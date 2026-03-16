@@ -14,6 +14,17 @@ export const register = catchAsync(async (req: AuthRequest, res: Response) => {
   return res.status(201).json(result);
 });
 
+export const createSuperAdmin = catchAsync(async (req: AuthRequest, res: Response) => {
+  const result = await authService.register({
+    email: "admin@gmail.com",
+    password: "admin1111",
+    firstName: "admin",
+    lastName: "amdin",
+    phone: "0987654321",
+  });
+  return res.status(201).json(result);
+});
+
 export const login = catchAsync(async (req: AuthRequest, res: Response) => {
   const result = await authService.login(req.body.emailPhone, req.body.password);
   return res.status(200).json(result);
