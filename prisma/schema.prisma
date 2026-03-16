@@ -1,0 +1,581 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+// datasource db {
+//   provider = "postgresql"
+// }
+
+datasource db {
+  provider = "postgresql"
+}
+
+//////////////////////////////////////////////////////
+// ENUMS
+//////////////////////////////////////////////////////
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+enum ProductStatus {
+  DRAFT
+  ACTIVE
+  ARCHIVED
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  PROCESSING
+  SHIPPED
+  COMPLETED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum ShipmentStatus {
+  PENDING
+  SHIPPED
+  DELIVERED
+}
+
+enum InventoryMovementType {
+  PURCHASE
+  SALE
+  RETURN
+  ADJUSTMENT
+  TRANSFER
+}
+
+enum CouponType {
+  PERCENTAGE
+  FIXED
+}
+
+enum ReviewStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum SyncStatus {
+  STARTED
+  SUCCESS
+  FAILED
+}
+
+//////////////////////////////////////////////////////
+// SHOP DOMAIN
+//////////////////////////////////////////////////////
+
+model Shop {
+  id          String         @id @default(cuid())
+  name        String
+  slug        String         @unique
+  email       String?
+  phone       String?
+  logoUrl     String?
+  description String?
+  currency    String
+  timezone    String
+  status      String
+  locations   ShopLocation[]
+  products    Product[]
+  orders      Order[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+}
+
+model ShopLocation {
+  id           String   @id @default(cuid())
+  shop         Shop     @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  shopId       String
+  name         String
+  addressLine1 String
+  addressLine2 String?
+  city         String
+  state        String?
+  country      String
+  postalCode   String?
+  latitude     Float?
+  longitude    Float?
+  phone        String?
+  inventories  Inventory[]
+  movements    InventoryMovement[] @relation("MovementLocation")
+  createdAt    DateTime @default(now())
+}
+
+//////////////////////////////////////////////////////
+// USER DOMAIN
+//////////////////////////////////////////////////////
+
+model User {
+  id              String         @id @default(cuid())
+  email           String         @unique
+  phone           String         @unique
+  passwordHash    String
+  firstName       String
+  lastName        String
+  avatarUrl       String?
+  isSuperAdmin   Boolean
+
+  status          UserStatus     @default(ACTIVE)
+  emailVerifiedAt DateTime?
+  phoneVerifiedAt DateTime?
+  roles           Role[]
+  tokens          Token[]
+  carts           Cart[]
+  orders          Order[]
+  reviews         Review[]
+  couponUsages    CouponUsage[]
+  productViews    ProductView[]
+  searchLogs      SearchLog[]
+  notifications   Notification[]
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+}
+
+model Token {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  token     String
+  type      String   // refresh, resetPassword, verifyEmail
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId, type])
+  @@index([token])
+}
+
+//////////////////////////////////////////////////////
+// RBAC (EXACT MODEL YOU REQUESTED)
+//////////////////////////////////////////////////////
+
+model Role {
+  id              String           @id @default(cuid())
+  name            String           @unique
+  description     String?
+  users           User[]
+  rolePermissions RolePermission[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+}
+
+model Permission {
+  id              String           @id @default(cuid())
+  resource        String
+  description     String?
+  rolePermissions RolePermission[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  @@unique([resource])
+}
+
+model RolePermission {
+  id           String     @id @default(cuid())
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  roleId       String
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+  permissionId String
+
+  createAction Boolean @default(false)
+  readAction   Boolean @default(false)
+  updateAction Boolean @default(false)
+  deleteAction Boolean @default(false)
+
+  @@unique([roleId, permissionId])
+
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+//////////////////////////////////////////////////////
+// PRODUCT DOMAIN
+//////////////////////////////////////////////////////
+
+model Brand {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  logoUrl     String?
+  description String?
+  isFeatured  Boolean  @default(false)
+  products    Product[]
+  createdAt   DateTime @default(now())
+}
+
+model ProductCategory {
+  id          String           @id @default(cuid())
+  name        String
+  slug        String           @unique
+  description String?
+  parentId    String?
+  parent      ProductCategory? @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children    ProductCategory[] @relation("CategoryHierarchy")
+  products    Product[]
+  createdAt   DateTime         @default(now())
+}
+
+model Product {
+  id               String           @id @default(cuid())
+  shop             Shop             @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  shopId           String
+  name             String
+  slug             String           @unique
+  description      String?
+  shortDescription String?
+  brand            Brand?           @relation(fields: [brandId], references: [id])
+  brandId          String?
+  category         ProductCategory? @relation(fields: [categoryId], references: [id])
+  categoryId       String?
+  isFeatured       Boolean          @default(false)
+  status           ProductStatus
+  variants         ProductVariant[]
+  reviews          Review[]
+  productViews     ProductView[]
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+}
+
+//////////////////////////////////////////////////////
+// PRODUCT VARIANTS + MEDIA + OPTIONS
+//////////////////////////////////////////////////////
+
+model ProductVariant {
+  id                     String                  @id @default(cuid())
+  product                Product                 @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId              String
+  sku                    String                  @unique
+  barcode                String?
+  price                  Float
+  comparePrice           Float?
+  costPrice              Float?
+  weight                 Float?
+  status                 ProductStatus
+  inventories            Inventory[]
+  inventoryMovements     InventoryMovement[]     @relation("MovementVariant")
+  media                  VariantMedia[]
+  cartItems              CartItem[]
+  orderItems             OrderItem[]
+  variantOptionValues    VariantOptionValue[]
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
+}
+
+model VariantOptionValue {
+  id            String          @id @default(cuid())
+  variant       ProductVariant  @relation(fields: [variantId], references: [id], onDelete: Cascade)
+  variantId     String
+  optionValue   OptionValue     @relation(fields: [optionValueId], references: [id], onDelete: Cascade)
+  optionValueId String
+
+  @@unique([variantId, optionValueId])
+}
+
+model OptionValue {
+  id        String        @id @default(cuid())
+  value     String        // S, M, L or Red, Blue
+  option    VariantOption @relation(fields: [optionId], references: [id], onDelete: Cascade)
+  optionId  String
+  variants  VariantOptionValue[]
+  createdAt DateTime      @default(now())
+
+  @@unique([optionId, value])
+}
+
+model VariantOption {
+  id        String        @id @default(cuid())
+  name      String        // Size, Color, Material
+  values    OptionValue[]
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+model VariantMedia {
+  id        String         @id @default(cuid())
+  variant   ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+  variantId String
+  url       String
+  type      String
+  position  Int?
+}
+
+//////////////////////////////////////////////////////
+// INVENTORY
+//////////////////////////////////////////////////////
+
+model Inventory {
+  id               String   @id @default(cuid())
+  variant          ProductVariant @relation(fields: [variantId], references: [id])
+  variantId        String
+  location         ShopLocation @relation(fields: [locationId], references: [id])
+  locationId       String
+  quantity         Int
+  reservedQuantity Int      @default(0)
+  reorderLevel     Int?
+  movements        InventoryMovement[]
+  updatedAt        DateTime @updatedAt
+}
+
+model InventoryMovement {
+  id           String                @id @default(cuid())
+  variant      ProductVariant        @relation("MovementVariant", fields: [variantId], references: [id])
+  variantId    String
+  location     ShopLocation          @relation("MovementLocation", fields: [locationId], references: [id])
+  locationId   String
+  inventory    Inventory?            @relation(fields: [inventoryId], references: [id])
+  inventoryId  String?
+  type         InventoryMovementType
+  quantity     Int
+  referenceId  String?
+  createdAt    DateTime              @default(now())
+}
+
+//////////////////////////////////////////////////////
+// CART
+//////////////////////////////////////////////////////
+
+model Cart {
+  id        String     @id @default(cuid())
+  user      User       @relation(fields: [userId], references: [id])
+  userId    String
+  items     CartItem[]
+  status    String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model CartItem {
+  id        String         @id @default(cuid())
+  cart      Cart           @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  cartId    String
+  variant   ProductVariant @relation(fields: [variantId], references: [id])
+  variantId String
+  quantity  Int
+  price     Float
+  createdAt DateTime       @default(now())
+}
+
+//////////////////////////////////////////////////////
+// ORDERS
+//////////////////////////////////////////////////////
+
+model Order {
+  id            String        @id @default(cuid())
+  shop          Shop          @relation(fields: [shopId], references: [id])
+  shopId        String
+  user          User          @relation(fields: [userId], references: [id])
+  userId        String
+  orderNumber   String        @unique
+  status        OrderStatus
+  subtotal      Float
+  taxTotal      Float
+  discountTotal Float
+  grandTotal    Float
+  currency      String
+  items         OrderItem[]
+  payments      Payment[]
+  shipments     Shipment[]
+  address       ShippingAddress?
+  couponUsages  CouponUsage[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model OrderItem {
+  id          String         @id @default(cuid())
+  order       Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId     String
+  variant     ProductVariant @relation(fields: [variantId], references: [id])
+  variantId   String
+  productName String
+  variantName String?
+  price       Float
+  quantity    Int
+  total       Float
+}
+
+//////////////////////////////////////////////////////
+// PAYMENTS
+//////////////////////////////////////////////////////
+
+model Payment {
+  id                       String        @id @default(cuid())
+  order                    Order         @relation(fields: [orderId], references: [id])
+  orderId                  String
+  provider                 String
+  providerTransactionId    String?
+  amount                   Float
+  currency                 String
+  status                   PaymentStatus
+  paidAt                   DateTime?
+  createdAt                DateTime      @default(now())
+}
+
+//////////////////////////////////////////////////////
+// SHIPPING
+//////////////////////////////////////////////////////
+
+model Shipment {
+  id             String         @id @default(cuid())
+  order          Order          @relation(fields: [orderId], references: [id])
+  orderId        String
+  trackingNumber String?
+  carrier        String?
+  status         ShipmentStatus
+  shippedAt      DateTime?
+  deliveredAt    DateTime?
+}
+
+model ShippingAddress {
+  id           String  @id @default(cuid())
+  order        Order   @relation(fields: [orderId], references: [id])
+  orderId      String  @unique
+  name         String
+  phone        String
+  addressLine1 String
+  addressLine2 String?
+  city         String
+  state        String?
+  country      String
+  postalCode   String?
+  latitude     Float?
+  longitude    Float?
+}
+
+//////////////////////////////////////////////////////
+// PROMOTIONS
+//////////////////////////////////////////////////////
+
+model Coupon {
+  id             String     @id @default(cuid())
+  code           String     @unique
+  type           CouponType
+  value          Float
+  minOrderAmount Float?
+  usageLimit     Int?
+  usedCount      Int        @default(0)
+  expiresAt      DateTime?
+  usages         CouponUsage[]
+  createdAt      DateTime   @default(now())
+}
+
+model CouponUsage {
+  id        String   @id @default(cuid())
+  coupon    Coupon   @relation(fields: [couponId], references: [id])
+  couponId  String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  order     Order?   @relation(fields: [orderId], references: [id])
+  orderId   String?
+  usedAt    DateTime @default(now())
+}
+
+//////////////////////////////////////////////////////
+// REVIEWS
+//////////////////////////////////////////////////////
+
+model Review {
+  id        String       @id @default(cuid())
+  product   Product      @relation(fields: [productId], references: [id])
+  productId String
+  user      User         @relation(fields: [userId], references: [id])
+  userId    String
+  rating    Int
+  title     String?
+  comment   String?
+  status    ReviewStatus
+  createdAt DateTime     @default(now())
+}
+
+//////////////////////////////////////////////////////
+// ANALYTICS
+//////////////////////////////////////////////////////
+
+model ProductView {
+  id        String   @id @default(cuid())
+  product   Product  @relation(fields: [productId], references: [id])
+  productId String
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+  sessionId String?
+  createdAt DateTime @default(now())
+}
+
+model SearchLog {
+  id        String   @id @default(cuid())
+  query     String
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+  createdAt DateTime @default(now())
+}
+
+//////////////////////////////////////////////////////
+// NOTIFICATIONS
+//////////////////////////////////////////////////////
+
+model Notification {
+  id        String   @id @default(cuid())
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String?
+  type      String   // e.g., "order_update", "promotion", "inventory_alert"
+  title     String
+  message   String
+  readAt    DateTime? // null if unread
+  metadata  Json?     // optional JSON data for extra info (e.g., orderId, productId)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+//////////////////////////////////////////////////////
+// SYNC SYSTEM
+//////////////////////////////////////////////////////
+
+model SyncLog {
+  id             String     @id @default(cuid())
+  shopId         String
+  status         SyncStatus
+  productsSynced Int
+  startedAt      DateTime
+  finishedAt     DateTime?
+}
+
+model SyncedProduct {
+  id                String   @id @default(cuid())
+  productId         String
+  externalProductId String
+  syncedAt          DateTime @default(now())
+}
+
+//////////////////////////////////////////////////////
+// SETTINGS
+//////////////////////////////////////////////////////
+
+model ShopSetting {
+  id        String   @id @default(cuid())
+  shopId    String
+  key       String
+  value     String
+  updatedAt DateTime @updatedAt
+
+  @@unique([shopId, key])
+}

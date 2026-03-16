@@ -1,0 +1,1 @@
+{"version":3,"file":"sync.service.d.ts","sourceRoot":"","sources":["../../src/services/sync.service.ts"],"names":[],"mappings":"AAGA,wBAAsB,kBAAkB,CAAC,MAAM,EAAE,MAAM;;;;;;;GAsDtD;AAED,wBAAsB,YAAY,CAAC,MAAM,EAAE,MAAM,GAAG,SAAS,EAAE,KAAK,EAAE;IAAE,IAAI,CAAC,EAAE,MAAM,CAAC;IAAC,QAAQ,CAAC,EAAE,MAAM,CAAA;CAAE;;;;;;;;;;;;;;;GAmBzG;AAED,wBAAsB,cAAc,CAAC,EAAE,EAAE,MAAM;;;;;;;GAM9C"}

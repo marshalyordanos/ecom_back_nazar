@@ -1,0 +1,24 @@
+import { Response, NextFunction } from "express";
+import type { AuthRequest } from "../middleware/auth.middleware";
+export declare const listProducts: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const getProductById: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const createProduct: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const updateProduct: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const deleteProduct: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const getFeatured: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const createVariant: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const updateVariant: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const deleteVariant: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const addVariantMedia: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const removeVariantMedia: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const listVariantOptions: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const getVariantOptionById: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const createVariantOption: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const updateVariantOption: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const deleteVariantOption: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const listOptionValues: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const getOptionValueById: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const createOptionValue: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const updateOptionValue: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const deleteOptionValue: (req: AuthRequest, res: Response, next: NextFunction) => void;
+//# sourceMappingURL=product.controller.d.ts.map

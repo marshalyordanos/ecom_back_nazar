@@ -1,0 +1,65 @@
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const productController = __importStar(require("../controllers/product.controller"));
+const reviewController = __importStar(require("../controllers/review.controller"));
+const auth_middleware_1 = require("../middleware/auth.middleware");
+const router = (0, express_1.Router)();
+router.get("/", productController.listProducts);
+router.get("/featured", productController.getFeatured);
+router.put("/variants/:variantId", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), productController.updateVariant);
+router.delete("/variants/:variantId", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), productController.deleteVariant);
+router.post("/variants/:variantId/media", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), productController.addVariantMedia);
+router.delete("/variants/media/:mediaId", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), productController.removeVariantMedia);
+// VariantOption & OptionValue (place /options/values/:valueId before /options/:optionId)
+router.get("/options", productController.listVariantOptions);
+router.post("/options", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), productController.createVariantOption);
+router.get("/options/values/:valueId", productController.getOptionValueById);
+router.put("/options/values/:valueId", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), productController.updateOptionValue);
+router.delete("/options/values/:valueId", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), productController.deleteOptionValue);
+router.get("/options/:optionId/values", productController.listOptionValues);
+router.post("/options/:optionId/values", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), productController.createOptionValue);
+router.get("/options/:optionId", productController.getVariantOptionById);
+router.put("/options/:optionId", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), productController.updateVariantOption);
+router.delete("/options/:optionId", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), productController.deleteVariantOption);
+router.get("/:id", productController.getProductById);
+router.get("/:id/reviews", reviewController.listByProduct);
+router.post("/", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), productController.createProduct);
+router.put("/:id", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), productController.updateProduct);
+router.delete("/:id", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), productController.deleteProduct);
+router.post("/:id/variants", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), productController.createVariant);
+exports.default = router;
+//# sourceMappingURL=product.router.js.map
