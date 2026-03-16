@@ -7,8 +7,8 @@ import { hashPassword, comparePassword } from "../utils/hash";
 import AppError from "../utils/appError";
 import { sendEmail } from "../utils/email";
 
-const accessExpirationMinutes = parseInt(config.jwt.accessExpirationMinutes, 10) || 30;
-const refreshExpirationDays = parseInt(config.jwt.refreshExpirationDays, 10) || 30;
+const accessExpirationMinutes = parseInt(config.jwt.accessExpirationMinutes, 10) || 60;
+const refreshExpirationDays = parseInt(config.jwt.refreshExpirationDays, 10) || 60;
 
 function generateAccessToken(userId: string, email: string): string {
   return jwt.sign(

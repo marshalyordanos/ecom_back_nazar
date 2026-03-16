@@ -10,7 +10,7 @@ router.use(restrictTo("admin"));
 router.get("/", permissionController.listPermissions);
 router.post("/", permissionController.createPermission);
 router.get("/:id", permissionController.getPermissionById);
-router.put("/:id", permissionController.updatePermission);
+router.patch("/:id", permissionController.updatePermission);
 router.delete("/:id", permissionController.deletePermission);
 
 export default router;

@@ -1,5 +1,7 @@
 import { Router } from "express";
 import * as userController from "../controllers/user.controller";
+import * as authController from "../controllers/auth.controller";
+
 import { protect, restrictTo } from "../middleware/auth.middleware";
 
 const router = Router();
@@ -7,12 +9,14 @@ const router = Router();
 router.use(protect);
 
 router.get("/me", userController.getMe);
-router.put("/me", userController.updateMe);
-router.put("/me/password", userController.updateMyPassword);
+router.patch("/me", userController.updateMe);
+router.patch("/me/password", userController.updateMyPassword);
+router.post("/", protect,restrictTo("admin"), authController.register);
 
 router.get("/", restrictTo("admin"), userController.listUsers);
 router.get("/:id", restrictTo("admin"), userController.getById);
-router.put("/:id", restrictTo("admin"), userController.updateUser);
+router.patch("/:id", restrictTo("admin"), userController.updateUser);
+
 router.delete("/:id", restrictTo("admin"), userController.deactivateUser);
 
 export default router;
