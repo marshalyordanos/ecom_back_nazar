@@ -12,7 +12,7 @@ export interface JwtPayload {
 }
 
 export interface AuthRequest extends Request {
-  user?: { id: string; email: string; roles: string[] };
+  user?: { id: string; email: string; roles: string[], isSuperAdmin:boolean };
 }
 
 /**
@@ -47,6 +47,8 @@ export const protect = async (req: AuthRequest, _res: Response, next: NextFuncti
     req.user = {
       id: user.id,
       email: user.email,
+      isSuperAdmin:user.isSuperAdmin,
+
       roles: user.roles.map((r) => r.name),
     };
     next();
@@ -79,6 +81,7 @@ export const optionalAuth = async (req: AuthRequest, _res: Response, next: NextF
     req.user = {
       id: user.id,
       email: user.email,
+      isSuperAdmin:user.isSuperAdmin,
       roles: user.roles.map((r) => r.name),
     };
   } catch {
@@ -92,8 +95,12 @@ export const optionalAuth = async (req: AuthRequest, _res: Response, next: NextF
  */
 export const restrictTo = (...roleNames: string[]) => {
   return (req: AuthRequest, _res: Response, next: NextFunction) => {
+    console.log("00000000000000: ",req.user)
     if (!req.user) {
       return next(new AppError("Not authenticated", 401));
+    }
+    if (req.user!.isSuperAdmin) {
+      return next();
     }
     const hasRole = roleNames.some((r) => req.user!.roles.includes(r));
     if (!hasRole) {

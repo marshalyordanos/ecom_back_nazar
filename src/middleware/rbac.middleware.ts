@@ -14,6 +14,9 @@ export const requirePermission = (resource: string, action: Action) => {
     if (!req.user) {
       return next(new AppError("Not authenticated", 401));
     }
+    if (req.user!.isSuperAdmin) {
+      return next();
+    }
 
     const actionKey = `${action}Action` as "createAction" | "readAction" | "updateAction" | "deleteAction";
     const roleNames = req.user.roles;
@@ -39,8 +42,12 @@ export const requirePermission = (resource: string, action: Action) => {
  */
 export const requireAnyPermission = (...checks: Array<{ resource: string; action: Action }>) => {
   return async (req: AuthRequest, _res: Response, next: NextFunction) => {
+    console.log("999999",req.user)
     if (!req.user) {
       return next(new AppError("Not authenticated", 401));
+    }
+    if (req.user!.isSuperAdmin) {
+      return next();
     }
 
     const roleNames = req.user.roles;
