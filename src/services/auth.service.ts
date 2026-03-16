@@ -26,6 +26,57 @@ function generateResetToken(): string {
   return crypto.randomBytes(32).toString("hex");
 }
 
+export async function adminRegister(data: {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  phone?: string;
+}) {
+  if (!data.phone) {
+    throw new AppError("Phone is required", 400);
+  }
+ 
+  const passwordHash = await hashPassword(data.password);
+
+
+  const user = await prisma.user.create({
+    data: {
+      email: data.email,
+      passwordHash,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      phone: data.phone,
+      isSuperAdmin: false,
+    },
+    select: {
+      id: true,
+      email: true,
+      firstName: true,
+      lastName: true,
+      status: true,
+      createdAt: true,
+    },
+  });
+
+  const accessToken = generateAccessToken(user.id, user.email);
+  const refreshToken = generateRefreshToken();
+  await prisma.token.create({
+    data: {
+      userId: user.id,
+      token: refreshToken,
+      type: tokenTypes.REFRESH,
+      expiresAt: new Date(Date.now() + refreshExpirationDays * 24 * 60 * 60 * 1000),
+    },
+  });
+
+  return {
+    user,
+    accessToken,
+    refreshToken,
+    expiresIn: accessExpirationMinutes * 60,
+  };
+}
 export async function register(data: {
   email: string;
   password: string;

@@ -15,7 +15,8 @@ export const register = catchAsync(async (req: AuthRequest, res: Response) => {
 });
 
 export const createSuperAdmin = catchAsync(async (req: AuthRequest, res: Response) => {
-  const result = await authService.register({
+
+  const result = await authService.adminRegister({
     email: "admin@gmail.com",
     password: "admin1111",
     firstName: "admin",
