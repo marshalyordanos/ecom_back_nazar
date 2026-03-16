@@ -3009,3 +3009,4 @@
 ::1 - - [16/Mar/2026:08:14:17 +0000] "POST /api/v1/roles HTTP/1.1" 400 67 "-" "PostmanRuntime/7.51.1"
 ::1 - - [16/Mar/2026:08:29:31 +0000] "POST /api/v1/auth/createSuperAdmin HTTP/1.1" 400 71 "-" "PostmanRuntime/7.51.1"
 ::1 - - [16/Mar/2026:08:31:10 +0000] "POST /api/v1/auth/createSuperAdmin HTTP/1.1" 201 514 "-" "PostmanRuntime/7.51.1"
+::1 - - [16/Mar/2026:08:31:54 +0000] "POST /api/v1/roles HTTP/1.1" 400 79 "-" "PostmanRuntime/7.51.1"

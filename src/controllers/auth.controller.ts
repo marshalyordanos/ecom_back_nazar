@@ -22,6 +22,7 @@ export const createSuperAdmin = catchAsync(async (req: AuthRequest, res: Respons
     firstName: "admin",
     lastName: "amdin",
     phone: "0987654321",
+    
   });
   return res.status(201).json(result);
 });

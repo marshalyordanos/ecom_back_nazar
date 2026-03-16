@@ -47,7 +47,7 @@ export async function adminRegister(data: {
       firstName: data.firstName,
       lastName: data.lastName,
       phone: data.phone,
-      isSuperAdmin: false,
+      isSuperAdmin: true,
     },
     select: {
       id: true,
