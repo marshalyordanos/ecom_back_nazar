@@ -28,18 +28,25 @@ export const uploadToCloudinary = async (
   resourceType: 'auto' | 'image' | 'video' | 'raw' = 'auto'
 ): Promise<UploadResult> => {
   return new Promise((resolve, reject) => {
+    console.log("cloudinary11111111");
+
     const uploadStream = cloudinary.uploader.upload_stream(
       {
         folder,
-        resource_type: resourceType, // 'auto' lets Cloudinary detect file type
+        resource_type: resourceType,
       },
       (error: any, result: any) => {
         if (error) {
+          console.error("Cloudinary error:", error);
           return reject(error);
         }
+
         if (!result) {
           return reject(new Error('Upload failed: No result returned'));
         }
+
+        console.log("Cloudinary success");
+
         resolve({
           url: result.url,
           public_id: result.public_id,
@@ -49,10 +56,7 @@ export const uploadToCloudinary = async (
       }
     );
 
-    const readableStream = new Readable();
-    readableStream.push(buffer);
-    readableStream.push(null);
-    readableStream.pipe(uploadStream);
+    uploadStream.end(buffer); // ✅ FIX
   });
 };
 

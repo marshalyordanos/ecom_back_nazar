@@ -16,12 +16,14 @@ export const getBrandById = catchAsync(async (req: AuthRequest, res: Response, _
 });
 
 export const createBrand = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
-  const brand = await brandService.createBrand(req.body);
+  
+  console.log("brand file", req.files,req.file)
+  const brand = await brandService.createBrand(req.body,req.file);
   res.status(201).json(brand);
 });
 
 export const updateBrand = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
-  const brand = await brandService.updateBrand(req.params.id, req.body);
+  const brand = await brandService.updateBrand(req.params.id, req.body,req.file);
   res.status(200).json(brand);
 });
 

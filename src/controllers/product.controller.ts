@@ -44,13 +44,13 @@ export const getFeatured = catchAsync(async (req: AuthRequest, res: Response, _n
 });
 
 export const createVariant = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
-  const variant = await productService.createVariant(req.params.id, req.body);
+  const variant = await productService.createVariant(req.params.id, req.body, req.file);
   res.status(201).json(variant);
 });
 
 export const updateVariant = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
   const variantId = req.params.variantId || req.params.id;
-  const variant = await productService.updateVariant(variantId, req.body);
+  const variant = await productService.updateVariant(variantId, req.body, req.file);
   res.status(200).json(variant);
 });
 
@@ -127,4 +127,38 @@ export const deleteOptionValue = catchAsync(async (req: AuthRequest, res: Respon
   const valueId = req.params.valueId || req.params.id;
   await productService.deleteOptionValue(valueId);
   res.status(200).json({ message: "Option value deleted successfully" });
+});
+
+// --------- Variant Option Value Assignment Controllers ---------
+export const setVariantOptionValues = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  // expects: req.params.variantId and req.body.optionValueIds (array)
+  const variantId = req.params.variantId || req.params.id;
+  const optionValueIds = req.body.optionValueIds;
+  if (!Array.isArray(optionValueIds)) {
+    return res.status(400).json({ status: "fail", message: "optionValueIds (array) is required" });
+  }
+  const updated = await productService.setVariantOptionValues(variantId, optionValueIds);
+  res.status(200).json(updated);
+});
+
+export const removeVariantOptionValue = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  // expects: req.params.variantId, req.params.optionValueId (or req.body.optionValueId)
+  const variantId = req.params.variantId || req.params.id;
+  const optionValueId = req.params.optionValueId || req.body.optionValueId;
+  if (!variantId || !optionValueId) {
+    return res.status(400).json({ status: "fail", message: "variantId and optionValueId required" });
+  }
+  const result = await productService.removeVariantOptionValue(variantId, optionValueId);
+  res.status(200).json(result);
+});
+
+export const assignVariantOptionValue = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  // expects: req.params.variantId, req.params.optionValueId (or both in req.body)
+  const variantId = req.params.variantId || req.body.variantId || req.params.id;
+  const optionValueId = req.params.optionValueId || req.body.optionValueId;
+  if (!variantId || !optionValueId) {
+    return res.status(400).json({ status: "fail", message: "variantId and optionValueId required" });
+  }
+  const result = await productService.assignVariantOptionValue(variantId, optionValueId);
+  res.status(201).json(result);
 });

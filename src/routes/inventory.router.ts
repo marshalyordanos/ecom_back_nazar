@@ -11,6 +11,6 @@ router.get("/", inventoryController.listInventory);
 router.get("/movements", inventoryController.listMovements);
 router.post("/movements", inventoryController.addMovement);
 router.get("/:variantId", inventoryController.getByVariantId);
-router.put("/:variantId", inventoryController.updateInventory);
+router.patch("/:variantId", inventoryController.updateInventory);
 
 export default router;

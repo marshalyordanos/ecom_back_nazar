@@ -16,7 +16,14 @@ export const getShopById = catchAsync(async (req: AuthRequest, res: Response, _n
 });
 
 export const updateShop = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
-  const shop = await shopService.updateShop(req.params.id, req.body);
+  const shop = await shopService.updateShop(req.params.id, req.body, req.file);
+  res.status(200).json(shop);
+});
+
+// Controller for createOrUpdateShop
+export const createOrUpdateShop = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  // createOrUpdateShop expects all data (req.body) and a file (req.file), if available
+  const shop = await shopService.createOrUpdateShop(req.body, req.file);
   res.status(200).json(shop);
 });
 

@@ -1,6 +1,9 @@
 import { prisma } from "../lib/prisma";
 import AppError from "../utils/appError";
 import { PrismaQueryFeature } from "../utils/apiFeature";
+import fs from 'fs';
+import { uploadToCloudinary } from "../config/cloudinary";
+import { boolean } from "joi";
 
 const searchableFields = ["name", "slug", "description"];
 const dateFields = ["createdAt"];
@@ -41,14 +44,29 @@ export async function createBrand(data: {
   logoUrl?: string;
   description?: string;
   isFeatured?: boolean;
-}) {
+}, file: any) {
+  // console.log("brand file", req.files,req.file)
+
+  if (!file) {
+    throw new AppError('No file uploaded', 400);
+  }
+
+  const fileBuffer = fs.readFileSync(file.path);
+  console.log("brand11111111")
+
+  // Upload to Cloudinary
+  const uploadResult = await uploadToCloudinary(fileBuffer, 'ecommerce/brands', 'image');
+  fs.unlinkSync(file.path);  
+  console.log("brand111111122221")
+
+
   const brand = await prisma.brand.create({
     data: {
       name: data.name,
       slug: data.slug,
-      logoUrl: data.logoUrl,
+      logoUrl: uploadResult.secure_url,
       description: data.description,
-      isFeatured: data.isFeatured ?? false,
+      isFeatured: Boolean(data.isFeatured) ?? false,
     },
   });
   return brand;
@@ -57,7 +75,20 @@ export async function createBrand(data: {
 export async function updateBrand(
   id: string,
   data: { name?: string; slug?: string; logoUrl?: string; description?: string; isFeatured?: boolean }
-) {
+, file: any) {
+  if (!file) {
+    throw new AppError('No file uploaded', 400);
+  }
+
+  const fileBuffer = fs.readFileSync(file.path);
+
+  // Upload to Cloudinary
+  const uploadResult = await uploadToCloudinary(fileBuffer, 'ecommerce/brands', 'image');
+  fs.unlinkSync(file.path);  
+if (uploadResult.secure_url) {
+    data.logoUrl = uploadResult.secure_url;
+  }
+  data.isFeatured = Boolean(data.isFeatured) ?? false;
   const brand = await prisma.brand.update({
     where: { id },
     data: data as Parameters<typeof prisma.brand.update>[0]["data"],

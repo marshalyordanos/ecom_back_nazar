@@ -1,7 +1,8 @@
 import { prisma } from "../lib/prisma";
 import AppError from "../utils/appError";
 import { PrismaQueryFeature } from "../utils/apiFeature";
-
+import fs from "fs";
+import { uploadToCloudinary } from "../config/cloudinary";
 const searchableFields = ["name", "slug", "description", "shortDescription"];
 const dateFields = ["createdAt", "updatedAt"];
 
@@ -148,8 +149,18 @@ export async function createVariant(
     costPrice?: number;
     weight?: number;
     status: string;
-  }
+  },
+  file?: any
 ) {
+  if (!file) {
+    throw new AppError('No file uploaded', 400);
+  }
+  const fileBuffer = fs.readFileSync(file.path);
+  const uploadResult = await uploadToCloudinary(fileBuffer, "ecommerce/variants", "image");
+  fs.unlinkSync(file.path);
+  if (!uploadResult.secure_url) {
+    throw new AppError('Failed to upload image', 500);
+  }
   const product = await prisma.product.findUnique({ where: { id: productId } });
   if (!product) throw new AppError("Product not found", 404);
   const variant = await prisma.productVariant.create({
@@ -157,10 +168,11 @@ export async function createVariant(
       productId,
       sku: data.sku,
       barcode: data.barcode,
-      price: data.price,
-      comparePrice: data.comparePrice,
-      costPrice: data.costPrice,
-      weight: data.weight,
+      price: Number(data.price),
+      comparePrice: Number(data.comparePrice),
+      costPrice: Number(data.costPrice),
+      weight: Number(data.weight),
+      image: uploadResult.secure_url,
       status: data.status as any,
     },
   });
@@ -177,8 +189,28 @@ export async function updateVariant(
     costPrice?: number;
     weight?: number;
     status?: string;
-  }
+    image?: string;
+  },
+  file?: any
 ) {
+  // if (!file) {
+  //   throw new AppError('No file uploaded', 400);
+  // }
+  if (file) {
+  const fileBuffer = fs.readFileSync(file.path);
+  const uploadResult = await uploadToCloudinary(fileBuffer, "ecommerce/variants", "image");
+  fs.unlinkSync(file.path);
+  // if (!uploadResult.secure_url) {
+  //   throw new AppError('Failed to upload image', 500);
+  // }
+  if (uploadResult.secure_url) {
+    data.image = uploadResult.secure_url;
+  }
+}
+if(data.price) data.price = Number(data.price);
+if(data.comparePrice) data.comparePrice = Number(data.comparePrice);
+if(data.costPrice) data.costPrice = Number(data.costPrice);
+if(data.weight) data.weight = Number(data.weight);
   const variant = await prisma.productVariant.update({
     where: { id: variantId },
     data: data as Parameters<typeof prisma.productVariant.update>[0]["data"],
@@ -281,4 +313,96 @@ export async function updateOptionValue(valueId: string, data: { value?: string 
 export async function deleteOptionValue(valueId: string) {
   await prisma.optionValue.delete({ where: { id: valueId } });
   return { message: "Option value deleted successfully" };
+}
+
+// --------- Assign and Remove Option Values to Product Variant ---------
+
+/**
+ * Assigns option values (array of optionValueIds) to the given variantId.
+ * This will add any new values and remove any values not present in the array.
+ */
+export async function setVariantOptionValues(
+  variantId: string,
+  optionValueIds: string[]
+) {
+  // Ensure unique input, and check existence of the variant
+  const uniqueOptionValueIds = Array.from(new Set(optionValueIds));
+  const variant = await prisma.productVariant.findUnique({
+    where: { id: variantId },
+  });
+  if (!variant) throw new AppError("Variant not found", 404);
+
+  // Get current values
+  const current = await prisma.variantOptionValue.findMany({
+    where: { variantId },
+    select: { optionValueId: true },
+  });
+  const currentIds = new Set(current.map((v) => v.optionValueId));
+
+  // Calculate adds and removes
+  const toAdd = uniqueOptionValueIds.filter((id) => !currentIds.has(id));
+  const toRemove = Array.from(currentIds).filter((id) => !uniqueOptionValueIds.includes(id));
+
+  // Add missing values
+  await Promise.all(
+    toAdd.map((optionValueId) =>
+      prisma.variantOptionValue.create({
+        data: { variantId, optionValueId },
+      })
+    )
+  );
+
+  // Remove old values
+  await Promise.all(
+    toRemove.map((optionValueId) =>
+      prisma.variantOptionValue.deleteMany({
+        where: { variantId, optionValueId },
+      })
+    )
+  );
+
+  // Return updated variant with values
+  const updated = await prisma.productVariant.findUnique({
+    where: { id: variantId },
+    include: {
+      variantOptionValues: {
+        include: { optionValue: { include: { option: true } } },
+      }
+    }
+  });
+  return updated;
+}
+
+/**
+ * Remove a particular optionValue from the variant.
+ */
+export async function removeVariantOptionValue(
+  variantId: string,
+  optionValueId: string
+) {
+  await prisma.variantOptionValue.deleteMany({
+    where: {
+      variantId,
+      optionValueId,
+    },
+  });
+  return { message: "Variant option value removed successfully" };
+}
+
+/**
+ * Add/Assign a particular optionValue to a variant (idempotent).
+ */
+export async function assignVariantOptionValue(
+  variantId: string,
+  optionValueId: string
+) {
+  // Checks for existing assignment
+  const exists = await prisma.variantOptionValue.findUnique({
+    where: { variantId_optionValueId: { variantId, optionValueId } },
+  });
+  if (exists) return exists;
+  const result = await prisma.variantOptionValue.create({
+    data: { variantId, optionValueId },
+  });
+  return result;
 }
