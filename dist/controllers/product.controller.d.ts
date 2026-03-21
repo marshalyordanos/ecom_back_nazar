@@ -2,6 +2,7 @@ import { Response, NextFunction } from "express";
 import type { AuthRequest } from "../middleware/auth.middleware";
 export declare const listProducts: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const getProductById: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const getProductByIdMobile: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const createProduct: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const updateProduct: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const deleteProduct: (req: AuthRequest, res: Response, next: NextFunction) => void;
@@ -21,4 +22,7 @@ export declare const getOptionValueById: (req: AuthRequest, res: Response, next:
 export declare const createOptionValue: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const updateOptionValue: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const deleteOptionValue: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const setVariantOptionValues: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const removeVariantOptionValue: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const assignVariantOptionValue: (req: AuthRequest, res: Response, next: NextFunction) => void;
 //# sourceMappingURL=product.controller.d.ts.map

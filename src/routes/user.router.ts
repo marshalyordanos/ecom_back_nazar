@@ -13,6 +13,21 @@ router.patch("/me", userController.updateMe);
 router.patch("/me/password", userController.updateMyPassword);
 router.post("/", protect,restrictTo("admin"), authController.register);
 
+// ===============================
+// CUSTOMER NOTIFICATIONS (ME)
+// ===============================
+router.get("/notifications", userController.listMyNotifications);
+router.get("/notifications/unread-count", userController.getMyUnreadNotificationsCount);
+router.post("/notifications/read-all", userController.markAllMyNotificationsRead);
+router.post("/notifications/:id/read", userController.markMyNotificationRead);
+
+// ===============================
+// SAVED ADDRESSES (ME)
+// ===============================
+router.get("/saved-addresses", userController.listMySavedAddresses);
+router.post("/saved-addresses", userController.addMySavedAddress);
+router.delete("/saved-addresses/:id", userController.deleteMySavedAddress);
+
 router.get("/", restrictTo("admin"), userController.listUsers);
 router.get("/:id", restrictTo("admin"), userController.getById);
 router.patch("/:id", restrictTo("admin"), userController.updateUser);

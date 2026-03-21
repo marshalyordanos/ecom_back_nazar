@@ -58,3 +58,48 @@ export async function getUnreadCount(userId: string): Promise<number> {
     where: { userId, readAt: null },
   });
 }
+
+export async function listMyNotifications(
+  userId: string,
+  query: { page?: number; pageSize?: number } = {}
+) {
+  const page = query.page ?? 1
+  const pageSize = Math.min(query.pageSize ?? 20, 50)
+  const skip = (page - 1) * pageSize
+
+  const [data, total] = await Promise.all([
+    prisma.notification.findMany({
+      where: { userId },
+      orderBy: { createdAt: "desc" },
+      skip,
+      take: pageSize,
+    }),
+    prisma.notification.count({ where: { userId } }),
+  ])
+
+  return {
+    data,
+    pagination: {
+      page,
+      pageSize,
+      total,
+      totalPages: Math.max(1, Math.ceil(total / pageSize)),
+    },
+  }
+}
+
+export async function markMyNotificationRead(userId: string, notificationId: string) {
+  await prisma.notification.updateMany({
+    where: { id: notificationId, userId },
+    data: { readAt: new Date() },
+  })
+  return { message: "Notification marked as read" }
+}
+
+export async function markAllMyNotificationsRead(userId: string) {
+  await prisma.notification.updateMany({
+    where: { userId, readAt: null },
+    data: { readAt: new Date() },
+  })
+  return { message: "All notifications marked as read" }
+}

@@ -265,6 +265,7 @@ exports.ProductVariantScalarFieldEnum = {
     costPrice: 'costPrice',
     weight: 'weight',
     status: 'status',
+    image: 'image',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
 };
@@ -299,6 +300,7 @@ exports.InventoryScalarFieldEnum = {
     quantity: 'quantity',
     reservedQuantity: 'reservedQuantity',
     reorderLevel: 'reorderLevel',
+    createdAt: 'createdAt',
     updatedAt: 'updatedAt'
 };
 exports.InventoryMovementScalarFieldEnum = {
@@ -309,7 +311,8 @@ exports.InventoryMovementScalarFieldEnum = {
     type: 'type',
     quantity: 'quantity',
     referenceId: 'referenceId',
-    createdAt: 'createdAt'
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
 };
 exports.CartScalarFieldEnum = {
     id: 'id',
@@ -368,7 +371,9 @@ exports.ShipmentScalarFieldEnum = {
     carrier: 'carrier',
     status: 'status',
     shippedAt: 'shippedAt',
-    deliveredAt: 'deliveredAt'
+    deliveredAt: 'deliveredAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
 };
 exports.ShippingAddressScalarFieldEnum = {
     id: 'id',
@@ -393,14 +398,17 @@ exports.CouponScalarFieldEnum = {
     usageLimit: 'usageLimit',
     usedCount: 'usedCount',
     expiresAt: 'expiresAt',
-    createdAt: 'createdAt'
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
 };
 exports.CouponUsageScalarFieldEnum = {
     id: 'id',
     couponId: 'couponId',
     userId: 'userId',
     orderId: 'orderId',
-    usedAt: 'usedAt'
+    usedAt: 'usedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
 };
 exports.ReviewScalarFieldEnum = {
     id: 'id',
@@ -410,20 +418,23 @@ exports.ReviewScalarFieldEnum = {
     title: 'title',
     comment: 'comment',
     status: 'status',
-    createdAt: 'createdAt'
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
 };
 exports.ProductViewScalarFieldEnum = {
     id: 'id',
     productId: 'productId',
     userId: 'userId',
     sessionId: 'sessionId',
-    createdAt: 'createdAt'
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
 };
 exports.SearchLogScalarFieldEnum = {
     id: 'id',
     query: 'query',
     userId: 'userId',
-    createdAt: 'createdAt'
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
 };
 exports.NotificationScalarFieldEnum = {
     id: 'id',

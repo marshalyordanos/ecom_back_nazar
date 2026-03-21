@@ -13,11 +13,13 @@ export declare function listShipments(query: {
     } & {
         id: string;
         status: import("../generated/prisma/enums").ShipmentStatus;
+        createdAt: Date;
+        updatedAt: Date;
         orderId: string;
-        shippedAt: Date | null;
-        deliveredAt: Date | null;
         trackingNumber: string | null;
         carrier: string | null;
+        shippedAt: Date | null;
+        deliveredAt: Date | null;
     })[];
     pagination: {
         total: number;
@@ -44,11 +46,13 @@ export declare function getShipmentById(id: string): Promise<{
 } & {
     id: string;
     status: import("../generated/prisma/enums").ShipmentStatus;
+    createdAt: Date;
+    updatedAt: Date;
     orderId: string;
-    shippedAt: Date | null;
-    deliveredAt: Date | null;
     trackingNumber: string | null;
     carrier: string | null;
+    shippedAt: Date | null;
+    deliveredAt: Date | null;
 }>;
 export declare function getTrackingInfo(id: string): Promise<{
     trackingNumber: string | null;
@@ -81,10 +85,12 @@ export declare function updateShipmentStatus(id: string, data: {
 }): Promise<{
     id: string;
     status: import("../generated/prisma/enums").ShipmentStatus;
+    createdAt: Date;
+    updatedAt: Date;
     orderId: string;
-    shippedAt: Date | null;
-    deliveredAt: Date | null;
     trackingNumber: string | null;
     carrier: string | null;
+    shippedAt: Date | null;
+    deliveredAt: Date | null;
 }>;
 //# sourceMappingURL=shipment.service.d.ts.map

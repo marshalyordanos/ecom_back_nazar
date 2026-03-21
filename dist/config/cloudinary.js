@@ -2,7 +2,6 @@
 // "cloudinary" TS error fix: Use dynamic require for JS compatibility (when types are missing)
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteFromCloudinary = exports.uploadToCloudinary = void 0;
-const stream_1 = require("stream");
 const cloudinary = require('cloudinary').v2;
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -16,16 +15,19 @@ cloudinary.config({
  */
 const uploadToCloudinary = async (buffer, folder = 'clean-addis', resourceType = 'auto') => {
     return new Promise((resolve, reject) => {
+        console.log("cloudinary11111111");
         const uploadStream = cloudinary.uploader.upload_stream({
             folder,
-            resource_type: resourceType, // 'auto' lets Cloudinary detect file type
+            resource_type: resourceType,
         }, (error, result) => {
             if (error) {
+                console.error("Cloudinary error:", error);
                 return reject(error);
             }
             if (!result) {
                 return reject(new Error('Upload failed: No result returned'));
             }
+            console.log("Cloudinary success");
             resolve({
                 url: result.url,
                 public_id: result.public_id,
@@ -33,10 +35,7 @@ const uploadToCloudinary = async (buffer, folder = 'clean-addis', resourceType =
                 format: result.format,
             });
         });
-        const readableStream = new stream_1.Readable();
-        readableStream.push(buffer);
-        readableStream.push(null);
-        readableStream.pipe(uploadStream);
+        uploadStream.end(buffer); // ✅ FIX
     });
 };
 exports.uploadToCloudinary = uploadToCloudinary;

@@ -29,6 +29,7 @@ export type InventoryMinAggregateOutputType = {
     quantity: number | null;
     reservedQuantity: number | null;
     reorderLevel: number | null;
+    createdAt: Date | null;
     updatedAt: Date | null;
 };
 export type InventoryMaxAggregateOutputType = {
@@ -38,6 +39,7 @@ export type InventoryMaxAggregateOutputType = {
     quantity: number | null;
     reservedQuantity: number | null;
     reorderLevel: number | null;
+    createdAt: Date | null;
     updatedAt: Date | null;
 };
 export type InventoryCountAggregateOutputType = {
@@ -47,6 +49,7 @@ export type InventoryCountAggregateOutputType = {
     quantity: number;
     reservedQuantity: number;
     reorderLevel: number;
+    createdAt: number;
     updatedAt: number;
     _all: number;
 };
@@ -67,6 +70,7 @@ export type InventoryMinAggregateInputType = {
     quantity?: true;
     reservedQuantity?: true;
     reorderLevel?: true;
+    createdAt?: true;
     updatedAt?: true;
 };
 export type InventoryMaxAggregateInputType = {
@@ -76,6 +80,7 @@ export type InventoryMaxAggregateInputType = {
     quantity?: true;
     reservedQuantity?: true;
     reorderLevel?: true;
+    createdAt?: true;
     updatedAt?: true;
 };
 export type InventoryCountAggregateInputType = {
@@ -85,6 +90,7 @@ export type InventoryCountAggregateInputType = {
     quantity?: true;
     reservedQuantity?: true;
     reorderLevel?: true;
+    createdAt?: true;
     updatedAt?: true;
     _all?: true;
 };
@@ -171,6 +177,7 @@ export type InventoryGroupByOutputType = {
     quantity: number;
     reservedQuantity: number;
     reorderLevel: number | null;
+    createdAt: Date;
     updatedAt: Date;
     _count: InventoryCountAggregateOutputType | null;
     _avg: InventoryAvgAggregateOutputType | null;
@@ -191,6 +198,7 @@ export type InventoryWhereInput = {
     quantity?: Prisma.IntFilter<"Inventory"> | number;
     reservedQuantity?: Prisma.IntFilter<"Inventory"> | number;
     reorderLevel?: Prisma.IntNullableFilter<"Inventory"> | number | null;
+    createdAt?: Prisma.DateTimeFilter<"Inventory"> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<"Inventory"> | Date | string;
     variant?: Prisma.XOR<Prisma.ProductVariantScalarRelationFilter, Prisma.ProductVariantWhereInput>;
     location?: Prisma.XOR<Prisma.ShopLocationScalarRelationFilter, Prisma.ShopLocationWhereInput>;
@@ -203,6 +211,7 @@ export type InventoryOrderByWithRelationInput = {
     quantity?: Prisma.SortOrder;
     reservedQuantity?: Prisma.SortOrder;
     reorderLevel?: Prisma.SortOrderInput | Prisma.SortOrder;
+    createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
     variant?: Prisma.ProductVariantOrderByWithRelationInput;
     location?: Prisma.ShopLocationOrderByWithRelationInput;
@@ -218,6 +227,7 @@ export type InventoryWhereUniqueInput = Prisma.AtLeast<{
     quantity?: Prisma.IntFilter<"Inventory"> | number;
     reservedQuantity?: Prisma.IntFilter<"Inventory"> | number;
     reorderLevel?: Prisma.IntNullableFilter<"Inventory"> | number | null;
+    createdAt?: Prisma.DateTimeFilter<"Inventory"> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<"Inventory"> | Date | string;
     variant?: Prisma.XOR<Prisma.ProductVariantScalarRelationFilter, Prisma.ProductVariantWhereInput>;
     location?: Prisma.XOR<Prisma.ShopLocationScalarRelationFilter, Prisma.ShopLocationWhereInput>;
@@ -230,6 +240,7 @@ export type InventoryOrderByWithAggregationInput = {
     quantity?: Prisma.SortOrder;
     reservedQuantity?: Prisma.SortOrder;
     reorderLevel?: Prisma.SortOrderInput | Prisma.SortOrder;
+    createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
     _count?: Prisma.InventoryCountOrderByAggregateInput;
     _avg?: Prisma.InventoryAvgOrderByAggregateInput;
@@ -247,6 +258,7 @@ export type InventoryScalarWhereWithAggregatesInput = {
     quantity?: Prisma.IntWithAggregatesFilter<"Inventory"> | number;
     reservedQuantity?: Prisma.IntWithAggregatesFilter<"Inventory"> | number;
     reorderLevel?: Prisma.IntNullableWithAggregatesFilter<"Inventory"> | number | null;
+    createdAt?: Prisma.DateTimeWithAggregatesFilter<"Inventory"> | Date | string;
     updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Inventory"> | Date | string;
 };
 export type InventoryCreateInput = {
@@ -254,6 +266,7 @@ export type InventoryCreateInput = {
     quantity: number;
     reservedQuantity?: number;
     reorderLevel?: number | null;
+    createdAt?: Date | string;
     updatedAt?: Date | string;
     variant: Prisma.ProductVariantCreateNestedOneWithoutInventoriesInput;
     location: Prisma.ShopLocationCreateNestedOneWithoutInventoriesInput;
@@ -266,6 +279,7 @@ export type InventoryUncheckedCreateInput = {
     quantity: number;
     reservedQuantity?: number;
     reorderLevel?: number | null;
+    createdAt?: Date | string;
     updatedAt?: Date | string;
     movements?: Prisma.InventoryMovementUncheckedCreateNestedManyWithoutInventoryInput;
 };
@@ -274,6 +288,7 @@ export type InventoryUpdateInput = {
     quantity?: Prisma.IntFieldUpdateOperationsInput | number;
     reservedQuantity?: Prisma.IntFieldUpdateOperationsInput | number;
     reorderLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     variant?: Prisma.ProductVariantUpdateOneRequiredWithoutInventoriesNestedInput;
     location?: Prisma.ShopLocationUpdateOneRequiredWithoutInventoriesNestedInput;
@@ -286,6 +301,7 @@ export type InventoryUncheckedUpdateInput = {
     quantity?: Prisma.IntFieldUpdateOperationsInput | number;
     reservedQuantity?: Prisma.IntFieldUpdateOperationsInput | number;
     reorderLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     movements?: Prisma.InventoryMovementUncheckedUpdateManyWithoutInventoryNestedInput;
 };
@@ -296,6 +312,7 @@ export type InventoryCreateManyInput = {
     quantity: number;
     reservedQuantity?: number;
     reorderLevel?: number | null;
+    createdAt?: Date | string;
     updatedAt?: Date | string;
 };
 export type InventoryUpdateManyMutationInput = {
@@ -303,6 +320,7 @@ export type InventoryUpdateManyMutationInput = {
     quantity?: Prisma.IntFieldUpdateOperationsInput | number;
     reservedQuantity?: Prisma.IntFieldUpdateOperationsInput | number;
     reorderLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 export type InventoryUncheckedUpdateManyInput = {
@@ -312,6 +330,7 @@ export type InventoryUncheckedUpdateManyInput = {
     quantity?: Prisma.IntFieldUpdateOperationsInput | number;
     reservedQuantity?: Prisma.IntFieldUpdateOperationsInput | number;
     reorderLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 export type InventoryListRelationFilter = {
@@ -329,6 +348,7 @@ export type InventoryCountOrderByAggregateInput = {
     quantity?: Prisma.SortOrder;
     reservedQuantity?: Prisma.SortOrder;
     reorderLevel?: Prisma.SortOrder;
+    createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
 };
 export type InventoryAvgOrderByAggregateInput = {
@@ -343,6 +363,7 @@ export type InventoryMaxOrderByAggregateInput = {
     quantity?: Prisma.SortOrder;
     reservedQuantity?: Prisma.SortOrder;
     reorderLevel?: Prisma.SortOrder;
+    createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
 };
 export type InventoryMinOrderByAggregateInput = {
@@ -352,6 +373,7 @@ export type InventoryMinOrderByAggregateInput = {
     quantity?: Prisma.SortOrder;
     reservedQuantity?: Prisma.SortOrder;
     reorderLevel?: Prisma.SortOrder;
+    createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
 };
 export type InventorySumOrderByAggregateInput = {
@@ -465,6 +487,7 @@ export type InventoryCreateWithoutLocationInput = {
     quantity: number;
     reservedQuantity?: number;
     reorderLevel?: number | null;
+    createdAt?: Date | string;
     updatedAt?: Date | string;
     variant: Prisma.ProductVariantCreateNestedOneWithoutInventoriesInput;
     movements?: Prisma.InventoryMovementCreateNestedManyWithoutInventoryInput;
@@ -475,6 +498,7 @@ export type InventoryUncheckedCreateWithoutLocationInput = {
     quantity: number;
     reservedQuantity?: number;
     reorderLevel?: number | null;
+    createdAt?: Date | string;
     updatedAt?: Date | string;
     movements?: Prisma.InventoryMovementUncheckedCreateNestedManyWithoutInventoryInput;
 };
@@ -509,6 +533,7 @@ export type InventoryScalarWhereInput = {
     quantity?: Prisma.IntFilter<"Inventory"> | number;
     reservedQuantity?: Prisma.IntFilter<"Inventory"> | number;
     reorderLevel?: Prisma.IntNullableFilter<"Inventory"> | number | null;
+    createdAt?: Prisma.DateTimeFilter<"Inventory"> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<"Inventory"> | Date | string;
 };
 export type InventoryCreateWithoutVariantInput = {
@@ -516,6 +541,7 @@ export type InventoryCreateWithoutVariantInput = {
     quantity: number;
     reservedQuantity?: number;
     reorderLevel?: number | null;
+    createdAt?: Date | string;
     updatedAt?: Date | string;
     location: Prisma.ShopLocationCreateNestedOneWithoutInventoriesInput;
     movements?: Prisma.InventoryMovementCreateNestedManyWithoutInventoryInput;
@@ -526,6 +552,7 @@ export type InventoryUncheckedCreateWithoutVariantInput = {
     quantity: number;
     reservedQuantity?: number;
     reorderLevel?: number | null;
+    createdAt?: Date | string;
     updatedAt?: Date | string;
     movements?: Prisma.InventoryMovementUncheckedCreateNestedManyWithoutInventoryInput;
 };
@@ -555,6 +582,7 @@ export type InventoryCreateWithoutMovementsInput = {
     quantity: number;
     reservedQuantity?: number;
     reorderLevel?: number | null;
+    createdAt?: Date | string;
     updatedAt?: Date | string;
     variant: Prisma.ProductVariantCreateNestedOneWithoutInventoriesInput;
     location: Prisma.ShopLocationCreateNestedOneWithoutInventoriesInput;
@@ -566,6 +594,7 @@ export type InventoryUncheckedCreateWithoutMovementsInput = {
     quantity: number;
     reservedQuantity?: number;
     reorderLevel?: number | null;
+    createdAt?: Date | string;
     updatedAt?: Date | string;
 };
 export type InventoryCreateOrConnectWithoutMovementsInput = {
@@ -586,6 +615,7 @@ export type InventoryUpdateWithoutMovementsInput = {
     quantity?: Prisma.IntFieldUpdateOperationsInput | number;
     reservedQuantity?: Prisma.IntFieldUpdateOperationsInput | number;
     reorderLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     variant?: Prisma.ProductVariantUpdateOneRequiredWithoutInventoriesNestedInput;
     location?: Prisma.ShopLocationUpdateOneRequiredWithoutInventoriesNestedInput;
@@ -597,6 +627,7 @@ export type InventoryUncheckedUpdateWithoutMovementsInput = {
     quantity?: Prisma.IntFieldUpdateOperationsInput | number;
     reservedQuantity?: Prisma.IntFieldUpdateOperationsInput | number;
     reorderLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 export type InventoryCreateManyLocationInput = {
@@ -605,6 +636,7 @@ export type InventoryCreateManyLocationInput = {
     quantity: number;
     reservedQuantity?: number;
     reorderLevel?: number | null;
+    createdAt?: Date | string;
     updatedAt?: Date | string;
 };
 export type InventoryUpdateWithoutLocationInput = {
@@ -612,6 +644,7 @@ export type InventoryUpdateWithoutLocationInput = {
     quantity?: Prisma.IntFieldUpdateOperationsInput | number;
     reservedQuantity?: Prisma.IntFieldUpdateOperationsInput | number;
     reorderLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     variant?: Prisma.ProductVariantUpdateOneRequiredWithoutInventoriesNestedInput;
     movements?: Prisma.InventoryMovementUpdateManyWithoutInventoryNestedInput;
@@ -622,6 +655,7 @@ export type InventoryUncheckedUpdateWithoutLocationInput = {
     quantity?: Prisma.IntFieldUpdateOperationsInput | number;
     reservedQuantity?: Prisma.IntFieldUpdateOperationsInput | number;
     reorderLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     movements?: Prisma.InventoryMovementUncheckedUpdateManyWithoutInventoryNestedInput;
 };
@@ -631,6 +665,7 @@ export type InventoryUncheckedUpdateManyWithoutLocationInput = {
     quantity?: Prisma.IntFieldUpdateOperationsInput | number;
     reservedQuantity?: Prisma.IntFieldUpdateOperationsInput | number;
     reorderLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 export type InventoryCreateManyVariantInput = {
@@ -639,6 +674,7 @@ export type InventoryCreateManyVariantInput = {
     quantity: number;
     reservedQuantity?: number;
     reorderLevel?: number | null;
+    createdAt?: Date | string;
     updatedAt?: Date | string;
 };
 export type InventoryUpdateWithoutVariantInput = {
@@ -646,6 +682,7 @@ export type InventoryUpdateWithoutVariantInput = {
     quantity?: Prisma.IntFieldUpdateOperationsInput | number;
     reservedQuantity?: Prisma.IntFieldUpdateOperationsInput | number;
     reorderLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     location?: Prisma.ShopLocationUpdateOneRequiredWithoutInventoriesNestedInput;
     movements?: Prisma.InventoryMovementUpdateManyWithoutInventoryNestedInput;
@@ -656,6 +693,7 @@ export type InventoryUncheckedUpdateWithoutVariantInput = {
     quantity?: Prisma.IntFieldUpdateOperationsInput | number;
     reservedQuantity?: Prisma.IntFieldUpdateOperationsInput | number;
     reorderLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     movements?: Prisma.InventoryMovementUncheckedUpdateManyWithoutInventoryNestedInput;
 };
@@ -665,6 +703,7 @@ export type InventoryUncheckedUpdateManyWithoutVariantInput = {
     quantity?: Prisma.IntFieldUpdateOperationsInput | number;
     reservedQuantity?: Prisma.IntFieldUpdateOperationsInput | number;
     reorderLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 /**
@@ -698,6 +737,7 @@ export type InventorySelect<ExtArgs extends runtime.Types.Extensions.InternalArg
     quantity?: boolean;
     reservedQuantity?: boolean;
     reorderLevel?: boolean;
+    createdAt?: boolean;
     updatedAt?: boolean;
     variant?: boolean | Prisma.ProductVariantDefaultArgs<ExtArgs>;
     location?: boolean | Prisma.ShopLocationDefaultArgs<ExtArgs>;
@@ -711,6 +751,7 @@ export type InventorySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
     quantity?: boolean;
     reservedQuantity?: boolean;
     reorderLevel?: boolean;
+    createdAt?: boolean;
     updatedAt?: boolean;
     variant?: boolean | Prisma.ProductVariantDefaultArgs<ExtArgs>;
     location?: boolean | Prisma.ShopLocationDefaultArgs<ExtArgs>;
@@ -722,6 +763,7 @@ export type InventorySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
     quantity?: boolean;
     reservedQuantity?: boolean;
     reorderLevel?: boolean;
+    createdAt?: boolean;
     updatedAt?: boolean;
     variant?: boolean | Prisma.ProductVariantDefaultArgs<ExtArgs>;
     location?: boolean | Prisma.ShopLocationDefaultArgs<ExtArgs>;
@@ -733,9 +775,10 @@ export type InventorySelectScalar = {
     quantity?: boolean;
     reservedQuantity?: boolean;
     reorderLevel?: boolean;
+    createdAt?: boolean;
     updatedAt?: boolean;
 };
-export type InventoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "variantId" | "locationId" | "quantity" | "reservedQuantity" | "reorderLevel" | "updatedAt", ExtArgs["result"]["inventory"]>;
+export type InventoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "variantId" | "locationId" | "quantity" | "reservedQuantity" | "reorderLevel" | "createdAt" | "updatedAt", ExtArgs["result"]["inventory"]>;
 export type InventoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     variant?: boolean | Prisma.ProductVariantDefaultArgs<ExtArgs>;
     location?: boolean | Prisma.ShopLocationDefaultArgs<ExtArgs>;
@@ -764,6 +807,7 @@ export type $InventoryPayload<ExtArgs extends runtime.Types.Extensions.InternalA
         quantity: number;
         reservedQuantity: number;
         reorderLevel: number | null;
+        createdAt: Date;
         updatedAt: Date;
     }, ExtArgs["result"]["inventory"]>;
     composites: {};
@@ -1128,6 +1172,7 @@ export interface InventoryFieldRefs {
     readonly quantity: Prisma.FieldRef<"Inventory", 'Int'>;
     readonly reservedQuantity: Prisma.FieldRef<"Inventory", 'Int'>;
     readonly reorderLevel: Prisma.FieldRef<"Inventory", 'Int'>;
+    readonly createdAt: Prisma.FieldRef<"Inventory", 'DateTime'>;
     readonly updatedAt: Prisma.FieldRef<"Inventory", 'DateTime'>;
 }
 /**

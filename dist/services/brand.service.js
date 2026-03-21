@@ -11,6 +11,8 @@ exports.deleteBrand = deleteBrand;
 const prisma_1 = require("../lib/prisma");
 const appError_1 = __importDefault(require("../utils/appError"));
 const apiFeature_1 = require("../utils/apiFeature");
+const fs_1 = __importDefault(require("fs"));
+const cloudinary_1 = require("../config/cloudinary");
 const searchableFields = ["name", "slug", "description"];
 const dateFields = ["createdAt"];
 async function listBrands(query) {
@@ -35,19 +37,40 @@ async function getBrandById(id) {
         throw new appError_1.default("Brand not found", 404);
     return brand;
 }
-async function createBrand(data) {
+async function createBrand(data, file) {
+    // console.log("brand file", req.files,req.file)
+    if (!file) {
+        throw new appError_1.default('No file uploaded', 400);
+    }
+    const fileBuffer = fs_1.default.readFileSync(file.path);
+    console.log("brand11111111");
+    // Upload to Cloudinary
+    const uploadResult = await (0, cloudinary_1.uploadToCloudinary)(fileBuffer, 'ecommerce/brands', 'image');
+    fs_1.default.unlinkSync(file.path);
+    console.log("brand111111122221");
     const brand = await prisma_1.prisma.brand.create({
         data: {
             name: data.name,
             slug: data.slug,
-            logoUrl: data.logoUrl,
+            logoUrl: uploadResult.secure_url,
             description: data.description,
-            isFeatured: data.isFeatured ?? false,
+            isFeatured: Boolean(data.isFeatured) ?? false,
         },
     });
     return brand;
 }
-async function updateBrand(id, data) {
+async function updateBrand(id, data, file) {
+    if (!file) {
+        throw new appError_1.default('No file uploaded', 400);
+    }
+    const fileBuffer = fs_1.default.readFileSync(file.path);
+    // Upload to Cloudinary
+    const uploadResult = await (0, cloudinary_1.uploadToCloudinary)(fileBuffer, 'ecommerce/brands', 'image');
+    fs_1.default.unlinkSync(file.path);
+    if (uploadResult.secure_url) {
+        data.logoUrl = uploadResult.secure_url;
+    }
+    data.isFeatured = Boolean(data.isFeatured) ?? false;
     const brand = await prisma_1.prisma.brand.update({
         where: { id },
         data: data,

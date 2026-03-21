@@ -148,6 +148,7 @@ model User {
   productViews    ProductView[]
   searchLogs      SearchLog[]
   notifications   Notification[]
+  savedAddresses SavedAddress[]
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
 }
@@ -228,7 +229,9 @@ model ProductCategory {
   name        String
   slug        String           @unique
   description String?
+  image       String?
   parentId    String?
+  track       String?
   parent      ProductCategory? @relation("CategoryHierarchy", fields: [parentId], references: [id])
   children    ProductCategory[] @relation("CategoryHierarchy")
   products    Product[]
@@ -247,6 +250,7 @@ model Product {
   brandId          String?
   category         ProductCategory? @relation(fields: [categoryId], references: [id])
   categoryId       String?
+  track            String?
   isFeatured       Boolean          @default(false)
   status           ProductStatus
   variants         ProductVariant[]
@@ -447,6 +451,8 @@ model Shipment {
   status         ShipmentStatus
   shippedAt      DateTime?
   deliveredAt    DateTime?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 }
 
 model ShippingAddress {
@@ -466,6 +472,33 @@ model ShippingAddress {
 }
 
 //////////////////////////////////////////////////////
+// SAVED ADDRESSES (PER CUSTOMER)
+//////////////////////////////////////////////////////
+
+model SavedAddress {
+  id           String   @id @default(cuid())
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String
+
+  label        String
+  name         String
+  phone        String
+  addressLine1 String
+  addressLine2 String?
+  city         String
+  state        String?
+  country      String
+  postalCode   String?
+  latitude     Float?
+  longitude    Float?
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([userId])
+}
+
+//////////////////////////////////////////////////////
 // PROMOTIONS
 //////////////////////////////////////////////////////
 
@@ -479,7 +512,8 @@ model Coupon {
   usedCount      Int        @default(0)
   expiresAt      DateTime?
   usages         CouponUsage[]
-  createdAt      DateTime   @default(now())
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 }
 
 model CouponUsage {
@@ -491,6 +525,8 @@ model CouponUsage {
   order     Order?   @relation(fields: [orderId], references: [id])
   orderId   String?
   usedAt    DateTime @default(now())
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 }
 
 //////////////////////////////////////////////////////
@@ -507,7 +543,8 @@ model Review {
   title     String?
   comment   String?
   status    ReviewStatus
-  createdAt DateTime     @default(now())
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 }
 
 //////////////////////////////////////////////////////
@@ -521,7 +558,8 @@ model ProductView {
   user      User?    @relation(fields: [userId], references: [id])
   userId    String?
   sessionId String?
-  createdAt DateTime @default(now())
+createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 }
 
 model SearchLog {
@@ -529,7 +567,8 @@ model SearchLog {
   query     String
   user      User?    @relation(fields: [userId], references: [id])
   userId    String?
-  createdAt DateTime @default(now())
+createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 }
 
 //////////////////////////////////////////////////////

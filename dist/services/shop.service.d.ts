@@ -18,6 +18,21 @@ export declare function listShops(query: {
         logoUrl: string | null;
         currency: string;
         timezone: string;
+        locations: {
+            name: string;
+            id: string;
+            phone: string | null;
+            createdAt: Date;
+            shopId: string;
+            addressLine1: string;
+            addressLine2: string | null;
+            city: string;
+            state: string | null;
+            country: string;
+            postalCode: string | null;
+            latitude: number | null;
+            longitude: number | null;
+        }[];
     }[];
     pagination: {
         total: number;
@@ -56,6 +71,30 @@ export declare function getShopById(id: string): Promise<{
     currency: string;
     timezone: string;
 }>;
+export declare function createOrUpdateShop(data: {
+    name: string;
+    slug: string;
+    email?: string;
+    phone?: string;
+    description?: string;
+    currency: string;
+    timezone: string;
+    status: string;
+    logoUrl?: string;
+}, file?: any): Promise<{
+    name: string;
+    email: string | null;
+    id: string;
+    phone: string | null;
+    status: string;
+    createdAt: Date;
+    updatedAt: Date;
+    description: string | null;
+    slug: string;
+    logoUrl: string | null;
+    currency: string;
+    timezone: string;
+}>;
 export declare function updateShop(id: string, data: {
     name?: string;
     email?: string;
@@ -65,7 +104,7 @@ export declare function updateShop(id: string, data: {
     currency?: string;
     timezone?: string;
     status?: string;
-}): Promise<{
+}, file?: any): Promise<{
     name: string;
     email: string | null;
     id: string;

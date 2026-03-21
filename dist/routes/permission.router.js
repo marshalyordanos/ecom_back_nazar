@@ -42,7 +42,7 @@ router.use((0, auth_middleware_1.restrictTo)("admin"));
 router.get("/", permissionController.listPermissions);
 router.post("/", permissionController.createPermission);
 router.get("/:id", permissionController.getPermissionById);
-router.put("/:id", permissionController.updatePermission);
+router.patch("/:id", permissionController.updatePermission);
 router.delete("/:id", permissionController.deletePermission);
 exports.default = router;
 //# sourceMappingURL=permission.router.js.map

@@ -51,6 +51,7 @@ export const protect = async (req: AuthRequest, _res: Response, next: NextFuncti
 
       roles: user.roles.map((r) => r.name),
     };
+    console.log("req.user222222: ",req.user)
     next();
   } catch {
     return next(new AppError("Invalid or expired token", 401));

@@ -7,4 +7,11 @@ export declare const getById: (req: AuthRequest, res: Response, next: NextFuncti
 export declare const listUsers: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const updateUser: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const deactivateUser: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const listMyNotifications: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const markMyNotificationRead: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const markAllMyNotificationsRead: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const getMyUnreadNotificationsCount: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const listMySavedAddresses: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const addMySavedAddress: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const deleteMySavedAddress: (req: AuthRequest, res: Response, next: NextFunction) => void;
 //# sourceMappingURL=user.controller.d.ts.map

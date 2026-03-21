@@ -14,8 +14,9 @@ export declare function listReviewsByProduct(productId: string, query: {
         id: string;
         status: import("../generated/prisma/enums").ReviewStatus;
         createdAt: Date;
-        productId: string;
+        updatedAt: Date;
         title: string | null;
+        productId: string;
         comment: string | null;
         rating: number;
     })[];
@@ -43,8 +44,9 @@ export declare function getReviewById(id: string): Promise<{
     id: string;
     status: import("../generated/prisma/enums").ReviewStatus;
     createdAt: Date;
-    productId: string;
+    updatedAt: Date;
     title: string | null;
+    productId: string;
     comment: string | null;
     rating: number;
 }>;
@@ -57,8 +59,9 @@ export declare function createReview(userId: string, productId: string, data: {
     id: string;
     status: import("../generated/prisma/enums").ReviewStatus;
     createdAt: Date;
-    productId: string;
+    updatedAt: Date;
     title: string | null;
+    productId: string;
     comment: string | null;
     rating: number;
 }>;
@@ -71,8 +74,9 @@ export declare function updateReview(id: string, userId: string, data: {
     id: string;
     status: import("../generated/prisma/enums").ReviewStatus;
     createdAt: Date;
-    productId: string;
+    updatedAt: Date;
     title: string | null;
+    productId: string;
     comment: string | null;
     rating: number;
 }>;

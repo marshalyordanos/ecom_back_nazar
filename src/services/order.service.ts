@@ -145,6 +145,8 @@ export async function createOrderAdmin(data: {
     state?: string;
     country: string;
     postalCode?: string;
+    latitude?: number;
+    longitude?: number;
   };
 }) {
   const orderNumber = data.orderNumber || `ORD-${Date.now()}-${Math.random().toString(36).slice(2, 9).toUpperCase()}`;

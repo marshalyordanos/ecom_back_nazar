@@ -36,7 +36,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteLocation = exports.updateLocation = exports.addShopLocation = exports.listShopLocations = exports.updateShop = exports.getShopById = exports.listShops = void 0;
+exports.deleteLocation = exports.updateLocation = exports.addShopLocation = exports.listShopLocations = exports.createOrUpdateShop = exports.updateShop = exports.getShopById = exports.listShops = void 0;
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 const shopService = __importStar(require("../services/shop.service"));
 const queryParser_1 = require("../utils/queryParser");
@@ -50,7 +50,13 @@ exports.getShopById = (0, catchAsync_1.default)(async (req, res, _next) => {
     res.status(200).json(shop);
 });
 exports.updateShop = (0, catchAsync_1.default)(async (req, res, _next) => {
-    const shop = await shopService.updateShop(req.params.id, req.body);
+    const shop = await shopService.updateShop(req.params.id, req.body, req.file);
+    res.status(200).json(shop);
+});
+// Controller for createOrUpdateShop
+exports.createOrUpdateShop = (0, catchAsync_1.default)(async (req, res, _next) => {
+    // createOrUpdateShop expects all data (req.body) and a file (req.file), if available
+    const shop = await shopService.createOrUpdateShop(req.body, req.file);
     res.status(200).json(shop);
 });
 exports.listShopLocations = (0, catchAsync_1.default)(async (req, res, _next) => {

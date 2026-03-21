@@ -36,7 +36,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.changePassword = exports.resetPassword = exports.forgotPassword = exports.refresh = exports.logout = exports.login = exports.register = void 0;
+exports.changePassword = exports.resetPassword = exports.forgotPassword = exports.refresh = exports.logout = exports.login = exports.createSuperAdmin = exports.register = void 0;
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 const authService = __importStar(require("../services/auth.service"));
 exports.register = (0, catchAsync_1.default)(async (req, res) => {
@@ -46,6 +46,16 @@ exports.register = (0, catchAsync_1.default)(async (req, res) => {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         phone: req.body.phone,
+    });
+    return res.status(201).json(result);
+});
+exports.createSuperAdmin = (0, catchAsync_1.default)(async (req, res) => {
+    const result = await authService.adminRegister({
+        email: "admin@gmail.com",
+        password: "admin1111",
+        firstName: "admin",
+        lastName: "amdin",
+        phone: "0987654321",
     });
     return res.status(201).json(result);
 });

@@ -51,7 +51,7 @@ export declare function createBrand(data: {
     logoUrl?: string;
     description?: string;
     isFeatured?: boolean;
-}): Promise<{
+}, file: any): Promise<{
     name: string;
     id: string;
     createdAt: Date;
@@ -66,7 +66,7 @@ export declare function updateBrand(id: string, data: {
     logoUrl?: string;
     description?: string;
     isFeatured?: boolean;
-}): Promise<{
+}, file: any): Promise<{
     name: string;
     id: string;
     createdAt: Date;

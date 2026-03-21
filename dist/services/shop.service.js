@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listShops = listShops;
 exports.getShopById = getShopById;
+exports.createOrUpdateShop = createOrUpdateShop;
 exports.updateShop = updateShop;
 exports.listShopLocations = listShopLocations;
 exports.addShopLocation = addShopLocation;
@@ -13,6 +14,8 @@ exports.deleteLocation = deleteLocation;
 const prisma_1 = require("../lib/prisma");
 const appError_1 = __importDefault(require("../utils/appError"));
 const apiFeature_1 = require("../utils/apiFeature");
+const fs_1 = __importDefault(require("fs"));
+const cloudinary_1 = require("../config/cloudinary");
 const searchableFields = ["name", "slug", "email", "description"];
 const dateFields = ["createdAt", "updatedAt"];
 async function listShops(query) {
@@ -41,6 +44,7 @@ async function listShops(query) {
                 status: true,
                 createdAt: true,
                 updatedAt: true,
+                locations: true
             },
         }),
         prisma_1.prisma.shop.count({ where }),
@@ -56,10 +60,55 @@ async function getShopById(id) {
         throw new appError_1.default("Shop not found", 404);
     return shop;
 }
-async function updateShop(id, data) {
+// Create or update the single shop (since only one shop row is allowed).
+// If any shop exists, update it, otherwise create a new one.
+// For logo, support uploading via Cloudinary if a file is provided.
+async function createOrUpdateShop(data, file) {
+    let logoUrl = data.logoUrl;
+    if (file) {
+        const fileBuffer = fs_1.default.readFileSync(file.path);
+        const uploadResult = await (0, cloudinary_1.uploadToCloudinary)(fileBuffer, "ecommerce/shops", "image");
+        fs_1.default.unlinkSync(file.path);
+        if (uploadResult.secure_url) {
+            logoUrl = uploadResult.secure_url;
+        }
+    }
+    const existingShop = await prisma_1.prisma.shop.findFirst();
+    if (existingShop) {
+        // Update the only shop row
+        const shop = await prisma_1.prisma.shop.update({
+            where: { id: existingShop.id },
+            data: {
+                ...data,
+                logoUrl,
+            },
+        });
+        return shop;
+    }
+    else {
+        // Create the shop row
+        const shop = await prisma_1.prisma.shop.create({
+            data: {
+                ...data,
+                logoUrl,
+            },
+        });
+        return shop;
+    }
+}
+async function updateShop(id, data, file) {
+    let newData = { ...data };
+    if (file) {
+        const fileBuffer = fs_1.default.readFileSync(file.path);
+        const uploadResult = await (0, cloudinary_1.uploadToCloudinary)(fileBuffer, "ecommerce/shops", "image");
+        fs_1.default.unlinkSync(file.path);
+        if (uploadResult.secure_url) {
+            newData.logoUrl = uploadResult.secure_url;
+        }
+    }
     const shop = await prisma_1.prisma.shop.update({
         where: { id },
-        data: data,
+        data: newData,
     });
     return shop;
 }

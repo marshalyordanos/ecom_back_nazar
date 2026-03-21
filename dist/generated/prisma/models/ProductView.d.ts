@@ -16,6 +16,7 @@ export type ProductViewMinAggregateOutputType = {
     userId: string | null;
     sessionId: string | null;
     createdAt: Date | null;
+    updatedAt: Date | null;
 };
 export type ProductViewMaxAggregateOutputType = {
     id: string | null;
@@ -23,6 +24,7 @@ export type ProductViewMaxAggregateOutputType = {
     userId: string | null;
     sessionId: string | null;
     createdAt: Date | null;
+    updatedAt: Date | null;
 };
 export type ProductViewCountAggregateOutputType = {
     id: number;
@@ -30,6 +32,7 @@ export type ProductViewCountAggregateOutputType = {
     userId: number;
     sessionId: number;
     createdAt: number;
+    updatedAt: number;
     _all: number;
 };
 export type ProductViewMinAggregateInputType = {
@@ -38,6 +41,7 @@ export type ProductViewMinAggregateInputType = {
     userId?: true;
     sessionId?: true;
     createdAt?: true;
+    updatedAt?: true;
 };
 export type ProductViewMaxAggregateInputType = {
     id?: true;
@@ -45,6 +49,7 @@ export type ProductViewMaxAggregateInputType = {
     userId?: true;
     sessionId?: true;
     createdAt?: true;
+    updatedAt?: true;
 };
 export type ProductViewCountAggregateInputType = {
     id?: true;
@@ -52,6 +57,7 @@ export type ProductViewCountAggregateInputType = {
     userId?: true;
     sessionId?: true;
     createdAt?: true;
+    updatedAt?: true;
     _all?: true;
 };
 export type ProductViewAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -122,6 +128,7 @@ export type ProductViewGroupByOutputType = {
     userId: string | null;
     sessionId: string | null;
     createdAt: Date;
+    updatedAt: Date;
     _count: ProductViewCountAggregateOutputType | null;
     _min: ProductViewMinAggregateOutputType | null;
     _max: ProductViewMaxAggregateOutputType | null;
@@ -138,6 +145,7 @@ export type ProductViewWhereInput = {
     userId?: Prisma.StringNullableFilter<"ProductView"> | string | null;
     sessionId?: Prisma.StringNullableFilter<"ProductView"> | string | null;
     createdAt?: Prisma.DateTimeFilter<"ProductView"> | Date | string;
+    updatedAt?: Prisma.DateTimeFilter<"ProductView"> | Date | string;
     product?: Prisma.XOR<Prisma.ProductScalarRelationFilter, Prisma.ProductWhereInput>;
     user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null;
 };
@@ -147,6 +155,7 @@ export type ProductViewOrderByWithRelationInput = {
     userId?: Prisma.SortOrderInput | Prisma.SortOrder;
     sessionId?: Prisma.SortOrderInput | Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
+    updatedAt?: Prisma.SortOrder;
     product?: Prisma.ProductOrderByWithRelationInput;
     user?: Prisma.UserOrderByWithRelationInput;
 };
@@ -159,6 +168,7 @@ export type ProductViewWhereUniqueInput = Prisma.AtLeast<{
     userId?: Prisma.StringNullableFilter<"ProductView"> | string | null;
     sessionId?: Prisma.StringNullableFilter<"ProductView"> | string | null;
     createdAt?: Prisma.DateTimeFilter<"ProductView"> | Date | string;
+    updatedAt?: Prisma.DateTimeFilter<"ProductView"> | Date | string;
     product?: Prisma.XOR<Prisma.ProductScalarRelationFilter, Prisma.ProductWhereInput>;
     user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null;
 }, "id">;
@@ -168,6 +178,7 @@ export type ProductViewOrderByWithAggregationInput = {
     userId?: Prisma.SortOrderInput | Prisma.SortOrder;
     sessionId?: Prisma.SortOrderInput | Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
+    updatedAt?: Prisma.SortOrder;
     _count?: Prisma.ProductViewCountOrderByAggregateInput;
     _max?: Prisma.ProductViewMaxOrderByAggregateInput;
     _min?: Prisma.ProductViewMinOrderByAggregateInput;
@@ -181,11 +192,13 @@ export type ProductViewScalarWhereWithAggregatesInput = {
     userId?: Prisma.StringNullableWithAggregatesFilter<"ProductView"> | string | null;
     sessionId?: Prisma.StringNullableWithAggregatesFilter<"ProductView"> | string | null;
     createdAt?: Prisma.DateTimeWithAggregatesFilter<"ProductView"> | Date | string;
+    updatedAt?: Prisma.DateTimeWithAggregatesFilter<"ProductView"> | Date | string;
 };
 export type ProductViewCreateInput = {
     id?: string;
     sessionId?: string | null;
     createdAt?: Date | string;
+    updatedAt?: Date | string;
     product: Prisma.ProductCreateNestedOneWithoutProductViewsInput;
     user?: Prisma.UserCreateNestedOneWithoutProductViewsInput;
 };
@@ -195,11 +208,13 @@ export type ProductViewUncheckedCreateInput = {
     userId?: string | null;
     sessionId?: string | null;
     createdAt?: Date | string;
+    updatedAt?: Date | string;
 };
 export type ProductViewUpdateInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     product?: Prisma.ProductUpdateOneRequiredWithoutProductViewsNestedInput;
     user?: Prisma.UserUpdateOneWithoutProductViewsNestedInput;
 };
@@ -209,6 +224,7 @@ export type ProductViewUncheckedUpdateInput = {
     userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 export type ProductViewCreateManyInput = {
     id?: string;
@@ -216,11 +232,13 @@ export type ProductViewCreateManyInput = {
     userId?: string | null;
     sessionId?: string | null;
     createdAt?: Date | string;
+    updatedAt?: Date | string;
 };
 export type ProductViewUpdateManyMutationInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 export type ProductViewUncheckedUpdateManyInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -228,6 +246,7 @@ export type ProductViewUncheckedUpdateManyInput = {
     userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 export type ProductViewListRelationFilter = {
     every?: Prisma.ProductViewWhereInput;
@@ -243,6 +262,7 @@ export type ProductViewCountOrderByAggregateInput = {
     userId?: Prisma.SortOrder;
     sessionId?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
+    updatedAt?: Prisma.SortOrder;
 };
 export type ProductViewMaxOrderByAggregateInput = {
     id?: Prisma.SortOrder;
@@ -250,6 +270,7 @@ export type ProductViewMaxOrderByAggregateInput = {
     userId?: Prisma.SortOrder;
     sessionId?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
+    updatedAt?: Prisma.SortOrder;
 };
 export type ProductViewMinOrderByAggregateInput = {
     id?: Prisma.SortOrder;
@@ -257,6 +278,7 @@ export type ProductViewMinOrderByAggregateInput = {
     userId?: Prisma.SortOrder;
     sessionId?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
+    updatedAt?: Prisma.SortOrder;
 };
 export type ProductViewCreateNestedManyWithoutUserInput = {
     create?: Prisma.XOR<Prisma.ProductViewCreateWithoutUserInput, Prisma.ProductViewUncheckedCreateWithoutUserInput> | Prisma.ProductViewCreateWithoutUserInput[] | Prisma.ProductViewUncheckedCreateWithoutUserInput[];
@@ -338,6 +360,7 @@ export type ProductViewCreateWithoutUserInput = {
     id?: string;
     sessionId?: string | null;
     createdAt?: Date | string;
+    updatedAt?: Date | string;
     product: Prisma.ProductCreateNestedOneWithoutProductViewsInput;
 };
 export type ProductViewUncheckedCreateWithoutUserInput = {
@@ -345,6 +368,7 @@ export type ProductViewUncheckedCreateWithoutUserInput = {
     productId: string;
     sessionId?: string | null;
     createdAt?: Date | string;
+    updatedAt?: Date | string;
 };
 export type ProductViewCreateOrConnectWithoutUserInput = {
     where: Prisma.ProductViewWhereUniqueInput;
@@ -376,11 +400,13 @@ export type ProductViewScalarWhereInput = {
     userId?: Prisma.StringNullableFilter<"ProductView"> | string | null;
     sessionId?: Prisma.StringNullableFilter<"ProductView"> | string | null;
     createdAt?: Prisma.DateTimeFilter<"ProductView"> | Date | string;
+    updatedAt?: Prisma.DateTimeFilter<"ProductView"> | Date | string;
 };
 export type ProductViewCreateWithoutProductInput = {
     id?: string;
     sessionId?: string | null;
     createdAt?: Date | string;
+    updatedAt?: Date | string;
     user?: Prisma.UserCreateNestedOneWithoutProductViewsInput;
 };
 export type ProductViewUncheckedCreateWithoutProductInput = {
@@ -388,6 +414,7 @@ export type ProductViewUncheckedCreateWithoutProductInput = {
     userId?: string | null;
     sessionId?: string | null;
     createdAt?: Date | string;
+    updatedAt?: Date | string;
 };
 export type ProductViewCreateOrConnectWithoutProductInput = {
     where: Prisma.ProductViewWhereUniqueInput;
@@ -415,11 +442,13 @@ export type ProductViewCreateManyUserInput = {
     productId: string;
     sessionId?: string | null;
     createdAt?: Date | string;
+    updatedAt?: Date | string;
 };
 export type ProductViewUpdateWithoutUserInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     product?: Prisma.ProductUpdateOneRequiredWithoutProductViewsNestedInput;
 };
 export type ProductViewUncheckedUpdateWithoutUserInput = {
@@ -427,23 +456,27 @@ export type ProductViewUncheckedUpdateWithoutUserInput = {
     productId?: Prisma.StringFieldUpdateOperationsInput | string;
     sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 export type ProductViewUncheckedUpdateManyWithoutUserInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     productId?: Prisma.StringFieldUpdateOperationsInput | string;
     sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 export type ProductViewCreateManyProductInput = {
     id?: string;
     userId?: string | null;
     sessionId?: string | null;
     createdAt?: Date | string;
+    updatedAt?: Date | string;
 };
 export type ProductViewUpdateWithoutProductInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     user?: Prisma.UserUpdateOneWithoutProductViewsNestedInput;
 };
 export type ProductViewUncheckedUpdateWithoutProductInput = {
@@ -451,12 +484,14 @@ export type ProductViewUncheckedUpdateWithoutProductInput = {
     userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 export type ProductViewUncheckedUpdateManyWithoutProductInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 export type ProductViewSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
@@ -464,6 +499,7 @@ export type ProductViewSelect<ExtArgs extends runtime.Types.Extensions.InternalA
     userId?: boolean;
     sessionId?: boolean;
     createdAt?: boolean;
+    updatedAt?: boolean;
     product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>;
     user?: boolean | Prisma.ProductView$userArgs<ExtArgs>;
 }, ExtArgs["result"]["productView"]>;
@@ -473,6 +509,7 @@ export type ProductViewSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
     userId?: boolean;
     sessionId?: boolean;
     createdAt?: boolean;
+    updatedAt?: boolean;
     product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>;
     user?: boolean | Prisma.ProductView$userArgs<ExtArgs>;
 }, ExtArgs["result"]["productView"]>;
@@ -482,6 +519,7 @@ export type ProductViewSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
     userId?: boolean;
     sessionId?: boolean;
     createdAt?: boolean;
+    updatedAt?: boolean;
     product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>;
     user?: boolean | Prisma.ProductView$userArgs<ExtArgs>;
 }, ExtArgs["result"]["productView"]>;
@@ -491,8 +529,9 @@ export type ProductViewSelectScalar = {
     userId?: boolean;
     sessionId?: boolean;
     createdAt?: boolean;
+    updatedAt?: boolean;
 };
-export type ProductViewOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "productId" | "userId" | "sessionId" | "createdAt", ExtArgs["result"]["productView"]>;
+export type ProductViewOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "productId" | "userId" | "sessionId" | "createdAt" | "updatedAt", ExtArgs["result"]["productView"]>;
 export type ProductViewInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>;
     user?: boolean | Prisma.ProductView$userArgs<ExtArgs>;
@@ -517,6 +556,7 @@ export type $ProductViewPayload<ExtArgs extends runtime.Types.Extensions.Interna
         userId: string | null;
         sessionId: string | null;
         createdAt: Date;
+        updatedAt: Date;
     }, ExtArgs["result"]["productView"]>;
     composites: {};
 };
@@ -878,6 +918,7 @@ export interface ProductViewFieldRefs {
     readonly userId: Prisma.FieldRef<"ProductView", 'String'>;
     readonly sessionId: Prisma.FieldRef<"ProductView", 'String'>;
     readonly createdAt: Prisma.FieldRef<"ProductView", 'DateTime'>;
+    readonly updatedAt: Prisma.FieldRef<"ProductView", 'DateTime'>;
 }
 /**
  * ProductView findUnique

@@ -196,6 +196,7 @@ export declare const ProductVariantScalarFieldEnum: {
     readonly costPrice: "costPrice";
     readonly weight: "weight";
     readonly status: "status";
+    readonly image: "image";
     readonly createdAt: "createdAt";
     readonly updatedAt: "updatedAt";
 };
@@ -235,6 +236,7 @@ export declare const InventoryScalarFieldEnum: {
     readonly quantity: "quantity";
     readonly reservedQuantity: "reservedQuantity";
     readonly reorderLevel: "reorderLevel";
+    readonly createdAt: "createdAt";
     readonly updatedAt: "updatedAt";
 };
 export type InventoryScalarFieldEnum = (typeof InventoryScalarFieldEnum)[keyof typeof InventoryScalarFieldEnum];
@@ -247,6 +249,7 @@ export declare const InventoryMovementScalarFieldEnum: {
     readonly quantity: "quantity";
     readonly referenceId: "referenceId";
     readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
 };
 export type InventoryMovementScalarFieldEnum = (typeof InventoryMovementScalarFieldEnum)[keyof typeof InventoryMovementScalarFieldEnum];
 export declare const CartScalarFieldEnum: {
@@ -312,6 +315,8 @@ export declare const ShipmentScalarFieldEnum: {
     readonly status: "status";
     readonly shippedAt: "shippedAt";
     readonly deliveredAt: "deliveredAt";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
 };
 export type ShipmentScalarFieldEnum = (typeof ShipmentScalarFieldEnum)[keyof typeof ShipmentScalarFieldEnum];
 export declare const ShippingAddressScalarFieldEnum: {
@@ -339,6 +344,7 @@ export declare const CouponScalarFieldEnum: {
     readonly usedCount: "usedCount";
     readonly expiresAt: "expiresAt";
     readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
 };
 export type CouponScalarFieldEnum = (typeof CouponScalarFieldEnum)[keyof typeof CouponScalarFieldEnum];
 export declare const CouponUsageScalarFieldEnum: {
@@ -347,6 +353,8 @@ export declare const CouponUsageScalarFieldEnum: {
     readonly userId: "userId";
     readonly orderId: "orderId";
     readonly usedAt: "usedAt";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
 };
 export type CouponUsageScalarFieldEnum = (typeof CouponUsageScalarFieldEnum)[keyof typeof CouponUsageScalarFieldEnum];
 export declare const ReviewScalarFieldEnum: {
@@ -358,6 +366,7 @@ export declare const ReviewScalarFieldEnum: {
     readonly comment: "comment";
     readonly status: "status";
     readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
 };
 export type ReviewScalarFieldEnum = (typeof ReviewScalarFieldEnum)[keyof typeof ReviewScalarFieldEnum];
 export declare const ProductViewScalarFieldEnum: {
@@ -366,6 +375,7 @@ export declare const ProductViewScalarFieldEnum: {
     readonly userId: "userId";
     readonly sessionId: "sessionId";
     readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
 };
 export type ProductViewScalarFieldEnum = (typeof ProductViewScalarFieldEnum)[keyof typeof ProductViewScalarFieldEnum];
 export declare const SearchLogScalarFieldEnum: {
@@ -373,6 +383,7 @@ export declare const SearchLogScalarFieldEnum: {
     readonly query: "query";
     readonly userId: "userId";
     readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
 };
 export type SearchLogScalarFieldEnum = (typeof SearchLogScalarFieldEnum)[keyof typeof SearchLogScalarFieldEnum];
 export declare const NotificationScalarFieldEnum: {

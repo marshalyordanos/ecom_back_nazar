@@ -35,15 +35,30 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const userController = __importStar(require("../controllers/user.controller"));
+const authController = __importStar(require("../controllers/auth.controller"));
 const auth_middleware_1 = require("../middleware/auth.middleware");
 const router = (0, express_1.Router)();
 router.use(auth_middleware_1.protect);
 router.get("/me", userController.getMe);
-router.put("/me", userController.updateMe);
-router.put("/me/password", userController.updateMyPassword);
+router.patch("/me", userController.updateMe);
+router.patch("/me/password", userController.updateMyPassword);
+router.post("/", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), authController.register);
+// ===============================
+// CUSTOMER NOTIFICATIONS (ME)
+// ===============================
+router.get("/notifications", userController.listMyNotifications);
+router.get("/notifications/unread-count", userController.getMyUnreadNotificationsCount);
+router.post("/notifications/read-all", userController.markAllMyNotificationsRead);
+router.post("/notifications/:id/read", userController.markMyNotificationRead);
+// ===============================
+// SAVED ADDRESSES (ME)
+// ===============================
+router.get("/saved-addresses", userController.listMySavedAddresses);
+router.post("/saved-addresses", userController.addMySavedAddress);
+router.delete("/saved-addresses/:id", userController.deleteMySavedAddress);
 router.get("/", (0, auth_middleware_1.restrictTo)("admin"), userController.listUsers);
 router.get("/:id", (0, auth_middleware_1.restrictTo)("admin"), userController.getById);
-router.put("/:id", (0, auth_middleware_1.restrictTo)("admin"), userController.updateUser);
+router.patch("/:id", (0, auth_middleware_1.restrictTo)("admin"), userController.updateUser);
 router.delete("/:id", (0, auth_middleware_1.restrictTo)("admin"), userController.deactivateUser);
 exports.default = router;
 //# sourceMappingURL=user.router.js.map

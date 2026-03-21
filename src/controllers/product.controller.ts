@@ -7,7 +7,8 @@ import type { AuthRequest } from "../middleware/auth.middleware";
 export const listProducts = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
   const query = parseListQuery(req);
   const shopId = req.query.shopId as string | undefined;
-  const result = await productService.listProducts(shopId, query);
+  const track = req.query.track as string | undefined;
+  const result = await productService.listProducts(shopId, track, query,req as any);
   res.status(200).json(result);
 });
 
@@ -16,6 +17,16 @@ export const getProductById = catchAsync(async (req: AuthRequest, res: Response,
   const product = await productService.getProductById(req.params.id, shopId);
   res.status(200).json(product);
 });
+
+export const getProductByIdMobile = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string | undefined;
+  const userId = req.body?.userId as string | undefined;
+  const sessionId = req.body?.sessionId as string | undefined;
+  const product = await productService.getProductByIdMobile(req.params.id, shopId,userId,sessionId);
+  res.status(200).json(product);
+});
+
+
 
 export const createProduct = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
   const shopId = (req as any).shopId || req.body.shopId;

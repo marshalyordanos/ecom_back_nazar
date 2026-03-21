@@ -62,3 +62,492 @@ export const getRecentActivities = catchAsync(async (req: AuthRequest, res: Resp
   const data = await dashboardService.getRecentActivities(shopId || "", limit);
   res.status(200).json(data);
 });
+
+// ===============================
+// 📊 GLOBAL SUMMARY (MAIN API)
+// ===============================
+export const getDashboardSummary = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getDashboardSummary(shopId);
+  res.status(200).json(data);
+});
+
+// ===============================
+// 👤 USER SUMMARY
+// ===============================
+export const getUserSummary = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  const days = parseInt(String(req.query.days), 10) || 30;
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getUserSummary(shopId, days);
+  res.status(200).json(data);
+});
+
+export const getUserVerificationStats = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getUserVerificationStats(shopId);
+  res.status(200).json(data);
+});
+
+// ===============================
+// 📦 ORDER SUMMARY
+// ===============================
+export const getOrderSummaryExtended = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getOrderSummaryExtended(shopId);
+  res.status(200).json(data);
+});
+
+export const getOrderRevenueSummary = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getOrderRevenueSummary(shopId);
+  res.status(200).json(data);
+});
+
+export const getDailyOrdersSummary = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  const days = parseInt(String(req.query.days), 10) || 30;
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getDailyOrdersSummary(shopId, days);
+  res.status(200).json(data);
+});
+
+// ===============================
+// 💳 PAYMENT SUMMARY
+// ===============================
+export const getPaymentSummary = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getPaymentSummary(shopId);
+  res.status(200).json(data);
+});
+
+export const getPaymentMethodStats = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getPaymentMethodStats(shopId);
+  res.status(200).json(data);
+});
+
+export const getDailyPayments = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  const days = parseInt(String(req.query.days), 10) || 30;
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getDailyPayments(shopId, days);
+  res.status(200).json(data);
+});
+
+// ===============================
+// 🛍 PRODUCT SUMMARY
+// ===============================
+export const getProductSummary = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getProductSummary(shopId);
+  res.status(200).json(data);
+});
+
+export const getVariantSummary = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getVariantSummary(shopId);
+  res.status(200).json(data);
+});
+
+// ===============================
+// 📦 INVENTORY SUMMARY
+// ===============================
+export const getInventorySummary = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getInventorySummary(shopId);
+  res.status(200).json(data);
+});
+
+export const getLowStockCount = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getLowStockCount(shopId);
+  res.status(200).json(data);
+});
+
+export const getOutOfStock = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getOutOfStock(shopId);
+  res.status(200).json(data);
+});
+
+// ===============================
+// 🏪 SHOP SUMMARY
+// ===============================
+export const getShopSummary = catchAsync(async (_req: AuthRequest, res: Response, _next: NextFunction) => {
+  const data = await dashboardService.getShopSummary();
+  res.status(200).json(data);
+});
+
+export const getLocationSummary = catchAsync(async (_req: AuthRequest, res: Response, _next: NextFunction) => {
+  const data = await dashboardService.getLocationSummary();
+  res.status(200).json(data);
+});
+
+// ===============================
+// 🎟 COUPON SUMMARY
+// ===============================
+export const getCouponSummary = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getCouponSummary(shopId);
+  res.status(200).json(data);
+});
+
+export const getCouponUsageSummary = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getCouponUsageSummary(shopId);
+  res.status(200).json(data);
+});
+
+// ===============================
+// ⭐ REVIEW SUMMARY
+// ===============================
+export const getReviewSummary = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getReviewSummary(shopId);
+  res.status(200).json(data);
+});
+
+// ===============================
+// 🔔 NOTIFICATION SUMMARY
+// ===============================
+export const getNotificationSummary = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getNotificationSummary(shopId);
+  res.status(200).json(data);
+});
+
+// ===============================
+// 🔍 SEARCH SUMMARY
+// ===============================
+export const getSearchSummary = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  const days = parseInt(String(req.query.days), 10) || 30;
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getSearchSummary(shopId, days);
+  res.status(200).json(data);
+});
+
+// ===============================
+// 💰 SALES ANALYTICS
+// ===============================
+export const getSalesTrends = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  const groupBy = (req.query.groupBy as "day" | "week" | "month") || "day";
+  const days = parseInt(String(req.query.days), 10) || 30;
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getSalesTrends(shopId, groupBy, days);
+  res.status(200).json(data);
+});
+
+export const getSalesByChannel = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  const days = parseInt(String(req.query.days), 10) || 30;
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getSalesByChannel(shopId, days);
+  res.status(200).json(data);
+});
+
+export const getSalesForecast = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  const historyDays = parseInt(String(req.query.historyDays), 10) || 30;
+  const forecastDays = parseInt(String(req.query.forecastDays), 10) || 7;
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getSalesForecast(shopId, historyDays, forecastDays);
+  res.status(200).json(data);
+});
+
+export const getRefundStats = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  const days = parseInt(String(req.query.days), 10) || 90;
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getRefundStats(shopId, days);
+  res.status(200).json(data);
+});
+
+// ===============================
+// 📦 ORDER ANALYTICS
+// ===============================
+export const getOrderStatusStats = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  const days = parseInt(String(req.query.days), 10) || 30;
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getOrderStatusStats(shopId, days);
+  res.status(200).json(data);
+});
+
+export const getOrderFulfillmentStats = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  const days = parseInt(String(req.query.days), 10) || 30;
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getOrderFulfillmentStats(shopId, days);
+  res.status(200).json(data);
+});
+
+export const getOrderValueStats = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  const days = parseInt(String(req.query.days), 10) || 90;
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getOrderValueStats(shopId, days);
+  res.status(200).json(data);
+});
+
+export const getAbandonedOrders = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  const minAgeDays = parseInt(String(req.query.minAgeDays), 10) || 1;
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getAbandonedOrders(shopId, minAgeDays);
+  res.status(200).json(data);
+});
+
+// ===============================
+// 🛍 PRODUCT ANALYTICS
+// ===============================
+export const getProductPerformance = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  const days = parseInt(String(req.query.days), 10) || 90;
+  const limit = Math.min(parseInt(String(req.query.limit), 10) || 10, 50);
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getProductPerformance(shopId, days, limit);
+  res.status(200).json(data);
+});
+
+export const getProductConversion = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  const days = parseInt(String(req.query.days), 10) || 30;
+  const limit = Math.min(parseInt(String(req.query.limit), 10) || 20, 100);
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getProductConversion(shopId, days, limit);
+  res.status(200).json(data);
+});
+
+export const getCategoryStats = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  const days = parseInt(String(req.query.days), 10) || 90;
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getCategoryStats(shopId, days);
+  res.status(200).json(data);
+});
+
+export const getBrandStats = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  const days = parseInt(String(req.query.days), 10) || 90;
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getBrandStats(shopId, days);
+  res.status(200).json(data);
+});
+
+// ===============================
+// 👥 CUSTOMER ANALYTICS
+// ===============================
+export const getCustomerGrowth = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  const days = parseInt(String(req.query.days), 10) || 30;
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getCustomerGrowth(shopId, days);
+  res.status(200).json(data);
+});
+
+export const getCustomerRetention = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  const days = parseInt(String(req.query.days), 10) || 30;
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getCustomerRetention(shopId, days);
+  res.status(200).json(data);
+});
+
+export const getCustomerLTV = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  const days = parseInt(String(req.query.days), 10) || 90;
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getCustomerLTV(shopId, days);
+  res.status(200).json(data);
+});
+
+export const getCustomerSegments = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  const days = parseInt(String(req.query.days), 10) || 90;
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getCustomerSegments(shopId, days);
+  res.status(200).json(data);
+});
+
+// ===============================
+// 📦 INVENTORY ANALYTICS
+// ===============================
+export const getInventoryValuation = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getInventoryValuation(shopId);
+  res.status(200).json(data);
+});
+
+export const getInventoryTurnover = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  const days = parseInt(String(req.query.days), 10) || 30;
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getInventoryTurnover(shopId, days);
+  res.status(200).json(data);
+});
+
+export const getInventoryAlerts = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  const limit = Math.min(parseInt(String(req.query.limit), 10) || 50, 200);
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getInventoryAlerts(shopId, limit);
+  res.status(200).json(data);
+});
+
+export const getInventoryByLocation = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getInventoryByLocation(shopId);
+  res.status(200).json(data);
+});
+
+// ===============================
+// 🎟 COUPONS / PROMOTIONS
+// ===============================
+export const getCouponPerformance = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  const limit = Math.min(parseInt(String(req.query.limit), 10) || 10, 50);
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getCouponPerformance(shopId, limit);
+  res.status(200).json(data);
+});
+
+export const getActiveCoupons = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  const limit = Math.min(parseInt(String(req.query.limit), 10) || 50, 200);
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getActiveCoupons(shopId, limit);
+  res.status(200).json(data);
+});
+
+export const getExpiredCoupons = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  const limit = Math.min(parseInt(String(req.query.limit), 10) || 50, 200);
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getExpiredCoupons(shopId, limit);
+  res.status(200).json(data);
+});
+
+// ===============================
+// ⭐ REVIEWS & RATINGS
+// ===============================
+export const getRatingDistribution = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getRatingDistribution(shopId);
+  res.status(200).json(data);
+});
+
+export const getRecentReviews = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  const limit = Math.min(parseInt(String(req.query.limit), 10) || 10, 50);
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getRecentReviews(shopId, limit);
+  res.status(200).json(data);
+});
+
+export const getPendingReviews = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  const limit = Math.min(parseInt(String(req.query.limit), 10) || 20, 100);
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getPendingReviews(shopId, limit);
+  res.status(200).json(data);
+});
+
+// ===============================
+// 🔔 ACTIVITY / SYSTEM LOGS
+// ===============================
+export const getOrderActivities = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  const limit = Math.min(parseInt(String(req.query.limit), 10) || 30, 200);
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getOrderActivities(shopId, limit);
+  res.status(200).json(data);
+});
+
+export const getUserActivities = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  const days = parseInt(String(req.query.days), 10) || 30;
+  const limit = Math.min(parseInt(String(req.query.limit), 10) || 20, 100);
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getUserActivities(shopId, days, limit);
+  res.status(200).json(data);
+});
+
+export const getInventoryActivities = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  const limit = Math.min(parseInt(String(req.query.limit), 10) || 50, 300);
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getInventoryActivities(shopId, limit);
+  res.status(200).json(data);
+});
+
+// ===============================
+// 🔍 SEARCH & BEHAVIOR
+// ===============================
+export const getTopSearchQueries = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  const days = parseInt(String(req.query.days), 10) || 30;
+  const limit = Math.min(parseInt(String(req.query.limit), 10) || 10, 50);
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getTopSearchQueries(shopId, days, limit);
+  res.status(200).json(data);
+});
+
+export const getNoResultSearches = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  const days = parseInt(String(req.query.days), 10) || 30;
+  const limit = Math.min(parseInt(String(req.query.limit), 10) || 10, 50);
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getNoResultSearches(shopId, days, limit);
+  res.status(200).json(data);
+});
+
+export const getMostViewedProducts = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  const limit = Math.min(parseInt(String(req.query.limit), 10) || 10, 50);
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getMostViewedProducts(shopId, limit);
+  res.status(200).json(data);
+});
+
+// ===============================
+// ⚙️ SYSTEM / SHOP HEALTH
+// ===============================
+export const getSystemHealth = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string | undefined;
+  const data = await dashboardService.getSystemHealth(shopId);
+  res.status(200).json(data);
+});
+
+export const getSyncStatus = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string | undefined;
+  const limit = Math.min(parseInt(String(req.query.limit), 10) || 20, 100);
+  const data = await dashboardService.getSyncStatus(shopId, limit);
+  res.status(200).json(data);
+});
+
+export const getUnreadNotifications = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const userId = req.query.userId as string | undefined;
+  const data = await dashboardService.getUnreadNotifications(userId);
+  res.status(200).json(data);
+});

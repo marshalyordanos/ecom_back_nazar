@@ -66,6 +66,34 @@ export async function capturePayment(id: string) {
     message: `Payment for order ${payment.order.orderNumber} has been confirmed.`,
     metadata: { orderId: payment.orderId, paymentId: id },
   });
+
+
+  // 5️⃣ Create shipment if payment is NOT cash
+  if (payment.provider.toLowerCase() !== "cash") {
+    const trackingNumber = `TRACK-${Date.now()}-${Math.random().toString(36).slice(2, 9).toUpperCase()}`;
+    const shipment = await prisma.shipment.create({
+      data: {
+        
+        orderId: payment.orderId,
+        status: "PENDING", // initial shipment status
+        trackingNumber: trackingNumber,
+        carrier: null,
+
+      },
+    });
+
+    // Optional: notify customer about shipment creation
+    await createNotification({
+      userId: payment.order.userId,
+      type: "shipment",
+      title: "Shipment created",
+      message: `Your order ${payment.order.orderNumber} shipment has been created.`,
+      metadata: { orderId: payment.orderId, shipmentId: shipment.id },
+    });
+  }
+
+
+
   return updated;
 }
 

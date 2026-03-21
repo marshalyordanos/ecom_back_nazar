@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.adminRegister = adminRegister;
 exports.register = register;
 exports.login = login;
 exports.logout = logout;
@@ -18,8 +19,8 @@ const prisma_1 = require("../lib/prisma");
 const hash_1 = require("../utils/hash");
 const appError_1 = __importDefault(require("../utils/appError"));
 const email_1 = require("../utils/email");
-const accessExpirationMinutes = parseInt(config_1.default.jwt.accessExpirationMinutes, 10) || 30;
-const refreshExpirationDays = parseInt(config_1.default.jwt.refreshExpirationDays, 10) || 30;
+const accessExpirationMinutes = parseInt(config_1.default.jwt.accessExpirationMinutes, 10) || 60;
+const refreshExpirationDays = parseInt(config_1.default.jwt.refreshExpirationDays, 10) || 60;
 function generateAccessToken(userId, email) {
     return jsonwebtoken_1.default.sign({ userId, email, type: tokens_1.tokenTypes.ACCESS }, config_1.default.jwt.secret, { expiresIn: `${accessExpirationMinutes}m` });
 }
@@ -28,6 +29,46 @@ function generateRefreshToken() {
 }
 function generateResetToken() {
     return crypto_1.default.randomBytes(32).toString("hex");
+}
+async function adminRegister(data) {
+    if (!data.phone) {
+        throw new appError_1.default("Phone is required", 400);
+    }
+    const passwordHash = await (0, hash_1.hashPassword)(data.password);
+    const user = await prisma_1.prisma.user.create({
+        data: {
+            email: data.email,
+            passwordHash,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            phone: data.phone,
+            isSuperAdmin: true,
+        },
+        select: {
+            id: true,
+            email: true,
+            firstName: true,
+            lastName: true,
+            status: true,
+            createdAt: true,
+        },
+    });
+    const accessToken = generateAccessToken(user.id, user.email);
+    const refreshToken = generateRefreshToken();
+    await prisma_1.prisma.token.create({
+        data: {
+            userId: user.id,
+            token: refreshToken,
+            type: tokens_1.tokenTypes.REFRESH,
+            expiresAt: new Date(Date.now() + refreshExpirationDays * 24 * 60 * 60 * 1000),
+        },
+    });
+    return {
+        user,
+        accessToken,
+        refreshToken,
+        expiresIn: accessExpirationMinutes * 60,
+    };
 }
 async function register(data) {
     if (!data.phone) {

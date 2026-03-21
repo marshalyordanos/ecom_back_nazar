@@ -31,6 +31,7 @@ router.patch("/options/:optionId", protect, restrictTo("admin"), productControll
 router.delete("/options/:optionId", protect, restrictTo("admin"), productController.deleteVariantOption);
 
 router.get("/:id", productController.getProductById);
+router.get("/mobile/:id", productController.getProductByIdMobile);
 router.get("/:id/reviews", reviewController.listByProduct);
 router.post("/", protect, restrictTo("admin"), productController.createProduct);
 router.patch("/:id", protect, restrictTo("admin"), productController.updateProduct);

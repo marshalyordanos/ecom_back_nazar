@@ -21,12 +21,12 @@ export const getCategoryById = catchAsync(async (req: AuthRequest, res: Response
 });
 
 export const createCategory = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
-  const category = await categoryService.createCategory(req.body);
+  const category = await categoryService.createCategory(req.body,req.file);
   res.status(201).json(category);
 });
 
 export const updateCategory = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
-  const category = await categoryService.updateCategory(req.params.id, req.body);
+  const category = await categoryService.updateCategory(req.params.id, req.body,req.file);
   res.status(200).json(category);
 });
 

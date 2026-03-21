@@ -42,7 +42,7 @@ router.use((0, auth_middleware_1.restrictTo)("admin"));
 router.get("/", roleController.listRoles);
 router.post("/", roleController.createRole);
 router.get("/:id", roleController.getRoleById);
-router.put("/:id", roleController.updateRole);
+router.patch("/:id", roleController.updateRole);
 router.delete("/:id", roleController.deleteRole);
 router.post("/:id/permissions", roleController.assignPermissions);
 router.delete("/:id/permissions", roleController.removePermissions);

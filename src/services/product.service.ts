@@ -8,22 +8,34 @@ const dateFields = ["createdAt", "updatedAt"];
 
 export async function listProducts(
   shopId: string | undefined,
-  query: {
+  track?: string,
+  query?: {
     page?: number;
     pageSize?: number;
     search?: string;
     filter?: string;
     sort?: string;
-  }
+  },req?: any
 ) {
+   // 🔥 Save search log
+   if ((query && query?.search !== "" || query?.filter !== "")&& req?.user?.roles.includes("user")) {
+    await prisma.searchLog.create({
+      data: {
+        query: query?.search || query?.filter || "",
+        userId:   req.user?.id || null,
+      },
+    });
+  }
   const feature = new PrismaQueryFeature<Record<string, unknown>, Record<string, string>>({
     ...query,
     searchableFields,
     dateFields,
   });
   const { skip, take, where, orderBy } = feature.getQuery();
-  const whereWithShop = shopId ? { ...where, shopId } : where;
-
+  let whereWithShop:any = shopId ? { ...where, shopId } : where;
+  if(track){
+    whereWithShop = { ...whereWithShop, category: { track: { contains: track } } };
+  }
   const [data, total] = await Promise.all([
     prisma.product.findMany({
       where: whereWithShop,
@@ -32,7 +44,7 @@ export async function listProducts(
       take,
       include: {
         brand: { select: { id: true, name: true, slug: true } },
-        category: { select: { id: true, name: true, slug: true } },
+        category: { select: { id: true, name: true, slug: true,image: true,track: true } },
         variants: {
           take: 5,
           include: { media: { take: 1 } },
@@ -57,6 +69,9 @@ export async function getProductById(id: string, shopId?: string) {
         include: {
           media: { orderBy: { position: "asc" } },
           inventories: { include: { location: true } },
+          variantOptionValues: {
+            include: { optionValue: { include: { option: true } } },
+          },
         },
       },
     },
@@ -64,6 +79,42 @@ export async function getProductById(id: string, shopId?: string) {
   if (!product) throw new AppError("Product not found", 404);
   return product;
 }
+
+export async function getProductByIdMobile(id: string, shopId?: string,userId?: string,sessionId?: string) {
+  const where: Record<string, unknown> = { id };
+  if (shopId) (where as any).shopId = shopId;
+  const product = await prisma.product.findFirst({
+    where,
+    include: {
+      shop: { select: { id: true, name: true, slug: true } },
+      brand: true,
+      category: true,
+      variants: {
+        include: {
+          media: { orderBy: { position: "asc" } },
+          inventories: { include: { location: true } },
+          variantOptionValues: {
+            include: { optionValue: { include: { option: true } } },
+          },
+        },
+      },
+    },
+  });
+
+  if (!product) throw new AppError("Product not found", 404);
+
+   // 🔥 Track view
+   await prisma.productView.create({
+    data: {
+      productId:product.id,
+      userId: userId || null,
+      sessionId: sessionId || null,
+    },
+  });
+
+  return product;
+}
+
 
 export async function createProduct(
   shopId: string,
@@ -149,34 +200,111 @@ export async function createVariant(
     costPrice?: number;
     weight?: number;
     status: string;
+    locationId: string;
+    type: string;
+    quantity: number;
   },
   file?: any
 ) {
+
+  if(!data.locationId) {
+    throw new AppError('Location is required', 400);
+  }
+  if(!data.type) {
+    throw new AppError('Type is required', 400);
+  }
+  if(!data.quantity) {
+    throw new AppError('Quantity is required', 400);
+  }
+
+  data.quantity = Number(data.quantity);
+
   if (!file) {
     throw new AppError('No file uploaded', 400);
   }
+
   const fileBuffer = fs.readFileSync(file.path);
   const uploadResult = await uploadToCloudinary(fileBuffer, "ecommerce/variants", "image");
   fs.unlinkSync(file.path);
+
   if (!uploadResult.secure_url) {
     throw new AppError('Failed to upload image', 500);
   }
+
   const product = await prisma.product.findUnique({ where: { id: productId } });
   if (!product) throw new AppError("Product not found", 404);
-  const variant = await prisma.productVariant.create({
-    data: {
-      productId,
-      sku: data.sku,
-      barcode: data.barcode,
-      price: Number(data.price),
-      comparePrice: Number(data.comparePrice),
-      costPrice: Number(data.costPrice),
-      weight: Number(data.weight),
-      image: uploadResult.secure_url,
-      status: data.status as any,
-    },
+
+  // Start Transaction
+  const result = await prisma.$transaction(async (prismaTx) => {
+    // 1. Create the product variant
+    const variant = await prismaTx.productVariant.create({
+      data: {
+        productId,
+        sku: data.sku,
+        barcode: data.barcode,
+        price: Number(data.price),
+        comparePrice: Number(data.comparePrice),
+        costPrice: Number(data.costPrice),
+        weight: Number(data.weight),
+        image: uploadResult.secure_url,
+        status: data.status as any,
+      },
+      include: {
+        inventories: true,
+      },
+    });
+
+    // 2. Inventory logic ported from inventory.service.ts
+    let inventory = await prismaTx.inventory.findFirst({
+      where: { variantId: variant.id, locationId: data.locationId },
+    });
+    if (!inventory) {
+      inventory = await prismaTx.inventory.create({
+        data: {
+          variantId: variant.id,
+          locationId: data.locationId,
+          quantity: 0,
+          reservedQuantity: 0,
+        },
+      });
+    }
+
+    const newQty =
+      data.type === "PURCHASE" || data.type === "RETURN" || data.type === "TRANSFER"
+        ? inventory.quantity + data.quantity
+        : data.type === "SALE" || data.type === "ADJUSTMENT"
+          ? inventory.quantity - data.quantity
+          : inventory.quantity;
+
+    await Promise.all([
+      prismaTx.inventoryMovement.create({
+        data: {
+          variantId: variant.id,
+          locationId: data.locationId,
+          inventoryId: inventory.id,
+          type: data.type as any,
+          quantity: data.quantity,
+          referenceId: undefined, // Set if needed
+        },
+      }),
+      prismaTx.inventory.update({
+        where: { id: inventory.id },
+        data: { quantity: Math.max(0, newQty) },
+      }),
+    ]);
+    
+   
+
+    return  await prismaTx.productVariant.findUnique({
+      where: { id: variant.id },
+      include: {
+        inventories: true,
+      },
+    });;
   });
-  return variant;
+  // End Transaction
+
+  return result;
 }
 
 export async function updateVariant(

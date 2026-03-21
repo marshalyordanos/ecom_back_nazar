@@ -13,6 +13,7 @@ export declare function getProductViews(filters: {
         userId: string | null;
         id: string;
         createdAt: Date;
+        updatedAt: Date;
         productId: string;
         sessionId: string | null;
     })[];
@@ -31,6 +32,7 @@ export declare function getSearchLogs(filters: {
         userId: string | null;
         id: string;
         createdAt: Date;
+        updatedAt: Date;
     }[];
     byQuery: Record<string, number>;
 }>;
@@ -47,9 +49,9 @@ export declare function getSalesReport(filters: {
             price: number;
             variantId: string;
             quantity: number;
+            orderId: string;
             productName: string;
             variantName: string | null;
-            orderId: string;
         }[];
     } & {
         userId: string;
@@ -88,9 +90,9 @@ export declare function getOrdersReport(filters: {
             price: number;
             variantId: string;
             quantity: number;
+            orderId: string;
             productName: string;
             variantName: string | null;
-            orderId: string;
         }[];
     } & {
         userId: string;

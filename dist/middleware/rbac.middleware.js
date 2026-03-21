@@ -15,6 +15,9 @@ const requirePermission = (resource, action) => {
         if (!req.user) {
             return next(new appError_1.default("Not authenticated", 401));
         }
+        if (req.user.isSuperAdmin) {
+            return next();
+        }
         const actionKey = `${action}Action`;
         const roleNames = req.user.roles;
         const rolePermissions = await prisma_1.prisma.rolePermission.findMany({
@@ -37,8 +40,12 @@ exports.requirePermission = requirePermission;
  */
 const requireAnyPermission = (...checks) => {
     return async (req, _res, next) => {
+        console.log("999999", req.user);
         if (!req.user) {
             return next(new appError_1.default("Not authenticated", 401));
+        }
+        if (req.user.isSuperAdmin) {
+            return next();
         }
         const roleNames = req.user.roles;
         for (const { resource, action } of checks) {

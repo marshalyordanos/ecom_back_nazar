@@ -28,6 +28,7 @@ export type ReviewMinAggregateOutputType = {
     comment: string | null;
     status: $Enums.ReviewStatus | null;
     createdAt: Date | null;
+    updatedAt: Date | null;
 };
 export type ReviewMaxAggregateOutputType = {
     id: string | null;
@@ -38,6 +39,7 @@ export type ReviewMaxAggregateOutputType = {
     comment: string | null;
     status: $Enums.ReviewStatus | null;
     createdAt: Date | null;
+    updatedAt: Date | null;
 };
 export type ReviewCountAggregateOutputType = {
     id: number;
@@ -48,6 +50,7 @@ export type ReviewCountAggregateOutputType = {
     comment: number;
     status: number;
     createdAt: number;
+    updatedAt: number;
     _all: number;
 };
 export type ReviewAvgAggregateInputType = {
@@ -65,6 +68,7 @@ export type ReviewMinAggregateInputType = {
     comment?: true;
     status?: true;
     createdAt?: true;
+    updatedAt?: true;
 };
 export type ReviewMaxAggregateInputType = {
     id?: true;
@@ -75,6 +79,7 @@ export type ReviewMaxAggregateInputType = {
     comment?: true;
     status?: true;
     createdAt?: true;
+    updatedAt?: true;
 };
 export type ReviewCountAggregateInputType = {
     id?: true;
@@ -85,6 +90,7 @@ export type ReviewCountAggregateInputType = {
     comment?: true;
     status?: true;
     createdAt?: true;
+    updatedAt?: true;
     _all?: true;
 };
 export type ReviewAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -172,6 +178,7 @@ export type ReviewGroupByOutputType = {
     comment: string | null;
     status: $Enums.ReviewStatus;
     createdAt: Date;
+    updatedAt: Date;
     _count: ReviewCountAggregateOutputType | null;
     _avg: ReviewAvgAggregateOutputType | null;
     _sum: ReviewSumAggregateOutputType | null;
@@ -193,6 +200,7 @@ export type ReviewWhereInput = {
     comment?: Prisma.StringNullableFilter<"Review"> | string | null;
     status?: Prisma.EnumReviewStatusFilter<"Review"> | $Enums.ReviewStatus;
     createdAt?: Prisma.DateTimeFilter<"Review"> | Date | string;
+    updatedAt?: Prisma.DateTimeFilter<"Review"> | Date | string;
     product?: Prisma.XOR<Prisma.ProductScalarRelationFilter, Prisma.ProductWhereInput>;
     user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>;
 };
@@ -205,6 +213,7 @@ export type ReviewOrderByWithRelationInput = {
     comment?: Prisma.SortOrderInput | Prisma.SortOrder;
     status?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
+    updatedAt?: Prisma.SortOrder;
     product?: Prisma.ProductOrderByWithRelationInput;
     user?: Prisma.UserOrderByWithRelationInput;
 };
@@ -220,6 +229,7 @@ export type ReviewWhereUniqueInput = Prisma.AtLeast<{
     comment?: Prisma.StringNullableFilter<"Review"> | string | null;
     status?: Prisma.EnumReviewStatusFilter<"Review"> | $Enums.ReviewStatus;
     createdAt?: Prisma.DateTimeFilter<"Review"> | Date | string;
+    updatedAt?: Prisma.DateTimeFilter<"Review"> | Date | string;
     product?: Prisma.XOR<Prisma.ProductScalarRelationFilter, Prisma.ProductWhereInput>;
     user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>;
 }, "id">;
@@ -232,6 +242,7 @@ export type ReviewOrderByWithAggregationInput = {
     comment?: Prisma.SortOrderInput | Prisma.SortOrder;
     status?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
+    updatedAt?: Prisma.SortOrder;
     _count?: Prisma.ReviewCountOrderByAggregateInput;
     _avg?: Prisma.ReviewAvgOrderByAggregateInput;
     _max?: Prisma.ReviewMaxOrderByAggregateInput;
@@ -250,6 +261,7 @@ export type ReviewScalarWhereWithAggregatesInput = {
     comment?: Prisma.StringNullableWithAggregatesFilter<"Review"> | string | null;
     status?: Prisma.EnumReviewStatusWithAggregatesFilter<"Review"> | $Enums.ReviewStatus;
     createdAt?: Prisma.DateTimeWithAggregatesFilter<"Review"> | Date | string;
+    updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Review"> | Date | string;
 };
 export type ReviewCreateInput = {
     id?: string;
@@ -258,6 +270,7 @@ export type ReviewCreateInput = {
     comment?: string | null;
     status: $Enums.ReviewStatus;
     createdAt?: Date | string;
+    updatedAt?: Date | string;
     product: Prisma.ProductCreateNestedOneWithoutReviewsInput;
     user: Prisma.UserCreateNestedOneWithoutReviewsInput;
 };
@@ -270,6 +283,7 @@ export type ReviewUncheckedCreateInput = {
     comment?: string | null;
     status: $Enums.ReviewStatus;
     createdAt?: Date | string;
+    updatedAt?: Date | string;
 };
 export type ReviewUpdateInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -278,6 +292,7 @@ export type ReviewUpdateInput = {
     comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     status?: Prisma.EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     product?: Prisma.ProductUpdateOneRequiredWithoutReviewsNestedInput;
     user?: Prisma.UserUpdateOneRequiredWithoutReviewsNestedInput;
 };
@@ -290,6 +305,7 @@ export type ReviewUncheckedUpdateInput = {
     comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     status?: Prisma.EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 export type ReviewCreateManyInput = {
     id?: string;
@@ -300,6 +316,7 @@ export type ReviewCreateManyInput = {
     comment?: string | null;
     status: $Enums.ReviewStatus;
     createdAt?: Date | string;
+    updatedAt?: Date | string;
 };
 export type ReviewUpdateManyMutationInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -308,6 +325,7 @@ export type ReviewUpdateManyMutationInput = {
     comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     status?: Prisma.EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 export type ReviewUncheckedUpdateManyInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -318,6 +336,7 @@ export type ReviewUncheckedUpdateManyInput = {
     comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     status?: Prisma.EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 export type ReviewListRelationFilter = {
     every?: Prisma.ReviewWhereInput;
@@ -336,6 +355,7 @@ export type ReviewCountOrderByAggregateInput = {
     comment?: Prisma.SortOrder;
     status?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
+    updatedAt?: Prisma.SortOrder;
 };
 export type ReviewAvgOrderByAggregateInput = {
     rating?: Prisma.SortOrder;
@@ -349,6 +369,7 @@ export type ReviewMaxOrderByAggregateInput = {
     comment?: Prisma.SortOrder;
     status?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
+    updatedAt?: Prisma.SortOrder;
 };
 export type ReviewMinOrderByAggregateInput = {
     id?: Prisma.SortOrder;
@@ -359,6 +380,7 @@ export type ReviewMinOrderByAggregateInput = {
     comment?: Prisma.SortOrder;
     status?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
+    updatedAt?: Prisma.SortOrder;
 };
 export type ReviewSumOrderByAggregateInput = {
     rating?: Prisma.SortOrder;
@@ -449,6 +471,7 @@ export type ReviewCreateWithoutUserInput = {
     comment?: string | null;
     status: $Enums.ReviewStatus;
     createdAt?: Date | string;
+    updatedAt?: Date | string;
     product: Prisma.ProductCreateNestedOneWithoutReviewsInput;
 };
 export type ReviewUncheckedCreateWithoutUserInput = {
@@ -459,6 +482,7 @@ export type ReviewUncheckedCreateWithoutUserInput = {
     comment?: string | null;
     status: $Enums.ReviewStatus;
     createdAt?: Date | string;
+    updatedAt?: Date | string;
 };
 export type ReviewCreateOrConnectWithoutUserInput = {
     where: Prisma.ReviewWhereUniqueInput;
@@ -493,6 +517,7 @@ export type ReviewScalarWhereInput = {
     comment?: Prisma.StringNullableFilter<"Review"> | string | null;
     status?: Prisma.EnumReviewStatusFilter<"Review"> | $Enums.ReviewStatus;
     createdAt?: Prisma.DateTimeFilter<"Review"> | Date | string;
+    updatedAt?: Prisma.DateTimeFilter<"Review"> | Date | string;
 };
 export type ReviewCreateWithoutProductInput = {
     id?: string;
@@ -501,6 +526,7 @@ export type ReviewCreateWithoutProductInput = {
     comment?: string | null;
     status: $Enums.ReviewStatus;
     createdAt?: Date | string;
+    updatedAt?: Date | string;
     user: Prisma.UserCreateNestedOneWithoutReviewsInput;
 };
 export type ReviewUncheckedCreateWithoutProductInput = {
@@ -511,6 +537,7 @@ export type ReviewUncheckedCreateWithoutProductInput = {
     comment?: string | null;
     status: $Enums.ReviewStatus;
     createdAt?: Date | string;
+    updatedAt?: Date | string;
 };
 export type ReviewCreateOrConnectWithoutProductInput = {
     where: Prisma.ReviewWhereUniqueInput;
@@ -541,6 +568,7 @@ export type ReviewCreateManyUserInput = {
     comment?: string | null;
     status: $Enums.ReviewStatus;
     createdAt?: Date | string;
+    updatedAt?: Date | string;
 };
 export type ReviewUpdateWithoutUserInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -549,6 +577,7 @@ export type ReviewUpdateWithoutUserInput = {
     comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     status?: Prisma.EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     product?: Prisma.ProductUpdateOneRequiredWithoutReviewsNestedInput;
 };
 export type ReviewUncheckedUpdateWithoutUserInput = {
@@ -559,6 +588,7 @@ export type ReviewUncheckedUpdateWithoutUserInput = {
     comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     status?: Prisma.EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 export type ReviewUncheckedUpdateManyWithoutUserInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -568,6 +598,7 @@ export type ReviewUncheckedUpdateManyWithoutUserInput = {
     comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     status?: Prisma.EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 export type ReviewCreateManyProductInput = {
     id?: string;
@@ -577,6 +608,7 @@ export type ReviewCreateManyProductInput = {
     comment?: string | null;
     status: $Enums.ReviewStatus;
     createdAt?: Date | string;
+    updatedAt?: Date | string;
 };
 export type ReviewUpdateWithoutProductInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -585,6 +617,7 @@ export type ReviewUpdateWithoutProductInput = {
     comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     status?: Prisma.EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     user?: Prisma.UserUpdateOneRequiredWithoutReviewsNestedInput;
 };
 export type ReviewUncheckedUpdateWithoutProductInput = {
@@ -595,6 +628,7 @@ export type ReviewUncheckedUpdateWithoutProductInput = {
     comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     status?: Prisma.EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 export type ReviewUncheckedUpdateManyWithoutProductInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -604,6 +638,7 @@ export type ReviewUncheckedUpdateManyWithoutProductInput = {
     comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     status?: Prisma.EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 export type ReviewSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
@@ -614,6 +649,7 @@ export type ReviewSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     comment?: boolean;
     status?: boolean;
     createdAt?: boolean;
+    updatedAt?: boolean;
     product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>;
     user?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
 }, ExtArgs["result"]["review"]>;
@@ -626,6 +662,7 @@ export type ReviewSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
     comment?: boolean;
     status?: boolean;
     createdAt?: boolean;
+    updatedAt?: boolean;
     product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>;
     user?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
 }, ExtArgs["result"]["review"]>;
@@ -638,6 +675,7 @@ export type ReviewSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
     comment?: boolean;
     status?: boolean;
     createdAt?: boolean;
+    updatedAt?: boolean;
     product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>;
     user?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
 }, ExtArgs["result"]["review"]>;
@@ -650,8 +688,9 @@ export type ReviewSelectScalar = {
     comment?: boolean;
     status?: boolean;
     createdAt?: boolean;
+    updatedAt?: boolean;
 };
-export type ReviewOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "productId" | "userId" | "rating" | "title" | "comment" | "status" | "createdAt", ExtArgs["result"]["review"]>;
+export type ReviewOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "productId" | "userId" | "rating" | "title" | "comment" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["review"]>;
 export type ReviewInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>;
     user?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
@@ -679,6 +718,7 @@ export type $ReviewPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
         comment: string | null;
         status: $Enums.ReviewStatus;
         createdAt: Date;
+        updatedAt: Date;
     }, ExtArgs["result"]["review"]>;
     composites: {};
 };
@@ -1043,6 +1083,7 @@ export interface ReviewFieldRefs {
     readonly comment: Prisma.FieldRef<"Review", 'String'>;
     readonly status: Prisma.FieldRef<"Review", 'ReviewStatus'>;
     readonly createdAt: Prisma.FieldRef<"Review", 'DateTime'>;
+    readonly updatedAt: Prisma.FieldRef<"Review", 'DateTime'>;
 }
 /**
  * Review findUnique

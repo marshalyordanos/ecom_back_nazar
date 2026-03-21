@@ -1,5 +1,6 @@
 import { prisma } from "../lib/prisma";
 import AppError from "../utils/appError";
+import { createNotification } from "./notification.service";
 
 export async function getOrCreateCart(userId: string) {
   let cart = await prisma.cart.findFirst({
@@ -40,7 +41,11 @@ export async function getOrCreateCart(userId: string) {
 export async function addItem(userId: string, variantId: string, quantity: number, price: number) {
   const variant = await prisma.productVariant.findUnique({ where: { id: variantId } });
   if (!variant) throw new AppError("Variant not found", 404);
-
+  
+  console.log("variant.price", variant.price, "price", price);
+  if(variant.price !== price) {
+    throw new AppError("Price mismatch", 400);
+  }
   let cart = await prisma.cart.findFirst({
     where: { userId, status: "active" },
     include: { items: true },
@@ -198,6 +203,17 @@ export async function checkout(
       data: { status: "completed" },
     });
 
+     // 5️⃣ Create payment record
+     await tx.payment.create({
+      data: {
+        orderId: newOrder.id,
+        provider: "",
+        amount: grandTotal,
+        currency: shop.currency,
+        status: "PENDING",
+      },
+    });
+
     return newOrder;
   });
 
@@ -205,5 +221,16 @@ export async function checkout(
     where: { id: order.id },
     include: { items: true, address: true },
   });
+  if (!fullOrder) throw new AppError("Order not found", 404);
+
+  // Notify the customer so their in-app notifications are user-specific.
+  await createNotification({
+    userId,
+    type: "order_created",
+    title: "Order placed",
+    message: `Order ${fullOrder.orderNumber} has been placed successfully.`,
+    metadata: { orderId: fullOrder.id },
+  });
+
   return fullOrder;
 }

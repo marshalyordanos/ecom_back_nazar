@@ -10,6 +10,7 @@ exports.removeItem = removeItem;
 exports.checkout = checkout;
 const prisma_1 = require("../lib/prisma");
 const appError_1 = __importDefault(require("../utils/appError"));
+const notification_service_1 = require("./notification.service");
 async function getOrCreateCart(userId) {
     let cart = await prisma_1.prisma.cart.findFirst({
         where: { userId, status: "active" },
@@ -49,6 +50,10 @@ async function addItem(userId, variantId, quantity, price) {
     const variant = await prisma_1.prisma.productVariant.findUnique({ where: { id: variantId } });
     if (!variant)
         throw new appError_1.default("Variant not found", 404);
+    console.log("variant.price", variant.price, "price", price);
+    if (variant.price !== price) {
+        throw new appError_1.default("Price mismatch", 400);
+    }
     let cart = await prisma_1.prisma.cart.findFirst({
         where: { userId, status: "active" },
         include: { items: true },
@@ -184,11 +189,31 @@ async function checkout(userId, data) {
             where: { id: cart.id },
             data: { status: "completed" },
         });
+        // 5️⃣ Create payment record
+        await tx.payment.create({
+            data: {
+                orderId: newOrder.id,
+                provider: "",
+                amount: grandTotal,
+                currency: shop.currency,
+                status: "PENDING",
+            },
+        });
         return newOrder;
     });
     const fullOrder = await prisma_1.prisma.order.findUnique({
         where: { id: order.id },
         include: { items: true, address: true },
+    });
+    if (!fullOrder)
+        throw new appError_1.default("Order not found", 404);
+    // Notify the customer so their in-app notifications are user-specific.
+    await (0, notification_service_1.createNotification)({
+        userId,
+        type: "order_created",
+        title: "Order placed",
+        message: `Order ${fullOrder.orderNumber} has been placed successfully.`,
+        metadata: { orderId: fullOrder.id },
     });
     return fullOrder;
 }

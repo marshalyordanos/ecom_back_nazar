@@ -2,6 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createNotification = createNotification;
 exports.getUnreadCount = getUnreadCount;
+exports.listMyNotifications = listMyNotifications;
+exports.markMyNotificationRead = markMyNotificationRead;
+exports.markAllMyNotificationsRead = markAllMyNotificationsRead;
 const prisma_1 = require("../lib/prisma");
 const redis_1 = require("../lib/redis");
 /**
@@ -39,5 +42,42 @@ async function getUnreadCount(userId) {
     return prisma_1.prisma.notification.count({
         where: { userId, readAt: null },
     });
+}
+async function listMyNotifications(userId, query = {}) {
+    const page = query.page ?? 1;
+    const pageSize = Math.min(query.pageSize ?? 20, 50);
+    const skip = (page - 1) * pageSize;
+    const [data, total] = await Promise.all([
+        prisma_1.prisma.notification.findMany({
+            where: { userId },
+            orderBy: { createdAt: "desc" },
+            skip,
+            take: pageSize,
+        }),
+        prisma_1.prisma.notification.count({ where: { userId } }),
+    ]);
+    return {
+        data,
+        pagination: {
+            page,
+            pageSize,
+            total,
+            totalPages: Math.max(1, Math.ceil(total / pageSize)),
+        },
+    };
+}
+async function markMyNotificationRead(userId, notificationId) {
+    await prisma_1.prisma.notification.updateMany({
+        where: { id: notificationId, userId },
+        data: { readAt: new Date() },
+    });
+    return { message: "Notification marked as read" };
+}
+async function markAllMyNotificationsRead(userId) {
+    await prisma_1.prisma.notification.updateMany({
+        where: { userId, readAt: null },
+        data: { readAt: new Date() },
+    });
+    return { message: "All notifications marked as read" };
 }
 //# sourceMappingURL=notification.service.js.map

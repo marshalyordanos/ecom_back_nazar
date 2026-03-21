@@ -4,7 +4,7 @@ export declare function listProducts(shopId: string | undefined, query: {
     search?: string;
     filter?: string;
     sort?: string;
-}): Promise<{
+}, req: any): Promise<{
     data: ({
         brand: {
             name: string;
@@ -29,6 +29,7 @@ export declare function listProducts(shopId: string | undefined, query: {
             status: import("../generated/prisma/enums").ProductStatus;
             createdAt: Date;
             updatedAt: Date;
+            image: string | null;
             productId: string;
             sku: string;
             barcode: string | null;
@@ -100,6 +101,7 @@ export declare function getProductById(id: string, shopId?: string): Promise<{
             };
         } & {
             id: string;
+            createdAt: Date;
             updatedAt: Date;
             locationId: string;
             variantId: string;
@@ -114,11 +116,135 @@ export declare function getProductById(id: string, shopId?: string): Promise<{
             position: number | null;
             variantId: string;
         }[];
+        variantOptionValues: ({
+            optionValue: {
+                option: {
+                    name: string;
+                    id: string;
+                    createdAt: Date;
+                    updatedAt: Date;
+                };
+            } & {
+                id: string;
+                createdAt: Date;
+                value: string;
+                optionId: string;
+            };
+        } & {
+            id: string;
+            variantId: string;
+            optionValueId: string;
+        })[];
     } & {
         id: string;
         status: import("../generated/prisma/enums").ProductStatus;
         createdAt: Date;
         updatedAt: Date;
+        image: string | null;
+        productId: string;
+        sku: string;
+        barcode: string | null;
+        price: number;
+        comparePrice: number | null;
+        costPrice: number | null;
+        weight: number | null;
+    })[];
+} & {
+    name: string;
+    id: string;
+    status: import("../generated/prisma/enums").ProductStatus;
+    createdAt: Date;
+    updatedAt: Date;
+    description: string | null;
+    slug: string;
+    shopId: string;
+    isFeatured: boolean;
+    shortDescription: string | null;
+    brandId: string | null;
+    categoryId: string | null;
+}>;
+export declare function getProductByIdMobile(id: string, shopId?: string, userId?: string, sessionId?: string): Promise<{
+    shop: {
+        name: string;
+        id: string;
+        slug: string;
+    };
+    brand: {
+        name: string;
+        id: string;
+        createdAt: Date;
+        description: string | null;
+        slug: string;
+        logoUrl: string | null;
+        isFeatured: boolean;
+    } | null;
+    category: {
+        name: string;
+        id: string;
+        createdAt: Date;
+        description: string | null;
+        slug: string;
+        parentId: string | null;
+    } | null;
+    variants: ({
+        inventories: ({
+            location: {
+                name: string;
+                id: string;
+                phone: string | null;
+                createdAt: Date;
+                shopId: string;
+                addressLine1: string;
+                addressLine2: string | null;
+                city: string;
+                state: string | null;
+                country: string;
+                postalCode: string | null;
+                latitude: number | null;
+                longitude: number | null;
+            };
+        } & {
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            locationId: string;
+            variantId: string;
+            quantity: number;
+            reservedQuantity: number;
+            reorderLevel: number | null;
+        })[];
+        media: {
+            url: string;
+            type: string;
+            id: string;
+            position: number | null;
+            variantId: string;
+        }[];
+        variantOptionValues: ({
+            optionValue: {
+                option: {
+                    name: string;
+                    id: string;
+                    createdAt: Date;
+                    updatedAt: Date;
+                };
+            } & {
+                id: string;
+                createdAt: Date;
+                value: string;
+                optionId: string;
+            };
+        } & {
+            id: string;
+            variantId: string;
+            optionValueId: string;
+        })[];
+    } & {
+        id: string;
+        status: import("../generated/prisma/enums").ProductStatus;
+        createdAt: Date;
+        updatedAt: Date;
+        image: string | null;
         productId: string;
         sku: string;
         barcode: string | null;
@@ -214,6 +340,7 @@ export declare function getFeaturedProducts(shopId?: string, limit?: number): Pr
         status: import("../generated/prisma/enums").ProductStatus;
         createdAt: Date;
         updatedAt: Date;
+        image: string | null;
         productId: string;
         sku: string;
         barcode: string | null;
@@ -244,11 +371,12 @@ export declare function createVariant(productId: string, data: {
     costPrice?: number;
     weight?: number;
     status: string;
-}): Promise<{
+}, file?: any): Promise<{
     id: string;
     status: import("../generated/prisma/enums").ProductStatus;
     createdAt: Date;
     updatedAt: Date;
+    image: string | null;
     productId: string;
     sku: string;
     barcode: string | null;
@@ -265,11 +393,13 @@ export declare function updateVariant(variantId: string, data: {
     costPrice?: number;
     weight?: number;
     status?: string;
-}): Promise<{
+    image?: string;
+}, file?: any): Promise<{
     id: string;
     status: import("../generated/prisma/enums").ProductStatus;
     createdAt: Date;
     updatedAt: Date;
+    image: string | null;
     productId: string;
     sku: string;
     barcode: string | null;
@@ -373,5 +503,57 @@ export declare function updateOptionValue(valueId: string, data: {
 }>;
 export declare function deleteOptionValue(valueId: string): Promise<{
     message: string;
+}>;
+/**
+ * Assigns option values (array of optionValueIds) to the given variantId.
+ * This will add any new values and remove any values not present in the array.
+ */
+export declare function setVariantOptionValues(variantId: string, optionValueIds: string[]): Promise<({
+    variantOptionValues: ({
+        optionValue: {
+            option: {
+                name: string;
+                id: string;
+                createdAt: Date;
+                updatedAt: Date;
+            };
+        } & {
+            id: string;
+            createdAt: Date;
+            value: string;
+            optionId: string;
+        };
+    } & {
+        id: string;
+        variantId: string;
+        optionValueId: string;
+    })[];
+} & {
+    id: string;
+    status: import("../generated/prisma/enums").ProductStatus;
+    createdAt: Date;
+    updatedAt: Date;
+    image: string | null;
+    productId: string;
+    sku: string;
+    barcode: string | null;
+    price: number;
+    comparePrice: number | null;
+    costPrice: number | null;
+    weight: number | null;
+}) | null>;
+/**
+ * Remove a particular optionValue from the variant.
+ */
+export declare function removeVariantOptionValue(variantId: string, optionValueId: string): Promise<{
+    message: string;
+}>;
+/**
+ * Add/Assign a particular optionValue to a variant (idempotent).
+ */
+export declare function assignVariantOptionValue(variantId: string, optionValueId: string): Promise<{
+    id: string;
+    variantId: string;
+    optionValueId: string;
 }>;
 //# sourceMappingURL=product.service.d.ts.map

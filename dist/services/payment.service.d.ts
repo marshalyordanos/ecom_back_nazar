@@ -16,10 +16,10 @@ export declare function listPayments(query: {
         createdAt: Date;
         currency: string;
         orderId: string;
-        paidAt: Date | null;
         provider: string;
         providerTransactionId: string | null;
         amount: number;
+        paidAt: Date | null;
     })[];
     pagination: {
         total: number;
@@ -49,10 +49,10 @@ export declare function getPaymentById(id: string): Promise<{
     createdAt: Date;
     currency: string;
     orderId: string;
-    paidAt: Date | null;
     provider: string;
     providerTransactionId: string | null;
     amount: number;
+    paidAt: Date | null;
 }>;
 export declare function capturePayment(id: string): Promise<{
     id: string;
@@ -60,10 +60,10 @@ export declare function capturePayment(id: string): Promise<{
     createdAt: Date;
     currency: string;
     orderId: string;
-    paidAt: Date | null;
     provider: string;
     providerTransactionId: string | null;
     amount: number;
+    paidAt: Date | null;
 }>;
 export declare function refundPayment(id: string): Promise<{
     id: string;
@@ -71,9 +71,9 @@ export declare function refundPayment(id: string): Promise<{
     createdAt: Date;
     currency: string;
     orderId: string;
-    paidAt: Date | null;
     provider: string;
     providerTransactionId: string | null;
     amount: number;
+    paidAt: Date | null;
 }>;
 //# sourceMappingURL=payment.service.d.ts.map

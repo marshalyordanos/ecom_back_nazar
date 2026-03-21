@@ -36,13 +36,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const shopController = __importStar(require("../controllers/shop.controller"));
 const auth_middleware_1 = require("../middleware/auth.middleware");
+const multer_1 = require("../config/multer");
 const router = (0, express_1.Router)();
 router.get("/", shopController.listShops);
-router.put("/locations/:locationId", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), shopController.updateLocation);
+router.patch("/locations/:locationId", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), shopController.updateLocation);
 router.delete("/locations/:locationId", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), shopController.deleteLocation);
 router.get("/:id", shopController.getShopById);
-router.put("/:id", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), shopController.updateShop);
+router.patch("/:id", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), shopController.updateShop);
 router.get("/:id/locations", shopController.listShopLocations);
 router.post("/:id/locations", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), shopController.addShopLocation);
+router.post("/", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), (0, multer_1.uploadSingleImage)("image"), shopController.createOrUpdateShop);
 exports.default = router;
 //# sourceMappingURL=shop.router.js.map

@@ -35,6 +35,7 @@ export type ProductVariantMinAggregateOutputType = {
     costPrice: number | null;
     weight: number | null;
     status: $Enums.ProductStatus | null;
+    image: string | null;
     createdAt: Date | null;
     updatedAt: Date | null;
 };
@@ -48,6 +49,7 @@ export type ProductVariantMaxAggregateOutputType = {
     costPrice: number | null;
     weight: number | null;
     status: $Enums.ProductStatus | null;
+    image: string | null;
     createdAt: Date | null;
     updatedAt: Date | null;
 };
@@ -61,6 +63,7 @@ export type ProductVariantCountAggregateOutputType = {
     costPrice: number;
     weight: number;
     status: number;
+    image: number;
     createdAt: number;
     updatedAt: number;
     _all: number;
@@ -87,6 +90,7 @@ export type ProductVariantMinAggregateInputType = {
     costPrice?: true;
     weight?: true;
     status?: true;
+    image?: true;
     createdAt?: true;
     updatedAt?: true;
 };
@@ -100,6 +104,7 @@ export type ProductVariantMaxAggregateInputType = {
     costPrice?: true;
     weight?: true;
     status?: true;
+    image?: true;
     createdAt?: true;
     updatedAt?: true;
 };
@@ -113,6 +118,7 @@ export type ProductVariantCountAggregateInputType = {
     costPrice?: true;
     weight?: true;
     status?: true;
+    image?: true;
     createdAt?: true;
     updatedAt?: true;
     _all?: true;
@@ -203,6 +209,7 @@ export type ProductVariantGroupByOutputType = {
     costPrice: number | null;
     weight: number | null;
     status: $Enums.ProductStatus;
+    image: string | null;
     createdAt: Date;
     updatedAt: Date;
     _count: ProductVariantCountAggregateOutputType | null;
@@ -227,6 +234,7 @@ export type ProductVariantWhereInput = {
     costPrice?: Prisma.FloatNullableFilter<"ProductVariant"> | number | null;
     weight?: Prisma.FloatNullableFilter<"ProductVariant"> | number | null;
     status?: Prisma.EnumProductStatusFilter<"ProductVariant"> | $Enums.ProductStatus;
+    image?: Prisma.StringNullableFilter<"ProductVariant"> | string | null;
     createdAt?: Prisma.DateTimeFilter<"ProductVariant"> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<"ProductVariant"> | Date | string;
     product?: Prisma.XOR<Prisma.ProductScalarRelationFilter, Prisma.ProductWhereInput>;
@@ -247,6 +255,7 @@ export type ProductVariantOrderByWithRelationInput = {
     costPrice?: Prisma.SortOrderInput | Prisma.SortOrder;
     weight?: Prisma.SortOrderInput | Prisma.SortOrder;
     status?: Prisma.SortOrder;
+    image?: Prisma.SortOrderInput | Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
     product?: Prisma.ProductOrderByWithRelationInput;
@@ -270,6 +279,7 @@ export type ProductVariantWhereUniqueInput = Prisma.AtLeast<{
     costPrice?: Prisma.FloatNullableFilter<"ProductVariant"> | number | null;
     weight?: Prisma.FloatNullableFilter<"ProductVariant"> | number | null;
     status?: Prisma.EnumProductStatusFilter<"ProductVariant"> | $Enums.ProductStatus;
+    image?: Prisma.StringNullableFilter<"ProductVariant"> | string | null;
     createdAt?: Prisma.DateTimeFilter<"ProductVariant"> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<"ProductVariant"> | Date | string;
     product?: Prisma.XOR<Prisma.ProductScalarRelationFilter, Prisma.ProductWhereInput>;
@@ -290,6 +300,7 @@ export type ProductVariantOrderByWithAggregationInput = {
     costPrice?: Prisma.SortOrderInput | Prisma.SortOrder;
     weight?: Prisma.SortOrderInput | Prisma.SortOrder;
     status?: Prisma.SortOrder;
+    image?: Prisma.SortOrderInput | Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
     _count?: Prisma.ProductVariantCountOrderByAggregateInput;
@@ -311,6 +322,7 @@ export type ProductVariantScalarWhereWithAggregatesInput = {
     costPrice?: Prisma.FloatNullableWithAggregatesFilter<"ProductVariant"> | number | null;
     weight?: Prisma.FloatNullableWithAggregatesFilter<"ProductVariant"> | number | null;
     status?: Prisma.EnumProductStatusWithAggregatesFilter<"ProductVariant"> | $Enums.ProductStatus;
+    image?: Prisma.StringNullableWithAggregatesFilter<"ProductVariant"> | string | null;
     createdAt?: Prisma.DateTimeWithAggregatesFilter<"ProductVariant"> | Date | string;
     updatedAt?: Prisma.DateTimeWithAggregatesFilter<"ProductVariant"> | Date | string;
 };
@@ -323,6 +335,7 @@ export type ProductVariantCreateInput = {
     costPrice?: number | null;
     weight?: number | null;
     status: $Enums.ProductStatus;
+    image?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     product: Prisma.ProductCreateNestedOneWithoutVariantsInput;
@@ -343,6 +356,7 @@ export type ProductVariantUncheckedCreateInput = {
     costPrice?: number | null;
     weight?: number | null;
     status: $Enums.ProductStatus;
+    image?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutVariantInput;
@@ -361,6 +375,7 @@ export type ProductVariantUpdateInput = {
     costPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus;
+    image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     product?: Prisma.ProductUpdateOneRequiredWithoutVariantsNestedInput;
@@ -381,6 +396,7 @@ export type ProductVariantUncheckedUpdateInput = {
     costPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus;
+    image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     inventories?: Prisma.InventoryUncheckedUpdateManyWithoutVariantNestedInput;
@@ -400,6 +416,7 @@ export type ProductVariantCreateManyInput = {
     costPrice?: number | null;
     weight?: number | null;
     status: $Enums.ProductStatus;
+    image?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
 };
@@ -412,6 +429,7 @@ export type ProductVariantUpdateManyMutationInput = {
     costPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus;
+    image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -425,6 +443,7 @@ export type ProductVariantUncheckedUpdateManyInput = {
     costPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus;
+    image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -446,6 +465,7 @@ export type ProductVariantCountOrderByAggregateInput = {
     costPrice?: Prisma.SortOrder;
     weight?: Prisma.SortOrder;
     status?: Prisma.SortOrder;
+    image?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
 };
@@ -465,6 +485,7 @@ export type ProductVariantMaxOrderByAggregateInput = {
     costPrice?: Prisma.SortOrder;
     weight?: Prisma.SortOrder;
     status?: Prisma.SortOrder;
+    image?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
 };
@@ -478,6 +499,7 @@ export type ProductVariantMinOrderByAggregateInput = {
     costPrice?: Prisma.SortOrder;
     weight?: Prisma.SortOrder;
     status?: Prisma.SortOrder;
+    image?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
 };
@@ -617,6 +639,7 @@ export type ProductVariantCreateWithoutProductInput = {
     costPrice?: number | null;
     weight?: number | null;
     status: $Enums.ProductStatus;
+    image?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     inventories?: Prisma.InventoryCreateNestedManyWithoutVariantInput;
@@ -635,6 +658,7 @@ export type ProductVariantUncheckedCreateWithoutProductInput = {
     costPrice?: number | null;
     weight?: number | null;
     status: $Enums.ProductStatus;
+    image?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutVariantInput;
@@ -678,6 +702,7 @@ export type ProductVariantScalarWhereInput = {
     costPrice?: Prisma.FloatNullableFilter<"ProductVariant"> | number | null;
     weight?: Prisma.FloatNullableFilter<"ProductVariant"> | number | null;
     status?: Prisma.EnumProductStatusFilter<"ProductVariant"> | $Enums.ProductStatus;
+    image?: Prisma.StringNullableFilter<"ProductVariant"> | string | null;
     createdAt?: Prisma.DateTimeFilter<"ProductVariant"> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<"ProductVariant"> | Date | string;
 };
@@ -690,6 +715,7 @@ export type ProductVariantCreateWithoutVariantOptionValuesInput = {
     costPrice?: number | null;
     weight?: number | null;
     status: $Enums.ProductStatus;
+    image?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     product: Prisma.ProductCreateNestedOneWithoutVariantsInput;
@@ -709,6 +735,7 @@ export type ProductVariantUncheckedCreateWithoutVariantOptionValuesInput = {
     costPrice?: number | null;
     weight?: number | null;
     status: $Enums.ProductStatus;
+    image?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutVariantInput;
@@ -739,6 +766,7 @@ export type ProductVariantUpdateWithoutVariantOptionValuesInput = {
     costPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus;
+    image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     product?: Prisma.ProductUpdateOneRequiredWithoutVariantsNestedInput;
@@ -758,6 +786,7 @@ export type ProductVariantUncheckedUpdateWithoutVariantOptionValuesInput = {
     costPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus;
+    image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     inventories?: Prisma.InventoryUncheckedUpdateManyWithoutVariantNestedInput;
@@ -775,6 +804,7 @@ export type ProductVariantCreateWithoutMediaInput = {
     costPrice?: number | null;
     weight?: number | null;
     status: $Enums.ProductStatus;
+    image?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     product: Prisma.ProductCreateNestedOneWithoutVariantsInput;
@@ -794,6 +824,7 @@ export type ProductVariantUncheckedCreateWithoutMediaInput = {
     costPrice?: number | null;
     weight?: number | null;
     status: $Enums.ProductStatus;
+    image?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutVariantInput;
@@ -824,6 +855,7 @@ export type ProductVariantUpdateWithoutMediaInput = {
     costPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus;
+    image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     product?: Prisma.ProductUpdateOneRequiredWithoutVariantsNestedInput;
@@ -843,6 +875,7 @@ export type ProductVariantUncheckedUpdateWithoutMediaInput = {
     costPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus;
+    image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     inventories?: Prisma.InventoryUncheckedUpdateManyWithoutVariantNestedInput;
@@ -860,6 +893,7 @@ export type ProductVariantCreateWithoutInventoriesInput = {
     costPrice?: number | null;
     weight?: number | null;
     status: $Enums.ProductStatus;
+    image?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     product: Prisma.ProductCreateNestedOneWithoutVariantsInput;
@@ -879,6 +913,7 @@ export type ProductVariantUncheckedCreateWithoutInventoriesInput = {
     costPrice?: number | null;
     weight?: number | null;
     status: $Enums.ProductStatus;
+    image?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     inventoryMovements?: Prisma.InventoryMovementUncheckedCreateNestedManyWithoutVariantInput;
@@ -909,6 +944,7 @@ export type ProductVariantUpdateWithoutInventoriesInput = {
     costPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus;
+    image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     product?: Prisma.ProductUpdateOneRequiredWithoutVariantsNestedInput;
@@ -928,6 +964,7 @@ export type ProductVariantUncheckedUpdateWithoutInventoriesInput = {
     costPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus;
+    image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     inventoryMovements?: Prisma.InventoryMovementUncheckedUpdateManyWithoutVariantNestedInput;
@@ -945,6 +982,7 @@ export type ProductVariantCreateWithoutInventoryMovementsInput = {
     costPrice?: number | null;
     weight?: number | null;
     status: $Enums.ProductStatus;
+    image?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     product: Prisma.ProductCreateNestedOneWithoutVariantsInput;
@@ -964,6 +1002,7 @@ export type ProductVariantUncheckedCreateWithoutInventoryMovementsInput = {
     costPrice?: number | null;
     weight?: number | null;
     status: $Enums.ProductStatus;
+    image?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutVariantInput;
@@ -994,6 +1033,7 @@ export type ProductVariantUpdateWithoutInventoryMovementsInput = {
     costPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus;
+    image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     product?: Prisma.ProductUpdateOneRequiredWithoutVariantsNestedInput;
@@ -1013,6 +1053,7 @@ export type ProductVariantUncheckedUpdateWithoutInventoryMovementsInput = {
     costPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus;
+    image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     inventories?: Prisma.InventoryUncheckedUpdateManyWithoutVariantNestedInput;
@@ -1030,6 +1071,7 @@ export type ProductVariantCreateWithoutCartItemsInput = {
     costPrice?: number | null;
     weight?: number | null;
     status: $Enums.ProductStatus;
+    image?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     product: Prisma.ProductCreateNestedOneWithoutVariantsInput;
@@ -1049,6 +1091,7 @@ export type ProductVariantUncheckedCreateWithoutCartItemsInput = {
     costPrice?: number | null;
     weight?: number | null;
     status: $Enums.ProductStatus;
+    image?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutVariantInput;
@@ -1079,6 +1122,7 @@ export type ProductVariantUpdateWithoutCartItemsInput = {
     costPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus;
+    image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     product?: Prisma.ProductUpdateOneRequiredWithoutVariantsNestedInput;
@@ -1098,6 +1142,7 @@ export type ProductVariantUncheckedUpdateWithoutCartItemsInput = {
     costPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus;
+    image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     inventories?: Prisma.InventoryUncheckedUpdateManyWithoutVariantNestedInput;
@@ -1115,6 +1160,7 @@ export type ProductVariantCreateWithoutOrderItemsInput = {
     costPrice?: number | null;
     weight?: number | null;
     status: $Enums.ProductStatus;
+    image?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     product: Prisma.ProductCreateNestedOneWithoutVariantsInput;
@@ -1134,6 +1180,7 @@ export type ProductVariantUncheckedCreateWithoutOrderItemsInput = {
     costPrice?: number | null;
     weight?: number | null;
     status: $Enums.ProductStatus;
+    image?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutVariantInput;
@@ -1164,6 +1211,7 @@ export type ProductVariantUpdateWithoutOrderItemsInput = {
     costPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus;
+    image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     product?: Prisma.ProductUpdateOneRequiredWithoutVariantsNestedInput;
@@ -1183,6 +1231,7 @@ export type ProductVariantUncheckedUpdateWithoutOrderItemsInput = {
     costPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus;
+    image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     inventories?: Prisma.InventoryUncheckedUpdateManyWithoutVariantNestedInput;
@@ -1200,6 +1249,7 @@ export type ProductVariantCreateManyProductInput = {
     costPrice?: number | null;
     weight?: number | null;
     status: $Enums.ProductStatus;
+    image?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
 };
@@ -1212,6 +1262,7 @@ export type ProductVariantUpdateWithoutProductInput = {
     costPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus;
+    image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     inventories?: Prisma.InventoryUpdateManyWithoutVariantNestedInput;
@@ -1230,6 +1281,7 @@ export type ProductVariantUncheckedUpdateWithoutProductInput = {
     costPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus;
+    image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     inventories?: Prisma.InventoryUncheckedUpdateManyWithoutVariantNestedInput;
@@ -1248,6 +1300,7 @@ export type ProductVariantUncheckedUpdateManyWithoutProductInput = {
     costPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
     status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus;
+    image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -1325,6 +1378,7 @@ export type ProductVariantSelect<ExtArgs extends runtime.Types.Extensions.Intern
     costPrice?: boolean;
     weight?: boolean;
     status?: boolean;
+    image?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
     product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>;
@@ -1346,6 +1400,7 @@ export type ProductVariantSelectCreateManyAndReturn<ExtArgs extends runtime.Type
     costPrice?: boolean;
     weight?: boolean;
     status?: boolean;
+    image?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
     product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>;
@@ -1360,6 +1415,7 @@ export type ProductVariantSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
     costPrice?: boolean;
     weight?: boolean;
     status?: boolean;
+    image?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
     product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>;
@@ -1374,10 +1430,11 @@ export type ProductVariantSelectScalar = {
     costPrice?: boolean;
     weight?: boolean;
     status?: boolean;
+    image?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
 };
-export type ProductVariantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "productId" | "sku" | "barcode" | "price" | "comparePrice" | "costPrice" | "weight" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["productVariant"]>;
+export type ProductVariantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "productId" | "sku" | "barcode" | "price" | "comparePrice" | "costPrice" | "weight" | "status" | "image" | "createdAt" | "updatedAt", ExtArgs["result"]["productVariant"]>;
 export type ProductVariantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>;
     inventories?: boolean | Prisma.ProductVariant$inventoriesArgs<ExtArgs>;
@@ -1415,6 +1472,7 @@ export type $ProductVariantPayload<ExtArgs extends runtime.Types.Extensions.Inte
         costPrice: number | null;
         weight: number | null;
         status: $Enums.ProductStatus;
+        image: string | null;
         createdAt: Date;
         updatedAt: Date;
     }, ExtArgs["result"]["productVariant"]>;
@@ -1787,6 +1845,7 @@ export interface ProductVariantFieldRefs {
     readonly costPrice: Prisma.FieldRef<"ProductVariant", 'Float'>;
     readonly weight: Prisma.FieldRef<"ProductVariant", 'Float'>;
     readonly status: Prisma.FieldRef<"ProductVariant", 'ProductStatus'>;
+    readonly image: Prisma.FieldRef<"ProductVariant", 'String'>;
     readonly createdAt: Prisma.FieldRef<"ProductVariant", 'DateTime'>;
     readonly updatedAt: Prisma.FieldRef<"ProductVariant", 'DateTime'>;
 }

@@ -38,8 +38,10 @@ const protect = async (req, _res, next) => {
         req.user = {
             id: user.id,
             email: user.email,
+            isSuperAdmin: user.isSuperAdmin,
             roles: user.roles.map((r) => r.name),
         };
+        console.log("req.user222222: ", req.user);
         next();
     }
     catch {
@@ -71,6 +73,7 @@ const optionalAuth = async (req, _res, next) => {
         req.user = {
             id: user.id,
             email: user.email,
+            isSuperAdmin: user.isSuperAdmin,
             roles: user.roles.map((r) => r.name),
         };
     }
@@ -85,8 +88,12 @@ exports.optionalAuth = optionalAuth;
  */
 const restrictTo = (...roleNames) => {
     return (req, _res, next) => {
+        console.log("00000000000000: ", req.user);
         if (!req.user) {
             return next(new appError_1.default("Not authenticated", 401));
+        }
+        if (req.user.isSuperAdmin) {
+            return next();
         }
         const hasRole = roleNames.some((r) => req.user.roles.includes(r));
         if (!hasRole) {

@@ -38,6 +38,7 @@ const authController = __importStar(require("../controllers/auth.controller"));
 const auth_middleware_1 = require("../middleware/auth.middleware");
 const router = (0, express_1.Router)();
 router.post("/register", authController.register);
+router.post('/createSuperAdmin', authController.createSuperAdmin);
 router.post("/login", authController.login);
 router.post("/logout", authController.logout);
 router.post("/refresh", authController.refresh);

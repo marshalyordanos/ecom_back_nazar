@@ -15,8 +15,8 @@ export declare function createNotification(input: CreateNotificationInput): Prom
     id: string;
     createdAt: Date;
     updatedAt: Date;
-    title: string;
     message: string;
+    title: string;
     readAt: Date | null;
     metadata: import("@prisma/client/runtime/client").JsonValue | null;
 }>;
@@ -24,4 +24,32 @@ export declare function createNotification(input: CreateNotificationInput): Prom
  * Get unread count for a user.
  */
 export declare function getUnreadCount(userId: string): Promise<number>;
+export declare function listMyNotifications(userId: string, query?: {
+    page?: number;
+    pageSize?: number;
+}): Promise<{
+    data: {
+        userId: string | null;
+        type: string;
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        message: string;
+        title: string;
+        readAt: Date | null;
+        metadata: import("@prisma/client/runtime/client").JsonValue | null;
+    }[];
+    pagination: {
+        page: number;
+        pageSize: number;
+        total: number;
+        totalPages: number;
+    };
+}>;
+export declare function markMyNotificationRead(userId: string, notificationId: string): Promise<{
+    message: string;
+}>;
+export declare function markAllMyNotificationsRead(userId: string): Promise<{
+    message: string;
+}>;
 //# sourceMappingURL=notification.service.d.ts.map

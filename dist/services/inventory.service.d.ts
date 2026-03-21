@@ -31,6 +31,7 @@ export declare function listInventory(query: {
             status: import("../generated/prisma/enums").ProductStatus;
             createdAt: Date;
             updatedAt: Date;
+            image: string | null;
             productId: string;
             sku: string;
             barcode: string | null;
@@ -41,6 +42,7 @@ export declare function listInventory(query: {
         };
     } & {
         id: string;
+        createdAt: Date;
         updatedAt: Date;
         locationId: string;
         variantId: string;
@@ -73,6 +75,7 @@ export declare function getInventoryByVariantId(variantId: string): Promise<({
     };
 } & {
     id: string;
+    createdAt: Date;
     updatedAt: Date;
     locationId: string;
     variantId: string;
@@ -86,6 +89,7 @@ export declare function updateInventoryQuantity(variantId: string, locationId: s
     reorderLevel?: number;
 }): Promise<{
     id: string;
+    createdAt: Date;
     updatedAt: Date;
     locationId: string;
     variantId: string;
@@ -124,6 +128,7 @@ export declare function listMovements(query: {
             status: import("../generated/prisma/enums").ProductStatus;
             createdAt: Date;
             updatedAt: Date;
+            image: string | null;
             productId: string;
             sku: string;
             barcode: string | null;
@@ -136,6 +141,7 @@ export declare function listMovements(query: {
         type: import("../generated/prisma/enums").InventoryMovementType;
         id: string;
         createdAt: Date;
+        updatedAt: Date;
         locationId: string;
         variantId: string;
         quantity: number;
@@ -159,6 +165,7 @@ export declare function addMovement(data: {
     type: import("../generated/prisma/enums").InventoryMovementType;
     id: string;
     createdAt: Date;
+    updatedAt: Date;
     locationId: string;
     variantId: string;
     quantity: number;

@@ -9,6 +9,8 @@ export declare function listCoupons(query: {
         usages: {
             userId: string;
             id: string;
+            createdAt: Date;
+            updatedAt: Date;
             orderId: string | null;
             usedAt: Date;
             couponId: string;
@@ -17,6 +19,7 @@ export declare function listCoupons(query: {
         type: import("../generated/prisma/enums").CouponType;
         id: string;
         createdAt: Date;
+        updatedAt: Date;
         expiresAt: Date | null;
         value: number;
         code: string;
@@ -43,6 +46,8 @@ export declare function getCouponById(id: string): Promise<{
     } & {
         userId: string;
         id: string;
+        createdAt: Date;
+        updatedAt: Date;
         orderId: string | null;
         usedAt: Date;
         couponId: string;
@@ -51,6 +56,7 @@ export declare function getCouponById(id: string): Promise<{
     type: import("../generated/prisma/enums").CouponType;
     id: string;
     createdAt: Date;
+    updatedAt: Date;
     expiresAt: Date | null;
     value: number;
     code: string;
@@ -69,6 +75,7 @@ export declare function createCoupon(data: {
     type: import("../generated/prisma/enums").CouponType;
     id: string;
     createdAt: Date;
+    updatedAt: Date;
     expiresAt: Date | null;
     value: number;
     code: string;
@@ -87,6 +94,7 @@ export declare function updateCoupon(id: string, data: {
     type: import("../generated/prisma/enums").CouponType;
     id: string;
     createdAt: Date;
+    updatedAt: Date;
     expiresAt: Date | null;
     value: number;
     code: string;
@@ -104,9 +112,9 @@ export declare function applyCouponToOrder(orderId: string, couponId: string, us
         price: number;
         variantId: string;
         quantity: number;
+        orderId: string;
         productName: string;
         variantName: string | null;
-        orderId: string;
     }[];
     address: {
         name: string;

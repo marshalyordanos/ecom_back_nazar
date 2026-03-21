@@ -36,10 +36,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deactivateUser = exports.updateUser = exports.listUsers = exports.getById = exports.updateMyPassword = exports.updateMe = exports.getMe = void 0;
+exports.deleteMySavedAddress = exports.addMySavedAddress = exports.listMySavedAddresses = exports.getMyUnreadNotificationsCount = exports.markAllMyNotificationsRead = exports.markMyNotificationRead = exports.listMyNotifications = exports.deactivateUser = exports.updateUser = exports.listUsers = exports.getById = exports.updateMyPassword = exports.updateMe = exports.getMe = void 0;
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 const userService = __importStar(require("../services/user.service"));
 const queryParser_1 = require("../utils/queryParser");
+const notificationService = __importStar(require("../services/notification.service"));
+const savedAddressService = __importStar(require("../services/savedAddress.service"));
 exports.getMe = (0, catchAsync_1.default)(async (req, res, _next) => {
     const user = await userService.getMe(req.user.id);
     res.status(200).json(user);
@@ -72,5 +74,46 @@ exports.updateUser = (0, catchAsync_1.default)(async (req, res, _next) => {
 exports.deactivateUser = (0, catchAsync_1.default)(async (req, res, _next) => {
     const result = await userService.deactivateUser(req.params.id);
     res.status(200).json(result);
+});
+// ===============================
+// CUSTOMER NOTIFICATIONS
+// ===============================
+exports.listMyNotifications = (0, catchAsync_1.default)(async (req, res, _next) => {
+    const page = req.query.page ? Number(req.query.page) : undefined;
+    const pageSize = req.query.pageSize ? Number(req.query.pageSize) : undefined;
+    const data = await notificationService.listMyNotifications(req.user.id, {
+        page,
+        pageSize,
+    });
+    res.status(200).json(data);
+});
+exports.markMyNotificationRead = (0, catchAsync_1.default)(async (req, res, _next) => {
+    const { id } = req.params;
+    const data = await notificationService.markMyNotificationRead(req.user.id, id);
+    res.status(200).json(data);
+});
+exports.markAllMyNotificationsRead = (0, catchAsync_1.default)(async (req, res, _next) => {
+    const data = await notificationService.markAllMyNotificationsRead(req.user.id);
+    res.status(200).json(data);
+});
+exports.getMyUnreadNotificationsCount = (0, catchAsync_1.default)(async (req, res, _next) => {
+    const count = await notificationService.getUnreadCount(req.user.id);
+    res.status(200).json({ unreadCount: count });
+});
+// ===============================
+// SAVED ADDRESSES (PER USER)
+// ===============================
+exports.listMySavedAddresses = (0, catchAsync_1.default)(async (req, res, _next) => {
+    const data = await savedAddressService.listMySavedAddresses(req.user.id);
+    res.status(200).json({ data });
+});
+exports.addMySavedAddress = (0, catchAsync_1.default)(async (req, res, _next) => {
+    const data = await savedAddressService.addMySavedAddress(req.user.id, req.body);
+    res.status(201).json({ data });
+});
+exports.deleteMySavedAddress = (0, catchAsync_1.default)(async (req, res, _next) => {
+    const { id } = req.params;
+    const data = await savedAddressService.deleteMySavedAddress(req.user.id, id);
+    res.status(200).json(data);
 });
 //# sourceMappingURL=user.controller.js.map

@@ -15,18 +15,21 @@ export type SearchLogMinAggregateOutputType = {
     query: string | null;
     userId: string | null;
     createdAt: Date | null;
+    updatedAt: Date | null;
 };
 export type SearchLogMaxAggregateOutputType = {
     id: string | null;
     query: string | null;
     userId: string | null;
     createdAt: Date | null;
+    updatedAt: Date | null;
 };
 export type SearchLogCountAggregateOutputType = {
     id: number;
     query: number;
     userId: number;
     createdAt: number;
+    updatedAt: number;
     _all: number;
 };
 export type SearchLogMinAggregateInputType = {
@@ -34,18 +37,21 @@ export type SearchLogMinAggregateInputType = {
     query?: true;
     userId?: true;
     createdAt?: true;
+    updatedAt?: true;
 };
 export type SearchLogMaxAggregateInputType = {
     id?: true;
     query?: true;
     userId?: true;
     createdAt?: true;
+    updatedAt?: true;
 };
 export type SearchLogCountAggregateInputType = {
     id?: true;
     query?: true;
     userId?: true;
     createdAt?: true;
+    updatedAt?: true;
     _all?: true;
 };
 export type SearchLogAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -115,6 +121,7 @@ export type SearchLogGroupByOutputType = {
     query: string;
     userId: string | null;
     createdAt: Date;
+    updatedAt: Date;
     _count: SearchLogCountAggregateOutputType | null;
     _min: SearchLogMinAggregateOutputType | null;
     _max: SearchLogMaxAggregateOutputType | null;
@@ -130,6 +137,7 @@ export type SearchLogWhereInput = {
     query?: Prisma.StringFilter<"SearchLog"> | string;
     userId?: Prisma.StringNullableFilter<"SearchLog"> | string | null;
     createdAt?: Prisma.DateTimeFilter<"SearchLog"> | Date | string;
+    updatedAt?: Prisma.DateTimeFilter<"SearchLog"> | Date | string;
     user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null;
 };
 export type SearchLogOrderByWithRelationInput = {
@@ -137,6 +145,7 @@ export type SearchLogOrderByWithRelationInput = {
     query?: Prisma.SortOrder;
     userId?: Prisma.SortOrderInput | Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
+    updatedAt?: Prisma.SortOrder;
     user?: Prisma.UserOrderByWithRelationInput;
 };
 export type SearchLogWhereUniqueInput = Prisma.AtLeast<{
@@ -147,6 +156,7 @@ export type SearchLogWhereUniqueInput = Prisma.AtLeast<{
     query?: Prisma.StringFilter<"SearchLog"> | string;
     userId?: Prisma.StringNullableFilter<"SearchLog"> | string | null;
     createdAt?: Prisma.DateTimeFilter<"SearchLog"> | Date | string;
+    updatedAt?: Prisma.DateTimeFilter<"SearchLog"> | Date | string;
     user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null;
 }, "id">;
 export type SearchLogOrderByWithAggregationInput = {
@@ -154,6 +164,7 @@ export type SearchLogOrderByWithAggregationInput = {
     query?: Prisma.SortOrder;
     userId?: Prisma.SortOrderInput | Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
+    updatedAt?: Prisma.SortOrder;
     _count?: Prisma.SearchLogCountOrderByAggregateInput;
     _max?: Prisma.SearchLogMaxOrderByAggregateInput;
     _min?: Prisma.SearchLogMinOrderByAggregateInput;
@@ -166,11 +177,13 @@ export type SearchLogScalarWhereWithAggregatesInput = {
     query?: Prisma.StringWithAggregatesFilter<"SearchLog"> | string;
     userId?: Prisma.StringNullableWithAggregatesFilter<"SearchLog"> | string | null;
     createdAt?: Prisma.DateTimeWithAggregatesFilter<"SearchLog"> | Date | string;
+    updatedAt?: Prisma.DateTimeWithAggregatesFilter<"SearchLog"> | Date | string;
 };
 export type SearchLogCreateInput = {
     id?: string;
     query: string;
     createdAt?: Date | string;
+    updatedAt?: Date | string;
     user?: Prisma.UserCreateNestedOneWithoutSearchLogsInput;
 };
 export type SearchLogUncheckedCreateInput = {
@@ -178,11 +191,13 @@ export type SearchLogUncheckedCreateInput = {
     query: string;
     userId?: string | null;
     createdAt?: Date | string;
+    updatedAt?: Date | string;
 };
 export type SearchLogUpdateInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     query?: Prisma.StringFieldUpdateOperationsInput | string;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     user?: Prisma.UserUpdateOneWithoutSearchLogsNestedInput;
 };
 export type SearchLogUncheckedUpdateInput = {
@@ -190,23 +205,27 @@ export type SearchLogUncheckedUpdateInput = {
     query?: Prisma.StringFieldUpdateOperationsInput | string;
     userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 export type SearchLogCreateManyInput = {
     id?: string;
     query: string;
     userId?: string | null;
     createdAt?: Date | string;
+    updatedAt?: Date | string;
 };
 export type SearchLogUpdateManyMutationInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     query?: Prisma.StringFieldUpdateOperationsInput | string;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 export type SearchLogUncheckedUpdateManyInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     query?: Prisma.StringFieldUpdateOperationsInput | string;
     userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 export type SearchLogListRelationFilter = {
     every?: Prisma.SearchLogWhereInput;
@@ -221,18 +240,21 @@ export type SearchLogCountOrderByAggregateInput = {
     query?: Prisma.SortOrder;
     userId?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
+    updatedAt?: Prisma.SortOrder;
 };
 export type SearchLogMaxOrderByAggregateInput = {
     id?: Prisma.SortOrder;
     query?: Prisma.SortOrder;
     userId?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
+    updatedAt?: Prisma.SortOrder;
 };
 export type SearchLogMinOrderByAggregateInput = {
     id?: Prisma.SortOrder;
     query?: Prisma.SortOrder;
     userId?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
+    updatedAt?: Prisma.SortOrder;
 };
 export type SearchLogCreateNestedManyWithoutUserInput = {
     create?: Prisma.XOR<Prisma.SearchLogCreateWithoutUserInput, Prisma.SearchLogUncheckedCreateWithoutUserInput> | Prisma.SearchLogCreateWithoutUserInput[] | Prisma.SearchLogUncheckedCreateWithoutUserInput[];
@@ -276,11 +298,13 @@ export type SearchLogCreateWithoutUserInput = {
     id?: string;
     query: string;
     createdAt?: Date | string;
+    updatedAt?: Date | string;
 };
 export type SearchLogUncheckedCreateWithoutUserInput = {
     id?: string;
     query: string;
     createdAt?: Date | string;
+    updatedAt?: Date | string;
 };
 export type SearchLogCreateOrConnectWithoutUserInput = {
     where: Prisma.SearchLogWhereUniqueInput;
@@ -311,32 +335,38 @@ export type SearchLogScalarWhereInput = {
     query?: Prisma.StringFilter<"SearchLog"> | string;
     userId?: Prisma.StringNullableFilter<"SearchLog"> | string | null;
     createdAt?: Prisma.DateTimeFilter<"SearchLog"> | Date | string;
+    updatedAt?: Prisma.DateTimeFilter<"SearchLog"> | Date | string;
 };
 export type SearchLogCreateManyUserInput = {
     id?: string;
     query: string;
     createdAt?: Date | string;
+    updatedAt?: Date | string;
 };
 export type SearchLogUpdateWithoutUserInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     query?: Prisma.StringFieldUpdateOperationsInput | string;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 export type SearchLogUncheckedUpdateWithoutUserInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     query?: Prisma.StringFieldUpdateOperationsInput | string;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 export type SearchLogUncheckedUpdateManyWithoutUserInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     query?: Prisma.StringFieldUpdateOperationsInput | string;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 export type SearchLogSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
     query?: boolean;
     userId?: boolean;
     createdAt?: boolean;
+    updatedAt?: boolean;
     user?: boolean | Prisma.SearchLog$userArgs<ExtArgs>;
 }, ExtArgs["result"]["searchLog"]>;
 export type SearchLogSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -344,6 +374,7 @@ export type SearchLogSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
     query?: boolean;
     userId?: boolean;
     createdAt?: boolean;
+    updatedAt?: boolean;
     user?: boolean | Prisma.SearchLog$userArgs<ExtArgs>;
 }, ExtArgs["result"]["searchLog"]>;
 export type SearchLogSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -351,6 +382,7 @@ export type SearchLogSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
     query?: boolean;
     userId?: boolean;
     createdAt?: boolean;
+    updatedAt?: boolean;
     user?: boolean | Prisma.SearchLog$userArgs<ExtArgs>;
 }, ExtArgs["result"]["searchLog"]>;
 export type SearchLogSelectScalar = {
@@ -358,8 +390,9 @@ export type SearchLogSelectScalar = {
     query?: boolean;
     userId?: boolean;
     createdAt?: boolean;
+    updatedAt?: boolean;
 };
-export type SearchLogOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "query" | "userId" | "createdAt", ExtArgs["result"]["searchLog"]>;
+export type SearchLogOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "query" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["searchLog"]>;
 export type SearchLogInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     user?: boolean | Prisma.SearchLog$userArgs<ExtArgs>;
 };
@@ -379,6 +412,7 @@ export type $SearchLogPayload<ExtArgs extends runtime.Types.Extensions.InternalA
         query: string;
         userId: string | null;
         createdAt: Date;
+        updatedAt: Date;
     }, ExtArgs["result"]["searchLog"]>;
     composites: {};
 };
@@ -738,6 +772,7 @@ export interface SearchLogFieldRefs {
     readonly query: Prisma.FieldRef<"SearchLog", 'String'>;
     readonly userId: Prisma.FieldRef<"SearchLog", 'String'>;
     readonly createdAt: Prisma.FieldRef<"SearchLog", 'DateTime'>;
+    readonly updatedAt: Prisma.FieldRef<"SearchLog", 'DateTime'>;
 }
 /**
  * SearchLog findUnique
