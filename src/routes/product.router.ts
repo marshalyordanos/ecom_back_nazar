@@ -9,6 +9,7 @@ const router = Router();
 router.get("/", productController.listProducts);
 router.get("/featured", productController.getFeatured);
 router.patch("/variants/:variantId", protect, restrictTo("admin"), uploadSingleImage("image"), productController.updateVariant);
+router.get("/variants/:id", protect, restrictTo("admin"), productController.getVariantById);
 router.delete("/variants/:variantId", protect, restrictTo("admin"), productController.deleteVariant);
 router.post("/variants/:variantId/media", protect, restrictTo("admin"), productController.addVariantMedia);
 router.delete("/variants/media/:mediaId", protect, restrictTo("admin"), productController.removeVariantMedia);
@@ -37,5 +38,6 @@ router.post("/", protect, restrictTo("admin"), productController.createProduct);
 router.patch("/:id", protect, restrictTo("admin"), productController.updateProduct);
 router.delete("/:id", protect, restrictTo("admin"), productController.deleteProduct);
 router.post("/:id/variants", protect, restrictTo("admin"), uploadSingleImage("image"), productController.createVariant);
+
 
 export default router;

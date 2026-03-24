@@ -54,6 +54,11 @@ export const getFeatured = catchAsync(async (req: AuthRequest, res: Response, _n
   res.status(200).json(products);
 });
 
+export const getVariantById = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const variant = await productService.getVariantById(req.params.id);
+  res.status(200).json(variant);
+});
+
 export const createVariant = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
   const variant = await productService.createVariant(req.params.id, req.body, req.file);
   res.status(201).json(variant);

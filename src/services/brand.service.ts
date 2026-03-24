@@ -59,14 +59,14 @@ export async function createBrand(data: {
   fs.unlinkSync(file.path);  
   console.log("brand111111122221")
 
-
+  let isFeaturedString: string = data.isFeatured as unknown as string;
   const brand = await prisma.brand.create({
     data: {
       name: data.name,
       slug: data.slug,
       logoUrl: uploadResult.secure_url,
       description: data.description,
-      isFeatured: Boolean(data.isFeatured) ?? false,
+      isFeatured:  isFeaturedString === 'true' ,
     },
   });
   return brand;
@@ -76,9 +76,8 @@ export async function updateBrand(
   id: string,
   data: { name?: string; slug?: string; logoUrl?: string; description?: string; isFeatured?: boolean }
 , file: any) {
-  if (!file) {
-    throw new AppError('No file uploaded', 400);
-  }
+  console.log("brand update", data)
+  if(file){
 
   const fileBuffer = fs.readFileSync(file.path);
 
@@ -88,7 +87,9 @@ export async function updateBrand(
 if (uploadResult.secure_url) {
     data.logoUrl = uploadResult.secure_url;
   }
-  data.isFeatured = Boolean(data.isFeatured) ?? false;
+  }
+  let isFeaturedString: string = data.isFeatured as unknown as string;
+  data.isFeatured = isFeaturedString === 'true';  
   const brand = await prisma.brand.update({
     where: { id },
     data: data as Parameters<typeof prisma.brand.update>[0]["data"],

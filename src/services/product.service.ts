@@ -189,6 +189,19 @@ export async function getFeaturedProducts(shopId?: string, limit = 10) {
   return products;
 }
 
+export async function getVariantById(id: string) {
+  const variant = await prisma.productVariant.findUnique({
+    where: { id },
+    include: {
+      inventories: true,
+      variantOptionValues: {
+        include: { optionValue: { include: { option: true } } },
+      },
+      media: { orderBy: { position: "asc" } },
+    },
+  });
+  return variant;
+}
 // --------- Variants ---------
 export async function createVariant(
   productId: string,

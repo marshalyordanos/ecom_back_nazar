@@ -4,6 +4,7 @@ import { protect } from "../middleware/auth.middleware";
 
 const router = Router();
 
+router.get("/", reviewController.listReviews);
 router.get("/:id", reviewController.getReviewById);
 router.post("/", protect, reviewController.createReview);
 router.put("/:id", protect, reviewController.updateReview);

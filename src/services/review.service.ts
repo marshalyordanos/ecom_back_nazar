@@ -7,7 +7,7 @@ const dateFields = ["createdAt"];
 
 export async function listReviewsByProduct(
   productId: string,
-  query: { page?: number; pageSize?: number; sort?: string }
+  query: { page?: number; pageSize?: number; sort?: string; search?: string; filter?: string }
 ) {
   const feature = new PrismaQueryFeature<Record<string, unknown>, Record<string, string>>({
     ...query,
@@ -29,6 +29,40 @@ export async function listReviewsByProduct(
   ]);
   return { data, pagination: feature.getPagination(total) };
 }
+
+
+export async function listReviews(query: {
+  page?: number;
+  pageSize?: number;
+  search?: string;
+  filter?: string;
+  sort?: string;
+  productId?: string;
+}) {
+  const feature = new PrismaQueryFeature<Record<string, unknown>, Record<string, string>>({
+    ...query,
+    searchableFields,
+    dateFields,
+  });
+  const { skip, take, where, orderBy } = feature.getQuery();
+  const whereQuery = query.productId ? { ...where, productId: query.productId } : where;
+
+  const [data, total] = await Promise.all([
+    prisma.review.findMany({
+      where: whereQuery,
+      orderBy,
+      skip,
+      take,
+      include: {
+        user: { select: { id: true, firstName: true, lastName: true, email: true } },
+        product: { select: { id: true, name: true, slug: true } },
+      },
+    }),
+    prisma.review.count({ where: whereQuery }),
+  ]);
+  return { data, pagination: feature.getPagination(total) };
+}
+
 
 export async function getReviewById(id: string) {
   const review = await prisma.review.findUnique({
@@ -62,10 +96,10 @@ export async function createReview(
   return review;
 }
 
-export async function updateReview(id: string, userId: string, data: { rating?: number; title?: string; comment?: string }) {
+export async function updateReview(id: string, userId: string, data: { rating?: number; title?: string; comment?: string }, isAdmin = false) {
   const review = await prisma.review.findUnique({ where: { id } });
   if (!review) throw new AppError("Review not found", 404);
-  if (review.userId !== userId) throw new AppError("You can only edit your own review", 403);
+  if (!isAdmin && review.userId !== userId) throw new AppError("You can only edit your own review", 403);
   const updated = await prisma.review.update({
     where: { id },
     data: data as Parameters<typeof prisma.review.update>[0]["data"],

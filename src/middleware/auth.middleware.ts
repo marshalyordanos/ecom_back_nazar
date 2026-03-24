@@ -47,13 +47,16 @@ export const protect = async (req: AuthRequest, _res: Response, next: NextFuncti
     req.user = {
       id: user.id,
       email: user.email,
-      isSuperAdmin:user.isSuperAdmin,
-
+      isSuperAdmin: user.isSuperAdmin,
       roles: user.roles.map((r) => r.name),
     };
-    console.log("req.user222222: ",req.user)
+    console.log("req.user222222: ", req.user);
     next();
-  } catch {
+  } catch (err: any) {
+    // If token is expired, jwt.verify throws with err.name === 'TokenExpiredError'
+    if (err && err.name === 'TokenExpiredError') {
+      return next(new AppError("Token is expired", 401));
+    }
     return next(new AppError("Invalid or expired token", 401));
   }
 };
