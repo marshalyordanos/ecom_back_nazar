@@ -25,7 +25,7 @@ export async function listInventory(query: {
       skip,
       take,
       include: {
-        variant: { include: { product: { select: { name: true, slug: true } } } },
+        variant: { include: { product:true,variantOptionValues:{include: {optionValue:true}} } },
         location: true,
       },
     }),
@@ -62,6 +62,18 @@ export async function updateInventoryQuantity(
   return inventory;
 }
 
+export async function getInventoryById(id: string) {
+  const inventory = await prisma.inventory.findUnique({
+    where: { id },
+    include: {
+      variant: true,
+      location: true,
+      movements: true,
+    },
+  });
+  if (!inventory) throw new AppError("Inventory not found", 404);
+  return inventory;
+}
 export async function listMovements(query: {
   page?: number;
   pageSize?: number;

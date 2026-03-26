@@ -47,12 +47,21 @@ export const deleteProduct = catchAsync(async (req: AuthRequest, res: Response, 
   res.status(200).json({ message: "Product deleted successfully" });
 });
 
+export const listVariants = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const query = parseListQuery(req);
+  const shopId = req.query.shopId as string | undefined;
+  const result = await productService.listVariants(shopId, query);
+  res.status(200).json(result);
+});
+
 export const getFeatured = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
   const shopId = req.query.shopId as string | undefined;
   const limit = Math.min(parseInt(String(req.query.limit), 10) || 10, 50);
   const products = await productService.getFeaturedProducts(shopId, limit);
   res.status(200).json(products);
 });
+
+
 
 export const getVariantById = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
   const variant = await productService.getVariantById(req.params.id);

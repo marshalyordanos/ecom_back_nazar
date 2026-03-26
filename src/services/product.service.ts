@@ -171,6 +171,36 @@ export async function deleteProduct(id: string, _shopId?: string) {
   return { message: "Product deleted successfully" };
 }
 
+export async function listVariants(shopId?: string, query?: {
+  page?: number;
+  pageSize?: number;
+  search?: string;
+  filter?: string;
+  sort?: string;
+}) {
+  const feature = new PrismaQueryFeature<Record<string, unknown>, Record<string, string>>({
+    ...query,
+    searchableFields,
+    dateFields,
+  });
+  const { skip, take, where, orderBy } = feature.getQuery();
+  let whereWithShop:any = shopId ? { ...where, shopId } : where;
+  const variants = await prisma.productVariant.findMany({
+    where: whereWithShop,
+    orderBy,
+    skip,
+    take,
+    include: {
+      inventories: true,
+      variantOptionValues: {
+        include: { optionValue: { include: { option: true } } },
+      },
+      media: { orderBy: { position: "asc" } },
+    },
+  });
+  const total = await prisma.productVariant.count({ where: whereWithShop });
+  return { data: variants, pagination: feature.getPagination(total) };
+}
 export async function getFeaturedProducts(shopId?: string, limit = 10) {
   const where: Record<string, unknown> = { isFeatured: true, status: "ACTIVE" };
   if (shopId) (where as any).shopId = shopId;

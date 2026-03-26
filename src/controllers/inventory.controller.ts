@@ -32,6 +32,10 @@ export const listMovements = catchAsync(async (req: AuthRequest, res: Response, 
   res.status(200).json(result);
 });
 
+export const getInventoryById = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const inventory = await inventoryService.getInventoryById(req.params.id);
+  res.status(200).json(inventory);
+});
 export const addMovement = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
   const { variantId, locationId, type, quantity, referenceId } = req.body;
   if (!variantId || !locationId || !type || quantity == null) {

@@ -8,6 +8,8 @@ const router = Router();
 
 router.get("/", productController.listProducts);
 router.get("/featured", productController.getFeatured);
+router.get("/variants", protect, restrictTo("admin"), productController.listVariants);
+
 router.patch("/variants/:variantId", protect, restrictTo("admin"), uploadSingleImage("image"), productController.updateVariant);
 router.get("/variants/:id", protect, restrictTo("admin"), productController.getVariantById);
 router.delete("/variants/:variantId", protect, restrictTo("admin"), productController.deleteVariant);
