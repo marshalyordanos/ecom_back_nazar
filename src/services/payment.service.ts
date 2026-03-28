@@ -14,7 +14,7 @@ export async function listPayments(query: {
 }) {
   const feature = new PrismaQueryFeature<Record<string, unknown>, Record<string, string>>({
     ...query,
-    searchableFields: [],
+    searchableFields: ["order.orderNumber", "order.user.firstName", "order.user.lastName", "order.user.email"],
     dateFields,
   });
   const { skip, take, where, orderBy } = feature.getQuery();
@@ -26,7 +26,7 @@ export async function listPayments(query: {
       orderBy,
       skip,
       take,
-      include: { order: { select: { orderNumber: true, userId: true } } },
+      include: { order: { select: { orderNumber: true, user: true } } },
     }),
     prisma.payment.count({ where: whereOrder }),
   ]);

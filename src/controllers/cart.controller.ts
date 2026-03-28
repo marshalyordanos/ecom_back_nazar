@@ -30,6 +30,15 @@ export const removeCartItem = catchAsync(async (req: AuthRequest, res: Response,
 });
 
 export const checkout = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
-  const order = await cartService.checkout(req.user!.id, req.body);
-  res.status(201).json(order);
+  // const order = await cartService.checkout(req.user!.id, req.body);
+  // res.status(201).json(order);
+  const { order, checkout_url } = await cartService.checkout(req.user!.id, req.body);
+
+res.status(201).json({ order, checkout_url });
+});
+
+export const handleChapaCallback = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const { data } = req.body;
+  const payment = await cartService.handleChapaCallback(data);
+  res.status(200).json(payment);
 });

@@ -46,3 +46,9 @@ export const deleteLocation = catchAsync(async (req: AuthRequest, res: Response,
   const result = await shopService.deleteLocation(req.params.locationId);
   res.status(200).json(result);
 });
+
+
+export const addSalesFromShop = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const sales = await shopService.addSalesFromShop({locationId: req.body.locationId, variantId: req.body.variantId, quantity: req.body.quantity});
+  res.status(201).json(sales);
+});

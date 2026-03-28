@@ -72,7 +72,12 @@ export const getDashboardSummary = catchAsync(async (req: AuthRequest, res: Resp
   const data = await dashboardService.getDashboardSummary(shopId);
   res.status(200).json(data);
 });
-
+export const getSummaryWithDetails = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getSummaryWithDetails(shopId);
+  res.status(200).json(data);
+});
 // ===============================
 // 👤 USER SUMMARY
 // ===============================

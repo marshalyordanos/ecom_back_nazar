@@ -3,7 +3,7 @@ import AppError from "../utils/appError";
 import { PrismaQueryFeature } from "../utils/apiFeature";
 import { createNotification } from "./notification.service";
 
-const orderSearchableFields = ["orderNumber"];
+const orderSearchableFields = ["orderNumber", "user.firstName", "user.lastName", "user.email"];
 const orderDateFields = ["createdAt", "updatedAt"];
 
 export async function listUserOrders(
@@ -118,7 +118,7 @@ export async function listOrdersAdmin(query: {
       orderBy,
       skip,
       take,
-      include: { items: true, address: true, user: { select: { id: true, email: true, firstName: true, lastName: true } } },
+      include: { items: {include: {variant: {include:{variantOptionValues:{include:{optionValue:{include:{option:true}}}}}}}}, address: true, user: { select: { id: true, email: true, firstName: true, lastName: true } } },
     }),
     prisma.order.count({ where: whereShop }),
   ]);

@@ -196,3 +196,35 @@ export async function deleteLocation(locationId: string) {
   await prisma.shopLocation.delete({ where: { id: locationId } });
   return { message: "Location deleted successfully" };
 }
+
+export async function addSalesFromShop(data: { locationId: string, variantId: string, quantity: number }) {
+  const variant = await prisma.productVariant.findUnique({ where: { id: data.variantId } });
+  if (!variant) throw new AppError("Variant not found", 404);
+  const location = await prisma.shopLocation.findUnique({ where: { id: data.locationId } });
+  if (!location) throw new AppError("Location not found", 404);
+
+  // Use the compound unique constraint variantId + locationId as described in the schema
+  const sales = await prisma.$transaction(async (tx) => {
+    const sales = await tx.saleFromShop.create({
+      data: {
+        locationId: data.locationId,
+        variantId: data.variantId,
+        quantity: data.quantity,
+        price: variant.price,
+        total: variant.price * data.quantity
+      },
+    });
+    await tx.inventory.update({
+      where: {
+        variantId_locationId: {
+          variantId: variant.id,
+          locationId: location.id,
+        }
+      },
+      data: { quantity: { decrement: data.quantity } },
+    });
+    return sales;
+  });
+
+  return sales;
+}

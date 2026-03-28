@@ -115,7 +115,7 @@ export async function getLowInventory(shopId: string) {
       location: true,
     },
   });
-  return inventories.filter((inv) => inv.reorderLevel != null && inv.quantity <= inv.reorderLevel);
+  return inventories.filter((inv) =>  inv.quantity <= 0);
 }
 
 export async function getNewCustomers(shopId: string, days = 30) {
@@ -188,15 +188,115 @@ function safeNumber(n: number | null | undefined) {
   return n ?? 0;
 }
 
+
+  // Returns summary details for the current month and growth compared to previous month:
+  // - New customers this month + percent growth
+  // - Orders this month + percent growth
+  // - Sales this month + percent growth
+  export async function getSummaryWithDetails(shopId: string) {
+    const now = new Date();
+
+    // Current Month - first day & last day
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+
+    // Previous Month - first day & last day
+    const prevMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const prevMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59, 999);
+
+    // New Customers (users with 'user' role) - created in this month and last month
+    const [thisMonthNewCustomers, prevMonthNewCustomers] = await Promise.all([
+      prisma.user.count({
+        where: {
+          roles: { some: { name: "user" } },
+          createdAt: { gte: startOfMonth, lte: endOfMonth }
+        }
+      }),
+      prisma.user.count({
+        where: {
+          roles: { some: { name: "user" } },
+          createdAt: { gte: prevMonthStart, lte: prevMonthEnd }
+        }
+      }),
+    ]);
+
+    // Orders in current and previous month
+    const [thisMonthOrders, prevMonthOrders] = await Promise.all([
+      prisma.order.count({
+        where: {
+          shopId,
+          createdAt: { gte: startOfMonth, lte: endOfMonth },
+        },
+      }),
+      prisma.order.count({
+        where: {
+          shopId,
+          createdAt: { gte: prevMonthStart, lte: prevMonthEnd },
+        },
+      }),
+    ]);
+
+    // Sales (payments, PAID or REFUNDED) in current and previous month
+    const [thisMonthSalesAgg, prevMonthSalesAgg] = await Promise.all([
+      prisma.payment.aggregate({
+        where: {
+          
+          status: { in: ["PAID", "REFUNDED"] },
+          createdAt: { gte: startOfMonth, lte: endOfMonth },
+        },
+        _sum: { amount: true },
+      }),
+      prisma.payment.aggregate({
+        where: {
+          status: { in: ["PAID", "REFUNDED"] },
+          createdAt: { gte: prevMonthStart, lte: prevMonthEnd },
+        },
+        _sum: { amount: true },
+      }),
+    ]);
+
+    const thisMonthSales = thisMonthSalesAgg._sum?.amount ?? 0;
+    const prevMonthSales = prevMonthSalesAgg._sum?.amount ?? 0;
+
+    // Helper for percent change (avoid division by zero and fallback to 100 or 0)
+    function percentChange(current: number, prev: number) {
+      if (prev === 0) {
+        if (current === 0) return 0;
+        return 100;
+      }
+      return ((current - prev) / Math.abs(prev)) * 100;
+    }
+
+    return {
+      customers:{
+        thisMonth: thisMonthNewCustomers,
+        prevMonth: prevMonthNewCustomers,
+        growth: percentChange(thisMonthNewCustomers, prevMonthNewCustomers),
+      },
+      orders:{
+        thisMonth: thisMonthOrders,
+        prevMonth: prevMonthOrders,
+        growth: percentChange(thisMonthOrders, prevMonthOrders),
+      },
+      sales:{
+        thisMonth: thisMonthSales,
+        prevMonth: prevMonthSales,
+        growth: percentChange(thisMonthSales, prevMonthSales),
+      },
+    };
+  }
+
+
+
 // ===============================
 // 📊 GLOBAL SUMMARY (MAIN API)
 // ===============================
 export async function getDashboardSummary(shopId: string) {
-  const [ordersCount, revenueAgg, productsCount, userIds] = await Promise.all([
+  const [ordersCount, revenueAgg, productsCount, userIds, customersCount, totalTransactions] = await Promise.all([
     prisma.order.count({ where: { shopId } }),
-    prisma.order.aggregate({
-      where: { shopId, status: { in: ["PAID", "PROCESSING", "SHIPPED", "COMPLETED"] } },
-      _sum: { grandTotal: true },
+    prisma.payment.aggregate({
+      where: {  status: { in: ["PAID","REFUNDED"] } },
+      _sum: { amount: true },
     }),
     prisma.product.count({ where: { shopId } }),
     prisma.order.findMany({
@@ -204,18 +304,23 @@ export async function getDashboardSummary(shopId: string) {
       distinct: ["userId"],
       select: { userId: true },
     }),
+    prisma.user.count({ where: { roles: { some: { name: "user" } } } }),
+    prisma.payment.count({ where: { status: "PAID" } }),
   ]);
 
   const lowInventoryCount = (await getLowStockCount(shopId)).count;
   const usersCount = userIds.length;
-  const revenue = safeNumber(revenueAgg._sum.grandTotal);
+  console.log("revenueAgg",revenueAgg);
+  const revenue = safeNumber(revenueAgg._sum?.amount ?? 0);
 
   return {
+    totalTransactions,
     revenue,
     users: usersCount,
     orders: ordersCount,
     products: productsCount,
     alerts: lowInventoryCount,
+    customers: customersCount,
   };
 }
 

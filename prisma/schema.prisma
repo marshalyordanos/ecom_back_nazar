@@ -118,6 +118,7 @@ model ShopLocation {
   longitude    Float?
   phone        String?
   inventories  Inventory[]
+  sales        SaleFromShop[]
   movements    InventoryMovement[] @relation("MovementLocation")
   createdAt    DateTime @default(now())
 }
@@ -282,6 +283,7 @@ model ProductVariant {
   cartItems              CartItem[]
   orderItems             OrderItem[]
   variantOptionValues    VariantOptionValue[]
+  sales                  SaleFromShop[]
   createdAt              DateTime                @default(now())
   updatedAt              DateTime                @updatedAt
 }
@@ -340,6 +342,8 @@ model Inventory {
   movements        InventoryMovement[]
  createdAt        DateTime         @default(now())
   updatedAt        DateTime         @updatedAt
+
+  @@unique([variantId, locationId])
   }
 
 model InventoryMovement {
@@ -421,6 +425,8 @@ model OrderItem {
   total       Float
 }
 
+
+
 //////////////////////////////////////////////////////
 // PAYMENTS
 //////////////////////////////////////////////////////
@@ -434,6 +440,7 @@ model Payment {
   amount                   Float
   currency                 String
   status                   PaymentStatus
+  transactionId            String?
   paidAt                   DateTime?
   createdAt                DateTime      @default(now())
 }
@@ -620,4 +627,18 @@ model ShopSetting {
   updatedAt DateTime @updatedAt
 
   @@unique([shopId, key])
+}
+
+
+model SaleFromShop{
+  id String @id @default(cuid())
+  location ShopLocation @relation(fields: [locationId], references: [id])
+  locationId String
+  variant ProductVariant @relation(fields: [variantId], references: [id])
+  variantId String
+  quantity Int
+  price Float
+  total Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

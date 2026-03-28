@@ -20,6 +20,7 @@ router.get("/recent-activities", dashboardController.getRecentActivities);
 // 📊 GLOBAL SUMMARY (MAIN API)
 // ===============================
 router.get("/summary", dashboardController.getDashboardSummary);
+router.get("/summary-with-details", dashboardController.getSummaryWithDetails);
 
 // ===============================
 // 👤 USER SUMMARY

@@ -3,7 +3,9 @@ import AppError from "../utils/appError";
 import { PrismaQueryFeature } from "../utils/apiFeature";
 import fs from "fs";
 import { uploadToCloudinary } from "../config/cloudinary";
-const searchableFields = ["name", "slug", "description", "shortDescription"];
+const searchableFieldsforVariant = ["product.name","sku","product.brand.name",  "product.category.name", "product.description", "product.shortDescription"];
+const searchableFields = ["name","slug","brand.name",  "category.name", "description", "shortDescription"];
+
 const dateFields = ["createdAt", "updatedAt"];
 
 export async function listProducts(
@@ -180,7 +182,7 @@ export async function listVariants(shopId?: string, query?: {
 }) {
   const feature = new PrismaQueryFeature<Record<string, unknown>, Record<string, string>>({
     ...query,
-    searchableFields,
+    searchableFields: searchableFieldsforVariant,
     dateFields,
   });
   const { skip, take, where, orderBy } = feature.getQuery();
@@ -191,6 +193,7 @@ export async function listVariants(shopId?: string, query?: {
     skip,
     take,
     include: {
+      product: { select: { id: true, name: true, slug: true,brand: { select: { id: true, name: true, slug: true } }, category: { select: { id: true, name: true, slug: true } } } },
       inventories: true,
       variantOptionValues: {
         include: { optionValue: { include: { option: true } } },

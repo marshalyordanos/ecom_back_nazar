@@ -1,6 +1,16 @@
+import axios from "axios";
 import { prisma } from "../lib/prisma";
 import AppError from "../utils/appError";
 import { createNotification } from "./notification.service";
+import { createId } from '@paralleldrive/cuid2'
+import config from "../config/config";
+import { sendSms } from "../utils/sendSms";
+
+const generateOrderNumber = (counter: number) => {
+const year = new Date().getFullYear();
+  const paddedCounter = String(counter).padStart(7, '0');
+  return `ORD-${year}-${paddedCounter}`;
+}
 
 export async function getOrCreateCart(userId: string) {
   let cart = await prisma.cart.findFirst({
@@ -153,9 +163,19 @@ export async function checkout(
   }
   const taxTotal = 0;
   const grandTotal = subtotal - discountTotal + taxTotal;
-  const orderNumber = `ORD-${Date.now()}-${Math.random().toString(36).slice(2, 9).toUpperCase()}`;
+  const orderCount = await prisma.order.count({
+    where: {
+      createdAt: {
+        gte: new Date(`${new Date().getFullYear()}-01-01`),
+        lt: new Date(`${new Date().getFullYear() + 1}-01-01`),
+      },
+    },
+  });
+  const orderNumber = generateOrderNumber(orderCount + 1);
+let ord:any;
+let checkout_url:any;
 
-  const order = await prisma.$transaction(async (tx) => {
+ const orderData = await prisma.$transaction(async (tx) => {
     const newOrder = await tx.order.create({
       data: {
         shopId: data.shopId,
@@ -188,6 +208,7 @@ export async function checkout(
       });
     }
 
+
     if (couponId) {
       await tx.couponUsage.create({
         data: { couponId, userId, orderId: newOrder.id },
@@ -203,34 +224,152 @@ export async function checkout(
       data: { status: "completed" },
     });
 
+    let txRef = String(Date.now());
+    console.log('=====================txRef:', txRef + "-or-" + newOrder.id, 'secretKey:',process.env.CHAPA_SECRET_KEY, config.chapa.secretKey);
+    const chapaData = {
+      amount: grandTotal,
+      currency: 'ETB',
+      tx_ref: txRef + "-order-" + newOrder.id ,
+      callback_url: `https://api.wheellol.com/bookings/chapa-callback`,
+      'customization[title]': 'Car Rental Booking',
+      'customization[description]': 'Payment for car booking',
+      phone_number: data.shippingAddress.phone,
+      return_url: `https://api.wheellol.com/bookings/confirmation`,
+    };
+
+    try {
+      const chapaResponse = await axios.post(
+        'https://api.chapa.co/v1/transaction/initialize',
+        chapaData,
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.CHAPA_SECRET_KEY}`, 
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+
+      console.log('000000000000000000000005:', chapaResponse);
+      const chapaRes: any = chapaResponse.data;
+      if (chapaRes?.status !== 'success') {
+        throw new AppError('Chapa initialization failed', 500);
+      }
+      
+     
+      const fullOrder = await tx.order.findUnique({
+        where: { id: newOrder.id },
+        include: { items: true, address: true },
+      });
+      if (!fullOrder) throw new AppError("Order not found", 404);
+    
+      // Notify the customer so their in-app notifications are user-specific.
+      await createNotification({
+        userId,
+        type: "order_created",
+        title: "Order placed",
+        message: `Order ${fullOrder.orderNumber} has been placed successfully.`,
+        metadata: { orderId: fullOrder.id },
+      });
+
+      // await tx.commit();
+      ord = fullOrder;
+      checkout_url = chapaRes.data.checkout_url;
+      // return {
+      //   order: fullOrder,
+      //   checkout_url: chapaRes.checkout_url,
+      // };
+        } catch (err: any) {
+      // await tx.abort();
+      console.error('Chapa error:', err.response?.data || err.message);
+      throw new AppError('Failed to initialize Chapa payment', 500);
+    }
      // 5️⃣ Create payment record
-     await tx.payment.create({
-      data: {
-        orderId: newOrder.id,
-        provider: "",
-        amount: grandTotal,
-        currency: shop.currency,
-        status: "PENDING",
+    //  await tx.payment.create({
+    //   data: {
+    //     orderId: newOrder.id,
+    //     provider: "",
+    //     providerTransactionId: txRef,
+    //     amount: grandTotal,
+    //     currency: shop.currency,
+    //     status: "PENDING",
+    //   },
+    // });
+
+  });
+
+return {order: ord, checkout_url: checkout_url};
+}
+
+
+export async function handleChapaCallback(data: any) {
+  // 1️⃣ Validate body
+  console.log(
+    '=========================================1:handleChapaCallback ',
+    data,
+  );
+  if (!data || !data.trx_ref || !data.status) {
+    throw new AppError('Invalid Chapa payload', 400);
+  }
+
+  // 2️⃣ Lookup payment record by trx_ref
+  const payment = await prisma.payment.create({
+    data: {
+      orderId: data.tx_ref.split("-order-")[1],
+      provider: "CHAPA",
+      providerTransactionId: data.trx_ref,
+      amount: data.amount,
+      currency: data.currency,
+      status: data.status,
+    },
+  });
+
+
+  const verifyUrl = `https://api.chapa.co/v1/transaction/verify/${data.trx_ref}`;
+  let verifiedStatus = data.status;
+
+  try {
+    const verifyResponse = await axios.get(verifyUrl, {
+      headers: {
+        Authorization: `Bearer ${process.env.CHAPA_SECRET_KEY}`,
+        'Content-Type': 'application/json',
       },
     });
 
-    return newOrder;
-  });
+    if (verifyResponse.data?.status === 'success') {
+      verifiedStatus = verifyResponse.data?.data?.status ?? data.status;
+    }
+  } catch (error) {
+    console.warn('⚠️ Chapa verification failed, fallback to callback data');
+  }
 
-  const fullOrder = await prisma.order.findUnique({
-    where: { id: order.id },
-    include: { items: true, address: true },
-  });
-  if (!fullOrder) throw new AppError("Order not found", 404);
+  // 4️⃣ Update payment and booking within transaction
+  return await prisma.$transaction(async (tx) => {
+    const updatedPayment = await tx.payment.update({
+      where: { id: payment.id },
+      data: {
+        status: verifiedStatus === 'success' ? 'PAID' : 'FAILED',
+      },
 
-  // Notify the customer so their in-app notifications are user-specific.
-  await createNotification({
-    userId,
-    type: "order_created",
-    title: "Order placed",
-    message: `Order ${fullOrder.orderNumber} has been placed successfully.`,
-    metadata: { orderId: fullOrder.id },
-  });
+      include: { order: { include: { address:true} } },
+    });
 
-  return fullOrder;
+    if (verifiedStatus === 'success') {
+      
+      await createNotification({
+        userId: updatedPayment.order.userId,
+        type: "order_paid",
+        title: "Order placed",
+        message: `Order ${updatedPayment.order.orderNumber} has been paid successfully.`,
+        metadata: { orderId: updatedPayment.order.id },
+      });
+
+      await sendSms(
+        `Your order ${updatedPayment.order.orderNumber} has been paid successfully.`,
+        updatedPayment.order.address?.phone || '',
+      );
+
+    }
+
+    return updatedPayment;
+  });
 }

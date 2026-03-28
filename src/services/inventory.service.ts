@@ -13,7 +13,7 @@ export async function listInventory(query: {
 }) {
   const feature = new PrismaQueryFeature<Record<string, unknown>, Record<string, string>>({
     ...query,
-    searchableFields: [],
+    searchableFields: ["variant.product.name", "variant.sku"],
     dateFields: ["updatedAt"],
   });
   const { skip, take, where, orderBy } = feature.getQuery();
@@ -82,7 +82,7 @@ export async function listMovements(query: {
 }) {
   const feature = new PrismaQueryFeature<Record<string, unknown>, Record<string, string>>({
     ...query,
-    searchableFields: [],
+    searchableFields: ["variant.product.name",'variant.sku'],
     dateFields: movementDateFields,
   });
   const { skip, take, where, orderBy } = feature.getQuery();
