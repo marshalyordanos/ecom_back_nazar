@@ -294,6 +294,7 @@ export async function createVariant(
         weight: Number(data.weight),
         image: uploadResult.secure_url,
         status: data.status as any,
+        
       },
       include: {
         inventories: true,
