@@ -346,6 +346,8 @@ model Inventory {
   @@unique([variantId, locationId])
   }
 
+
+
 model InventoryMovement {
   id           String                @id @default(cuid())
   variant      ProductVariant        @relation("MovementVariant", fields: [variantId], references: [id])

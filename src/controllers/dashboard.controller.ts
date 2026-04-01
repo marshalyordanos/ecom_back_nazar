@@ -3,6 +3,11 @@ import catchAsync from "../utils/catchAsync";
 import * as dashboardService from "../services/dashboard.service";
 import type { AuthRequest } from "../middleware/auth.middleware";
 
+export const getSummary = catchAsync(async (_req: AuthRequest, res: Response, _next: NextFunction) => {
+  const data = await dashboardService.getGlobalDashboardSummary();
+  res.status(200).json({ data });
+});
+
 export const getOverview = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
   const shopId = req.query.shopId as string || (req as any).shopId;
   if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
@@ -64,12 +69,12 @@ export const getRecentActivities = catchAsync(async (req: AuthRequest, res: Resp
 });
 
 // ===============================
-// 📊 GLOBAL SUMMARY (MAIN API)
+// 📊 SHOP KPI (requires shopId)
 // ===============================
-export const getDashboardSummary = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+export const getShopDashboardSummary = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
   const shopId = req.query.shopId as string;
   if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
-  const data = await dashboardService.getDashboardSummary(shopId);
+  const data = await dashboardService.getShopDashboardSummary(shopId);
   res.status(200).json(data);
 });
 export const getSummaryWithDetails = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {

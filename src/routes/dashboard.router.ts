@@ -1,3 +1,8 @@
+
+
+
+
+
 import { Router } from "express";
 import * as dashboardController from "../controllers/dashboard.controller";
 import { protect, restrictTo } from "../middleware/auth.middleware";
@@ -17,9 +22,10 @@ router.get("/recent-orders", dashboardController.getRecentOrders);
 router.get("/recent-activities", dashboardController.getRecentActivities);
 
 // ===============================
-// 📊 GLOBAL SUMMARY (MAIN API)
+// 📊 GLOBAL ADMIN SUMMARY (cards)
 // ===============================
-router.get("/summary", dashboardController.getDashboardSummary);
+router.get("/summary", dashboardController.getSummary);
+router.get("/shop-kpi", dashboardController.getShopDashboardSummary);
 router.get("/summary-with-details", dashboardController.getSummaryWithDetails);
 
 // ===============================

@@ -1,5 +1,139 @@
 import { prisma } from "../lib/prisma";
 
+function percentChangeGlobal(current: number, previous: number) {
+  if (previous === 0) return current > 0 ? 100 : 0;
+  return ((current - previous) / previous) * 100;
+}
+
+/** Admin dashboard cards: global counts + week-over-week trend metrics */
+export async function getGlobalDashboardSummary() {
+  const now = new Date();
+  const currentWindowStart = new Date(now);
+  currentWindowStart.setDate(currentWindowStart.getDate() - 7);
+  const prevWindowStart = new Date(currentWindowStart);
+  prevWindowStart.setDate(prevWindowStart.getDate() - 7);
+
+  const [
+    totalUsers,
+    activeUsers,
+    suspendedUsers,
+    verifiedEmails,
+    usersThisWeek,
+    usersPrevWeek,
+    inventoryAgg,
+    lowStockRows,
+    totalVariants,
+    variantsThisWeek,
+    variantsPrevWeek,
+    totalOrders,
+    completedOrders,
+    pendingOrders,
+    totalRevenueAgg,
+    ordersThisWeek,
+    ordersPrevWeek,
+    revenueThisWeek,
+    revenuePrevWeek,
+    totalPayments,
+    paidPayments,
+    failedPayments,
+    totalPaymentAmountAgg,
+    paymentsThisWeek,
+    paymentsPrevWeek,
+    payAmountThisWeek,
+    payAmountPrevWeek,
+  ] = await Promise.all([
+    prisma.user.count(),
+    prisma.user.count({ where: { status: "ACTIVE" } }),
+    prisma.user.count({ where: { status: "SUSPENDED" } }),
+    prisma.user.count({ where: { emailVerifiedAt: { not: null } } }),
+    prisma.user.count({ where: { createdAt: { gte: currentWindowStart } } }),
+    prisma.user.count({ where: { createdAt: { gte: prevWindowStart, lt: currentWindowStart } } }),
+
+    prisma.inventory.aggregate({ _sum: { quantity: true, reservedQuantity: true } }),
+    prisma.inventory.findMany({
+      where: { reorderLevel: { not: null } },
+      select: { quantity: true, reorderLevel: true },
+    }),
+    prisma.productVariant.count(),
+    prisma.productVariant.count({ where: { createdAt: { gte: currentWindowStart } } }),
+    prisma.productVariant.count({
+      where: { createdAt: { gte: prevWindowStart, lt: currentWindowStart } },
+    }),
+
+    prisma.order.count(),
+    prisma.order.count({ where: { status: "COMPLETED" } }),
+    prisma.order.count({ where: { status: "PENDING" } }),
+    prisma.order.aggregate({ _sum: { grandTotal: true } }),
+    prisma.order.count({ where: { createdAt: { gte: currentWindowStart } } }),
+    prisma.order.count({ where: { createdAt: { gte: prevWindowStart, lt: currentWindowStart } } }),
+    prisma.order.aggregate({
+      _sum: { grandTotal: true },
+      where: { createdAt: { gte: currentWindowStart } },
+    }),
+    prisma.order.aggregate({
+      _sum: { grandTotal: true },
+      where: { createdAt: { gte: prevWindowStart, lt: currentWindowStart } },
+    }),
+
+    prisma.payment.count(),
+    prisma.payment.count({ where: { status: "PAID" } }),
+    prisma.payment.count({ where: { status: "FAILED" } }),
+    prisma.payment.aggregate({ _sum: { amount: true } }),
+    prisma.payment.count({ where: { createdAt: { gte: currentWindowStart } } }),
+    prisma.payment.count({ where: { createdAt: { gte: prevWindowStart, lt: currentWindowStart } } }),
+    prisma.payment.aggregate({
+      _sum: { amount: true },
+      where: { createdAt: { gte: currentWindowStart } },
+    }),
+    prisma.payment.aggregate({
+      _sum: { amount: true },
+      where: { createdAt: { gte: prevWindowStart, lt: currentWindowStart } },
+    }),
+  ]);
+
+  const lowStockAlerts = lowStockRows.filter((i) => (i.reorderLevel ?? Infinity) >= i.quantity).length;
+  const invSum = inventoryAgg._sum;
+  const totalRevenue = totalRevenueAgg._sum.grandTotal ?? 0;
+  const rtThis = revenueThisWeek._sum.grandTotal ?? 0;
+  const rtPrev = revenuePrevWeek._sum.grandTotal ?? 0;
+  const totalPaymentAmount = totalPaymentAmountAgg._sum.amount ?? 0;
+  const paThis = payAmountThisWeek._sum.amount ?? 0;
+  const paPrev = payAmountPrevWeek._sum.amount ?? 0;
+
+  return {
+    users: {
+      total: totalUsers,
+      active: activeUsers,
+      suspended: suspendedUsers,
+      verifiedEmails,
+      percentChange: percentChangeGlobal(usersThisWeek, usersPrevWeek),
+    },
+    inventory: {
+      totalStock: invSum.quantity ?? 0,
+      reservedQuantity: invSum.reservedQuantity ?? 0,
+      lowStockAlerts,
+      totalVariants,
+      percentChange: percentChangeGlobal(variantsThisWeek, variantsPrevWeek),
+    },
+    orders: {
+      totalOrders,
+      completedOrders,
+      pendingOrders,
+      totalRevenue,
+      percentChange: percentChangeGlobal(ordersThisWeek, ordersPrevWeek),
+      revenueChange: percentChangeGlobal(rtThis, rtPrev),
+    },
+    payments: {
+      totalPayments,
+      paidPayments,
+      failedPayments,
+      totalPaymentAmount,
+      percentChange: percentChangeGlobal(paymentsThisWeek, paymentsPrevWeek),
+      amountChange: percentChangeGlobal(paThis, paPrev),
+    },
+  };
+}
+
 export async function getOverview(shopId: string) {
   const [totalOrders, totalRevenue, ordersByStatus, lowInventoryCount] = await Promise.all([
     prisma.order.count({ where: { shopId } }),
@@ -289,9 +423,9 @@ function safeNumber(n: number | null | undefined) {
 
 
 // ===============================
-// 📊 GLOBAL SUMMARY (MAIN API)
+// 📊 SHOP KPI SUMMARY (per shop, requires shopId)
 // ===============================
-export async function getDashboardSummary(shopId: string) {
+export async function getShopDashboardSummary(shopId: string) {
   const [ordersCount, revenueAgg, productsCount, userIds, customersCount, totalTransactions] = await Promise.all([
     prisma.order.count({ where: { shopId } }),
     prisma.payment.aggregate({

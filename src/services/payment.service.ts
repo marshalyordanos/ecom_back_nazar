@@ -8,6 +8,7 @@ const dateFields = ["createdAt", "paidAt"];
 export async function listPayments(query: {
   page?: number;
   pageSize?: number;
+  search?: string;
   filter?: string;
   sort?: string;
   orderId?: string;
