@@ -100,9 +100,19 @@ export async function updateReview(id: string, userId: string, data: { rating?: 
   const review = await prisma.review.findUnique({ where: { id } });
   if (!review) throw new AppError("Review not found", 404);
   if (!isAdmin && review.userId !== userId) throw new AppError("You can only edit your own review", 403);
+  const incoming: any = data || {};
+
+  if (incoming.status != null) {
+    if (!isAdmin) throw new AppError("Forbidden", 403);
+    const allowed = new Set(["PENDING", "APPROVED", "REJECTED"]);
+    if (!allowed.has(String(incoming.status))) {
+      throw new AppError("Invalid review status", 400);
+    }
+  }
+
   const updated = await prisma.review.update({
     where: { id },
-    data: data as Parameters<typeof prisma.review.update>[0]["data"],
+    data: incoming as Parameters<typeof prisma.review.update>[0]["data"],
   });
   return updated;
 }

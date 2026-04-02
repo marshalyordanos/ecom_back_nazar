@@ -338,7 +338,7 @@ model Inventory {
   locationId       String
   quantity         Int
   reservedQuantity Int      @default(0)
-  reorderLevel     Int?
+  reorderLevel     Int?     @default(0)
   movements        InventoryMovement[]
  createdAt        DateTime         @default(now())
   updatedAt        DateTime         @updatedAt

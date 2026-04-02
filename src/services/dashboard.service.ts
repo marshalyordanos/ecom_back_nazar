@@ -50,9 +50,15 @@ export async function getGlobalDashboardSummary() {
     prisma.user.count({ where: { createdAt: { gte: prevWindowStart, lt: currentWindowStart } } }),
 
     prisma.inventory.aggregate({ _sum: { quantity: true, reservedQuantity: true } }),
-    prisma.inventory.findMany({
-      where: { reorderLevel: { not: null } },
-      select: { quantity: true, reorderLevel: true },
+    prisma.inventory.count({
+      where: {
+        reorderLevel: {
+          not: null, // optional, since it's nullable
+        },
+        quantity: {
+          lte: prisma.inventory.fields.reorderLevel,
+        },
+      },
     }),
     prisma.productVariant.count(),
     prisma.productVariant.count({ where: { createdAt: { gte: currentWindowStart } } }),
@@ -91,7 +97,7 @@ export async function getGlobalDashboardSummary() {
     }),
   ]);
 
-  const lowStockAlerts = lowStockRows.filter((i) => (i.reorderLevel ?? Infinity) >= i.quantity).length;
+  const lowStockAlerts = lowStockRows
   const invSum = inventoryAgg._sum;
   const totalRevenue = totalRevenueAgg._sum.grandTotal ?? 0;
   const rtThis = revenueThisWeek._sum.grandTotal ?? 0;
