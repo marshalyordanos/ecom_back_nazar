@@ -197,34 +197,129 @@ export async function deleteLocation(locationId: string) {
   return { message: "Location deleted successfully" };
 }
 
-export async function addSalesFromShop(data: { locationId: string, variantId: string, quantity: number }) {
-  const variant = await prisma.productVariant.findUnique({ where: { id: data.variantId } });
-  if (!variant) throw new AppError("Variant not found", 404);
-  const location = await prisma.shopLocation.findUnique({ where: { id: data.locationId } });
+type SaleLineInput = { variantId: string; quantity: number };
+
+export type AddSalesFromShopBody = {
+  locationId: string;
+  items?: SaleLineInput[];
+  variantId?: string;
+  quantity?: number;
+};
+
+function normalizeSaleLines(body: AddSalesFromShopBody): SaleLineInput[] {
+  if (Array.isArray(body.items) && body.items.length > 0) {
+    return body.items.map((row) => ({
+      variantId: String(row.variantId ?? ""),
+      quantity: Number(row.quantity),
+    }));
+  }
+  if (body.variantId != null && body.quantity != null) {
+    return [{ variantId: String(body.variantId), quantity: Number(body.quantity) }];
+  }
+  return [];
+}
+
+function mergeDuplicateVariantLines(lines: SaleLineInput[]): SaleLineInput[] {
+  const merged = new Map<string, number>();
+  for (const { variantId, quantity } of lines) {
+    merged.set(variantId, (merged.get(variantId) ?? 0) + quantity);
+  }
+  return Array.from(merged.entries()).map(([variantId, quantity]) => ({ variantId, quantity }));
+}
+
+export async function addSalesFromShop(body: AddSalesFromShopBody) {
+  const { locationId } = body;
+  if (!locationId || typeof locationId !== "string") {
+    throw new AppError("locationId is required", 400);
+  }
+
+  const rawItems = normalizeSaleLines(body);
+  if (rawItems.length === 0) {
+    throw new AppError("items[] or variantId and quantity are required", 400);
+  }
+
+  for (const row of rawItems) {
+    if (!row.variantId) {
+      throw new AppError("Each item must have a variantId", 400);
+    }
+    if (!Number.isFinite(row.quantity) || row.quantity < 1 || !Number.isInteger(row.quantity)) {
+      throw new AppError("Each quantity must be a positive integer", 400);
+    }
+  }
+
+  const lines = mergeDuplicateVariantLines(rawItems);
+
+  const location = await prisma.shopLocation.findUnique({ where: { id: locationId } });
   if (!location) throw new AppError("Location not found", 404);
 
-  // Use the compound unique constraint variantId + locationId as described in the schema
-  const sales = await prisma.$transaction(async (tx) => {
-    const sales = await tx.saleFromShop.create({
-      data: {
-        locationId: data.locationId,
-        variantId: data.variantId,
-        quantity: data.quantity,
-        price: variant.price,
-        total: variant.price * data.quantity
-      },
-    });
-    await tx.inventory.update({
-      where: {
-        variantId_locationId: {
-          variantId: variant.id,
-          locationId: location.id,
-        }
-      },
-      data: { quantity: { decrement: data.quantity } },
-    });
+  const result = await prisma.$transaction(async (tx) => {
+    type LineMeta = {
+      variantId: string;
+      quantity: number;
+      variant: NonNullable<Awaited<ReturnType<typeof tx.productVariant.findUnique>>>;
+    };
+
+    const validated: LineMeta[] = [];
+
+    for (const line of lines) {
+      const variant = await tx.productVariant.findUnique({
+        where: { id: line.variantId },
+        include: { product: { select: { name: true } } },
+      });
+      if (!variant) {
+        throw new AppError("Variant not found", 404);
+      }
+
+      const inventory = await tx.inventory.findUnique({
+        where: {
+          variantId_locationId: {
+            variantId: line.variantId,
+            locationId,
+          },
+        },
+      });
+
+      if (!inventory) {
+        const label = variant.product?.name ? `${variant.product.name} (${variant.sku})` : variant.sku;
+        throw new AppError(`No inventory for this variant at this location: ${label}`, 400);
+      }
+
+      if (inventory.quantity < line.quantity) {
+        const label = variant.product?.name ? `${variant.product.name} (${variant.sku})` : variant.sku;
+        throw new AppError(
+          `Insufficient stock for ${label}. Available: ${inventory.quantity}, requested: ${line.quantity}`,
+          400
+        );
+      }
+
+      validated.push({ variantId: line.variantId, quantity: line.quantity, variant });
+    }
+
+    const sales = [];
+    for (const row of validated) {
+      const sale = await tx.saleFromShop.create({
+        data: {
+          locationId,
+          variantId: row.variantId,
+          quantity: row.quantity,
+          price: row.variant.price,
+          total: row.variant.price * row.quantity,
+        },
+      });
+      await tx.inventory.update({
+        where: {
+          variantId_locationId: {
+            variantId: row.variantId,
+            locationId,
+          },
+        },
+        data: { quantity: { decrement: row.quantity } },
+      });
+      sales.push(sale);
+    }
+
     return sales;
   });
 
-  return sales;
+  return { sales: result };
 }

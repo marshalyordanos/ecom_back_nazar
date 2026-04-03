@@ -2,6 +2,8 @@ import { Response, NextFunction } from "express";
 import catchAsync from "../utils/catchAsync";
 import * as dashboardService from "../services/dashboard.service";
 import type { AuthRequest } from "../middleware/auth.middleware";
+import { calculateTrend, DashboardResponse, formatCard, getDateRanges } from "../utils/helper";
+import { prisma } from "../lib/prisma";
 
 export const getSummary = catchAsync(async (_req: AuthRequest, res: Response, _next: NextFunction) => {
   const data = await dashboardService.getGlobalDashboardSummary();
@@ -561,3 +563,260 @@ export const getUnreadNotifications = catchAsync(async (req: AuthRequest, res: R
   const data = await dashboardService.getUnreadNotifications(userId);
   res.status(200).json(data);
 });
+
+
+
+
+// ===============================  customer dashboard  ===============================
+
+//////////////////////////////////////////////////////
+// CONTROLLER
+//////////////////////////////////////////////////////
+
+// export const getCustomerDashboardCards = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+//   try {
+//     const { current, previous } = getDateRanges();
+
+//     const [
+//       totalUsers,
+//       prevTotalUsers,
+
+//       activeUsers,
+//       prevActiveUsers,
+
+//       newUsers,
+//       prevNewUsers,
+
+//       customersWithOrders,
+//       prevCustomersWithOrders,
+//     ] = await Promise.all([
+//       // TOTAL USERS
+//       prisma.user.count({ where: { createdAt: current, roles: { some: { name: "user" } } } }),
+//       prisma.user.count({ where: { createdAt: previous, roles: { some: { name: "user" } } } }),
+
+//       // ACTIVE USERS
+//       prisma.user.count({
+//         where: { status: "ACTIVE", createdAt: current, roles: { some: { name: "user" } } },
+//       }),
+//       prisma.user.count({
+//         where: { status: "ACTIVE", createdAt: previous, roles: { some: { name: "user" } } },
+//       }),
+
+//       // NEW USERS (same as total but semantic)
+//       prisma.user.count({ where: { createdAt: current, roles: { some: { name: "user" } } } }),
+//       prisma.user.count({ where: { createdAt: previous, roles: { some: { name: "user" } } } }),
+
+//       // CUSTOMERS WITH ORDERS
+//       prisma.user.count({
+//         where: {
+//           orders: {
+//             some: { createdAt: current },
+//           },
+//           roles: { some: { name: "user" } }
+//         },
+//       }),
+//       prisma.user.count({
+//         where: {
+//           orders: {
+//             some: { createdAt: previous },
+//           },
+//           roles: { some: { name: "user" } }
+//         },
+//       }),
+//     ]);
+
+//     const response: DashboardResponse = {
+//       total_users: formatCard(
+//         totalUsers,
+//         calculateTrend(totalUsers, prevTotalUsers).percentChange,
+//         "Total Users"
+//       ),
+
+//       active_users: formatCard(
+//         activeUsers,
+//         calculateTrend(activeUsers, prevActiveUsers).percentChange,
+//         "Active Users"
+//       ),
+
+//       new_users: formatCard(
+//         newUsers,
+//         calculateTrend(newUsers, prevNewUsers).percentChange,
+//         "New Users This Month"
+//       ),
+
+//       customers_with_orders: formatCard(
+//         customersWithOrders,
+//         calculateTrend(
+//           customersWithOrders,
+//           prevCustomersWithOrders
+//         ).percentChange,
+//         "Customers With Orders"
+//       ),
+//     };
+
+//     return res.json(response);
+//   } catch (error) {
+//     console.error("Dashboard Error:", error);
+
+//     return res.status(500).json({
+//       message: "Failed to load dashboard data",
+//     });
+//   }
+// });
+export const getCustomerDashboardCards = catchAsync(
+  async (req: AuthRequest, res: Response, _next: NextFunction) => {
+    try {
+      //////////////////////////////////////////////////////
+      // DATE RANGES (INTERNAL ONLY FOR TREND)
+      //////////////////////////////////////////////////////
+      const now = new Date();
+
+      const startOfThisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+      const endOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+
+      const current = {
+        gte: startOfThisMonth,
+        lte: now,
+      };
+
+      const previous = {
+        gte: startOfLastMonth,
+        lte: endOfLastMonth,
+      };
+
+      //////////////////////////////////////////////////////
+      // QUERIES
+      //////////////////////////////////////////////////////
+      const [
+        // ✅ ALL TIME VALUES
+        totalUsers,
+        activeUsers,
+        customersWithOrders,
+
+        // ✅ TREND VALUES (THIS MONTH vs LAST MONTH)
+        currentUsers,
+        previousUsers,
+
+        currentActiveUsers,
+        previousActiveUsers,
+
+        currentCustomersWithOrders,
+        previousCustomersWithOrders,
+      ] = await Promise.all([
+        // =========================
+        // ALL USERS (NO DATE FILTER)
+        // =========================
+        prisma.user.count({
+          where: {
+            roles: { some: { name: "user" } },
+          },
+        }),
+
+        prisma.user.count({
+          where: {
+            status: "ACTIVE",
+            roles: { some: { name: "user" } },
+          },
+        }),
+
+        prisma.user.count({
+          where: {
+            orders: { some: {} },
+            roles: { some: { name: "user" } },
+          },
+        }),
+
+        // =========================
+        // TREND (THIS MONTH)
+        // =========================
+        prisma.user.count({
+          where: {
+            createdAt: current,
+            roles: { some: { name: "user" } },
+          },
+        }),
+
+        // LAST MONTH
+        prisma.user.count({
+          where: {
+            createdAt: previous,
+            roles: { some: { name: "user" } },
+          },
+        }),
+
+        // ACTIVE TREND
+        prisma.user.count({
+          where: {
+            status: "ACTIVE",
+            createdAt: current,
+            roles: { some: { name: "user" } },
+          },
+        }),
+
+        prisma.user.count({
+          where: {
+            status: "ACTIVE",
+            createdAt: previous,
+            roles: { some: { name: "user" } },
+          },
+        }),
+
+        // CUSTOMERS WITH ORDERS TREND
+        prisma.user.count({
+          where: {
+            orders: { some: { createdAt: current } },
+            roles: { some: { name: "user" } },
+          },
+        }),
+
+        prisma.user.count({
+          where: {
+            orders: { some: { createdAt: previous } },
+            roles: { some: { name: "user" } },
+          },
+        }),
+      ]);
+
+      //////////////////////////////////////////////////////
+      // RESPONSE
+      //////////////////////////////////////////////////////
+      const response: DashboardResponse = {
+        total_users: formatCard(
+          totalUsers,
+          calculateTrend(currentUsers, previousUsers).percentChange,
+          "Total Users"
+        ),
+
+        active_users: formatCard(
+          activeUsers,
+          calculateTrend(currentActiveUsers, previousActiveUsers).percentChange,
+          "Active Users"
+        ),
+
+        new_users: formatCard(
+          currentUsers,
+          calculateTrend(currentUsers, previousUsers).percentChange,
+          "New Users This Month"
+        ),
+
+        customers_with_orders: formatCard(
+          customersWithOrders,
+          calculateTrend(
+            currentCustomersWithOrders,
+            previousCustomersWithOrders
+          ).percentChange,
+          "Customers With Orders"
+        ),
+      };
+
+      return res.json(response);
+    } catch (error) {
+      console.error("Dashboard Error:", error);
+
+      return res.status(500).json({
+        message: "Failed to load dashboard data",
+      });
+    }
+  }
+);

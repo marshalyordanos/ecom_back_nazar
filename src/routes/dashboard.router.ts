@@ -163,4 +163,10 @@ router.get("/health/summary", dashboardController.getSystemHealth);
 router.get("/sync/status", dashboardController.getSyncStatus);
 router.get("/notifications/unread", dashboardController.getUnreadNotifications);
 
+
+// ===============================
+// 👥 CUSTOMER DASHBOARD CARDS
+// ===============================
+router.get("/customers/cards", dashboardController.getCustomerDashboardCards);
+
 export default router;
