@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listReviewsByProduct = listReviewsByProduct;
+exports.listReviews = listReviews;
 exports.getReviewById = getReviewById;
 exports.createReview = createReview;
 exports.updateReview = updateReview;
@@ -30,6 +31,29 @@ async function listReviewsByProduct(productId, query) {
             include: { user: { select: { id: true, firstName: true, lastName: true } } },
         }),
         prisma_1.prisma.review.count({ where: whereProduct }),
+    ]);
+    return { data, pagination: feature.getPagination(total) };
+}
+async function listReviews(query) {
+    const feature = new apiFeature_1.PrismaQueryFeature({
+        ...query,
+        searchableFields,
+        dateFields,
+    });
+    const { skip, take, where, orderBy } = feature.getQuery();
+    const whereQuery = query.productId ? { ...where, productId: query.productId } : where;
+    const [data, total] = await Promise.all([
+        prisma_1.prisma.review.findMany({
+            where: whereQuery,
+            orderBy,
+            skip,
+            take,
+            include: {
+                user: { select: { id: true, firstName: true, lastName: true, email: true } },
+                product: { select: { id: true, name: true, slug: true } },
+            },
+        }),
+        prisma_1.prisma.review.count({ where: whereQuery }),
     ]);
     return { data, pagination: feature.getPagination(total) };
 }
@@ -61,15 +85,24 @@ async function createReview(userId, productId, data) {
     });
     return review;
 }
-async function updateReview(id, userId, data) {
+async function updateReview(id, userId, data, isAdmin = false) {
     const review = await prisma_1.prisma.review.findUnique({ where: { id } });
     if (!review)
         throw new appError_1.default("Review not found", 404);
-    if (review.userId !== userId)
+    if (!isAdmin && review.userId !== userId)
         throw new appError_1.default("You can only edit your own review", 403);
+    const incoming = data || {};
+    if (incoming.status != null) {
+        if (!isAdmin)
+            throw new appError_1.default("Forbidden", 403);
+        const allowed = new Set(["PENDING", "APPROVED", "REJECTED"]);
+        if (!allowed.has(String(incoming.status))) {
+            throw new appError_1.default("Invalid review status", 400);
+        }
+    }
     const updated = await prisma_1.prisma.review.update({
         where: { id },
-        data: data,
+        data: incoming,
     });
     return updated;
 }

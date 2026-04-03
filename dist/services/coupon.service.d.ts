@@ -110,8 +110,8 @@ export declare function applyCouponToOrder(orderId: string, couponId: string, us
         id: string;
         total: number;
         price: number;
-        variantId: string;
         quantity: number;
+        variantId: string;
         orderId: string;
         productName: string;
         variantName: string | null;

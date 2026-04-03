@@ -149,4 +149,12 @@ export declare function removePermissionsFromRole(roleId: string, permissionIds:
     updatedAt: Date;
     description: string | null;
 }>;
+/**
+ * Assign a specific role to a user (replaces all current roles with this one).
+ * @param userId The user's ID
+ * @param roleId The role's ID
+ */
+export declare function assignRoleToUser(roleId: string, userId: string): Promise<{
+    message: string;
+}>;
 //# sourceMappingURL=role.service.d.ts.map

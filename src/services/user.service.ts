@@ -80,7 +80,7 @@ export async function listUsers(query: {
   search?: string;
   filter?: string;
   sort?: string;
-}) {
+}, onlyUsers?: boolean) {
   const feature = new PrismaQueryFeature<Record<string, unknown>, Record<string, string>>({
     ...query,
     searchableFields: userSearchableFields,
@@ -88,12 +88,17 @@ export async function listUsers(query: {
   });
   const { skip, take, where, orderBy } = feature.getQuery();
 
+  console.log('query', onlyUsers)
+  if (onlyUsers) {
+    where.roles = { some: { name: "user" } };
+  }
   const [users, total] = await Promise.all([
     prisma.user.findMany({
       where,
       orderBy,
       skip,
       take,
+
       select: {
         id: true,
         email: true,

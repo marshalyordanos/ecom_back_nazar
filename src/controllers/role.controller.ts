@@ -41,3 +41,9 @@ export const removePermissions = catchAsync(async (req: AuthRequest, res: Respon
   const role = await roleService.removePermissionsFromRole(req.params.id, permissionIds || []);
   res.status(200).json(role);
 });
+
+export const assignRoleToUser = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const { userId } = req.body;
+  const role = await roleService.assignRoleToUser(req.params.id, userId);
+  res.status(200).json(role);
+});

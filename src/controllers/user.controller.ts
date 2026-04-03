@@ -32,7 +32,8 @@ export const getById = catchAsync(async (req: AuthRequest, res: Response, _next:
 
 export const listUsers = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
   const query = parseListQuery(req);
-  const result = await userService.listUsers(query);
+  console.log('req.query.onlyUsers', req.query)
+  const result = await userService.listUsers(query,Boolean(req.query.onlyUsers) );
   res.status(200).json(result);
 });
 

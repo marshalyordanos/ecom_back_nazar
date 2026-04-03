@@ -10,6 +10,7 @@ exports.updateRole = updateRole;
 exports.deleteRole = deleteRole;
 exports.assignPermissionsToRole = assignPermissionsToRole;
 exports.removePermissionsFromRole = removePermissionsFromRole;
+exports.assignRoleToUser = assignRoleToUser;
 const prisma_1 = require("../lib/prisma");
 const appError_1 = __importDefault(require("../utils/appError"));
 const apiFeature_1 = require("../utils/apiFeature");
@@ -82,5 +83,32 @@ async function removePermissionsFromRole(roleId, permissionIds) {
         where: { roleId, permissionId: { in: permissionIds } },
     });
     return await getRoleById(roleId);
+}
+/**
+ * Assign a specific role to a user (replaces all current roles with this one).
+ * @param userId The user's ID
+ * @param roleId The role's ID
+ */
+async function assignRoleToUser(roleId, userId) {
+    // Validate user exists
+    console.log('userId', userId);
+    console.log('roleId', roleId);
+    const user = await prisma_1.prisma.user.findUnique({ where: { id: userId } });
+    if (!user)
+        throw new appError_1.default("User not found", 404);
+    // Validate role exists
+    const role = await prisma_1.prisma.role.findUnique({ where: { id: roleId } });
+    if (!role)
+        throw new appError_1.default("Role not found", 404);
+    // Update user roles (replace all with the provided role)
+    await prisma_1.prisma.user.update({
+        where: { id: userId },
+        data: {
+            roles: {
+                set: [{ id: roleId }]
+            }
+        }
+    });
+    return { message: "Role assigned to user" };
 }
 //# sourceMappingURL=role.service.js.map

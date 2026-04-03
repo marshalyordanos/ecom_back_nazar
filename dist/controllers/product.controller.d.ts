@@ -6,7 +6,9 @@ export declare const getProductByIdMobile: (req: AuthRequest, res: Response, nex
 export declare const createProduct: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const updateProduct: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const deleteProduct: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const listVariants: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const getFeatured: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const getVariantById: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const createVariant: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const updateVariant: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const deleteVariant: (req: AuthRequest, res: Response, next: NextFunction) => void;

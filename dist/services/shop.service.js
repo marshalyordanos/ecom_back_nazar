@@ -11,6 +11,7 @@ exports.listShopLocations = listShopLocations;
 exports.addShopLocation = addShopLocation;
 exports.updateLocation = updateLocation;
 exports.deleteLocation = deleteLocation;
+exports.addSalesFromShop = addSalesFromShop;
 const prisma_1 = require("../lib/prisma");
 const appError_1 = __importDefault(require("../utils/appError"));
 const apiFeature_1 = require("../utils/apiFeature");
@@ -135,5 +136,36 @@ async function updateLocation(locationId, data) {
 async function deleteLocation(locationId) {
     await prisma_1.prisma.shopLocation.delete({ where: { id: locationId } });
     return { message: "Location deleted successfully" };
+}
+async function addSalesFromShop(data) {
+    const variant = await prisma_1.prisma.productVariant.findUnique({ where: { id: data.variantId } });
+    if (!variant)
+        throw new appError_1.default("Variant not found", 404);
+    const location = await prisma_1.prisma.shopLocation.findUnique({ where: { id: data.locationId } });
+    if (!location)
+        throw new appError_1.default("Location not found", 404);
+    // Use the compound unique constraint variantId + locationId as described in the schema
+    const sales = await prisma_1.prisma.$transaction(async (tx) => {
+        const sales = await tx.saleFromShop.create({
+            data: {
+                locationId: data.locationId,
+                variantId: data.variantId,
+                quantity: data.quantity,
+                price: variant.price,
+                total: variant.price * data.quantity
+            },
+        });
+        await tx.inventory.update({
+            where: {
+                variantId_locationId: {
+                    variantId: variant.id,
+                    locationId: location.id,
+                }
+            },
+            data: { quantity: { decrement: data.quantity } },
+        });
+        return sales;
+    });
+    return sales;
 }
 //# sourceMappingURL=shop.service.js.map

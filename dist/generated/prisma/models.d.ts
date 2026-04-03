@@ -22,6 +22,7 @@ export type * from './models/OrderItem';
 export type * from './models/Payment';
 export type * from './models/Shipment';
 export type * from './models/ShippingAddress';
+export type * from './models/SavedAddress';
 export type * from './models/Coupon';
 export type * from './models/CouponUsage';
 export type * from './models/Review';
@@ -31,5 +32,6 @@ export type * from './models/Notification';
 export type * from './models/SyncLog';
 export type * from './models/SyncedProduct';
 export type * from './models/ShopSetting';
+export type * from './models/SaleFromShop';
 export type * from './commonInputTypes';
 //# sourceMappingURL=models.d.ts.map

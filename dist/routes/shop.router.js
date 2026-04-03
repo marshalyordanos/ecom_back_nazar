@@ -46,5 +46,6 @@ router.patch("/:id", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo
 router.get("/:id/locations", shopController.listShopLocations);
 router.post("/:id/locations", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), shopController.addShopLocation);
 router.post("/", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), (0, multer_1.uploadSingleImage)("image"), shopController.createOrUpdateShop);
+router.post("/sales-from-shop", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), shopController.addSalesFromShop);
 exports.default = router;
 //# sourceMappingURL=shop.router.js.map

@@ -9,8 +9,8 @@ export declare function getOrCreateCart(userId: string): Promise<{
                 url: string;
                 type: string;
                 id: string;
-                position: number | null;
                 variantId: string;
+                position: number | null;
             }[];
         } & {
             id: string;
@@ -18,8 +18,8 @@ export declare function getOrCreateCart(userId: string): Promise<{
             createdAt: Date;
             updatedAt: Date;
             image: string | null;
-            productId: string;
             sku: string;
+            productId: string;
             barcode: string | null;
             price: number;
             comparePrice: number | null;
@@ -30,8 +30,8 @@ export declare function getOrCreateCart(userId: string): Promise<{
         id: string;
         createdAt: Date;
         price: number;
-        variantId: string;
         quantity: number;
+        variantId: string;
         cartId: string;
     })[];
 } & {
@@ -52,8 +52,8 @@ export declare function addItem(userId: string, variantId: string, quantity: num
                 url: string;
                 type: string;
                 id: string;
-                position: number | null;
                 variantId: string;
+                position: number | null;
             }[];
         } & {
             id: string;
@@ -61,8 +61,8 @@ export declare function addItem(userId: string, variantId: string, quantity: num
             createdAt: Date;
             updatedAt: Date;
             image: string | null;
-            productId: string;
             sku: string;
+            productId: string;
             barcode: string | null;
             price: number;
             comparePrice: number | null;
@@ -73,8 +73,8 @@ export declare function addItem(userId: string, variantId: string, quantity: num
         id: string;
         createdAt: Date;
         price: number;
-        variantId: string;
         quantity: number;
+        variantId: string;
         cartId: string;
     })[];
 } & {
@@ -95,8 +95,8 @@ export declare function updateItemQuantity(userId: string, itemId: string, quant
                 url: string;
                 type: string;
                 id: string;
-                position: number | null;
                 variantId: string;
+                position: number | null;
             }[];
         } & {
             id: string;
@@ -104,8 +104,8 @@ export declare function updateItemQuantity(userId: string, itemId: string, quant
             createdAt: Date;
             updatedAt: Date;
             image: string | null;
-            productId: string;
             sku: string;
+            productId: string;
             barcode: string | null;
             price: number;
             comparePrice: number | null;
@@ -116,8 +116,8 @@ export declare function updateItemQuantity(userId: string, itemId: string, quant
         id: string;
         createdAt: Date;
         price: number;
-        variantId: string;
         quantity: number;
+        variantId: string;
         cartId: string;
     })[];
 } & {
@@ -138,8 +138,8 @@ export declare function removeItem(userId: string, itemId: string): Promise<{
                 url: string;
                 type: string;
                 id: string;
-                position: number | null;
                 variantId: string;
+                position: number | null;
             }[];
         } & {
             id: string;
@@ -147,8 +147,8 @@ export declare function removeItem(userId: string, itemId: string): Promise<{
             createdAt: Date;
             updatedAt: Date;
             image: string | null;
-            productId: string;
             sku: string;
+            productId: string;
             barcode: string | null;
             price: number;
             comparePrice: number | null;
@@ -159,8 +159,8 @@ export declare function removeItem(userId: string, itemId: string): Promise<{
         id: string;
         createdAt: Date;
         price: number;
-        variantId: string;
         quantity: number;
+        variantId: string;
         cartId: string;
     })[];
 } & {
@@ -184,42 +184,49 @@ export declare function checkout(userId: string, data: {
     };
     couponCode?: string;
 }): Promise<{
-    items: {
+    order: any;
+    checkout_url: any;
+}>;
+export declare function handleChapaCallback(data: any): Promise<{
+    order: {
+        address: {
+            name: string;
+            id: string;
+            phone: string;
+            addressLine1: string;
+            addressLine2: string | null;
+            city: string;
+            state: string | null;
+            country: string;
+            postalCode: string | null;
+            latitude: number | null;
+            longitude: number | null;
+            orderId: string;
+        } | null;
+    } & {
+        userId: string;
         id: string;
-        total: number;
-        price: number;
-        variantId: string;
-        quantity: number;
-        orderId: string;
-        productName: string;
-        variantName: string | null;
-    }[];
-    address: {
-        name: string;
-        id: string;
-        phone: string;
-        addressLine1: string;
-        addressLine2: string | null;
-        city: string;
-        state: string | null;
-        country: string;
-        postalCode: string | null;
-        latitude: number | null;
-        longitude: number | null;
-        orderId: string;
-    } | null;
+        status: import("../generated/prisma/enums").OrderStatus;
+        createdAt: Date;
+        updatedAt: Date;
+        currency: string;
+        shopId: string;
+        orderNumber: string;
+        subtotal: number;
+        taxTotal: number;
+        discountTotal: number;
+        grandTotal: number;
+    };
 } & {
-    userId: string;
     id: string;
-    status: import("../generated/prisma/enums").OrderStatus;
+    status: import("../generated/prisma/enums").PaymentStatus;
     createdAt: Date;
-    updatedAt: Date;
     currency: string;
-    shopId: string;
-    orderNumber: string;
-    subtotal: number;
-    taxTotal: number;
-    discountTotal: number;
-    grandTotal: number;
+    provider: string;
+    providerTransactionId: string | null;
+    amount: number;
+    transactionId: string | null;
+    paidAt: Date | null;
+    orderId: string;
 }>;
 //# sourceMappingURL=cart.service.d.ts.map

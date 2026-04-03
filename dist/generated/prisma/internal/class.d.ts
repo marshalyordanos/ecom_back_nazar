@@ -376,6 +376,17 @@ export interface PrismaClient<in LogOpts extends Prisma.LogLevel = never, in out
         omit: OmitOpts;
     }>;
     /**
+     * `prisma.savedAddress`: Exposes CRUD operations for the **SavedAddress** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more SavedAddresses
+      * const savedAddresses = await prisma.savedAddress.findMany()
+      * ```
+      */
+    get savedAddress(): Prisma.SavedAddressDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    /**
      * `prisma.coupon`: Exposes CRUD operations for the **Coupon** model.
       * Example usage:
       * ```ts
@@ -472,6 +483,17 @@ export interface PrismaClient<in LogOpts extends Prisma.LogLevel = never, in out
       * ```
       */
     get shopSetting(): Prisma.ShopSettingDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    /**
+     * `prisma.saleFromShop`: Exposes CRUD operations for the **SaleFromShop** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more SaleFromShops
+      * const saleFromShops = await prisma.saleFromShop.findMany()
+      * ```
+      */
+    get saleFromShop(): Prisma.SaleFromShopDelegate<ExtArgs, {
         omit: OmitOpts;
     }>;
 }

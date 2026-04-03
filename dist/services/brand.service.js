@@ -48,29 +48,31 @@ async function createBrand(data, file) {
     const uploadResult = await (0, cloudinary_1.uploadToCloudinary)(fileBuffer, 'ecommerce/brands', 'image');
     fs_1.default.unlinkSync(file.path);
     console.log("brand111111122221");
+    let isFeaturedString = data.isFeatured;
     const brand = await prisma_1.prisma.brand.create({
         data: {
             name: data.name,
             slug: data.slug,
             logoUrl: uploadResult.secure_url,
             description: data.description,
-            isFeatured: Boolean(data.isFeatured) ?? false,
+            isFeatured: isFeaturedString === 'true',
         },
     });
     return brand;
 }
 async function updateBrand(id, data, file) {
-    if (!file) {
-        throw new appError_1.default('No file uploaded', 400);
+    console.log("brand update", data);
+    if (file) {
+        const fileBuffer = fs_1.default.readFileSync(file.path);
+        // Upload to Cloudinary
+        const uploadResult = await (0, cloudinary_1.uploadToCloudinary)(fileBuffer, 'ecommerce/brands', 'image');
+        fs_1.default.unlinkSync(file.path);
+        if (uploadResult.secure_url) {
+            data.logoUrl = uploadResult.secure_url;
+        }
     }
-    const fileBuffer = fs_1.default.readFileSync(file.path);
-    // Upload to Cloudinary
-    const uploadResult = await (0, cloudinary_1.uploadToCloudinary)(fileBuffer, 'ecommerce/brands', 'image');
-    fs_1.default.unlinkSync(file.path);
-    if (uploadResult.secure_url) {
-        data.logoUrl = uploadResult.secure_url;
-    }
-    data.isFeatured = Boolean(data.isFeatured) ?? false;
+    let isFeaturedString = data.isFeatured;
+    data.isFeatured = isFeaturedString === 'true';
     const brand = await prisma_1.prisma.brand.update({
         where: { id },
         data: data,

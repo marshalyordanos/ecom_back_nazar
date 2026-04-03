@@ -46,5 +46,6 @@ router.patch("/:id", roleController.updateRole);
 router.delete("/:id", roleController.deleteRole);
 router.post("/:id/permissions", roleController.assignPermissions);
 router.delete("/:id/permissions", roleController.removePermissions);
+router.post("/:id/assign", roleController.assignRoleToUser);
 exports.default = router;
 //# sourceMappingURL=role.router.js.map

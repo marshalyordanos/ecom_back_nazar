@@ -80,13 +80,17 @@ async function getById(id) {
     const { passwordHash, ...rest } = user;
     return rest;
 }
-async function listUsers(query) {
+async function listUsers(query, onlyUsers) {
     const feature = new apiFeature_1.PrismaQueryFeature({
         ...query,
         searchableFields: userSearchableFields,
         dateFields: userDateFields,
     });
     const { skip, take, where, orderBy } = feature.getQuery();
+    console.log('query', onlyUsers);
+    if (onlyUsers) {
+        where.roles = { some: { name: "user" } };
+    }
     const [users, total] = await Promise.all([
         prisma_1.prisma.user.findMany({
             where,

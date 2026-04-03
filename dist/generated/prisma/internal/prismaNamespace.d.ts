@@ -255,6 +255,7 @@ export declare const ModelName: {
     readonly Payment: "Payment";
     readonly Shipment: "Shipment";
     readonly ShippingAddress: "ShippingAddress";
+    readonly SavedAddress: "SavedAddress";
     readonly Coupon: "Coupon";
     readonly CouponUsage: "CouponUsage";
     readonly Review: "Review";
@@ -264,6 +265,7 @@ export declare const ModelName: {
     readonly SyncLog: "SyncLog";
     readonly SyncedProduct: "SyncedProduct";
     readonly ShopSetting: "ShopSetting";
+    readonly SaleFromShop: "SaleFromShop";
 };
 export type ModelName = (typeof ModelName)[keyof typeof ModelName];
 export interface TypeMapCb<GlobalOmitOptions = {}> extends runtime.Types.Utils.Fn<{
@@ -276,7 +278,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         omit: GlobalOmitOptions;
     };
     meta: {
-        modelProps: "shop" | "shopLocation" | "user" | "token" | "role" | "permission" | "rolePermission" | "brand" | "productCategory" | "product" | "productVariant" | "variantOptionValue" | "optionValue" | "variantOption" | "variantMedia" | "inventory" | "inventoryMovement" | "cart" | "cartItem" | "order" | "orderItem" | "payment" | "shipment" | "shippingAddress" | "coupon" | "couponUsage" | "review" | "productView" | "searchLog" | "notification" | "syncLog" | "syncedProduct" | "shopSetting";
+        modelProps: "shop" | "shopLocation" | "user" | "token" | "role" | "permission" | "rolePermission" | "brand" | "productCategory" | "product" | "productVariant" | "variantOptionValue" | "optionValue" | "variantOption" | "variantMedia" | "inventory" | "inventoryMovement" | "cart" | "cartItem" | "order" | "orderItem" | "payment" | "shipment" | "shippingAddress" | "savedAddress" | "coupon" | "couponUsage" | "review" | "productView" | "searchLog" | "notification" | "syncLog" | "syncedProduct" | "shopSetting" | "saleFromShop";
         txIsolationLevel: TransactionIsolationLevel;
     };
     model: {
@@ -2056,6 +2058,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
                 };
             };
         };
+        SavedAddress: {
+            payload: Prisma.$SavedAddressPayload<ExtArgs>;
+            fields: Prisma.SavedAddressFieldRefs;
+            operations: {
+                findUnique: {
+                    args: Prisma.SavedAddressFindUniqueArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedAddressPayload> | null;
+                };
+                findUniqueOrThrow: {
+                    args: Prisma.SavedAddressFindUniqueOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedAddressPayload>;
+                };
+                findFirst: {
+                    args: Prisma.SavedAddressFindFirstArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedAddressPayload> | null;
+                };
+                findFirstOrThrow: {
+                    args: Prisma.SavedAddressFindFirstOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedAddressPayload>;
+                };
+                findMany: {
+                    args: Prisma.SavedAddressFindManyArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedAddressPayload>[];
+                };
+                create: {
+                    args: Prisma.SavedAddressCreateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedAddressPayload>;
+                };
+                createMany: {
+                    args: Prisma.SavedAddressCreateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                createManyAndReturn: {
+                    args: Prisma.SavedAddressCreateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedAddressPayload>[];
+                };
+                delete: {
+                    args: Prisma.SavedAddressDeleteArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedAddressPayload>;
+                };
+                update: {
+                    args: Prisma.SavedAddressUpdateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedAddressPayload>;
+                };
+                deleteMany: {
+                    args: Prisma.SavedAddressDeleteManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateMany: {
+                    args: Prisma.SavedAddressUpdateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateManyAndReturn: {
+                    args: Prisma.SavedAddressUpdateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedAddressPayload>[];
+                };
+                upsert: {
+                    args: Prisma.SavedAddressUpsertArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedAddressPayload>;
+                };
+                aggregate: {
+                    args: Prisma.SavedAddressAggregateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.AggregateSavedAddress>;
+                };
+                groupBy: {
+                    args: Prisma.SavedAddressGroupByArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.SavedAddressGroupByOutputType>[];
+                };
+                count: {
+                    args: Prisma.SavedAddressCountArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.SavedAddressCountAggregateOutputType> | number;
+                };
+            };
+        };
         Coupon: {
             payload: Prisma.$CouponPayload<ExtArgs>;
             fields: Prisma.CouponFieldRefs;
@@ -2722,6 +2798,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
                 };
             };
         };
+        SaleFromShop: {
+            payload: Prisma.$SaleFromShopPayload<ExtArgs>;
+            fields: Prisma.SaleFromShopFieldRefs;
+            operations: {
+                findUnique: {
+                    args: Prisma.SaleFromShopFindUniqueArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SaleFromShopPayload> | null;
+                };
+                findUniqueOrThrow: {
+                    args: Prisma.SaleFromShopFindUniqueOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SaleFromShopPayload>;
+                };
+                findFirst: {
+                    args: Prisma.SaleFromShopFindFirstArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SaleFromShopPayload> | null;
+                };
+                findFirstOrThrow: {
+                    args: Prisma.SaleFromShopFindFirstOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SaleFromShopPayload>;
+                };
+                findMany: {
+                    args: Prisma.SaleFromShopFindManyArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SaleFromShopPayload>[];
+                };
+                create: {
+                    args: Prisma.SaleFromShopCreateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SaleFromShopPayload>;
+                };
+                createMany: {
+                    args: Prisma.SaleFromShopCreateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                createManyAndReturn: {
+                    args: Prisma.SaleFromShopCreateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SaleFromShopPayload>[];
+                };
+                delete: {
+                    args: Prisma.SaleFromShopDeleteArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SaleFromShopPayload>;
+                };
+                update: {
+                    args: Prisma.SaleFromShopUpdateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SaleFromShopPayload>;
+                };
+                deleteMany: {
+                    args: Prisma.SaleFromShopDeleteManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateMany: {
+                    args: Prisma.SaleFromShopUpdateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateManyAndReturn: {
+                    args: Prisma.SaleFromShopUpdateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SaleFromShopPayload>[];
+                };
+                upsert: {
+                    args: Prisma.SaleFromShopUpsertArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SaleFromShopPayload>;
+                };
+                aggregate: {
+                    args: Prisma.SaleFromShopAggregateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.AggregateSaleFromShop>;
+                };
+                groupBy: {
+                    args: Prisma.SaleFromShopGroupByArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.SaleFromShopGroupByOutputType>[];
+                };
+                count: {
+                    args: Prisma.SaleFromShopCountArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.SaleFromShopCountAggregateOutputType> | number;
+                };
+            };
+        };
     };
 } & {
     other: {
@@ -2855,7 +3005,9 @@ export declare const ProductCategoryScalarFieldEnum: {
     readonly name: "name";
     readonly slug: "slug";
     readonly description: "description";
+    readonly image: "image";
     readonly parentId: "parentId";
+    readonly track: "track";
     readonly createdAt: "createdAt";
 };
 export type ProductCategoryScalarFieldEnum = (typeof ProductCategoryScalarFieldEnum)[keyof typeof ProductCategoryScalarFieldEnum];
@@ -2868,6 +3020,7 @@ export declare const ProductScalarFieldEnum: {
     readonly shortDescription: "shortDescription";
     readonly brandId: "brandId";
     readonly categoryId: "categoryId";
+    readonly track: "track";
     readonly isFeatured: "isFeatured";
     readonly status: "status";
     readonly createdAt: "createdAt";
@@ -2991,6 +3144,7 @@ export declare const PaymentScalarFieldEnum: {
     readonly amount: "amount";
     readonly currency: "currency";
     readonly status: "status";
+    readonly transactionId: "transactionId";
     readonly paidAt: "paidAt";
     readonly createdAt: "createdAt";
 };
@@ -3022,6 +3176,24 @@ export declare const ShippingAddressScalarFieldEnum: {
     readonly longitude: "longitude";
 };
 export type ShippingAddressScalarFieldEnum = (typeof ShippingAddressScalarFieldEnum)[keyof typeof ShippingAddressScalarFieldEnum];
+export declare const SavedAddressScalarFieldEnum: {
+    readonly id: "id";
+    readonly userId: "userId";
+    readonly label: "label";
+    readonly name: "name";
+    readonly phone: "phone";
+    readonly addressLine1: "addressLine1";
+    readonly addressLine2: "addressLine2";
+    readonly city: "city";
+    readonly state: "state";
+    readonly country: "country";
+    readonly postalCode: "postalCode";
+    readonly latitude: "latitude";
+    readonly longitude: "longitude";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type SavedAddressScalarFieldEnum = (typeof SavedAddressScalarFieldEnum)[keyof typeof SavedAddressScalarFieldEnum];
 export declare const CouponScalarFieldEnum: {
     readonly id: "id";
     readonly code: "code";
@@ -3110,6 +3282,17 @@ export declare const ShopSettingScalarFieldEnum: {
     readonly updatedAt: "updatedAt";
 };
 export type ShopSettingScalarFieldEnum = (typeof ShopSettingScalarFieldEnum)[keyof typeof ShopSettingScalarFieldEnum];
+export declare const SaleFromShopScalarFieldEnum: {
+    readonly id: "id";
+    readonly locationId: "locationId";
+    readonly variantId: "variantId";
+    readonly quantity: "quantity";
+    readonly price: "price";
+    readonly total: "total";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type SaleFromShopScalarFieldEnum = (typeof SaleFromShopScalarFieldEnum)[keyof typeof SaleFromShopScalarFieldEnum];
 export declare const SortOrder: {
     readonly asc: "asc";
     readonly desc: "desc";
@@ -3373,6 +3556,7 @@ export type GlobalOmitConfig = {
     payment?: Prisma.PaymentOmit;
     shipment?: Prisma.ShipmentOmit;
     shippingAddress?: Prisma.ShippingAddressOmit;
+    savedAddress?: Prisma.SavedAddressOmit;
     coupon?: Prisma.CouponOmit;
     couponUsage?: Prisma.CouponUsageOmit;
     review?: Prisma.ReviewOmit;
@@ -3382,6 +3566,7 @@ export type GlobalOmitConfig = {
     syncLog?: Prisma.SyncLogOmit;
     syncedProduct?: Prisma.SyncedProductOmit;
     shopSetting?: Prisma.ShopSettingOmit;
+    saleFromShop?: Prisma.SaleFromShopOmit;
 };
 export type LogLevel = 'info' | 'query' | 'warn' | 'error';
 export type LogDefinition = {

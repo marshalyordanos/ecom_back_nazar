@@ -88,3 +88,31 @@ export async function removePermissionsFromRole(roleId: string, permissionIds: s
   });
   return await getRoleById(roleId);
 }
+
+/**
+ * Assign a specific role to a user (replaces all current roles with this one).
+ * @param userId The user's ID
+ * @param roleId The role's ID
+ */
+export async function assignRoleToUser(roleId: string, userId: string) {
+  // Validate user exists
+  console.log('userId', userId)
+  console.log('roleId', roleId)
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user) throw new AppError("User not found", 404);
+
+  // Validate role exists
+  const role = await prisma.role.findUnique({ where: { id: roleId } });
+  if (!role) throw new AppError("Role not found", 404);
+
+  // Update user roles (replace all with the provided role)
+  await prisma.user.update({
+    where: { id: userId },
+    data: {
+      roles: {
+        set: [{ id: roleId }]
+      }
+    }
+  });
+  return { message: "Role assigned to user" };
+}

@@ -32,6 +32,7 @@ export declare function getBrandById(id: string): Promise<{
         slug: string;
         shopId: string;
         isFeatured: boolean;
+        track: string | null;
         shortDescription: string | null;
         brandId: string | null;
         categoryId: string | null;

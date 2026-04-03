@@ -15,7 +15,9 @@ export type ProductCategoryMinAggregateOutputType = {
     name: string | null;
     slug: string | null;
     description: string | null;
+    image: string | null;
     parentId: string | null;
+    track: string | null;
     createdAt: Date | null;
 };
 export type ProductCategoryMaxAggregateOutputType = {
@@ -23,7 +25,9 @@ export type ProductCategoryMaxAggregateOutputType = {
     name: string | null;
     slug: string | null;
     description: string | null;
+    image: string | null;
     parentId: string | null;
+    track: string | null;
     createdAt: Date | null;
 };
 export type ProductCategoryCountAggregateOutputType = {
@@ -31,7 +35,9 @@ export type ProductCategoryCountAggregateOutputType = {
     name: number;
     slug: number;
     description: number;
+    image: number;
     parentId: number;
+    track: number;
     createdAt: number;
     _all: number;
 };
@@ -40,7 +46,9 @@ export type ProductCategoryMinAggregateInputType = {
     name?: true;
     slug?: true;
     description?: true;
+    image?: true;
     parentId?: true;
+    track?: true;
     createdAt?: true;
 };
 export type ProductCategoryMaxAggregateInputType = {
@@ -48,7 +56,9 @@ export type ProductCategoryMaxAggregateInputType = {
     name?: true;
     slug?: true;
     description?: true;
+    image?: true;
     parentId?: true;
+    track?: true;
     createdAt?: true;
 };
 export type ProductCategoryCountAggregateInputType = {
@@ -56,7 +66,9 @@ export type ProductCategoryCountAggregateInputType = {
     name?: true;
     slug?: true;
     description?: true;
+    image?: true;
     parentId?: true;
+    track?: true;
     createdAt?: true;
     _all?: true;
 };
@@ -127,7 +139,9 @@ export type ProductCategoryGroupByOutputType = {
     name: string;
     slug: string;
     description: string | null;
+    image: string | null;
     parentId: string | null;
+    track: string | null;
     createdAt: Date;
     _count: ProductCategoryCountAggregateOutputType | null;
     _min: ProductCategoryMinAggregateOutputType | null;
@@ -144,7 +158,9 @@ export type ProductCategoryWhereInput = {
     name?: Prisma.StringFilter<"ProductCategory"> | string;
     slug?: Prisma.StringFilter<"ProductCategory"> | string;
     description?: Prisma.StringNullableFilter<"ProductCategory"> | string | null;
+    image?: Prisma.StringNullableFilter<"ProductCategory"> | string | null;
     parentId?: Prisma.StringNullableFilter<"ProductCategory"> | string | null;
+    track?: Prisma.StringNullableFilter<"ProductCategory"> | string | null;
     createdAt?: Prisma.DateTimeFilter<"ProductCategory"> | Date | string;
     parent?: Prisma.XOR<Prisma.ProductCategoryNullableScalarRelationFilter, Prisma.ProductCategoryWhereInput> | null;
     children?: Prisma.ProductCategoryListRelationFilter;
@@ -155,7 +171,9 @@ export type ProductCategoryOrderByWithRelationInput = {
     name?: Prisma.SortOrder;
     slug?: Prisma.SortOrder;
     description?: Prisma.SortOrderInput | Prisma.SortOrder;
+    image?: Prisma.SortOrderInput | Prisma.SortOrder;
     parentId?: Prisma.SortOrderInput | Prisma.SortOrder;
+    track?: Prisma.SortOrderInput | Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     parent?: Prisma.ProductCategoryOrderByWithRelationInput;
     children?: Prisma.ProductCategoryOrderByRelationAggregateInput;
@@ -169,7 +187,9 @@ export type ProductCategoryWhereUniqueInput = Prisma.AtLeast<{
     NOT?: Prisma.ProductCategoryWhereInput | Prisma.ProductCategoryWhereInput[];
     name?: Prisma.StringFilter<"ProductCategory"> | string;
     description?: Prisma.StringNullableFilter<"ProductCategory"> | string | null;
+    image?: Prisma.StringNullableFilter<"ProductCategory"> | string | null;
     parentId?: Prisma.StringNullableFilter<"ProductCategory"> | string | null;
+    track?: Prisma.StringNullableFilter<"ProductCategory"> | string | null;
     createdAt?: Prisma.DateTimeFilter<"ProductCategory"> | Date | string;
     parent?: Prisma.XOR<Prisma.ProductCategoryNullableScalarRelationFilter, Prisma.ProductCategoryWhereInput> | null;
     children?: Prisma.ProductCategoryListRelationFilter;
@@ -180,7 +200,9 @@ export type ProductCategoryOrderByWithAggregationInput = {
     name?: Prisma.SortOrder;
     slug?: Prisma.SortOrder;
     description?: Prisma.SortOrderInput | Prisma.SortOrder;
+    image?: Prisma.SortOrderInput | Prisma.SortOrder;
     parentId?: Prisma.SortOrderInput | Prisma.SortOrder;
+    track?: Prisma.SortOrderInput | Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     _count?: Prisma.ProductCategoryCountOrderByAggregateInput;
     _max?: Prisma.ProductCategoryMaxOrderByAggregateInput;
@@ -194,7 +216,9 @@ export type ProductCategoryScalarWhereWithAggregatesInput = {
     name?: Prisma.StringWithAggregatesFilter<"ProductCategory"> | string;
     slug?: Prisma.StringWithAggregatesFilter<"ProductCategory"> | string;
     description?: Prisma.StringNullableWithAggregatesFilter<"ProductCategory"> | string | null;
+    image?: Prisma.StringNullableWithAggregatesFilter<"ProductCategory"> | string | null;
     parentId?: Prisma.StringNullableWithAggregatesFilter<"ProductCategory"> | string | null;
+    track?: Prisma.StringNullableWithAggregatesFilter<"ProductCategory"> | string | null;
     createdAt?: Prisma.DateTimeWithAggregatesFilter<"ProductCategory"> | Date | string;
 };
 export type ProductCategoryCreateInput = {
@@ -202,6 +226,8 @@ export type ProductCategoryCreateInput = {
     name: string;
     slug: string;
     description?: string | null;
+    image?: string | null;
+    track?: string | null;
     createdAt?: Date | string;
     parent?: Prisma.ProductCategoryCreateNestedOneWithoutChildrenInput;
     children?: Prisma.ProductCategoryCreateNestedManyWithoutParentInput;
@@ -212,7 +238,9 @@ export type ProductCategoryUncheckedCreateInput = {
     name: string;
     slug: string;
     description?: string | null;
+    image?: string | null;
     parentId?: string | null;
+    track?: string | null;
     createdAt?: Date | string;
     children?: Prisma.ProductCategoryUncheckedCreateNestedManyWithoutParentInput;
     products?: Prisma.ProductUncheckedCreateNestedManyWithoutCategoryInput;
@@ -222,6 +250,8 @@ export type ProductCategoryUpdateInput = {
     name?: Prisma.StringFieldUpdateOperationsInput | string;
     slug?: Prisma.StringFieldUpdateOperationsInput | string;
     description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    track?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     parent?: Prisma.ProductCategoryUpdateOneWithoutChildrenNestedInput;
     children?: Prisma.ProductCategoryUpdateManyWithoutParentNestedInput;
@@ -232,7 +262,9 @@ export type ProductCategoryUncheckedUpdateInput = {
     name?: Prisma.StringFieldUpdateOperationsInput | string;
     slug?: Prisma.StringFieldUpdateOperationsInput | string;
     description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    track?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     children?: Prisma.ProductCategoryUncheckedUpdateManyWithoutParentNestedInput;
     products?: Prisma.ProductUncheckedUpdateManyWithoutCategoryNestedInput;
@@ -242,7 +274,9 @@ export type ProductCategoryCreateManyInput = {
     name: string;
     slug: string;
     description?: string | null;
+    image?: string | null;
     parentId?: string | null;
+    track?: string | null;
     createdAt?: Date | string;
 };
 export type ProductCategoryUpdateManyMutationInput = {
@@ -250,6 +284,8 @@ export type ProductCategoryUpdateManyMutationInput = {
     name?: Prisma.StringFieldUpdateOperationsInput | string;
     slug?: Prisma.StringFieldUpdateOperationsInput | string;
     description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    track?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 export type ProductCategoryUncheckedUpdateManyInput = {
@@ -257,7 +293,9 @@ export type ProductCategoryUncheckedUpdateManyInput = {
     name?: Prisma.StringFieldUpdateOperationsInput | string;
     slug?: Prisma.StringFieldUpdateOperationsInput | string;
     description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    track?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 export type ProductCategoryNullableScalarRelationFilter = {
@@ -277,7 +315,9 @@ export type ProductCategoryCountOrderByAggregateInput = {
     name?: Prisma.SortOrder;
     slug?: Prisma.SortOrder;
     description?: Prisma.SortOrder;
+    image?: Prisma.SortOrder;
     parentId?: Prisma.SortOrder;
+    track?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
 };
 export type ProductCategoryMaxOrderByAggregateInput = {
@@ -285,7 +325,9 @@ export type ProductCategoryMaxOrderByAggregateInput = {
     name?: Prisma.SortOrder;
     slug?: Prisma.SortOrder;
     description?: Prisma.SortOrder;
+    image?: Prisma.SortOrder;
     parentId?: Prisma.SortOrder;
+    track?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
 };
 export type ProductCategoryMinOrderByAggregateInput = {
@@ -293,7 +335,9 @@ export type ProductCategoryMinOrderByAggregateInput = {
     name?: Prisma.SortOrder;
     slug?: Prisma.SortOrder;
     description?: Prisma.SortOrder;
+    image?: Prisma.SortOrder;
     parentId?: Prisma.SortOrder;
+    track?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
 };
 export type ProductCategoryCreateNestedOneWithoutChildrenInput = {
@@ -367,6 +411,8 @@ export type ProductCategoryCreateWithoutChildrenInput = {
     name: string;
     slug: string;
     description?: string | null;
+    image?: string | null;
+    track?: string | null;
     createdAt?: Date | string;
     parent?: Prisma.ProductCategoryCreateNestedOneWithoutChildrenInput;
     products?: Prisma.ProductCreateNestedManyWithoutCategoryInput;
@@ -376,7 +422,9 @@ export type ProductCategoryUncheckedCreateWithoutChildrenInput = {
     name: string;
     slug: string;
     description?: string | null;
+    image?: string | null;
     parentId?: string | null;
+    track?: string | null;
     createdAt?: Date | string;
     products?: Prisma.ProductUncheckedCreateNestedManyWithoutCategoryInput;
 };
@@ -389,6 +437,8 @@ export type ProductCategoryCreateWithoutParentInput = {
     name: string;
     slug: string;
     description?: string | null;
+    image?: string | null;
+    track?: string | null;
     createdAt?: Date | string;
     children?: Prisma.ProductCategoryCreateNestedManyWithoutParentInput;
     products?: Prisma.ProductCreateNestedManyWithoutCategoryInput;
@@ -398,6 +448,8 @@ export type ProductCategoryUncheckedCreateWithoutParentInput = {
     name: string;
     slug: string;
     description?: string | null;
+    image?: string | null;
+    track?: string | null;
     createdAt?: Date | string;
     children?: Prisma.ProductCategoryUncheckedCreateNestedManyWithoutParentInput;
     products?: Prisma.ProductUncheckedCreateNestedManyWithoutCategoryInput;
@@ -424,6 +476,8 @@ export type ProductCategoryUpdateWithoutChildrenInput = {
     name?: Prisma.StringFieldUpdateOperationsInput | string;
     slug?: Prisma.StringFieldUpdateOperationsInput | string;
     description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    track?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     parent?: Prisma.ProductCategoryUpdateOneWithoutChildrenNestedInput;
     products?: Prisma.ProductUpdateManyWithoutCategoryNestedInput;
@@ -433,7 +487,9 @@ export type ProductCategoryUncheckedUpdateWithoutChildrenInput = {
     name?: Prisma.StringFieldUpdateOperationsInput | string;
     slug?: Prisma.StringFieldUpdateOperationsInput | string;
     description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    track?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     products?: Prisma.ProductUncheckedUpdateManyWithoutCategoryNestedInput;
 };
@@ -458,7 +514,9 @@ export type ProductCategoryScalarWhereInput = {
     name?: Prisma.StringFilter<"ProductCategory"> | string;
     slug?: Prisma.StringFilter<"ProductCategory"> | string;
     description?: Prisma.StringNullableFilter<"ProductCategory"> | string | null;
+    image?: Prisma.StringNullableFilter<"ProductCategory"> | string | null;
     parentId?: Prisma.StringNullableFilter<"ProductCategory"> | string | null;
+    track?: Prisma.StringNullableFilter<"ProductCategory"> | string | null;
     createdAt?: Prisma.DateTimeFilter<"ProductCategory"> | Date | string;
 };
 export type ProductCategoryCreateWithoutProductsInput = {
@@ -466,6 +524,8 @@ export type ProductCategoryCreateWithoutProductsInput = {
     name: string;
     slug: string;
     description?: string | null;
+    image?: string | null;
+    track?: string | null;
     createdAt?: Date | string;
     parent?: Prisma.ProductCategoryCreateNestedOneWithoutChildrenInput;
     children?: Prisma.ProductCategoryCreateNestedManyWithoutParentInput;
@@ -475,7 +535,9 @@ export type ProductCategoryUncheckedCreateWithoutProductsInput = {
     name: string;
     slug: string;
     description?: string | null;
+    image?: string | null;
     parentId?: string | null;
+    track?: string | null;
     createdAt?: Date | string;
     children?: Prisma.ProductCategoryUncheckedCreateNestedManyWithoutParentInput;
 };
@@ -497,6 +559,8 @@ export type ProductCategoryUpdateWithoutProductsInput = {
     name?: Prisma.StringFieldUpdateOperationsInput | string;
     slug?: Prisma.StringFieldUpdateOperationsInput | string;
     description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    track?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     parent?: Prisma.ProductCategoryUpdateOneWithoutChildrenNestedInput;
     children?: Prisma.ProductCategoryUpdateManyWithoutParentNestedInput;
@@ -506,7 +570,9 @@ export type ProductCategoryUncheckedUpdateWithoutProductsInput = {
     name?: Prisma.StringFieldUpdateOperationsInput | string;
     slug?: Prisma.StringFieldUpdateOperationsInput | string;
     description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    track?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     children?: Prisma.ProductCategoryUncheckedUpdateManyWithoutParentNestedInput;
 };
@@ -515,6 +581,8 @@ export type ProductCategoryCreateManyParentInput = {
     name: string;
     slug: string;
     description?: string | null;
+    image?: string | null;
+    track?: string | null;
     createdAt?: Date | string;
 };
 export type ProductCategoryUpdateWithoutParentInput = {
@@ -522,6 +590,8 @@ export type ProductCategoryUpdateWithoutParentInput = {
     name?: Prisma.StringFieldUpdateOperationsInput | string;
     slug?: Prisma.StringFieldUpdateOperationsInput | string;
     description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    track?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     children?: Prisma.ProductCategoryUpdateManyWithoutParentNestedInput;
     products?: Prisma.ProductUpdateManyWithoutCategoryNestedInput;
@@ -531,6 +601,8 @@ export type ProductCategoryUncheckedUpdateWithoutParentInput = {
     name?: Prisma.StringFieldUpdateOperationsInput | string;
     slug?: Prisma.StringFieldUpdateOperationsInput | string;
     description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    track?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     children?: Prisma.ProductCategoryUncheckedUpdateManyWithoutParentNestedInput;
     products?: Prisma.ProductUncheckedUpdateManyWithoutCategoryNestedInput;
@@ -540,6 +612,8 @@ export type ProductCategoryUncheckedUpdateManyWithoutParentInput = {
     name?: Prisma.StringFieldUpdateOperationsInput | string;
     slug?: Prisma.StringFieldUpdateOperationsInput | string;
     description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    track?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 /**
@@ -579,7 +653,9 @@ export type ProductCategorySelect<ExtArgs extends runtime.Types.Extensions.Inter
     name?: boolean;
     slug?: boolean;
     description?: boolean;
+    image?: boolean;
     parentId?: boolean;
+    track?: boolean;
     createdAt?: boolean;
     parent?: boolean | Prisma.ProductCategory$parentArgs<ExtArgs>;
     children?: boolean | Prisma.ProductCategory$childrenArgs<ExtArgs>;
@@ -591,7 +667,9 @@ export type ProductCategorySelectCreateManyAndReturn<ExtArgs extends runtime.Typ
     name?: boolean;
     slug?: boolean;
     description?: boolean;
+    image?: boolean;
     parentId?: boolean;
+    track?: boolean;
     createdAt?: boolean;
     parent?: boolean | Prisma.ProductCategory$parentArgs<ExtArgs>;
 }, ExtArgs["result"]["productCategory"]>;
@@ -600,7 +678,9 @@ export type ProductCategorySelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
     name?: boolean;
     slug?: boolean;
     description?: boolean;
+    image?: boolean;
     parentId?: boolean;
+    track?: boolean;
     createdAt?: boolean;
     parent?: boolean | Prisma.ProductCategory$parentArgs<ExtArgs>;
 }, ExtArgs["result"]["productCategory"]>;
@@ -609,10 +689,12 @@ export type ProductCategorySelectScalar = {
     name?: boolean;
     slug?: boolean;
     description?: boolean;
+    image?: boolean;
     parentId?: boolean;
+    track?: boolean;
     createdAt?: boolean;
 };
-export type ProductCategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "slug" | "description" | "parentId" | "createdAt", ExtArgs["result"]["productCategory"]>;
+export type ProductCategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "slug" | "description" | "image" | "parentId" | "track" | "createdAt", ExtArgs["result"]["productCategory"]>;
 export type ProductCategoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     parent?: boolean | Prisma.ProductCategory$parentArgs<ExtArgs>;
     children?: boolean | Prisma.ProductCategory$childrenArgs<ExtArgs>;
@@ -637,7 +719,9 @@ export type $ProductCategoryPayload<ExtArgs extends runtime.Types.Extensions.Int
         name: string;
         slug: string;
         description: string | null;
+        image: string | null;
         parentId: string | null;
+        track: string | null;
         createdAt: Date;
     }, ExtArgs["result"]["productCategory"]>;
     composites: {};
@@ -1000,7 +1084,9 @@ export interface ProductCategoryFieldRefs {
     readonly name: Prisma.FieldRef<"ProductCategory", 'String'>;
     readonly slug: Prisma.FieldRef<"ProductCategory", 'String'>;
     readonly description: Prisma.FieldRef<"ProductCategory", 'String'>;
+    readonly image: Prisma.FieldRef<"ProductCategory", 'String'>;
     readonly parentId: Prisma.FieldRef<"ProductCategory", 'String'>;
+    readonly track: Prisma.FieldRef<"ProductCategory", 'String'>;
     readonly createdAt: Prisma.FieldRef<"ProductCategory", 'DateTime'>;
 }
 /**

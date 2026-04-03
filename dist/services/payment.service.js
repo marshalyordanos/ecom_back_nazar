@@ -15,7 +15,7 @@ const dateFields = ["createdAt", "paidAt"];
 async function listPayments(query) {
     const feature = new apiFeature_1.PrismaQueryFeature({
         ...query,
-        searchableFields: [],
+        searchableFields: ["order.orderNumber", "order.user.firstName", "order.user.lastName", "order.user.email"],
         dateFields,
     });
     const { skip, take, where, orderBy } = feature.getQuery();
@@ -26,7 +26,7 @@ async function listPayments(query) {
             orderBy,
             skip,
             take,
-            include: { order: { select: { orderNumber: true, userId: true } } },
+            include: { order: { select: { orderNumber: true, user: true } } },
         }),
         prisma_1.prisma.payment.count({ where: whereOrder }),
     ]);

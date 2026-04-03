@@ -62,7 +62,7 @@ export declare function listUsers(query: {
     search?: string;
     filter?: string;
     sort?: string;
-}): Promise<{
+}, onlyUsers?: boolean): Promise<{
     data: {
         email: string;
         id: string;

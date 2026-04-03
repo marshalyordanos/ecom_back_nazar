@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getGlobalDashboardSummary = getGlobalDashboardSummary;
 exports.getOverview = getOverview;
 exports.getSalesSummary = getSalesSummary;
 exports.getOrdersSummary = getOrdersSummary;
@@ -8,7 +9,8 @@ exports.getLowInventory = getLowInventory;
 exports.getNewCustomers = getNewCustomers;
 exports.getRecentOrders = getRecentOrders;
 exports.getRecentActivities = getRecentActivities;
-exports.getDashboardSummary = getDashboardSummary;
+exports.getSummaryWithDetails = getSummaryWithDetails;
+exports.getShopDashboardSummary = getShopDashboardSummary;
 exports.getUserSummary = getUserSummary;
 exports.getUserVerificationStats = getUserVerificationStats;
 exports.getOrderSummaryExtended = getOrderSummaryExtended;
@@ -65,6 +67,111 @@ exports.getSystemHealth = getSystemHealth;
 exports.getSyncStatus = getSyncStatus;
 exports.getUnreadNotifications = getUnreadNotifications;
 const prisma_1 = require("../lib/prisma");
+function percentChangeGlobal(current, previous) {
+    if (previous === 0)
+        return current > 0 ? 100 : 0;
+    return ((current - previous) / previous) * 100;
+}
+/** Admin dashboard cards: global counts + week-over-week trend metrics */
+async function getGlobalDashboardSummary() {
+    const now = new Date();
+    const currentWindowStart = new Date(now);
+    currentWindowStart.setDate(currentWindowStart.getDate() - 7);
+    const prevWindowStart = new Date(currentWindowStart);
+    prevWindowStart.setDate(prevWindowStart.getDate() - 7);
+    const [totalUsers, activeUsers, suspendedUsers, verifiedEmails, usersThisWeek, usersPrevWeek, inventoryAgg, lowStockRows, totalVariants, variantsThisWeek, variantsPrevWeek, totalOrders, completedOrders, pendingOrders, totalRevenueAgg, ordersThisWeek, ordersPrevWeek, revenueThisWeek, revenuePrevWeek, totalPayments, paidPayments, failedPayments, totalPaymentAmountAgg, paymentsThisWeek, paymentsPrevWeek, payAmountThisWeek, payAmountPrevWeek,] = await Promise.all([
+        prisma_1.prisma.user.count(),
+        prisma_1.prisma.user.count({ where: { status: "ACTIVE" } }),
+        prisma_1.prisma.user.count({ where: { status: "SUSPENDED" } }),
+        prisma_1.prisma.user.count({ where: { emailVerifiedAt: { not: null } } }),
+        prisma_1.prisma.user.count({ where: { createdAt: { gte: currentWindowStart } } }),
+        prisma_1.prisma.user.count({ where: { createdAt: { gte: prevWindowStart, lt: currentWindowStart } } }),
+        prisma_1.prisma.inventory.aggregate({ _sum: { quantity: true, reservedQuantity: true } }),
+        prisma_1.prisma.inventory.count({
+            where: {
+                reorderLevel: {
+                    not: null, // optional, since it's nullable
+                },
+                quantity: {
+                    lte: prisma_1.prisma.inventory.fields.reorderLevel,
+                },
+            },
+        }),
+        prisma_1.prisma.productVariant.count(),
+        prisma_1.prisma.productVariant.count({ where: { createdAt: { gte: currentWindowStart } } }),
+        prisma_1.prisma.productVariant.count({
+            where: { createdAt: { gte: prevWindowStart, lt: currentWindowStart } },
+        }),
+        prisma_1.prisma.order.count(),
+        prisma_1.prisma.order.count({ where: { status: "COMPLETED" } }),
+        prisma_1.prisma.order.count({ where: { status: "PENDING" } }),
+        prisma_1.prisma.order.aggregate({ _sum: { grandTotal: true } }),
+        prisma_1.prisma.order.count({ where: { createdAt: { gte: currentWindowStart } } }),
+        prisma_1.prisma.order.count({ where: { createdAt: { gte: prevWindowStart, lt: currentWindowStart } } }),
+        prisma_1.prisma.order.aggregate({
+            _sum: { grandTotal: true },
+            where: { createdAt: { gte: currentWindowStart } },
+        }),
+        prisma_1.prisma.order.aggregate({
+            _sum: { grandTotal: true },
+            where: { createdAt: { gte: prevWindowStart, lt: currentWindowStart } },
+        }),
+        prisma_1.prisma.payment.count(),
+        prisma_1.prisma.payment.count({ where: { status: "PAID" } }),
+        prisma_1.prisma.payment.count({ where: { status: "FAILED" } }),
+        prisma_1.prisma.payment.aggregate({ _sum: { amount: true } }),
+        prisma_1.prisma.payment.count({ where: { createdAt: { gte: currentWindowStart } } }),
+        prisma_1.prisma.payment.count({ where: { createdAt: { gte: prevWindowStart, lt: currentWindowStart } } }),
+        prisma_1.prisma.payment.aggregate({
+            _sum: { amount: true },
+            where: { createdAt: { gte: currentWindowStart } },
+        }),
+        prisma_1.prisma.payment.aggregate({
+            _sum: { amount: true },
+            where: { createdAt: { gte: prevWindowStart, lt: currentWindowStart } },
+        }),
+    ]);
+    const lowStockAlerts = lowStockRows;
+    const invSum = inventoryAgg._sum;
+    const totalRevenue = totalRevenueAgg._sum.grandTotal ?? 0;
+    const rtThis = revenueThisWeek._sum.grandTotal ?? 0;
+    const rtPrev = revenuePrevWeek._sum.grandTotal ?? 0;
+    const totalPaymentAmount = totalPaymentAmountAgg._sum.amount ?? 0;
+    const paThis = payAmountThisWeek._sum.amount ?? 0;
+    const paPrev = payAmountPrevWeek._sum.amount ?? 0;
+    return {
+        users: {
+            total: totalUsers,
+            active: activeUsers,
+            suspended: suspendedUsers,
+            verifiedEmails,
+            percentChange: percentChangeGlobal(usersThisWeek, usersPrevWeek),
+        },
+        inventory: {
+            totalStock: invSum.quantity ?? 0,
+            reservedQuantity: invSum.reservedQuantity ?? 0,
+            lowStockAlerts,
+            totalVariants,
+            percentChange: percentChangeGlobal(variantsThisWeek, variantsPrevWeek),
+        },
+        orders: {
+            totalOrders,
+            completedOrders,
+            pendingOrders,
+            totalRevenue,
+            percentChange: percentChangeGlobal(ordersThisWeek, ordersPrevWeek),
+            revenueChange: percentChangeGlobal(rtThis, rtPrev),
+        },
+        payments: {
+            totalPayments,
+            paidPayments,
+            failedPayments,
+            totalPaymentAmount,
+            percentChange: percentChangeGlobal(paymentsThisWeek, paymentsPrevWeek),
+            amountChange: percentChangeGlobal(paThis, paPrev),
+        },
+    };
+}
 async function getOverview(shopId) {
     const [totalOrders, totalRevenue, ordersByStatus, lowInventoryCount] = await Promise.all([
         prisma_1.prisma.order.count({ where: { shopId } }),
@@ -176,7 +283,7 @@ async function getLowInventory(shopId) {
             location: true,
         },
     });
-    return inventories.filter((inv) => inv.reorderLevel != null && inv.quantity <= inv.reorderLevel);
+    return inventories.filter((inv) => inv.quantity <= 0);
 }
 async function getNewCustomers(shopId, days = 30) {
     const since = new Date();
@@ -242,15 +349,103 @@ function bucketKey(d, groupBy) {
 function safeNumber(n) {
     return n ?? 0;
 }
+// Returns summary details for the current month and growth compared to previous month:
+// - New customers this month + percent growth
+// - Orders this month + percent growth
+// - Sales this month + percent growth
+async function getSummaryWithDetails(shopId) {
+    const now = new Date();
+    // Current Month - first day & last day
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+    // Previous Month - first day & last day
+    const prevMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const prevMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59, 999);
+    // New Customers (users with 'user' role) - created in this month and last month
+    const [thisMonthNewCustomers, prevMonthNewCustomers] = await Promise.all([
+        prisma_1.prisma.user.count({
+            where: {
+                roles: { some: { name: "user" } },
+                createdAt: { gte: startOfMonth, lte: endOfMonth }
+            }
+        }),
+        prisma_1.prisma.user.count({
+            where: {
+                roles: { some: { name: "user" } },
+                createdAt: { gte: prevMonthStart, lte: prevMonthEnd }
+            }
+        }),
+    ]);
+    // Orders in current and previous month
+    const [thisMonthOrders, prevMonthOrders] = await Promise.all([
+        prisma_1.prisma.order.count({
+            where: {
+                shopId,
+                createdAt: { gte: startOfMonth, lte: endOfMonth },
+            },
+        }),
+        prisma_1.prisma.order.count({
+            where: {
+                shopId,
+                createdAt: { gte: prevMonthStart, lte: prevMonthEnd },
+            },
+        }),
+    ]);
+    // Sales (payments, PAID or REFUNDED) in current and previous month
+    const [thisMonthSalesAgg, prevMonthSalesAgg] = await Promise.all([
+        prisma_1.prisma.payment.aggregate({
+            where: {
+                status: { in: ["PAID", "REFUNDED"] },
+                createdAt: { gte: startOfMonth, lte: endOfMonth },
+            },
+            _sum: { amount: true },
+        }),
+        prisma_1.prisma.payment.aggregate({
+            where: {
+                status: { in: ["PAID", "REFUNDED"] },
+                createdAt: { gte: prevMonthStart, lte: prevMonthEnd },
+            },
+            _sum: { amount: true },
+        }),
+    ]);
+    const thisMonthSales = thisMonthSalesAgg._sum?.amount ?? 0;
+    const prevMonthSales = prevMonthSalesAgg._sum?.amount ?? 0;
+    // Helper for percent change (avoid division by zero and fallback to 100 or 0)
+    function percentChange(current, prev) {
+        if (prev === 0) {
+            if (current === 0)
+                return 0;
+            return 100;
+        }
+        return ((current - prev) / Math.abs(prev)) * 100;
+    }
+    return {
+        customers: {
+            thisMonth: thisMonthNewCustomers,
+            prevMonth: prevMonthNewCustomers,
+            growth: percentChange(thisMonthNewCustomers, prevMonthNewCustomers),
+        },
+        orders: {
+            thisMonth: thisMonthOrders,
+            prevMonth: prevMonthOrders,
+            growth: percentChange(thisMonthOrders, prevMonthOrders),
+        },
+        sales: {
+            thisMonth: thisMonthSales,
+            prevMonth: prevMonthSales,
+            growth: percentChange(thisMonthSales, prevMonthSales),
+        },
+    };
+}
 // ===============================
-// 📊 GLOBAL SUMMARY (MAIN API)
+// 📊 SHOP KPI SUMMARY (per shop, requires shopId)
 // ===============================
-async function getDashboardSummary(shopId) {
-    const [ordersCount, revenueAgg, productsCount, userIds] = await Promise.all([
+async function getShopDashboardSummary(shopId) {
+    const [ordersCount, revenueAgg, productsCount, userIds, customersCount, totalTransactions] = await Promise.all([
         prisma_1.prisma.order.count({ where: { shopId } }),
-        prisma_1.prisma.order.aggregate({
-            where: { shopId, status: { in: ["PAID", "PROCESSING", "SHIPPED", "COMPLETED"] } },
-            _sum: { grandTotal: true },
+        prisma_1.prisma.payment.aggregate({
+            where: { status: { in: ["PAID", "REFUNDED"] } },
+            _sum: { amount: true },
         }),
         prisma_1.prisma.product.count({ where: { shopId } }),
         prisma_1.prisma.order.findMany({
@@ -258,16 +453,21 @@ async function getDashboardSummary(shopId) {
             distinct: ["userId"],
             select: { userId: true },
         }),
+        prisma_1.prisma.user.count({ where: { roles: { some: { name: "user" } } } }),
+        prisma_1.prisma.payment.count({ where: { status: "PAID" } }),
     ]);
     const lowInventoryCount = (await getLowStockCount(shopId)).count;
     const usersCount = userIds.length;
-    const revenue = safeNumber(revenueAgg._sum.grandTotal);
+    console.log("revenueAgg", revenueAgg);
+    const revenue = safeNumber(revenueAgg._sum?.amount ?? 0);
     return {
+        totalTransactions,
         revenue,
         users: usersCount,
         orders: ordersCount,
         products: productsCount,
         alerts: lowInventoryCount,
+        customers: customersCount,
     };
 }
 // ===============================

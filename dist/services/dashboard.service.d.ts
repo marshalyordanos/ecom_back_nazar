@@ -1,3 +1,36 @@
+/** Admin dashboard cards: global counts + week-over-week trend metrics */
+export declare function getGlobalDashboardSummary(): Promise<{
+    users: {
+        total: number;
+        active: number;
+        suspended: number;
+        verifiedEmails: number;
+        percentChange: number;
+    };
+    inventory: {
+        totalStock: number;
+        reservedQuantity: number;
+        lowStockAlerts: number;
+        totalVariants: number;
+        percentChange: number;
+    };
+    orders: {
+        totalOrders: number;
+        completedOrders: number;
+        pendingOrders: number;
+        totalRevenue: number;
+        percentChange: number;
+        revenueChange: number;
+    };
+    payments: {
+        totalPayments: number;
+        paidPayments: number;
+        failedPayments: number;
+        totalPaymentAmount: number;
+        percentChange: number;
+        amountChange: number;
+    };
+}>;
 export declare function getOverview(shopId: string): Promise<{
     totalOrders: number;
     totalRevenue: number;
@@ -24,7 +57,6 @@ export declare function getLowInventory(shopId: string): Promise<({
         id: string;
         phone: string | null;
         createdAt: Date;
-        shopId: string;
         addressLine1: string;
         addressLine2: string | null;
         city: string;
@@ -33,6 +65,7 @@ export declare function getLowInventory(shopId: string): Promise<({
         postalCode: string | null;
         latitude: number | null;
         longitude: number | null;
+        shopId: string;
     };
     variant: {
         product: {
@@ -45,8 +78,8 @@ export declare function getLowInventory(shopId: string): Promise<({
         createdAt: Date;
         updatedAt: Date;
         image: string | null;
-        productId: string;
         sku: string;
+        productId: string;
         barcode: string | null;
         price: number;
         comparePrice: number | null;
@@ -57,9 +90,9 @@ export declare function getLowInventory(shopId: string): Promise<({
     id: string;
     createdAt: Date;
     updatedAt: Date;
+    quantity: number;
     locationId: string;
     variantId: string;
-    quantity: number;
     reservedQuantity: number;
     reorderLevel: number | null;
 })[]>;
@@ -74,8 +107,8 @@ export declare function getRecentOrders(shopId: string, limit?: number): Promise
         id: string;
         total: number;
         price: number;
-        variantId: string;
         quantity: number;
+        variantId: string;
         orderId: string;
         productName: string;
         variantName: string | null;
@@ -115,8 +148,8 @@ export declare function getRecentActivities(_shopId: string, limit?: number): Pr
             createdAt: Date;
             updatedAt: Date;
             image: string | null;
-            productId: string;
             sku: string;
+            productId: string;
             barcode: string | null;
             price: number;
             comparePrice: number | null;
@@ -128,19 +161,38 @@ export declare function getRecentActivities(_shopId: string, limit?: number): Pr
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        quantity: number;
         locationId: string;
         variantId: string;
-        quantity: number;
-        inventoryId: string | null;
         referenceId: string | null;
+        inventoryId: string | null;
     };
 })[]>;
-export declare function getDashboardSummary(shopId: string): Promise<{
+export declare function getSummaryWithDetails(shopId: string): Promise<{
+    customers: {
+        thisMonth: number;
+        prevMonth: number;
+        growth: number;
+    };
+    orders: {
+        thisMonth: number;
+        prevMonth: number;
+        growth: number;
+    };
+    sales: {
+        thisMonth: number;
+        prevMonth: number;
+        growth: number;
+    };
+}>;
+export declare function getShopDashboardSummary(shopId: string): Promise<{
+    totalTransactions: number;
     revenue: number;
     users: number;
     orders: number;
     products: number;
     alerts: number;
+    customers: number;
 }>;
 export declare function getUserSummary(shopId: string, days?: number): Promise<{
     totalUsers: number;
@@ -550,9 +602,9 @@ export declare function getOrderActivities(shopId: string, limit?: number): Prom
         id: string;
         status: import("../generated/prisma/enums").PaymentStatus;
         createdAt: Date;
-        orderId: string;
         provider: string;
         amount: number;
+        orderId: string;
     };
 })[]>;
 export declare function getUserActivities(shopId: string, days?: number, limit?: number): Promise<{

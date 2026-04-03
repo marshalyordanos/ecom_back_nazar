@@ -36,7 +36,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkout = exports.removeCartItem = exports.updateCartItem = exports.addToCart = exports.getCart = void 0;
+exports.handleChapaCallback = exports.checkout = exports.removeCartItem = exports.updateCartItem = exports.addToCart = exports.getCart = void 0;
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 const cartService = __importStar(require("../services/cart.service"));
 exports.getCart = (0, catchAsync_1.default)(async (req, res, _next) => {
@@ -63,7 +63,14 @@ exports.removeCartItem = (0, catchAsync_1.default)(async (req, res, _next) => {
     res.status(200).json(cart);
 });
 exports.checkout = (0, catchAsync_1.default)(async (req, res, _next) => {
-    const order = await cartService.checkout(req.user.id, req.body);
-    res.status(201).json(order);
+    // const order = await cartService.checkout(req.user!.id, req.body);
+    // res.status(201).json(order);
+    const { order, checkout_url } = await cartService.checkout(req.user.id, req.body);
+    res.status(201).json({ order, checkout_url });
+});
+exports.handleChapaCallback = (0, catchAsync_1.default)(async (req, res, _next) => {
+    const { data } = req.body;
+    const payment = await cartService.handleChapaCallback(data);
+    res.status(200).json(payment);
 });
 //# sourceMappingURL=cart.controller.js.map

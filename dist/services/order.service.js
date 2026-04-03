@@ -14,7 +14,7 @@ const prisma_1 = require("../lib/prisma");
 const appError_1 = __importDefault(require("../utils/appError"));
 const apiFeature_1 = require("../utils/apiFeature");
 const notification_service_1 = require("./notification.service");
-const orderSearchableFields = ["orderNumber"];
+const orderSearchableFields = ["orderNumber", "user.firstName", "user.lastName", "user.email"];
 const orderDateFields = ["createdAt", "updatedAt"];
 async function listUserOrders(userId, query) {
     const feature = new apiFeature_1.PrismaQueryFeature({
@@ -115,7 +115,7 @@ async function listOrdersAdmin(query) {
             orderBy,
             skip,
             take,
-            include: { items: true, address: true, user: { select: { id: true, email: true, firstName: true, lastName: true } } },
+            include: { items: { include: { variant: { include: { variantOptionValues: { include: { optionValue: { include: { option: true } } } } } } } }, address: true, user: { select: { id: true, email: true, firstName: true, lastName: true } } },
         }),
         prisma_1.prisma.order.count({ where: whereShop }),
     ]);

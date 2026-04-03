@@ -36,7 +36,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteLocation = exports.updateLocation = exports.addShopLocation = exports.listShopLocations = exports.createOrUpdateShop = exports.updateShop = exports.getShopById = exports.listShops = void 0;
+exports.addSalesFromShop = exports.deleteLocation = exports.updateLocation = exports.addShopLocation = exports.listShopLocations = exports.createOrUpdateShop = exports.updateShop = exports.getShopById = exports.listShops = void 0;
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 const shopService = __importStar(require("../services/shop.service"));
 const queryParser_1 = require("../utils/queryParser");
@@ -74,5 +74,9 @@ exports.updateLocation = (0, catchAsync_1.default)(async (req, res, _next) => {
 exports.deleteLocation = (0, catchAsync_1.default)(async (req, res, _next) => {
     const result = await shopService.deleteLocation(req.params.locationId);
     res.status(200).json(result);
+});
+exports.addSalesFromShop = (0, catchAsync_1.default)(async (req, res, _next) => {
+    const sales = await shopService.addSalesFromShop({ locationId: req.body.locationId, variantId: req.body.variantId, quantity: req.body.quantity });
+    res.status(201).json(sales);
 });
 //# sourceMappingURL=shop.controller.js.map

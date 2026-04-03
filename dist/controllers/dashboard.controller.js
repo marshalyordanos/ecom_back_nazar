@@ -36,10 +36,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCouponPerformance = exports.getInventoryByLocation = exports.getInventoryAlerts = exports.getInventoryTurnover = exports.getInventoryValuation = exports.getCustomerSegments = exports.getCustomerLTV = exports.getCustomerRetention = exports.getCustomerGrowth = exports.getBrandStats = exports.getCategoryStats = exports.getProductConversion = exports.getProductPerformance = exports.getAbandonedOrders = exports.getOrderValueStats = exports.getOrderFulfillmentStats = exports.getOrderStatusStats = exports.getRefundStats = exports.getSalesForecast = exports.getSalesByChannel = exports.getSalesTrends = exports.getSearchSummary = exports.getNotificationSummary = exports.getReviewSummary = exports.getCouponUsageSummary = exports.getCouponSummary = exports.getLocationSummary = exports.getShopSummary = exports.getOutOfStock = exports.getLowStockCount = exports.getInventorySummary = exports.getVariantSummary = exports.getProductSummary = exports.getDailyPayments = exports.getPaymentMethodStats = exports.getPaymentSummary = exports.getDailyOrdersSummary = exports.getOrderRevenueSummary = exports.getOrderSummaryExtended = exports.getUserVerificationStats = exports.getUserSummary = exports.getDashboardSummary = exports.getRecentActivities = exports.getRecentOrders = exports.getNewCustomers = exports.getLowInventory = exports.getTopProducts = exports.getOrdersSummary = exports.getSalesSummary = exports.getOverview = void 0;
-exports.getUnreadNotifications = exports.getSyncStatus = exports.getSystemHealth = exports.getMostViewedProducts = exports.getNoResultSearches = exports.getTopSearchQueries = exports.getInventoryActivities = exports.getUserActivities = exports.getOrderActivities = exports.getPendingReviews = exports.getRecentReviews = exports.getRatingDistribution = exports.getExpiredCoupons = exports.getActiveCoupons = void 0;
+exports.getInventoryAlerts = exports.getInventoryTurnover = exports.getInventoryValuation = exports.getCustomerSegments = exports.getCustomerLTV = exports.getCustomerRetention = exports.getCustomerGrowth = exports.getBrandStats = exports.getCategoryStats = exports.getProductConversion = exports.getProductPerformance = exports.getAbandonedOrders = exports.getOrderValueStats = exports.getOrderFulfillmentStats = exports.getOrderStatusStats = exports.getRefundStats = exports.getSalesForecast = exports.getSalesByChannel = exports.getSalesTrends = exports.getSearchSummary = exports.getNotificationSummary = exports.getReviewSummary = exports.getCouponUsageSummary = exports.getCouponSummary = exports.getLocationSummary = exports.getShopSummary = exports.getOutOfStock = exports.getLowStockCount = exports.getInventorySummary = exports.getVariantSummary = exports.getProductSummary = exports.getDailyPayments = exports.getPaymentMethodStats = exports.getPaymentSummary = exports.getDailyOrdersSummary = exports.getOrderRevenueSummary = exports.getOrderSummaryExtended = exports.getUserVerificationStats = exports.getUserSummary = exports.getSummaryWithDetails = exports.getShopDashboardSummary = exports.getRecentActivities = exports.getRecentOrders = exports.getNewCustomers = exports.getLowInventory = exports.getTopProducts = exports.getOrdersSummary = exports.getSalesSummary = exports.getOverview = exports.getSummary = void 0;
+exports.getUnreadNotifications = exports.getSyncStatus = exports.getSystemHealth = exports.getMostViewedProducts = exports.getNoResultSearches = exports.getTopSearchQueries = exports.getInventoryActivities = exports.getUserActivities = exports.getOrderActivities = exports.getPendingReviews = exports.getRecentReviews = exports.getRatingDistribution = exports.getExpiredCoupons = exports.getActiveCoupons = exports.getCouponPerformance = exports.getInventoryByLocation = void 0;
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 const dashboardService = __importStar(require("../services/dashboard.service"));
+exports.getSummary = (0, catchAsync_1.default)(async (_req, res, _next) => {
+    const data = await dashboardService.getGlobalDashboardSummary();
+    res.status(200).json({ data });
+});
 exports.getOverview = (0, catchAsync_1.default)(async (req, res, _next) => {
     const shopId = req.query.shopId || req.shopId;
     if (!shopId)
@@ -100,13 +104,20 @@ exports.getRecentActivities = (0, catchAsync_1.default)(async (req, res, _next) 
     res.status(200).json(data);
 });
 // ===============================
-// 📊 GLOBAL SUMMARY (MAIN API)
+// 📊 SHOP KPI (requires shopId)
 // ===============================
-exports.getDashboardSummary = (0, catchAsync_1.default)(async (req, res, _next) => {
+exports.getShopDashboardSummary = (0, catchAsync_1.default)(async (req, res, _next) => {
     const shopId = req.query.shopId;
     if (!shopId)
         return res.status(400).json({ status: "fail", message: "shopId required" });
-    const data = await dashboardService.getDashboardSummary(shopId);
+    const data = await dashboardService.getShopDashboardSummary(shopId);
+    res.status(200).json(data);
+});
+exports.getSummaryWithDetails = (0, catchAsync_1.default)(async (req, res, _next) => {
+    const shopId = req.query.shopId;
+    if (!shopId)
+        return res.status(400).json({ status: "fail", message: "shopId required" });
+    const data = await dashboardService.getSummaryWithDetails(shopId);
     res.status(200).json(data);
 });
 // ===============================

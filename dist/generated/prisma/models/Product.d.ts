@@ -20,6 +20,7 @@ export type ProductMinAggregateOutputType = {
     shortDescription: string | null;
     brandId: string | null;
     categoryId: string | null;
+    track: string | null;
     isFeatured: boolean | null;
     status: $Enums.ProductStatus | null;
     createdAt: Date | null;
@@ -34,6 +35,7 @@ export type ProductMaxAggregateOutputType = {
     shortDescription: string | null;
     brandId: string | null;
     categoryId: string | null;
+    track: string | null;
     isFeatured: boolean | null;
     status: $Enums.ProductStatus | null;
     createdAt: Date | null;
@@ -48,6 +50,7 @@ export type ProductCountAggregateOutputType = {
     shortDescription: number;
     brandId: number;
     categoryId: number;
+    track: number;
     isFeatured: number;
     status: number;
     createdAt: number;
@@ -63,6 +66,7 @@ export type ProductMinAggregateInputType = {
     shortDescription?: true;
     brandId?: true;
     categoryId?: true;
+    track?: true;
     isFeatured?: true;
     status?: true;
     createdAt?: true;
@@ -77,6 +81,7 @@ export type ProductMaxAggregateInputType = {
     shortDescription?: true;
     brandId?: true;
     categoryId?: true;
+    track?: true;
     isFeatured?: true;
     status?: true;
     createdAt?: true;
@@ -91,6 +96,7 @@ export type ProductCountAggregateInputType = {
     shortDescription?: true;
     brandId?: true;
     categoryId?: true;
+    track?: true;
     isFeatured?: true;
     status?: true;
     createdAt?: true;
@@ -168,6 +174,7 @@ export type ProductGroupByOutputType = {
     shortDescription: string | null;
     brandId: string | null;
     categoryId: string | null;
+    track: string | null;
     isFeatured: boolean;
     status: $Enums.ProductStatus;
     createdAt: Date;
@@ -191,6 +198,7 @@ export type ProductWhereInput = {
     shortDescription?: Prisma.StringNullableFilter<"Product"> | string | null;
     brandId?: Prisma.StringNullableFilter<"Product"> | string | null;
     categoryId?: Prisma.StringNullableFilter<"Product"> | string | null;
+    track?: Prisma.StringNullableFilter<"Product"> | string | null;
     isFeatured?: Prisma.BoolFilter<"Product"> | boolean;
     status?: Prisma.EnumProductStatusFilter<"Product"> | $Enums.ProductStatus;
     createdAt?: Prisma.DateTimeFilter<"Product"> | Date | string;
@@ -211,6 +219,7 @@ export type ProductOrderByWithRelationInput = {
     shortDescription?: Prisma.SortOrderInput | Prisma.SortOrder;
     brandId?: Prisma.SortOrderInput | Prisma.SortOrder;
     categoryId?: Prisma.SortOrderInput | Prisma.SortOrder;
+    track?: Prisma.SortOrderInput | Prisma.SortOrder;
     isFeatured?: Prisma.SortOrder;
     status?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
@@ -234,6 +243,7 @@ export type ProductWhereUniqueInput = Prisma.AtLeast<{
     shortDescription?: Prisma.StringNullableFilter<"Product"> | string | null;
     brandId?: Prisma.StringNullableFilter<"Product"> | string | null;
     categoryId?: Prisma.StringNullableFilter<"Product"> | string | null;
+    track?: Prisma.StringNullableFilter<"Product"> | string | null;
     isFeatured?: Prisma.BoolFilter<"Product"> | boolean;
     status?: Prisma.EnumProductStatusFilter<"Product"> | $Enums.ProductStatus;
     createdAt?: Prisma.DateTimeFilter<"Product"> | Date | string;
@@ -254,6 +264,7 @@ export type ProductOrderByWithAggregationInput = {
     shortDescription?: Prisma.SortOrderInput | Prisma.SortOrder;
     brandId?: Prisma.SortOrderInput | Prisma.SortOrder;
     categoryId?: Prisma.SortOrderInput | Prisma.SortOrder;
+    track?: Prisma.SortOrderInput | Prisma.SortOrder;
     isFeatured?: Prisma.SortOrder;
     status?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
@@ -274,6 +285,7 @@ export type ProductScalarWhereWithAggregatesInput = {
     shortDescription?: Prisma.StringNullableWithAggregatesFilter<"Product"> | string | null;
     brandId?: Prisma.StringNullableWithAggregatesFilter<"Product"> | string | null;
     categoryId?: Prisma.StringNullableWithAggregatesFilter<"Product"> | string | null;
+    track?: Prisma.StringNullableWithAggregatesFilter<"Product"> | string | null;
     isFeatured?: Prisma.BoolWithAggregatesFilter<"Product"> | boolean;
     status?: Prisma.EnumProductStatusWithAggregatesFilter<"Product"> | $Enums.ProductStatus;
     createdAt?: Prisma.DateTimeWithAggregatesFilter<"Product"> | Date | string;
@@ -285,6 +297,7 @@ export type ProductCreateInput = {
     slug: string;
     description?: string | null;
     shortDescription?: string | null;
+    track?: string | null;
     isFeatured?: boolean;
     status: $Enums.ProductStatus;
     createdAt?: Date | string;
@@ -305,6 +318,7 @@ export type ProductUncheckedCreateInput = {
     shortDescription?: string | null;
     brandId?: string | null;
     categoryId?: string | null;
+    track?: string | null;
     isFeatured?: boolean;
     status: $Enums.ProductStatus;
     createdAt?: Date | string;
@@ -319,6 +333,7 @@ export type ProductUpdateInput = {
     slug?: Prisma.StringFieldUpdateOperationsInput | string;
     description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    track?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -339,6 +354,7 @@ export type ProductUncheckedUpdateInput = {
     shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     brandId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    track?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -356,6 +372,7 @@ export type ProductCreateManyInput = {
     shortDescription?: string | null;
     brandId?: string | null;
     categoryId?: string | null;
+    track?: string | null;
     isFeatured?: boolean;
     status: $Enums.ProductStatus;
     createdAt?: Date | string;
@@ -367,6 +384,7 @@ export type ProductUpdateManyMutationInput = {
     slug?: Prisma.StringFieldUpdateOperationsInput | string;
     description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    track?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -381,6 +399,7 @@ export type ProductUncheckedUpdateManyInput = {
     shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     brandId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    track?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -403,6 +422,7 @@ export type ProductCountOrderByAggregateInput = {
     shortDescription?: Prisma.SortOrder;
     brandId?: Prisma.SortOrder;
     categoryId?: Prisma.SortOrder;
+    track?: Prisma.SortOrder;
     isFeatured?: Prisma.SortOrder;
     status?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
@@ -417,6 +437,7 @@ export type ProductMaxOrderByAggregateInput = {
     shortDescription?: Prisma.SortOrder;
     brandId?: Prisma.SortOrder;
     categoryId?: Prisma.SortOrder;
+    track?: Prisma.SortOrder;
     isFeatured?: Prisma.SortOrder;
     status?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
@@ -431,6 +452,7 @@ export type ProductMinOrderByAggregateInput = {
     shortDescription?: Prisma.SortOrder;
     brandId?: Prisma.SortOrder;
     categoryId?: Prisma.SortOrder;
+    track?: Prisma.SortOrder;
     isFeatured?: Prisma.SortOrder;
     status?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
@@ -599,6 +621,7 @@ export type ProductCreateWithoutShopInput = {
     slug: string;
     description?: string | null;
     shortDescription?: string | null;
+    track?: string | null;
     isFeatured?: boolean;
     status: $Enums.ProductStatus;
     createdAt?: Date | string;
@@ -617,6 +640,7 @@ export type ProductUncheckedCreateWithoutShopInput = {
     shortDescription?: string | null;
     brandId?: string | null;
     categoryId?: string | null;
+    track?: string | null;
     isFeatured?: boolean;
     status: $Enums.ProductStatus;
     createdAt?: Date | string;
@@ -658,6 +682,7 @@ export type ProductScalarWhereInput = {
     shortDescription?: Prisma.StringNullableFilter<"Product"> | string | null;
     brandId?: Prisma.StringNullableFilter<"Product"> | string | null;
     categoryId?: Prisma.StringNullableFilter<"Product"> | string | null;
+    track?: Prisma.StringNullableFilter<"Product"> | string | null;
     isFeatured?: Prisma.BoolFilter<"Product"> | boolean;
     status?: Prisma.EnumProductStatusFilter<"Product"> | $Enums.ProductStatus;
     createdAt?: Prisma.DateTimeFilter<"Product"> | Date | string;
@@ -669,6 +694,7 @@ export type ProductCreateWithoutBrandInput = {
     slug: string;
     description?: string | null;
     shortDescription?: string | null;
+    track?: string | null;
     isFeatured?: boolean;
     status: $Enums.ProductStatus;
     createdAt?: Date | string;
@@ -687,6 +713,7 @@ export type ProductUncheckedCreateWithoutBrandInput = {
     description?: string | null;
     shortDescription?: string | null;
     categoryId?: string | null;
+    track?: string | null;
     isFeatured?: boolean;
     status: $Enums.ProductStatus;
     createdAt?: Date | string;
@@ -722,6 +749,7 @@ export type ProductCreateWithoutCategoryInput = {
     slug: string;
     description?: string | null;
     shortDescription?: string | null;
+    track?: string | null;
     isFeatured?: boolean;
     status: $Enums.ProductStatus;
     createdAt?: Date | string;
@@ -740,6 +768,7 @@ export type ProductUncheckedCreateWithoutCategoryInput = {
     description?: string | null;
     shortDescription?: string | null;
     brandId?: string | null;
+    track?: string | null;
     isFeatured?: boolean;
     status: $Enums.ProductStatus;
     createdAt?: Date | string;
@@ -775,6 +804,7 @@ export type ProductCreateWithoutVariantsInput = {
     slug: string;
     description?: string | null;
     shortDescription?: string | null;
+    track?: string | null;
     isFeatured?: boolean;
     status: $Enums.ProductStatus;
     createdAt?: Date | string;
@@ -794,6 +824,7 @@ export type ProductUncheckedCreateWithoutVariantsInput = {
     shortDescription?: string | null;
     brandId?: string | null;
     categoryId?: string | null;
+    track?: string | null;
     isFeatured?: boolean;
     status: $Enums.ProductStatus;
     createdAt?: Date | string;
@@ -820,6 +851,7 @@ export type ProductUpdateWithoutVariantsInput = {
     slug?: Prisma.StringFieldUpdateOperationsInput | string;
     description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    track?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -839,6 +871,7 @@ export type ProductUncheckedUpdateWithoutVariantsInput = {
     shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     brandId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    track?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -852,6 +885,7 @@ export type ProductCreateWithoutReviewsInput = {
     slug: string;
     description?: string | null;
     shortDescription?: string | null;
+    track?: string | null;
     isFeatured?: boolean;
     status: $Enums.ProductStatus;
     createdAt?: Date | string;
@@ -871,6 +905,7 @@ export type ProductUncheckedCreateWithoutReviewsInput = {
     shortDescription?: string | null;
     brandId?: string | null;
     categoryId?: string | null;
+    track?: string | null;
     isFeatured?: boolean;
     status: $Enums.ProductStatus;
     createdAt?: Date | string;
@@ -897,6 +932,7 @@ export type ProductUpdateWithoutReviewsInput = {
     slug?: Prisma.StringFieldUpdateOperationsInput | string;
     description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    track?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -916,6 +952,7 @@ export type ProductUncheckedUpdateWithoutReviewsInput = {
     shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     brandId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    track?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -929,6 +966,7 @@ export type ProductCreateWithoutProductViewsInput = {
     slug: string;
     description?: string | null;
     shortDescription?: string | null;
+    track?: string | null;
     isFeatured?: boolean;
     status: $Enums.ProductStatus;
     createdAt?: Date | string;
@@ -948,6 +986,7 @@ export type ProductUncheckedCreateWithoutProductViewsInput = {
     shortDescription?: string | null;
     brandId?: string | null;
     categoryId?: string | null;
+    track?: string | null;
     isFeatured?: boolean;
     status: $Enums.ProductStatus;
     createdAt?: Date | string;
@@ -974,6 +1013,7 @@ export type ProductUpdateWithoutProductViewsInput = {
     slug?: Prisma.StringFieldUpdateOperationsInput | string;
     description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    track?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -993,6 +1033,7 @@ export type ProductUncheckedUpdateWithoutProductViewsInput = {
     shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     brandId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    track?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1008,6 +1049,7 @@ export type ProductCreateManyShopInput = {
     shortDescription?: string | null;
     brandId?: string | null;
     categoryId?: string | null;
+    track?: string | null;
     isFeatured?: boolean;
     status: $Enums.ProductStatus;
     createdAt?: Date | string;
@@ -1019,6 +1061,7 @@ export type ProductUpdateWithoutShopInput = {
     slug?: Prisma.StringFieldUpdateOperationsInput | string;
     description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    track?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1037,6 +1080,7 @@ export type ProductUncheckedUpdateWithoutShopInput = {
     shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     brandId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    track?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1053,6 +1097,7 @@ export type ProductUncheckedUpdateManyWithoutShopInput = {
     shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     brandId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    track?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1066,6 +1111,7 @@ export type ProductCreateManyBrandInput = {
     description?: string | null;
     shortDescription?: string | null;
     categoryId?: string | null;
+    track?: string | null;
     isFeatured?: boolean;
     status: $Enums.ProductStatus;
     createdAt?: Date | string;
@@ -1077,6 +1123,7 @@ export type ProductUpdateWithoutBrandInput = {
     slug?: Prisma.StringFieldUpdateOperationsInput | string;
     description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    track?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1095,6 +1142,7 @@ export type ProductUncheckedUpdateWithoutBrandInput = {
     description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    track?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1111,6 +1159,7 @@ export type ProductUncheckedUpdateManyWithoutBrandInput = {
     description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    track?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1124,6 +1173,7 @@ export type ProductCreateManyCategoryInput = {
     description?: string | null;
     shortDescription?: string | null;
     brandId?: string | null;
+    track?: string | null;
     isFeatured?: boolean;
     status: $Enums.ProductStatus;
     createdAt?: Date | string;
@@ -1135,6 +1185,7 @@ export type ProductUpdateWithoutCategoryInput = {
     slug?: Prisma.StringFieldUpdateOperationsInput | string;
     description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    track?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1153,6 +1204,7 @@ export type ProductUncheckedUpdateWithoutCategoryInput = {
     description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     brandId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    track?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1169,6 +1221,7 @@ export type ProductUncheckedUpdateManyWithoutCategoryInput = {
     description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     brandId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    track?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1223,6 +1276,7 @@ export type ProductSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     shortDescription?: boolean;
     brandId?: boolean;
     categoryId?: boolean;
+    track?: boolean;
     isFeatured?: boolean;
     status?: boolean;
     createdAt?: boolean;
@@ -1244,6 +1298,7 @@ export type ProductSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
     shortDescription?: boolean;
     brandId?: boolean;
     categoryId?: boolean;
+    track?: boolean;
     isFeatured?: boolean;
     status?: boolean;
     createdAt?: boolean;
@@ -1261,6 +1316,7 @@ export type ProductSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
     shortDescription?: boolean;
     brandId?: boolean;
     categoryId?: boolean;
+    track?: boolean;
     isFeatured?: boolean;
     status?: boolean;
     createdAt?: boolean;
@@ -1278,12 +1334,13 @@ export type ProductSelectScalar = {
     shortDescription?: boolean;
     brandId?: boolean;
     categoryId?: boolean;
+    track?: boolean;
     isFeatured?: boolean;
     status?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
 };
-export type ProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "shopId" | "name" | "slug" | "description" | "shortDescription" | "brandId" | "categoryId" | "isFeatured" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>;
+export type ProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "shopId" | "name" | "slug" | "description" | "shortDescription" | "brandId" | "categoryId" | "track" | "isFeatured" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>;
 export type ProductInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     shop?: boolean | Prisma.ShopDefaultArgs<ExtArgs>;
     brand?: boolean | Prisma.Product$brandArgs<ExtArgs>;
@@ -1322,6 +1379,7 @@ export type $ProductPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
         shortDescription: string | null;
         brandId: string | null;
         categoryId: string | null;
+        track: string | null;
         isFeatured: boolean;
         status: $Enums.ProductStatus;
         createdAt: Date;
@@ -1694,6 +1752,7 @@ export interface ProductFieldRefs {
     readonly shortDescription: Prisma.FieldRef<"Product", 'String'>;
     readonly brandId: Prisma.FieldRef<"Product", 'String'>;
     readonly categoryId: Prisma.FieldRef<"Product", 'String'>;
+    readonly track: Prisma.FieldRef<"Product", 'String'>;
     readonly isFeatured: Prisma.FieldRef<"Product", 'Boolean'>;
     readonly status: Prisma.FieldRef<"Product", 'ProductStatus'>;
     readonly createdAt: Prisma.FieldRef<"Product", 'DateTime'>;

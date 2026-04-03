@@ -2,12 +2,52 @@ export declare function listReviewsByProduct(productId: string, query: {
     page?: number;
     pageSize?: number;
     sort?: string;
+    search?: string;
+    filter?: string;
 }): Promise<{
     data: ({
         user: {
             id: string;
             firstName: string;
             lastName: string;
+        };
+    } & {
+        userId: string;
+        id: string;
+        status: import("../generated/prisma/enums").ReviewStatus;
+        createdAt: Date;
+        updatedAt: Date;
+        title: string | null;
+        productId: string;
+        comment: string | null;
+        rating: number;
+    })[];
+    pagination: {
+        total: number;
+        page: number | undefined;
+        pageSize: number | undefined;
+        totalPages: number;
+    };
+}>;
+export declare function listReviews(query: {
+    page?: number;
+    pageSize?: number;
+    search?: string;
+    filter?: string;
+    sort?: string;
+    productId?: string;
+}): Promise<{
+    data: ({
+        user: {
+            email: string;
+            id: string;
+            firstName: string;
+            lastName: string;
+        };
+        product: {
+            name: string;
+            id: string;
+            slug: string;
         };
     } & {
         userId: string;
@@ -69,7 +109,7 @@ export declare function updateReview(id: string, userId: string, data: {
     rating?: number;
     title?: string;
     comment?: string;
-}): Promise<{
+}, isAdmin?: boolean): Promise<{
     userId: string;
     id: string;
     status: import("../generated/prisma/enums").ReviewStatus;

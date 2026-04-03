@@ -43,5 +43,6 @@ router.post("/", cartController.addToCart);
 router.patch("/items/:id", cartController.updateCartItem);
 router.delete("/items/:id", cartController.removeCartItem);
 router.post("/checkout", cartController.checkout);
+router.all("/chapa-callback", cartController.handleChapaCallback);
 exports.default = router;
 //# sourceMappingURL=cart.router.js.map

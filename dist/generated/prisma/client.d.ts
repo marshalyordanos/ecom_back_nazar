@@ -140,6 +140,11 @@ export type Shipment = Prisma.ShipmentModel;
  */
 export type ShippingAddress = Prisma.ShippingAddressModel;
 /**
+ * Model SavedAddress
+ *
+ */
+export type SavedAddress = Prisma.SavedAddressModel;
+/**
  * Model Coupon
  *
  */
@@ -184,4 +189,9 @@ export type SyncedProduct = Prisma.SyncedProductModel;
  *
  */
 export type ShopSetting = Prisma.ShopSettingModel;
+/**
+ * Model SaleFromShop
+ *
+ */
+export type SaleFromShop = Prisma.SaleFromShopModel;
 //# sourceMappingURL=client.d.ts.map

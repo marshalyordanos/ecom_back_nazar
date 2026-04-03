@@ -212,6 +212,7 @@ export type UserWhereInput = {
     productViews?: Prisma.ProductViewListRelationFilter;
     searchLogs?: Prisma.SearchLogListRelationFilter;
     notifications?: Prisma.NotificationListRelationFilter;
+    savedAddresses?: Prisma.SavedAddressListRelationFilter;
 };
 export type UserOrderByWithRelationInput = {
     id?: Prisma.SortOrder;
@@ -236,6 +237,7 @@ export type UserOrderByWithRelationInput = {
     productViews?: Prisma.ProductViewOrderByRelationAggregateInput;
     searchLogs?: Prisma.SearchLogOrderByRelationAggregateInput;
     notifications?: Prisma.NotificationOrderByRelationAggregateInput;
+    savedAddresses?: Prisma.SavedAddressOrderByRelationAggregateInput;
 };
 export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: string;
@@ -263,6 +265,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
     productViews?: Prisma.ProductViewListRelationFilter;
     searchLogs?: Prisma.SearchLogListRelationFilter;
     notifications?: Prisma.NotificationListRelationFilter;
+    savedAddresses?: Prisma.SavedAddressListRelationFilter;
 }, "id" | "email" | "phone">;
 export type UserOrderByWithAggregationInput = {
     id?: Prisma.SortOrder;
@@ -323,6 +326,7 @@ export type UserCreateInput = {
     productViews?: Prisma.ProductViewCreateNestedManyWithoutUserInput;
     searchLogs?: Prisma.SearchLogCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
+    savedAddresses?: Prisma.SavedAddressCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateInput = {
     id?: string;
@@ -347,6 +351,7 @@ export type UserUncheckedCreateInput = {
     productViews?: Prisma.ProductViewUncheckedCreateNestedManyWithoutUserInput;
     searchLogs?: Prisma.SearchLogUncheckedCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
+    savedAddresses?: Prisma.SavedAddressUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserUpdateInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -371,6 +376,7 @@ export type UserUpdateInput = {
     productViews?: Prisma.ProductViewUpdateManyWithoutUserNestedInput;
     searchLogs?: Prisma.SearchLogUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
+    savedAddresses?: Prisma.SavedAddressUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -395,6 +401,7 @@ export type UserUncheckedUpdateInput = {
     productViews?: Prisma.ProductViewUncheckedUpdateManyWithoutUserNestedInput;
     searchLogs?: Prisma.SearchLogUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    savedAddresses?: Prisma.SavedAddressUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserCreateManyInput = {
     id?: string;
@@ -581,6 +588,18 @@ export type UserUpdateOneRequiredWithoutOrdersNestedInput = {
     connect?: Prisma.UserWhereUniqueInput;
     update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutOrdersInput, Prisma.UserUpdateWithoutOrdersInput>, Prisma.UserUncheckedUpdateWithoutOrdersInput>;
 };
+export type UserCreateNestedOneWithoutSavedAddressesInput = {
+    create?: Prisma.XOR<Prisma.UserCreateWithoutSavedAddressesInput, Prisma.UserUncheckedCreateWithoutSavedAddressesInput>;
+    connectOrCreate?: Prisma.UserCreateOrConnectWithoutSavedAddressesInput;
+    connect?: Prisma.UserWhereUniqueInput;
+};
+export type UserUpdateOneRequiredWithoutSavedAddressesNestedInput = {
+    create?: Prisma.XOR<Prisma.UserCreateWithoutSavedAddressesInput, Prisma.UserUncheckedCreateWithoutSavedAddressesInput>;
+    connectOrCreate?: Prisma.UserCreateOrConnectWithoutSavedAddressesInput;
+    upsert?: Prisma.UserUpsertWithoutSavedAddressesInput;
+    connect?: Prisma.UserWhereUniqueInput;
+    update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSavedAddressesInput, Prisma.UserUpdateWithoutSavedAddressesInput>, Prisma.UserUncheckedUpdateWithoutSavedAddressesInput>;
+};
 export type UserCreateNestedOneWithoutCouponUsagesInput = {
     create?: Prisma.XOR<Prisma.UserCreateWithoutCouponUsagesInput, Prisma.UserUncheckedCreateWithoutCouponUsagesInput>;
     connectOrCreate?: Prisma.UserCreateOrConnectWithoutCouponUsagesInput;
@@ -669,6 +688,7 @@ export type UserCreateWithoutTokensInput = {
     productViews?: Prisma.ProductViewCreateNestedManyWithoutUserInput;
     searchLogs?: Prisma.SearchLogCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
+    savedAddresses?: Prisma.SavedAddressCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateWithoutTokensInput = {
     id?: string;
@@ -692,6 +712,7 @@ export type UserUncheckedCreateWithoutTokensInput = {
     productViews?: Prisma.ProductViewUncheckedCreateNestedManyWithoutUserInput;
     searchLogs?: Prisma.SearchLogUncheckedCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
+    savedAddresses?: Prisma.SavedAddressUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserCreateOrConnectWithoutTokensInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -728,6 +749,7 @@ export type UserUpdateWithoutTokensInput = {
     productViews?: Prisma.ProductViewUpdateManyWithoutUserNestedInput;
     searchLogs?: Prisma.SearchLogUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
+    savedAddresses?: Prisma.SavedAddressUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateWithoutTokensInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -751,6 +773,7 @@ export type UserUncheckedUpdateWithoutTokensInput = {
     productViews?: Prisma.ProductViewUncheckedUpdateManyWithoutUserNestedInput;
     searchLogs?: Prisma.SearchLogUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    savedAddresses?: Prisma.SavedAddressUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserCreateWithoutRolesInput = {
     id?: string;
@@ -774,6 +797,7 @@ export type UserCreateWithoutRolesInput = {
     productViews?: Prisma.ProductViewCreateNestedManyWithoutUserInput;
     searchLogs?: Prisma.SearchLogCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
+    savedAddresses?: Prisma.SavedAddressCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateWithoutRolesInput = {
     id?: string;
@@ -797,6 +821,7 @@ export type UserUncheckedCreateWithoutRolesInput = {
     productViews?: Prisma.ProductViewUncheckedCreateNestedManyWithoutUserInput;
     searchLogs?: Prisma.SearchLogUncheckedCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
+    savedAddresses?: Prisma.SavedAddressUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserCreateOrConnectWithoutRolesInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -855,6 +880,7 @@ export type UserCreateWithoutCartsInput = {
     productViews?: Prisma.ProductViewCreateNestedManyWithoutUserInput;
     searchLogs?: Prisma.SearchLogCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
+    savedAddresses?: Prisma.SavedAddressCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateWithoutCartsInput = {
     id?: string;
@@ -878,6 +904,7 @@ export type UserUncheckedCreateWithoutCartsInput = {
     productViews?: Prisma.ProductViewUncheckedCreateNestedManyWithoutUserInput;
     searchLogs?: Prisma.SearchLogUncheckedCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
+    savedAddresses?: Prisma.SavedAddressUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserCreateOrConnectWithoutCartsInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -914,6 +941,7 @@ export type UserUpdateWithoutCartsInput = {
     productViews?: Prisma.ProductViewUpdateManyWithoutUserNestedInput;
     searchLogs?: Prisma.SearchLogUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
+    savedAddresses?: Prisma.SavedAddressUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateWithoutCartsInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -937,6 +965,7 @@ export type UserUncheckedUpdateWithoutCartsInput = {
     productViews?: Prisma.ProductViewUncheckedUpdateManyWithoutUserNestedInput;
     searchLogs?: Prisma.SearchLogUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    savedAddresses?: Prisma.SavedAddressUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserCreateWithoutOrdersInput = {
     id?: string;
@@ -960,6 +989,7 @@ export type UserCreateWithoutOrdersInput = {
     productViews?: Prisma.ProductViewCreateNestedManyWithoutUserInput;
     searchLogs?: Prisma.SearchLogCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
+    savedAddresses?: Prisma.SavedAddressCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateWithoutOrdersInput = {
     id?: string;
@@ -983,6 +1013,7 @@ export type UserUncheckedCreateWithoutOrdersInput = {
     productViews?: Prisma.ProductViewUncheckedCreateNestedManyWithoutUserInput;
     searchLogs?: Prisma.SearchLogUncheckedCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
+    savedAddresses?: Prisma.SavedAddressUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserCreateOrConnectWithoutOrdersInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -1019,6 +1050,7 @@ export type UserUpdateWithoutOrdersInput = {
     productViews?: Prisma.ProductViewUpdateManyWithoutUserNestedInput;
     searchLogs?: Prisma.SearchLogUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
+    savedAddresses?: Prisma.SavedAddressUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateWithoutOrdersInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1037,6 +1069,116 @@ export type UserUncheckedUpdateWithoutOrdersInput = {
     roles?: Prisma.RoleUncheckedUpdateManyWithoutUsersNestedInput;
     tokens?: Prisma.TokenUncheckedUpdateManyWithoutUserNestedInput;
     carts?: Prisma.CartUncheckedUpdateManyWithoutUserNestedInput;
+    reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput;
+    couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput;
+    productViews?: Prisma.ProductViewUncheckedUpdateManyWithoutUserNestedInput;
+    searchLogs?: Prisma.SearchLogUncheckedUpdateManyWithoutUserNestedInput;
+    notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    savedAddresses?: Prisma.SavedAddressUncheckedUpdateManyWithoutUserNestedInput;
+};
+export type UserCreateWithoutSavedAddressesInput = {
+    id?: string;
+    email: string;
+    phone: string;
+    passwordHash: string;
+    firstName: string;
+    lastName: string;
+    avatarUrl?: string | null;
+    isSuperAdmin: boolean;
+    status?: $Enums.UserStatus;
+    emailVerifiedAt?: Date | string | null;
+    phoneVerifiedAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    roles?: Prisma.RoleCreateNestedManyWithoutUsersInput;
+    tokens?: Prisma.TokenCreateNestedManyWithoutUserInput;
+    carts?: Prisma.CartCreateNestedManyWithoutUserInput;
+    orders?: Prisma.OrderCreateNestedManyWithoutUserInput;
+    reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput;
+    couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput;
+    productViews?: Prisma.ProductViewCreateNestedManyWithoutUserInput;
+    searchLogs?: Prisma.SearchLogCreateNestedManyWithoutUserInput;
+    notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
+};
+export type UserUncheckedCreateWithoutSavedAddressesInput = {
+    id?: string;
+    email: string;
+    phone: string;
+    passwordHash: string;
+    firstName: string;
+    lastName: string;
+    avatarUrl?: string | null;
+    isSuperAdmin: boolean;
+    status?: $Enums.UserStatus;
+    emailVerifiedAt?: Date | string | null;
+    phoneVerifiedAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUsersInput;
+    tokens?: Prisma.TokenUncheckedCreateNestedManyWithoutUserInput;
+    carts?: Prisma.CartUncheckedCreateNestedManyWithoutUserInput;
+    orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput;
+    reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput;
+    couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput;
+    productViews?: Prisma.ProductViewUncheckedCreateNestedManyWithoutUserInput;
+    searchLogs?: Prisma.SearchLogUncheckedCreateNestedManyWithoutUserInput;
+    notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
+};
+export type UserCreateOrConnectWithoutSavedAddressesInput = {
+    where: Prisma.UserWhereUniqueInput;
+    create: Prisma.XOR<Prisma.UserCreateWithoutSavedAddressesInput, Prisma.UserUncheckedCreateWithoutSavedAddressesInput>;
+};
+export type UserUpsertWithoutSavedAddressesInput = {
+    update: Prisma.XOR<Prisma.UserUpdateWithoutSavedAddressesInput, Prisma.UserUncheckedUpdateWithoutSavedAddressesInput>;
+    create: Prisma.XOR<Prisma.UserCreateWithoutSavedAddressesInput, Prisma.UserUncheckedCreateWithoutSavedAddressesInput>;
+    where?: Prisma.UserWhereInput;
+};
+export type UserUpdateToOneWithWhereWithoutSavedAddressesInput = {
+    where?: Prisma.UserWhereInput;
+    data: Prisma.XOR<Prisma.UserUpdateWithoutSavedAddressesInput, Prisma.UserUncheckedUpdateWithoutSavedAddressesInput>;
+};
+export type UserUpdateWithoutSavedAddressesInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
+    phone?: Prisma.StringFieldUpdateOperationsInput | string;
+    passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
+    firstName?: Prisma.StringFieldUpdateOperationsInput | string;
+    lastName?: Prisma.StringFieldUpdateOperationsInput | string;
+    avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus;
+    emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    roles?: Prisma.RoleUpdateManyWithoutUsersNestedInput;
+    tokens?: Prisma.TokenUpdateManyWithoutUserNestedInput;
+    carts?: Prisma.CartUpdateManyWithoutUserNestedInput;
+    orders?: Prisma.OrderUpdateManyWithoutUserNestedInput;
+    reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput;
+    couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput;
+    productViews?: Prisma.ProductViewUpdateManyWithoutUserNestedInput;
+    searchLogs?: Prisma.SearchLogUpdateManyWithoutUserNestedInput;
+    notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
+};
+export type UserUncheckedUpdateWithoutSavedAddressesInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
+    phone?: Prisma.StringFieldUpdateOperationsInput | string;
+    passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
+    firstName?: Prisma.StringFieldUpdateOperationsInput | string;
+    lastName?: Prisma.StringFieldUpdateOperationsInput | string;
+    avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus;
+    emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    roles?: Prisma.RoleUncheckedUpdateManyWithoutUsersNestedInput;
+    tokens?: Prisma.TokenUncheckedUpdateManyWithoutUserNestedInput;
+    carts?: Prisma.CartUncheckedUpdateManyWithoutUserNestedInput;
+    orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput;
     reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput;
     couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput;
     productViews?: Prisma.ProductViewUncheckedUpdateManyWithoutUserNestedInput;
@@ -1065,6 +1207,7 @@ export type UserCreateWithoutCouponUsagesInput = {
     productViews?: Prisma.ProductViewCreateNestedManyWithoutUserInput;
     searchLogs?: Prisma.SearchLogCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
+    savedAddresses?: Prisma.SavedAddressCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateWithoutCouponUsagesInput = {
     id?: string;
@@ -1088,6 +1231,7 @@ export type UserUncheckedCreateWithoutCouponUsagesInput = {
     productViews?: Prisma.ProductViewUncheckedCreateNestedManyWithoutUserInput;
     searchLogs?: Prisma.SearchLogUncheckedCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
+    savedAddresses?: Prisma.SavedAddressUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserCreateOrConnectWithoutCouponUsagesInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -1124,6 +1268,7 @@ export type UserUpdateWithoutCouponUsagesInput = {
     productViews?: Prisma.ProductViewUpdateManyWithoutUserNestedInput;
     searchLogs?: Prisma.SearchLogUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
+    savedAddresses?: Prisma.SavedAddressUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateWithoutCouponUsagesInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1147,6 +1292,7 @@ export type UserUncheckedUpdateWithoutCouponUsagesInput = {
     productViews?: Prisma.ProductViewUncheckedUpdateManyWithoutUserNestedInput;
     searchLogs?: Prisma.SearchLogUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    savedAddresses?: Prisma.SavedAddressUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserCreateWithoutReviewsInput = {
     id?: string;
@@ -1170,6 +1316,7 @@ export type UserCreateWithoutReviewsInput = {
     productViews?: Prisma.ProductViewCreateNestedManyWithoutUserInput;
     searchLogs?: Prisma.SearchLogCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
+    savedAddresses?: Prisma.SavedAddressCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateWithoutReviewsInput = {
     id?: string;
@@ -1193,6 +1340,7 @@ export type UserUncheckedCreateWithoutReviewsInput = {
     productViews?: Prisma.ProductViewUncheckedCreateNestedManyWithoutUserInput;
     searchLogs?: Prisma.SearchLogUncheckedCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
+    savedAddresses?: Prisma.SavedAddressUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserCreateOrConnectWithoutReviewsInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -1229,6 +1377,7 @@ export type UserUpdateWithoutReviewsInput = {
     productViews?: Prisma.ProductViewUpdateManyWithoutUserNestedInput;
     searchLogs?: Prisma.SearchLogUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
+    savedAddresses?: Prisma.SavedAddressUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateWithoutReviewsInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1252,6 +1401,7 @@ export type UserUncheckedUpdateWithoutReviewsInput = {
     productViews?: Prisma.ProductViewUncheckedUpdateManyWithoutUserNestedInput;
     searchLogs?: Prisma.SearchLogUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    savedAddresses?: Prisma.SavedAddressUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserCreateWithoutProductViewsInput = {
     id?: string;
@@ -1275,6 +1425,7 @@ export type UserCreateWithoutProductViewsInput = {
     couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput;
     searchLogs?: Prisma.SearchLogCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
+    savedAddresses?: Prisma.SavedAddressCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateWithoutProductViewsInput = {
     id?: string;
@@ -1298,6 +1449,7 @@ export type UserUncheckedCreateWithoutProductViewsInput = {
     couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput;
     searchLogs?: Prisma.SearchLogUncheckedCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
+    savedAddresses?: Prisma.SavedAddressUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserCreateOrConnectWithoutProductViewsInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -1334,6 +1486,7 @@ export type UserUpdateWithoutProductViewsInput = {
     couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput;
     searchLogs?: Prisma.SearchLogUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
+    savedAddresses?: Prisma.SavedAddressUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateWithoutProductViewsInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1357,6 +1510,7 @@ export type UserUncheckedUpdateWithoutProductViewsInput = {
     couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput;
     searchLogs?: Prisma.SearchLogUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    savedAddresses?: Prisma.SavedAddressUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserCreateWithoutSearchLogsInput = {
     id?: string;
@@ -1380,6 +1534,7 @@ export type UserCreateWithoutSearchLogsInput = {
     couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput;
     productViews?: Prisma.ProductViewCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
+    savedAddresses?: Prisma.SavedAddressCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateWithoutSearchLogsInput = {
     id?: string;
@@ -1403,6 +1558,7 @@ export type UserUncheckedCreateWithoutSearchLogsInput = {
     couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput;
     productViews?: Prisma.ProductViewUncheckedCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
+    savedAddresses?: Prisma.SavedAddressUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserCreateOrConnectWithoutSearchLogsInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -1439,6 +1595,7 @@ export type UserUpdateWithoutSearchLogsInput = {
     couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput;
     productViews?: Prisma.ProductViewUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
+    savedAddresses?: Prisma.SavedAddressUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateWithoutSearchLogsInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1462,6 +1619,7 @@ export type UserUncheckedUpdateWithoutSearchLogsInput = {
     couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput;
     productViews?: Prisma.ProductViewUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    savedAddresses?: Prisma.SavedAddressUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserCreateWithoutNotificationsInput = {
     id?: string;
@@ -1485,6 +1643,7 @@ export type UserCreateWithoutNotificationsInput = {
     couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput;
     productViews?: Prisma.ProductViewCreateNestedManyWithoutUserInput;
     searchLogs?: Prisma.SearchLogCreateNestedManyWithoutUserInput;
+    savedAddresses?: Prisma.SavedAddressCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateWithoutNotificationsInput = {
     id?: string;
@@ -1508,6 +1667,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
     couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput;
     productViews?: Prisma.ProductViewUncheckedCreateNestedManyWithoutUserInput;
     searchLogs?: Prisma.SearchLogUncheckedCreateNestedManyWithoutUserInput;
+    savedAddresses?: Prisma.SavedAddressUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserCreateOrConnectWithoutNotificationsInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -1544,6 +1704,7 @@ export type UserUpdateWithoutNotificationsInput = {
     couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput;
     productViews?: Prisma.ProductViewUpdateManyWithoutUserNestedInput;
     searchLogs?: Prisma.SearchLogUpdateManyWithoutUserNestedInput;
+    savedAddresses?: Prisma.SavedAddressUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateWithoutNotificationsInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1567,6 +1728,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
     couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput;
     productViews?: Prisma.ProductViewUncheckedUpdateManyWithoutUserNestedInput;
     searchLogs?: Prisma.SearchLogUncheckedUpdateManyWithoutUserNestedInput;
+    savedAddresses?: Prisma.SavedAddressUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserUpdateWithoutRolesInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1590,6 +1752,7 @@ export type UserUpdateWithoutRolesInput = {
     productViews?: Prisma.ProductViewUpdateManyWithoutUserNestedInput;
     searchLogs?: Prisma.SearchLogUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
+    savedAddresses?: Prisma.SavedAddressUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateWithoutRolesInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1613,6 +1776,7 @@ export type UserUncheckedUpdateWithoutRolesInput = {
     productViews?: Prisma.ProductViewUncheckedUpdateManyWithoutUserNestedInput;
     searchLogs?: Prisma.SearchLogUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    savedAddresses?: Prisma.SavedAddressUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateManyWithoutRolesInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1642,6 +1806,7 @@ export type UserCountOutputType = {
     productViews: number;
     searchLogs: number;
     notifications: number;
+    savedAddresses: number;
 };
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     roles?: boolean | UserCountOutputTypeCountRolesArgs;
@@ -1653,6 +1818,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
     productViews?: boolean | UserCountOutputTypeCountProductViewsArgs;
     searchLogs?: boolean | UserCountOutputTypeCountSearchLogsArgs;
     notifications?: boolean | UserCountOutputTypeCountNotificationsArgs;
+    savedAddresses?: boolean | UserCountOutputTypeCountSavedAddressesArgs;
 };
 /**
  * UserCountOutputType without action
@@ -1717,6 +1883,12 @@ export type UserCountOutputTypeCountSearchLogsArgs<ExtArgs extends runtime.Types
 export type UserCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     where?: Prisma.NotificationWhereInput;
 };
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountSavedAddressesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    where?: Prisma.SavedAddressWhereInput;
+};
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
     email?: boolean;
@@ -1740,6 +1912,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
     productViews?: boolean | Prisma.User$productViewsArgs<ExtArgs>;
     searchLogs?: boolean | Prisma.User$searchLogsArgs<ExtArgs>;
     notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>;
+    savedAddresses?: boolean | Prisma.User$savedAddressesArgs<ExtArgs>;
     _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>;
 }, ExtArgs["result"]["user"]>;
 export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1798,6 +1971,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
     productViews?: boolean | Prisma.User$productViewsArgs<ExtArgs>;
     searchLogs?: boolean | Prisma.User$searchLogsArgs<ExtArgs>;
     notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>;
+    savedAddresses?: boolean | Prisma.User$savedAddressesArgs<ExtArgs>;
     _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>;
 };
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {};
@@ -1814,6 +1988,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
         productViews: Prisma.$ProductViewPayload<ExtArgs>[];
         searchLogs: Prisma.$SearchLogPayload<ExtArgs>[];
         notifications: Prisma.$NotificationPayload<ExtArgs>[];
+        savedAddresses: Prisma.$SavedAddressPayload<ExtArgs>[];
     };
     scalars: runtime.Types.Extensions.GetPayloadResult<{
         id: string;
@@ -2167,6 +2342,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
     productViews<T extends Prisma.User$productViewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$productViewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProductViewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     searchLogs<T extends Prisma.User$searchLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$searchLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SearchLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+    savedAddresses<T extends Prisma.User$savedAddressesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$savedAddressesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SavedAddressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2781,6 +2957,29 @@ export type User$notificationsArgs<ExtArgs extends runtime.Types.Extensions.Inte
     take?: number;
     skip?: number;
     distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[];
+};
+/**
+ * User.savedAddresses
+ */
+export type User$savedAddressesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedAddress
+     */
+    select?: Prisma.SavedAddressSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the SavedAddress
+     */
+    omit?: Prisma.SavedAddressOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.SavedAddressInclude<ExtArgs> | null;
+    where?: Prisma.SavedAddressWhereInput;
+    orderBy?: Prisma.SavedAddressOrderByWithRelationInput | Prisma.SavedAddressOrderByWithRelationInput[];
+    cursor?: Prisma.SavedAddressWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: Prisma.SavedAddressScalarFieldEnum | Prisma.SavedAddressScalarFieldEnum[];
 };
 /**
  * User without action

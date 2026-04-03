@@ -36,7 +36,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addMovement = exports.listMovements = exports.updateInventory = exports.getByVariantId = exports.listInventory = void 0;
+exports.addMovement = exports.getInventoryById = exports.listMovements = exports.updateInventory = exports.getByVariantId = exports.listInventory = void 0;
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 const inventoryService = __importStar(require("../services/inventory.service"));
 const queryParser_1 = require("../utils/queryParser");
@@ -60,6 +60,10 @@ exports.listMovements = (0, catchAsync_1.default)(async (req, res, _next) => {
     const query = (0, queryParser_1.parseListQuery)(req);
     const result = await inventoryService.listMovements(query);
     res.status(200).json(result);
+});
+exports.getInventoryById = (0, catchAsync_1.default)(async (req, res, _next) => {
+    const inventory = await inventoryService.getInventoryById(req.params.id);
+    res.status(200).json(inventory);
 });
 exports.addMovement = (0, catchAsync_1.default)(async (req, res, _next) => {
     const { variantId, locationId, type, quantity, referenceId } = req.body;

@@ -47,8 +47,8 @@ export declare function getSalesReport(filters: {
             id: string;
             total: number;
             price: number;
-            variantId: string;
             quantity: number;
+            variantId: string;
             orderId: string;
             productName: string;
             variantName: string | null;
@@ -88,8 +88,8 @@ export declare function getOrdersReport(filters: {
             id: string;
             total: number;
             price: number;
-            variantId: string;
             quantity: number;
+            variantId: string;
             orderId: string;
             productName: string;
             variantName: string | null;

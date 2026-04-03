@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.listInventory = listInventory;
 exports.getInventoryByVariantId = getInventoryByVariantId;
 exports.updateInventoryQuantity = updateInventoryQuantity;
+exports.getInventoryById = getInventoryById;
 exports.listMovements = listMovements;
 exports.addMovement = addMovement;
 const prisma_1 = require("../lib/prisma");
@@ -15,7 +16,7 @@ const movementDateFields = ["createdAt"];
 async function listInventory(query) {
     const feature = new apiFeature_1.PrismaQueryFeature({
         ...query,
-        searchableFields: [],
+        searchableFields: ["variant.product.name", "variant.sku"],
         dateFields: ["updatedAt"],
     });
     const { skip, take, where, orderBy } = feature.getQuery();
@@ -26,7 +27,7 @@ async function listInventory(query) {
             skip,
             take,
             include: {
-                variant: { include: { product: { select: { name: true, slug: true } } } },
+                variant: { include: { product: true, variantOptionValues: { include: { optionValue: true } } } },
                 location: true,
             },
         }),
@@ -57,10 +58,23 @@ async function updateInventoryQuantity(variantId, locationId, data) {
     });
     return inventory;
 }
+async function getInventoryById(id) {
+    const inventory = await prisma_1.prisma.inventory.findUnique({
+        where: { id },
+        include: {
+            variant: true,
+            location: true,
+            movements: true,
+        },
+    });
+    if (!inventory)
+        throw new appError_1.default("Inventory not found", 404);
+    return inventory;
+}
 async function listMovements(query) {
     const feature = new apiFeature_1.PrismaQueryFeature({
         ...query,
-        searchableFields: [],
+        searchableFields: ["variant.product.name", 'variant.sku'],
         dateFields: movementDateFields,
     });
     const { skip, take, where, orderBy } = feature.getQuery();

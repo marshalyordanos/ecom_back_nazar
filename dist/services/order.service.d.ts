@@ -10,8 +10,8 @@ export declare function listUserOrders(userId: string, query: {
             id: string;
             total: number;
             price: number;
-            variantId: string;
             quantity: number;
+            variantId: string;
             orderId: string;
             productName: string;
             variantName: string | null;
@@ -56,33 +56,11 @@ export declare function getOrderById(orderId: string, userId?: string): Promise<
         id: string;
         total: number;
         price: number;
-        variantId: string;
         quantity: number;
+        variantId: string;
         orderId: string;
         productName: string;
         variantName: string | null;
-    }[];
-    payments: {
-        id: string;
-        status: import("../generated/prisma/enums").PaymentStatus;
-        createdAt: Date;
-        currency: string;
-        orderId: string;
-        provider: string;
-        providerTransactionId: string | null;
-        amount: number;
-        paidAt: Date | null;
-    }[];
-    shipments: {
-        id: string;
-        status: import("../generated/prisma/enums").ShipmentStatus;
-        createdAt: Date;
-        updatedAt: Date;
-        orderId: string;
-        trackingNumber: string | null;
-        carrier: string | null;
-        shippedAt: Date | null;
-        deliveredAt: Date | null;
     }[];
     address: {
         name: string;
@@ -98,6 +76,29 @@ export declare function getOrderById(orderId: string, userId?: string): Promise<
         longitude: number | null;
         orderId: string;
     } | null;
+    payments: {
+        id: string;
+        status: import("../generated/prisma/enums").PaymentStatus;
+        createdAt: Date;
+        currency: string;
+        provider: string;
+        providerTransactionId: string | null;
+        amount: number;
+        transactionId: string | null;
+        paidAt: Date | null;
+        orderId: string;
+    }[];
+    shipments: {
+        id: string;
+        status: import("../generated/prisma/enums").ShipmentStatus;
+        createdAt: Date;
+        updatedAt: Date;
+        orderId: string;
+        trackingNumber: string | null;
+        carrier: string | null;
+        shippedAt: Date | null;
+        deliveredAt: Date | null;
+    }[];
 } & {
     userId: string;
     id: string;
@@ -152,8 +153,8 @@ export declare function listOrderItems(orderId: string): Promise<({
         createdAt: Date;
         updatedAt: Date;
         image: string | null;
-        productId: string;
         sku: string;
+        productId: string;
         barcode: string | null;
         price: number;
         comparePrice: number | null;
@@ -164,8 +165,8 @@ export declare function listOrderItems(orderId: string): Promise<({
     id: string;
     total: number;
     price: number;
-    variantId: string;
     quantity: number;
+    variantId: string;
     orderId: string;
     productName: string;
     variantName: string | null;
@@ -185,16 +186,51 @@ export declare function listOrdersAdmin(query: {
             firstName: string;
             lastName: string;
         };
-        items: {
+        items: ({
+            variant: {
+                variantOptionValues: ({
+                    optionValue: {
+                        option: {
+                            name: string;
+                            id: string;
+                            createdAt: Date;
+                            updatedAt: Date;
+                        };
+                    } & {
+                        id: string;
+                        createdAt: Date;
+                        value: string;
+                        optionId: string;
+                    };
+                } & {
+                    id: string;
+                    variantId: string;
+                    optionValueId: string;
+                })[];
+            } & {
+                id: string;
+                status: import("../generated/prisma/enums").ProductStatus;
+                createdAt: Date;
+                updatedAt: Date;
+                image: string | null;
+                sku: string;
+                productId: string;
+                barcode: string | null;
+                price: number;
+                comparePrice: number | null;
+                costPrice: number | null;
+                weight: number | null;
+            };
+        } & {
             id: string;
             total: number;
             price: number;
-            variantId: string;
             quantity: number;
+            variantId: string;
             orderId: string;
             productName: string;
             variantName: string | null;
-        }[];
+        })[];
         address: {
             name: string;
             id: string;
@@ -265,8 +301,8 @@ export declare function createOrderAdmin(data: {
         id: string;
         total: number;
         price: number;
-        variantId: string;
         quantity: number;
+        variantId: string;
         orderId: string;
         productName: string;
         variantName: string | null;

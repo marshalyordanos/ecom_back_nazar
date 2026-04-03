@@ -41,6 +41,7 @@ router.use(auth_middleware_1.protect);
 router.use((0, auth_middleware_1.restrictTo)("admin"));
 router.get("/", inventoryController.listInventory);
 router.get("/movements", inventoryController.listMovements);
+router.get("/inventory/:id", inventoryController.getInventoryById);
 router.post("/movements", inventoryController.addMovement);
 router.get("/:variantId", inventoryController.getByVariantId);
 router.patch("/:variantId", inventoryController.updateInventory);

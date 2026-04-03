@@ -37,6 +37,7 @@ const express_1 = require("express");
 const reviewController = __importStar(require("../controllers/review.controller"));
 const auth_middleware_1 = require("../middleware/auth.middleware");
 const router = (0, express_1.Router)();
+router.get("/", reviewController.listReviews);
 router.get("/:id", reviewController.getReviewById);
 router.post("/", auth_middleware_1.protect, reviewController.createReview);
 router.put("/:id", auth_middleware_1.protect, reviewController.updateReview);
