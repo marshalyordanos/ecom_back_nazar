@@ -253,17 +253,7 @@ export async function createVariant(
   file?: any
 ) {
 
-  if(!data.locationId) {
-    throw new AppError('Location is required', 400);
-  }
-  if(!data.type) {
-    throw new AppError('Type is required', 400);
-  }
-  if(!data.quantity) {
-    throw new AppError('Quantity is required', 400);
-  }
 
-  data.quantity = Number(data.quantity);
 
   if (!file) {
     throw new AppError('No file uploaded', 400);
@@ -302,45 +292,22 @@ export async function createVariant(
     });
 
     // 2. Inventory logic ported from inventory.service.ts
-    let inventory = await prismaTx.inventory.findFirst({
-      where: { variantId: variant.id, locationId: data.locationId },
+   let locations= await prismaTx.shopLocation.findMany({
+    where: {
+      shopId: product.shopId,
+    },
+   });
+   // create inventory for each location
+   await Promise.all(locations.map(async (location) => {
+    await prismaTx.inventory.create({
+      data: {
+        variantId: variant.id,
+        locationId: location.id,
+        quantity: 0,
+        reservedQuantity: 0,
+      },
     });
-    if (!inventory) {
-      inventory = await prismaTx.inventory.create({
-        data: {
-          variantId: variant.id,
-          locationId: data.locationId,
-          quantity: 0,
-          reservedQuantity: 0,
-        },
-      });
-    }
-
-    const newQty =
-      data.type === "PURCHASE" || data.type === "RETURN" || data.type === "TRANSFER"
-        ? inventory.quantity + data.quantity
-        : data.type === "SALE" || data.type === "ADJUSTMENT"
-          ? inventory.quantity - data.quantity
-          : inventory.quantity;
-
-    await Promise.all([
-      prismaTx.inventoryMovement.create({
-        data: {
-          variantId: variant.id,
-          locationId: data.locationId,
-          inventoryId: inventory.id,
-          type: data.type as any,
-          quantity: data.quantity,
-          referenceId: undefined, // Set if needed
-        },
-      }),
-      prismaTx.inventory.update({
-        where: { id: inventory.id },
-        data: { quantity: Math.max(0, newQty) },
-      }),
-    ]);
-    
-   
+   }));
 
     return  await prismaTx.productVariant.findUnique({
       where: { id: variant.id },
