@@ -19,6 +19,8 @@ export async function getMe(userId: string) {
       emailVerifiedAt: true,
       phoneVerifiedAt: true,
       roles: { select: { id: true, name: true, description: true } },
+      locationId: true,
+      location: { select: { id: true, name: true, shopId: true } },
       createdAt: true,
       updatedAt: true,
     },
@@ -74,31 +76,43 @@ export async function getById(id: string) {
   return rest;
 }
 
-export async function listUsers(query: {
-  page?: number;
-  pageSize?: number;
-  search?: string;
-  filter?: string;
-  sort?: string;
-}, onlyUsers?: boolean) {
+export async function listUsers(
+  query: {
+    page?: number;
+    pageSize?: number;
+    search?: string;
+    filter?: string;
+    sort?: string;
+    roleId?: string;
+  },
+  onlyUsers?: boolean
+) {
   const feature = new PrismaQueryFeature<Record<string, unknown>, Record<string, string>>({
     ...query,
     searchableFields: userSearchableFields,
     dateFields: userDateFields,
   });
-  const { skip, take, where, orderBy } = feature.getQuery();
+  const { skip, take, where: rawWhere, orderBy } = feature.getQuery();
 
-  console.log('query', onlyUsers)
-  if (onlyUsers) {
-    where.roles = { some: { name: "user" } };
-  }
+  const w = { ...rawWhere } as Record<string, unknown>;
+  const roleIdFromFilter = w.roleId as string | undefined;
+  delete w.roleId;
+  const roleId = query.roleId || roleIdFromFilter;
+
+  const parts: Record<string, unknown>[] = [];
+  if (Object.keys(w).length > 0) parts.push(w);
+  if (onlyUsers) parts.push({ roles: { some: { name: "user" } } });
+  if (roleId) parts.push({ roles: { some: { id: roleId } } });
+
+  const where =
+    parts.length === 0 ? {} : parts.length === 1 ? parts[0]! : { AND: parts };
+
   const [users, total] = await Promise.all([
     prisma.user.findMany({
       where,
       orderBy,
       skip,
       take,
-
       select: {
         id: true,
         email: true,
@@ -107,7 +121,9 @@ export async function listUsers(query: {
         lastName: true,
         avatarUrl: true,
         status: true,
-        roles: { select: { name: true } },
+        locationId: true,
+        location: { select: { id: true, name: true, shopId: true } },
+        roles: { select: { id: true, name: true } },
         createdAt: true,
         updatedAt: true,
       },
@@ -130,6 +146,7 @@ export async function updateUser(
     status?: string;
     avatarUrl?: string;
     roleIds?: string[];
+    locationId?: string | null;
   }
 ) {
   const existing = await prisma.user.findUnique({ where: { id } });
@@ -145,11 +162,23 @@ export async function updateUser(
   if (data.roleIds !== undefined) {
     updateData.roles = { set: data.roleIds.map((rid) => ({ id: rid })) };
   }
+  if (data.locationId !== undefined) {
+    if (data.locationId === null) {
+      updateData.locationId = null;
+    } else {
+      const loc = await prisma.shopLocation.findUnique({ where: { id: data.locationId } });
+      if (!loc) throw new AppError("Location not found", 404);
+      updateData.locationId = data.locationId;
+    }
+  }
 
   const user = await prisma.user.update({
     where: { id },
     data: updateData as Parameters<typeof prisma.user.update>[0]["data"],
-    include: { roles: { select: { id: true, name: true } } },
+    include: {
+      roles: { select: { id: true, name: true } },
+      location: { select: { id: true, name: true, shopId: true } },
+    },
   });
   const { passwordHash, ...rest } = user;
   return rest;

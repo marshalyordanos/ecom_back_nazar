@@ -43,7 +43,7 @@ export async function getGlobalDashboardSummary() {
     payAmountPrevWeek,
   ] = await Promise.all([
     prisma.user.count(),
-    prisma.user.count({ where: { status: "ACTIVE" } }),
+    prisma.user.count({ where: { status: "ACTIVE", } }),
     prisma.user.count({ where: { status: "SUSPENDED" } }),
     prisma.user.count({ where: { emailVerifiedAt: { not: null } } }),
     prisma.user.count({ where: { createdAt: { gte: currentWindowStart } } }),
@@ -140,6 +140,103 @@ export async function getGlobalDashboardSummary() {
   };
 }
 
+// ===============================
+// Global admin (no shopId) — chart-friendly series
+// ===============================
+
+function fillDailyBucketsFromSince(
+  since: Date,
+  buckets: Record<string, number>
+): { categories: string[]; data: number[] } {
+  const categories: string[] = [];
+  const data: number[] = [];
+  const cursor = new Date(since);
+  cursor.setHours(0, 0, 0, 0);
+  const end = new Date();
+  end.setHours(0, 0, 0, 0);
+  while (cursor <= end) {
+    const k = toISODate(cursor);
+    categories.push(k);
+    data.push(buckets[k] ?? 0);
+    cursor.setDate(cursor.getDate() + 1);
+  }
+  return { categories, data };
+}
+
+export async function getGlobalRevenueSeries(days: number) {
+  const clamped = Math.min(Math.max(Number(days) || 30, 1), 90);
+  const since = getSinceDate(clamped);
+  const orders = await prisma.order.findMany({
+    where: { createdAt: { gte: since } },
+    select: { createdAt: true, grandTotal: true },
+  });
+  const buckets: Record<string, number> = {};
+  for (const o of orders) {
+    const key = toISODate(new Date(o.createdAt));
+    buckets[key] = (buckets[key] || 0) + o.grandTotal;
+  }
+  const { categories, data } = fillDailyBucketsFromSince(since, buckets);
+  return {
+    days: clamped,
+    categories,
+    series: [{ name: "Revenue", data }],
+    totalRevenue: data.reduce((a, b) => a + b, 0),
+  };
+}
+
+export async function getGlobalOrdersCountSeries(days: number) {
+  const clamped = Math.min(Math.max(Number(days) || 30, 1), 90);
+  const since = getSinceDate(clamped);
+  const orders = await prisma.order.findMany({
+    where: { createdAt: { gte: since } },
+    select: { createdAt: true },
+  });
+  const buckets: Record<string, number> = {};
+  for (const o of orders) {
+    const key = toISODate(new Date(o.createdAt));
+    buckets[key] = (buckets[key] || 0) + 1;
+  }
+  const { categories, data } = fillDailyBucketsFromSince(since, buckets);
+  return {
+    days: clamped,
+    categories,
+    series: [{ name: "Orders", data }],
+    totalOrders: orders.length,
+  };
+}
+
+export async function getGlobalOrderStatusDistribution() {
+  const grouped = await prisma.order.groupBy({
+    by: ["status"],
+    _count: { id: true },
+  });
+  return {
+    labels: grouped.map((g) => String(g.status)),
+    values: grouped.map((g) => g._count.id),
+  };
+}
+
+export async function getGlobalPaymentsSeries(days: number) {
+  const clamped = Math.min(Math.max(Number(days) || 30, 1), 90);
+  const since = getSinceDate(clamped);
+  const payments = await prisma.payment.findMany({
+    where: { createdAt: { gte: since }, status: "PAID" },
+    select: { createdAt: true, amount: true },
+  });
+  const buckets: Record<string, number> = {};
+  for (const p of payments) {
+    const key = toISODate(new Date(p.createdAt));
+    buckets[key] = (buckets[key] || 0) + p.amount;
+  }
+  const { categories, data } = fillDailyBucketsFromSince(since, buckets);
+  return {
+    days: clamped,
+    categories,
+    series: [{ name: "Payments", data }],
+    totalAmount: data.reduce((a, b) => a + b, 0),
+  };
+}
+
 export async function getOverview(shopId: string) {
   const [totalOrders, totalRevenue, ordersByStatus, lowInventoryCount] = await Promise.all([
     prisma.order.count({ where: { shopId } }),
@@ -163,7 +260,7 @@ export async function getOverview(shopId: string) {
 
   const topProducts = await prisma.orderItem.groupBy({
     by: ["variantId"],
-    where: { order: { shopId } },
+    where: { order: { shopId,status:"COMPLETED" } },
     _sum: { total: true },
     _count: { id: true },
     orderBy: { _sum: { total: "desc" } },
@@ -468,69 +565,68 @@ export async function getShopDashboardSummary(shopId: string) {
 // 👤 USER SUMMARY
 // ===============================
 export async function getUserSummary(shopId: string, days = 30) {
-  const firstOrderByUser = await prisma.order.groupBy({
-    by: ["userId"],
-    where: { shopId },
-    _min: { createdAt: true },
+  const since = getSinceDate(days);
+
+  // Only include users directly associated with this shop via location 
+  // (users table, users might be staff or customers, depending on schema)
+
+  // Total users: user.location.shopId == shopId
+  const totalUsers = await prisma.user.count({
   });
 
-  const totalUsers = firstOrderByUser.length;
-  const since = getSinceDate(days);
-  const newUsers = firstOrderByUser.filter((u) => u._min.createdAt && u._min.createdAt >= since).length;
+  // New users in last X days: user.location.shopId == shopId AND createdAt >= since
+  const newUsers = await prisma.user.count({
+    where: {  createdAt: { gte: since } }
+  });
 
-  const userIds = firstOrderByUser.map((u) => u.userId);
-  const statuses = userIds.length
-    ? await prisma.user.groupBy({
-        by: ["status"],
-        where: { id: { in: userIds } },
-        _count: { id: true },
-      })
-    : [];
+  // Active users: user.location.shopId == shopId AND status == ACTIVE
+  const active = await prisma.user.count({
+    where: {  status: "ACTIVE" }
+  });
 
-  const statusCounts = statuses.reduce<Record<string, number>>((acc, s) => {
-    acc[String(s.status)] = s._count.id;
-    return acc;
-  }, {});
+
+  // Inactive users: 0 (as per your requirements)
+  const inactive = await prisma.user.count({
+    where: {  status: "INACTIVE" }
+  });
+
+  // Suspended users: 0 (as per your requirements)
+  const suspended =await prisma.user.count({
+    where: {  status: "SUSPENDED" }
+  });
 
   return {
     totalUsers,
     newUsers,
-    active: statusCounts.ACTIVE ?? 0,
-    inactive: statusCounts.INACTIVE ?? 0,
-    suspended: statusCounts.SUSPENDED ?? 0,
+    active,
+    inactive,
+    suspended
   };
 }
 
 export async function getUserVerificationStats(shopId: string) {
-  const userIds = await prisma.order.findMany({
-    where: { shopId },
-    distinct: ["userId"],
-    select: { userId: true },
+  // Find all users whose location.shopId == shopId, using 'user' model as per schema.prisma
+  // location is a relation, so we must filter where: { location: { shopId } }
+  // We only use .count()
+
+  const totalUsers = await prisma.user.count({
+   
   });
-  const ids = userIds.map((u) => u.userId);
-  const totalUsers = ids.length;
 
-  if (!ids.length) {
-    return {
-      totalUsers: 0,
-      emailVerified: 0,
-      emailNotVerified: 0,
-      phoneVerified: 0,
-      phoneNotVerified: 0,
-    };
-  }
+  const emailVerified = await prisma.user.count({
+    where: { emailVerifiedAt: { not: null } }
+  });
 
-  const [emailVerified, phoneVerified] = await Promise.all([
-    prisma.user.count({ where: { id: { in: ids }, emailVerifiedAt: { not: null } } }),
-    prisma.user.count({ where: { id: { in: ids }, phoneVerifiedAt: { not: null } } }),
-  ]);
+  const phoneVerified = await prisma.user.count({
+    where: { phoneVerifiedAt: { not: null } }
+  });
 
   return {
     totalUsers,
     emailVerified,
     emailNotVerified: totalUsers - emailVerified,
     phoneVerified,
-    phoneNotVerified: totalUsers - phoneVerified,
+    phoneNotVerified: totalUsers - phoneVerified
   };
 }
 
@@ -929,15 +1025,15 @@ export async function getSearchSummary(shopId: string, days = 30) {
 // ===============================
 export async function getSalesTrends(shopId: string, groupBy: "day" | "week" | "month", days = 30) {
   const since = getSinceDate(days);
-  const orders = await prisma.order.findMany({
-    where: { shopId, createdAt: { gte: since } },
-    select: { createdAt: true, grandTotal: true },
+  const orders = await prisma.payment.findMany({
+    where: { status: "PAID", createdAt: { gte: since } },
+    select: { createdAt: true, amount: true },
   });
 
   const buckets: Record<string, number> = {};
   for (const o of orders) {
     const key = bucketKey(o.createdAt, groupBy);
-    buckets[key] = (buckets[key] || 0) + o.grandTotal;
+    buckets[key] = (buckets[key] || 0) + o.amount;
   }
 
   return {
@@ -970,15 +1066,15 @@ export async function getSalesByChannel(shopId: string, days = 30) {
 
 export async function getSalesForecast(shopId: string, historyDays = 30, forecastDays = 7) {
   const since = getSinceDate(historyDays);
-  const orders = await prisma.order.findMany({
-    where: { shopId, createdAt: { gte: since } },
-    select: { createdAt: true, grandTotal: true },
+  const orders = await prisma.payment.findMany({
+    where: {  createdAt: { gte: since } },
+    select: { createdAt: true, amount: true },
   });
 
   const buckets: Record<string, number> = {};
   for (const o of orders) {
     const key = toISODate(o.createdAt);
-    buckets[key] = (buckets[key] || 0) + o.grandTotal;
+    buckets[key] = (buckets[key] || 0) + o.amount;
   }
 
   const historyTotal = Object.values(buckets).reduce((a, b) => a + b, 0);
@@ -1150,7 +1246,7 @@ export async function getProductPerformance(shopId: string, days = 90, limit = 1
   const since = getSinceDate(days);
   const byVariant = await prisma.orderItem.groupBy({
     by: ["variantId"],
-    where: { order: { shopId, createdAt: { gte: since } } },
+    where: { order: { shopId, status: "COMPLETED", createdAt: { gte: since } } },
     _sum: { total: true },
     _count: { id: true },
     orderBy: { _sum: { total: "desc" } },
@@ -1402,7 +1498,7 @@ export async function getCustomerLTV(shopId: string, days = 90) {
   const since = getSinceDate(days);
   const grouped = await prisma.order.groupBy({
     by: ["userId"],
-    where: { shopId, createdAt: { gte: since } },
+    where: { shopId, status: "COMPLETED", createdAt: { gte: since } },
     _sum: { grandTotal: true },
   });
 

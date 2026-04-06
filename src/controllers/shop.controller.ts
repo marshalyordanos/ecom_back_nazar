@@ -52,3 +52,31 @@ export const addSalesFromShop = catchAsync(async (req: AuthRequest, res: Respons
   const result = await shopService.addSalesFromShop(req.body);
   res.status(201).json(result);
 });
+
+export const getSalesFromShopStats = catchAsync(async (_req: AuthRequest, res: Response, _next: NextFunction) => {
+  const stats = await shopService.getSalesFromShopStats();
+  res.status(200).json(stats);
+});
+
+export const getSalesFromShop = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const query = parseListQuery(req);
+  const shopId = typeof req.query.shopId === "string" ? req.query.shopId : undefined;
+  const locationId = typeof req.query.locationId === "string" ? req.query.locationId : undefined;
+  const result = await shopService.listSalesFromShop({ ...query, shopId, locationId });
+  res.status(200).json(result);
+});
+
+export const getSalesFromShopById = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const sale = await shopService.getSaleFromShopById(req.params.id);
+  res.status(200).json(sale);
+});
+
+export const updateSalesFromShopById = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const sale = await shopService.updateSaleFromShop(req.params.id, req.body);
+  res.status(200).json(sale);
+});
+
+export const deleteSalesFromShopById = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const result = await shopService.deleteSaleFromShop(req.params.id);
+  res.status(200).json(result);
+});

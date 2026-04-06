@@ -4,6 +4,7 @@ import AppError from "../utils/appError";
 import { prisma } from "../lib/prisma";
 import config from "../config/config";
 import { tokenTypes } from "../config/tokens";
+import type { MergedPermissionMap } from "../services/rbacPermission.service";
 
 export interface JwtPayload {
   userId: string;
@@ -12,7 +13,15 @@ export interface JwtPayload {
 }
 
 export interface AuthRequest extends Request {
-  user?: { id: string; email: string; roles: string[], isSuperAdmin:boolean };
+  user?: {
+    id: string;
+    email: string;
+    roles: string[];
+    isSuperAdmin: boolean;
+    locationId?: string | null;
+  };
+  /** Cached merged RBAC map for non–super-admins (set by permission middleware). */
+  mergedPermissions?: MergedPermissionMap;
 }
 
 /**
@@ -49,6 +58,7 @@ export const protect = async (req: AuthRequest, _res: Response, next: NextFuncti
       email: user.email,
       isSuperAdmin: user.isSuperAdmin,
       roles: user.roles.map((r) => r.name),
+      locationId: user.locationId ?? null,
     };
     console.log("req.user222222: ", req.user);
     next();
@@ -85,8 +95,9 @@ export const optionalAuth = async (req: AuthRequest, _res: Response, next: NextF
     req.user = {
       id: user.id,
       email: user.email,
-      isSuperAdmin:user.isSuperAdmin,
+      isSuperAdmin: user.isSuperAdmin,
       roles: user.roles.map((r) => r.name),
+      locationId: user.locationId ?? null,
     };
   } catch {
     // ignore invalid token

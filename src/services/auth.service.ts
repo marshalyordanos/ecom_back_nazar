@@ -6,6 +6,7 @@ import { prisma } from "../lib/prisma";
 import { hashPassword, comparePassword } from "../utils/hash";
 import AppError from "../utils/appError";
 import { sendEmail } from "../utils/email";
+import { getMergedPermissionsForUser, mergedMapToList } from "./rbacPermission.service";
 
 const accessExpirationMinutes = parseInt(config.jwt.accessExpirationMinutes, 10) || 60;
 const refreshExpirationDays = parseInt(config.jwt.refreshExpirationDays, 10) || 60;
@@ -162,13 +163,18 @@ export async function login(emailPhone: string, password: string) {
     },
   });
 
+  const permMap = await getMergedPermissionsForUser(user.id);
+
   return {
     user: {
       id: user.id,
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
+      phone: user.phone,
+      isSuperAdmin: user.isSuperAdmin,
       roles: user.roles.map((r) => r.name),
+      permissions: mergedMapToList(permMap),
     },
     accessToken,
     refreshToken,
@@ -210,10 +216,29 @@ export async function refresh(refreshToken: string) {
     },
   });
 
+  const fullUser = await prisma.user.findUnique({
+    where: { id: tokenRecord.userId },
+    include: { roles: { select: { name: true } } },
+  });
+  if (!fullUser) {
+    throw new AppError("User no longer exists", 401);
+  }
+  const permMap = await getMergedPermissionsForUser(fullUser.id);
+
   return {
     accessToken: newAccessToken,
     refreshToken: newRefreshToken,
     expiresIn: accessExpirationMinutes * 60,
+    user: {
+      id: fullUser.id,
+      email: fullUser.email,
+      firstName: fullUser.firstName,
+      lastName: fullUser.lastName,
+      phone: fullUser.phone,
+      isSuperAdmin: fullUser.isSuperAdmin,
+      roles: fullUser.roles.map((r) => r.name),
+      permissions: mergedMapToList(permMap),
+    },
   };
 }
 

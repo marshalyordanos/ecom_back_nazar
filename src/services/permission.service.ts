@@ -1,24 +1,18 @@
 import { prisma } from "../lib/prisma";
 import AppError from "../utils/appError";
 import { PrismaQueryFeature } from "../utils/apiFeature";
+import type { ParsedQuery } from "../utils/queryParser";
 
 const searchableFields = ["resource", "description"];
 const dateFields = ["createdAt", "updatedAt"];
 
-export async function listPermissions(query: {
-  page?: number;
-  pageSize?: number;
-  search?: string;
-  filter?: string;
-  sort?: string;
-}) {
-  const feature = new PrismaQueryFeature<Record<string, unknown>, Record<string, string>>({
+export async function listPermissions(query: ParsedQuery) {
+  const feature = new PrismaQueryFeature({
     ...query,
     searchableFields,
     dateFields,
   });
   const { skip, take, where, orderBy } = feature.getQuery();
-
   const [data, total] = await Promise.all([
     prisma.permission.findMany({
       where,
@@ -48,10 +42,16 @@ export async function createPermission(data: { resource: string; description?: s
   return permission;
 }
 
-export async function updatePermission(id: string, data: { resource?: string; description?: string }) {
+export async function updatePermission(
+  id: string,
+  data: { resource?: string; description?: string }
+) {
   const permission = await prisma.permission.update({
     where: { id },
-    data: { ...(data.resource && { resource: data.resource }), ...(data.description !== undefined && { description: data.description }) },
+    data: {
+      ...(data.resource && { resource: data.resource }),
+      ...(data.description !== undefined && { description: data.description }),
+    },
   });
   return permission;
 }

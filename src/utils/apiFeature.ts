@@ -98,7 +98,10 @@ export class PrismaQueryFeature<
       console.log('filter::', filter);
       const filterItems = filter.split(',');
       filterItems.forEach((item) => {
-        const [key, value] = item.split(':');
+        const colon = item.indexOf(':');
+        if (colon === -1) return;
+        const key = item.slice(0, colon);
+        const value = item.slice(colon + 1);
         console.log(key, value);
 
         // Handle lte/gte with merging

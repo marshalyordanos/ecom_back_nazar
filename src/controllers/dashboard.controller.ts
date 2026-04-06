@@ -10,6 +10,29 @@ export const getSummary = catchAsync(async (_req: AuthRequest, res: Response, _n
   res.status(200).json({ data });
 });
 
+export const getGlobalRevenueSeries = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const days = parseInt(String(req.query.days), 10) || 30;
+  const data = await dashboardService.getGlobalRevenueSeries(days);
+  res.status(200).json({ data });
+});
+
+export const getGlobalOrdersCountSeries = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const days = parseInt(String(req.query.days), 10) || 30;
+  const data = await dashboardService.getGlobalOrdersCountSeries(days);
+  res.status(200).json({ data });
+});
+
+export const getGlobalOrderStatusDistribution = catchAsync(async (_req: AuthRequest, res: Response, _next: NextFunction) => {
+  const data = await dashboardService.getGlobalOrderStatusDistribution();
+  res.status(200).json({ data });
+});
+
+export const getGlobalPaymentsSeries = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const days = parseInt(String(req.query.days), 10) || 30;
+  const data = await dashboardService.getGlobalPaymentsSeries(days);
+  res.status(200).json({ data });
+});
+
 export const getOverview = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
   const shopId = req.query.shopId as string || (req as any).shopId;
   if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });

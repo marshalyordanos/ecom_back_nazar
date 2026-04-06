@@ -12,6 +12,12 @@ const router = Router();
 router.use(protect);
 router.use(restrictTo("admin"));
 
+// Global admin chart data (no shopId)
+router.get("/global/revenue-series", dashboardController.getGlobalRevenueSeries);
+router.get("/global/orders-count-series", dashboardController.getGlobalOrdersCountSeries);
+router.get("/global/order-status-distribution", dashboardController.getGlobalOrderStatusDistribution);
+router.get("/global/payments-series", dashboardController.getGlobalPaymentsSeries);
+
 router.get("/overview", dashboardController.getOverview);
 router.get("/sales-summary", dashboardController.getSalesSummary);
 router.get("/orders-summary", dashboardController.getOrdersSummary);

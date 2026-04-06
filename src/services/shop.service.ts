@@ -323,3 +323,207 @@ export async function addSalesFromShop(body: AddSalesFromShopBody) {
 
   return { sales: result };
 }
+
+const saleFromShopInclude = {
+  variant: {
+    include: {
+      product: { select: { id: true, name: true } },
+    },
+  },
+  location: {
+    include: {
+      shop: { select: { id: true, name: true } },
+    },
+  },
+} as const;
+
+const saleFromShopSearchableFields = [
+  "variant.sku",
+  "variant.product.name",
+  "location.name",
+  "location.shop.name",
+];
+
+const saleFromShopDateFields = ["createdAt", "updatedAt"];
+
+export async function listSalesFromShop(query: {
+  page?: number;
+  pageSize?: number;
+  search?: string;
+  filter?: string;
+  sort?: string;
+  shopId?: string;
+  locationId?: string;
+}) {
+  const feature = new PrismaQueryFeature<Record<string, unknown>, Record<string, string>>({
+    ...query,
+    searchableFields: saleFromShopSearchableFields,
+    dateFields: saleFromShopDateFields,
+  });
+  const { skip, take, where, orderBy } = feature.getQuery();
+
+  const parts: Record<string, unknown>[] = [];
+  if (Object.keys(where).length > 0) parts.push(where);
+  if (query.shopId) parts.push({ location: { shopId: query.shopId } });
+  if (query.locationId) parts.push({ locationId: query.locationId });
+  const whereFinal =
+    parts.length === 0 ? {} : parts.length === 1 ? parts[0]! : { AND: parts };
+
+  const [data, total] = await Promise.all([
+    prisma.saleFromShop.findMany({
+      where: whereFinal,
+      orderBy,
+      skip,
+      take,
+      include: saleFromShopInclude,
+    }),
+    prisma.saleFromShop.count({ where: whereFinal }),
+  ]);
+  return { data, pagination: feature.getPagination(total) };
+}
+
+export async function getSaleFromShopById(id: string) {
+  const sale = await prisma.saleFromShop.findUnique({
+    where: { id },
+    include: saleFromShopInclude,
+  });
+  if (!sale) throw new AppError("Sale not found", 404);
+  return sale;
+}
+
+export async function updateSaleFromShop(
+  id: string,
+  body: { quantity?: number; price?: number; variantId?: unknown; locationId?: unknown }
+) {
+  if (body.variantId !== undefined || body.locationId !== undefined) {
+    throw new AppError("Cannot change variant or location on an existing sale", 400);
+  }
+  const hasQty = body.quantity !== undefined;
+  const hasPrice = body.price !== undefined;
+  if (!hasQty && !hasPrice) {
+    throw new AppError("quantity or price is required", 400);
+  }
+
+  return prisma.$transaction(async (tx) => {
+    const sale = await tx.saleFromShop.findUnique({ where: { id } });
+    if (!sale) throw new AppError("Sale not found", 404);
+
+    const newQty = hasQty ? Math.floor(Number(body.quantity)) : sale.quantity;
+    const newPrice = hasPrice ? Number(body.price) : sale.price;
+
+    if (!Number.isInteger(newQty) || newQty < 1) {
+      throw new AppError("quantity must be a positive integer", 400);
+    }
+    if (!Number.isFinite(newPrice) || newPrice < 0) {
+      throw new AppError("price must be a non-negative number", 400);
+    }
+
+    const delta = newQty - sale.quantity;
+    if (delta !== 0) {
+      const inv = await tx.inventory.findUnique({
+        where: {
+          variantId_locationId: {
+            variantId: sale.variantId,
+            locationId: sale.locationId,
+          },
+        },
+      });
+      if (!inv) {
+        throw new AppError("No inventory row for this variant at this location", 400);
+      }
+      if (delta > 0 && inv.quantity < delta) {
+        throw new AppError(
+          `Insufficient stock. Available: ${inv.quantity}, additional units needed: ${delta}`,
+          400
+        );
+      }
+      await tx.inventory.update({
+        where: {
+          variantId_locationId: {
+            variantId: sale.variantId,
+            locationId: sale.locationId,
+          },
+        },
+        data: {
+          quantity: delta > 0 ? { decrement: delta } : { increment: -delta },
+        },
+      });
+    }
+
+    return tx.saleFromShop.update({
+      where: { id },
+      data: {
+        quantity: newQty,
+        price: newPrice,
+        total: newQty * newPrice,
+      },
+      include: saleFromShopInclude,
+    });
+  });
+}
+
+export async function deleteSaleFromShop(id: string) {
+  await prisma.$transaction(async (tx) => {
+    const sale = await tx.saleFromShop.findUnique({ where: { id } });
+    if (!sale) throw new AppError("Sale not found", 404);
+
+    const inv = await tx.inventory.findUnique({
+      where: {
+        variantId_locationId: {
+          variantId: sale.variantId,
+          locationId: sale.locationId,
+        },
+      },
+    });
+    if (!inv) {
+      throw new AppError(
+        "Cannot restore stock: no inventory row for this variant at this location",
+        400
+      );
+    }
+
+    await tx.inventory.update({
+      where: {
+        variantId_locationId: {
+          variantId: sale.variantId,
+          locationId: sale.locationId,
+        },
+      },
+      data: { quantity: { increment: sale.quantity } },
+    });
+    await tx.saleFromShop.delete({ where: { id } });
+  });
+  return { message: "Sale deleted successfully" };
+}
+
+/** Stats use UTC calendar month boundaries for revenueThisMonth. */
+export async function getSalesFromShopStats() {
+  const now = new Date();
+  const y = now.getUTCFullYear();
+  const m = now.getUTCMonth();
+  const startOfMonth = new Date(Date.UTC(y, m, 1, 0, 0, 0, 0));
+  const startOfNextMonth = new Date(Date.UTC(y, m + 1, 1, 0, 0, 0, 0));
+
+  const [totals, monthTotals, totalRecords] = await Promise.all([
+    prisma.saleFromShop.aggregate({
+      _sum: { total: true, quantity: true },
+    }),
+    prisma.saleFromShop.aggregate({
+      where: {
+        createdAt: {
+          gte: startOfMonth,
+          lt: startOfNextMonth,
+        },
+      },
+      _sum: { total: true },
+    }),
+    prisma.saleFromShop.count(),
+  ]);
+
+  return {
+    totalRecords,
+    totalRevenue: totals._sum.total ?? 0,
+    totalQuantity: totals._sum.quantity ?? 0,
+    revenueThisMonth: monthTotals._sum.total ?? 0,
+  };
+}
