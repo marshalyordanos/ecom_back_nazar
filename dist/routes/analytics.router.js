@@ -36,10 +36,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const analyticsController = __importStar(require("../controllers/analytics.controller"));
 const auth_middleware_1 = require("../middleware/auth.middleware");
+const permission_middleware_1 = require("../middleware/permission.middleware");
 const router = (0, express_1.Router)();
-router.get("/product-views", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), analyticsController.getProductViews);
-router.get("/searches", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), analyticsController.getSearches);
-router.get("/sales", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), analyticsController.getSalesReport);
-router.get("/orders", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), analyticsController.getOrdersReport);
+router.get("/product-views", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), (0, permission_middleware_1.requirePermission)("analytics", "read"), analyticsController.getProductViews);
+router.get("/searches", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), (0, permission_middleware_1.requirePermission)("analytics", "read"), analyticsController.getSearches);
+router.get("/sales", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), (0, permission_middleware_1.requirePermission)("analytics", "read"), analyticsController.getSalesReport);
+router.get("/orders", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), (0, permission_middleware_1.requirePermission)("analytics", "read"), analyticsController.getOrdersReport);
 exports.default = router;
 //# sourceMappingURL=analytics.router.js.map

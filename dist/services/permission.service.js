@@ -50,7 +50,10 @@ async function createPermission(data) {
 async function updatePermission(id, data) {
     const permission = await prisma_1.prisma.permission.update({
         where: { id },
-        data: { ...(data.resource && { resource: data.resource }), ...(data.description !== undefined && { description: data.description }) },
+        data: {
+            ...(data.resource && { resource: data.resource }),
+            ...(data.description !== undefined && { description: data.description }),
+        },
     });
     return permission;
 }

@@ -36,12 +36,33 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getInventoryAlerts = exports.getInventoryTurnover = exports.getInventoryValuation = exports.getCustomerSegments = exports.getCustomerLTV = exports.getCustomerRetention = exports.getCustomerGrowth = exports.getBrandStats = exports.getCategoryStats = exports.getProductConversion = exports.getProductPerformance = exports.getAbandonedOrders = exports.getOrderValueStats = exports.getOrderFulfillmentStats = exports.getOrderStatusStats = exports.getRefundStats = exports.getSalesForecast = exports.getSalesByChannel = exports.getSalesTrends = exports.getSearchSummary = exports.getNotificationSummary = exports.getReviewSummary = exports.getCouponUsageSummary = exports.getCouponSummary = exports.getLocationSummary = exports.getShopSummary = exports.getOutOfStock = exports.getLowStockCount = exports.getInventorySummary = exports.getVariantSummary = exports.getProductSummary = exports.getDailyPayments = exports.getPaymentMethodStats = exports.getPaymentSummary = exports.getDailyOrdersSummary = exports.getOrderRevenueSummary = exports.getOrderSummaryExtended = exports.getUserVerificationStats = exports.getUserSummary = exports.getSummaryWithDetails = exports.getShopDashboardSummary = exports.getRecentActivities = exports.getRecentOrders = exports.getNewCustomers = exports.getLowInventory = exports.getTopProducts = exports.getOrdersSummary = exports.getSalesSummary = exports.getOverview = exports.getSummary = void 0;
-exports.getUnreadNotifications = exports.getSyncStatus = exports.getSystemHealth = exports.getMostViewedProducts = exports.getNoResultSearches = exports.getTopSearchQueries = exports.getInventoryActivities = exports.getUserActivities = exports.getOrderActivities = exports.getPendingReviews = exports.getRecentReviews = exports.getRatingDistribution = exports.getExpiredCoupons = exports.getActiveCoupons = exports.getCouponPerformance = exports.getInventoryByLocation = void 0;
+exports.getCustomerLTV = exports.getCustomerRetention = exports.getCustomerGrowth = exports.getBrandStats = exports.getCategoryStats = exports.getProductConversion = exports.getProductPerformance = exports.getAbandonedOrders = exports.getOrderValueStats = exports.getOrderFulfillmentStats = exports.getOrderStatusStats = exports.getRefundStats = exports.getSalesForecast = exports.getSalesByChannel = exports.getSalesTrends = exports.getSearchSummary = exports.getNotificationSummary = exports.getReviewSummary = exports.getCouponUsageSummary = exports.getCouponSummary = exports.getLocationSummary = exports.getShopSummary = exports.getOutOfStock = exports.getLowStockCount = exports.getInventorySummary = exports.getVariantSummary = exports.getProductSummary = exports.getDailyPayments = exports.getPaymentMethodStats = exports.getPaymentSummary = exports.getDailyOrdersSummary = exports.getOrderRevenueSummary = exports.getOrderSummaryExtended = exports.getUserVerificationStats = exports.getUserSummary = exports.getSummaryWithDetails = exports.getShopDashboardSummary = exports.getRecentActivities = exports.getRecentOrders = exports.getNewCustomers = exports.getLowInventory = exports.getTopProducts = exports.getOrdersSummary = exports.getSalesSummary = exports.getOverview = exports.getGlobalPaymentsSeries = exports.getGlobalOrderStatusDistribution = exports.getGlobalOrdersCountSeries = exports.getGlobalRevenueSeries = exports.getSummary = void 0;
+exports.getCustomerDashboardCards = exports.getUnreadNotifications = exports.getSyncStatus = exports.getSystemHealth = exports.getMostViewedProducts = exports.getNoResultSearches = exports.getTopSearchQueries = exports.getInventoryActivities = exports.getUserActivities = exports.getOrderActivities = exports.getPendingReviews = exports.getRecentReviews = exports.getRatingDistribution = exports.getExpiredCoupons = exports.getActiveCoupons = exports.getCouponPerformance = exports.getInventoryByLocation = exports.getInventoryAlerts = exports.getInventoryTurnover = exports.getInventoryValuation = exports.getCustomerSegments = void 0;
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 const dashboardService = __importStar(require("../services/dashboard.service"));
+const helper_1 = require("../utils/helper");
+const prisma_1 = require("../lib/prisma");
 exports.getSummary = (0, catchAsync_1.default)(async (_req, res, _next) => {
     const data = await dashboardService.getGlobalDashboardSummary();
+    res.status(200).json({ data });
+});
+exports.getGlobalRevenueSeries = (0, catchAsync_1.default)(async (req, res, _next) => {
+    const days = parseInt(String(req.query.days), 10) || 30;
+    const data = await dashboardService.getGlobalRevenueSeries(days);
+    res.status(200).json({ data });
+});
+exports.getGlobalOrdersCountSeries = (0, catchAsync_1.default)(async (req, res, _next) => {
+    const days = parseInt(String(req.query.days), 10) || 30;
+    const data = await dashboardService.getGlobalOrdersCountSeries(days);
+    res.status(200).json({ data });
+});
+exports.getGlobalOrderStatusDistribution = (0, catchAsync_1.default)(async (_req, res, _next) => {
+    const data = await dashboardService.getGlobalOrderStatusDistribution();
+    res.status(200).json({ data });
+});
+exports.getGlobalPaymentsSeries = (0, catchAsync_1.default)(async (req, res, _next) => {
+    const days = parseInt(String(req.query.days), 10) || 30;
+    const data = await dashboardService.getGlobalPaymentsSeries(days);
     res.status(200).json({ data });
 });
 exports.getOverview = (0, catchAsync_1.default)(async (req, res, _next) => {
@@ -593,5 +614,194 @@ exports.getUnreadNotifications = (0, catchAsync_1.default)(async (req, res, _nex
     const userId = req.query.userId;
     const data = await dashboardService.getUnreadNotifications(userId);
     res.status(200).json(data);
+});
+// ===============================  customer dashboard  ===============================
+//////////////////////////////////////////////////////
+// CONTROLLER
+//////////////////////////////////////////////////////
+// export const getCustomerDashboardCards = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+//   try {
+//     const { current, previous } = getDateRanges();
+//     const [
+//       totalUsers,
+//       prevTotalUsers,
+//       activeUsers,
+//       prevActiveUsers,
+//       newUsers,
+//       prevNewUsers,
+//       customersWithOrders,
+//       prevCustomersWithOrders,
+//     ] = await Promise.all([
+//       // TOTAL USERS
+//       prisma.user.count({ where: { createdAt: current, roles: { some: { name: "user" } } } }),
+//       prisma.user.count({ where: { createdAt: previous, roles: { some: { name: "user" } } } }),
+//       // ACTIVE USERS
+//       prisma.user.count({
+//         where: { status: "ACTIVE", createdAt: current, roles: { some: { name: "user" } } },
+//       }),
+//       prisma.user.count({
+//         where: { status: "ACTIVE", createdAt: previous, roles: { some: { name: "user" } } },
+//       }),
+//       // NEW USERS (same as total but semantic)
+//       prisma.user.count({ where: { createdAt: current, roles: { some: { name: "user" } } } }),
+//       prisma.user.count({ where: { createdAt: previous, roles: { some: { name: "user" } } } }),
+//       // CUSTOMERS WITH ORDERS
+//       prisma.user.count({
+//         where: {
+//           orders: {
+//             some: { createdAt: current },
+//           },
+//           roles: { some: { name: "user" } }
+//         },
+//       }),
+//       prisma.user.count({
+//         where: {
+//           orders: {
+//             some: { createdAt: previous },
+//           },
+//           roles: { some: { name: "user" } }
+//         },
+//       }),
+//     ]);
+//     const response: DashboardResponse = {
+//       total_users: formatCard(
+//         totalUsers,
+//         calculateTrend(totalUsers, prevTotalUsers).percentChange,
+//         "Total Users"
+//       ),
+//       active_users: formatCard(
+//         activeUsers,
+//         calculateTrend(activeUsers, prevActiveUsers).percentChange,
+//         "Active Users"
+//       ),
+//       new_users: formatCard(
+//         newUsers,
+//         calculateTrend(newUsers, prevNewUsers).percentChange,
+//         "New Users This Month"
+//       ),
+//       customers_with_orders: formatCard(
+//         customersWithOrders,
+//         calculateTrend(
+//           customersWithOrders,
+//           prevCustomersWithOrders
+//         ).percentChange,
+//         "Customers With Orders"
+//       ),
+//     };
+//     return res.json(response);
+//   } catch (error) {
+//     console.error("Dashboard Error:", error);
+//     return res.status(500).json({
+//       message: "Failed to load dashboard data",
+//     });
+//   }
+// });
+exports.getCustomerDashboardCards = (0, catchAsync_1.default)(async (req, res, _next) => {
+    try {
+        //////////////////////////////////////////////////////
+        // DATE RANGES (INTERNAL ONLY FOR TREND)
+        //////////////////////////////////////////////////////
+        const now = new Date();
+        const startOfThisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+        const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+        const endOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+        const current = {
+            gte: startOfThisMonth,
+            lte: now,
+        };
+        const previous = {
+            gte: startOfLastMonth,
+            lte: endOfLastMonth,
+        };
+        //////////////////////////////////////////////////////
+        // QUERIES
+        //////////////////////////////////////////////////////
+        const [
+        // ✅ ALL TIME VALUES
+        totalUsers, activeUsers, customersWithOrders, 
+        // ✅ TREND VALUES (THIS MONTH vs LAST MONTH)
+        currentUsers, previousUsers, currentActiveUsers, previousActiveUsers, currentCustomersWithOrders, previousCustomersWithOrders,] = await Promise.all([
+            // =========================
+            // ALL USERS (NO DATE FILTER)
+            // =========================
+            prisma_1.prisma.user.count({
+                where: {
+                    roles: { some: { name: "user" } },
+                },
+            }),
+            prisma_1.prisma.user.count({
+                where: {
+                    status: "ACTIVE",
+                    roles: { some: { name: "user" } },
+                },
+            }),
+            prisma_1.prisma.user.count({
+                where: {
+                    orders: { some: {} },
+                    roles: { some: { name: "user" } },
+                },
+            }),
+            // =========================
+            // TREND (THIS MONTH)
+            // =========================
+            prisma_1.prisma.user.count({
+                where: {
+                    createdAt: current,
+                    roles: { some: { name: "user" } },
+                },
+            }),
+            // LAST MONTH
+            prisma_1.prisma.user.count({
+                where: {
+                    createdAt: previous,
+                    roles: { some: { name: "user" } },
+                },
+            }),
+            // ACTIVE TREND
+            prisma_1.prisma.user.count({
+                where: {
+                    status: "ACTIVE",
+                    createdAt: current,
+                    roles: { some: { name: "user" } },
+                },
+            }),
+            prisma_1.prisma.user.count({
+                where: {
+                    status: "ACTIVE",
+                    createdAt: previous,
+                    roles: { some: { name: "user" } },
+                },
+            }),
+            // CUSTOMERS WITH ORDERS TREND
+            prisma_1.prisma.user.count({
+                where: {
+                    orders: { some: { createdAt: current } },
+                    roles: { some: { name: "user" } },
+                },
+            }),
+            prisma_1.prisma.user.count({
+                where: {
+                    orders: { some: { createdAt: previous } },
+                    roles: { some: { name: "user" } },
+                },
+            }),
+        ]);
+        //////////////////////////////////////////////////////
+        // RESPONSE
+        //////////////////////////////////////////////////////
+        const response = {
+            total_users: (0, helper_1.formatCard)(totalUsers, (0, helper_1.calculateTrend)(currentUsers, previousUsers).percentChange, "Total Users"),
+            active_users: (0, helper_1.formatCard)(activeUsers, (0, helper_1.calculateTrend)(currentActiveUsers, previousActiveUsers).percentChange, "Active Users"),
+            new_users: (0, helper_1.formatCard)(currentUsers, (0, helper_1.calculateTrend)(currentUsers, previousUsers).percentChange, "New Users This Month"),
+            customers_with_orders: (0, helper_1.formatCard)(customersWithOrders, (0, helper_1.calculateTrend)(currentCustomersWithOrders, previousCustomersWithOrders).percentChange, "Customers With Orders"),
+        };
+        return res.json(response);
+    }
+    catch (error) {
+        console.error("Dashboard Error:", error);
+        return res.status(500).json({
+            message: "Failed to load dashboard data",
+        });
+    }
 });
 //# sourceMappingURL=dashboard.controller.js.map

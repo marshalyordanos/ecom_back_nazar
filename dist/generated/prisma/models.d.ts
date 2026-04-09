@@ -8,6 +8,7 @@ export type * from './models/RolePermission';
 export type * from './models/Brand';
 export type * from './models/ProductCategory';
 export type * from './models/Product';
+export type * from './models/Favorite';
 export type * from './models/ProductVariant';
 export type * from './models/VariantOptionValue';
 export type * from './models/OptionValue';

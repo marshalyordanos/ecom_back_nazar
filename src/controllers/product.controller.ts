@@ -61,6 +61,27 @@ export const getFeatured = catchAsync(async (req: AuthRequest, res: Response, _n
   res.status(200).json(products);
 });
 
+export const getPopular = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string | undefined;
+  const limit = Math.min(parseInt(String(req.query.limit), 10) || 10, 50);
+  const products = await productService.getPopularProducts(shopId, limit);
+  res.status(200).json(products);
+});
+
+export const getNewArrivals = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string | undefined;
+  const limit = Math.min(parseInt(String(req.query.limit), 10) || 10, 50);
+  const products = await productService.getNewProducts(shopId, limit);
+  res.status(200).json(products);
+});
+
+export const getMostViewed = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string | undefined;
+  const limit = Math.min(parseInt(String(req.query.limit), 10) || 10, 50);
+  const products = await productService.getMostViewedProducts(shopId, limit);
+  res.status(200).json(products);
+});
+
 
 
 export const getVariantById = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {

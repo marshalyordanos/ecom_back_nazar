@@ -10,10 +10,10 @@ export declare function getProductViews(filters: {
             slug: string;
         };
     } & {
-        userId: string | null;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        userId: string | null;
         productId: string;
         sessionId: string | null;
     })[];
@@ -29,10 +29,10 @@ export declare function getSearchLogs(filters: {
 }): Promise<{
     logs: {
         query: string;
-        userId: string | null;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        userId: string | null;
     }[];
     byQuery: Record<string, number>;
 }>;
@@ -46,21 +46,21 @@ export declare function getSalesReport(filters: {
         items: {
             id: string;
             total: number;
-            price: number;
-            quantity: number;
             variantId: string;
+            quantity: number;
+            price: number;
             orderId: string;
             productName: string;
             variantName: string | null;
         }[];
     } & {
-        userId: string;
         id: string;
         status: import("../generated/prisma/enums").OrderStatus;
         createdAt: Date;
         updatedAt: Date;
-        currency: string;
+        userId: string;
         shopId: string;
+        currency: string;
         orderNumber: string;
         subtotal: number;
         taxTotal: number;
@@ -87,21 +87,21 @@ export declare function getOrdersReport(filters: {
         items: {
             id: string;
             total: number;
-            price: number;
-            quantity: number;
             variantId: string;
+            quantity: number;
+            price: number;
             orderId: string;
             productName: string;
             variantName: string | null;
         }[];
     } & {
-        userId: string;
         id: string;
         status: import("../generated/prisma/enums").OrderStatus;
         createdAt: Date;
         updatedAt: Date;
-        currency: string;
+        userId: string;
         shopId: string;
+        currency: string;
         orderNumber: string;
         subtotal: number;
         taxTotal: number;

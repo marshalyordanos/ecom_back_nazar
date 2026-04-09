@@ -36,12 +36,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const shipmentController = __importStar(require("../controllers/shipment.controller"));
 const auth_middleware_1 = require("../middleware/auth.middleware");
+const permission_middleware_1 = require("../middleware/permission.middleware");
 const router = (0, express_1.Router)();
 router.use(auth_middleware_1.protect);
 router.use((0, auth_middleware_1.restrictTo)("admin"));
-router.get("/", shipmentController.listShipments);
-router.get("/:id/track", shipmentController.getTracking);
-router.post("/:id/update-status", shipmentController.updateStatus);
-router.get("/:id", shipmentController.getShipmentById);
+router.get("/", (0, permission_middleware_1.requirePermission)("shipments", "read"), shipmentController.listShipments);
+router.get("/:id/track", (0, permission_middleware_1.requirePermission)("shipments", "read"), shipmentController.getTracking);
+router.post("/:id/update-status", (0, permission_middleware_1.requirePermission)("shipments", "update"), shipmentController.updateStatus);
+router.get("/:id", (0, permission_middleware_1.requirePermission)("shipments", "read"), shipmentController.getShipmentById);
 exports.default = router;
 //# sourceMappingURL=shipment.router.js.map

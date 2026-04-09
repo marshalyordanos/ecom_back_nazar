@@ -36,9 +36,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const syncController = __importStar(require("../controllers/sync.controller"));
 const auth_middleware_1 = require("../middleware/auth.middleware");
+const permission_middleware_1 = require("../middleware/permission.middleware");
 const router = (0, express_1.Router)();
-router.post("/products", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), syncController.triggerSync);
-router.get("/logs", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), syncController.listSyncLogs);
-router.get("/logs/:id", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), syncController.getSyncLogById);
+router.post("/products", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), (0, permission_middleware_1.requirePermission)("sync", "create"), syncController.triggerSync);
+router.get("/logs", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), (0, permission_middleware_1.requirePermission)("sync", "read"), syncController.listSyncLogs);
+router.get("/logs/:id", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), (0, permission_middleware_1.requirePermission)("sync", "read"), syncController.getSyncLogById);
 exports.default = router;
 //# sourceMappingURL=sync.router.js.map

@@ -60,3 +60,36 @@ export const formatCard = (
   subtitle,
 });
 
+/**
+ * Normalize Ethiopian phone numbers to +251XXXXXXXXX for Chapa.
+ * Examples:
+ *  - 0912345678 -> +251912345678
+ *  - 912345678  -> +251912345678
+ *  - 251912345678 -> +251912345678
+ *  - +251912345678 -> +251912345678
+ */
+export const formatPhoneTo251 = (input: string): string => {
+  const trimmed = String(input || "").trim();
+  if (!trimmed) return "+251";
+
+  if (trimmed.startsWith("+")) {
+    const digits = trimmed.slice(1).replace(/\D/g, "");
+    if (digits.startsWith("251")) {
+      return `+251${digits.slice(3)}`;
+    }
+    if (digits.startsWith("0")) {
+      return `+251${digits.slice(1)}`;
+    }
+    if (digits.length === 9 && digits.startsWith("9")) {
+      return `+251${digits}`;
+    }
+    return `+251${digits}`;
+  }
+
+  const rawPhone = trimmed.replace(/\D/g, "");
+  if (rawPhone.startsWith("251")) return `+251${rawPhone.slice(3)}`;
+  if (rawPhone.startsWith("0")) return `+251${rawPhone.slice(1)}`;
+  if (rawPhone.length === 9 && rawPhone.startsWith("9")) return `+251${rawPhone}`;
+  return `+251${rawPhone}`;
+};
+

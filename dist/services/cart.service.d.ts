@@ -7,8 +7,8 @@ export declare function getOrCreateCart(userId: string): Promise<{
             };
             media: {
                 url: string;
-                type: string;
                 id: string;
+                type: string;
                 variantId: string;
                 position: number | null;
             }[];
@@ -18,10 +18,10 @@ export declare function getOrCreateCart(userId: string): Promise<{
             createdAt: Date;
             updatedAt: Date;
             image: string | null;
-            sku: string;
-            productId: string;
-            barcode: string | null;
             price: number;
+            productId: string;
+            sku: string;
+            barcode: string | null;
             comparePrice: number | null;
             costPrice: number | null;
             weight: number | null;
@@ -29,17 +29,17 @@ export declare function getOrCreateCart(userId: string): Promise<{
     } & {
         id: string;
         createdAt: Date;
-        price: number;
-        quantity: number;
         variantId: string;
+        quantity: number;
+        price: number;
         cartId: string;
     })[];
 } & {
-    userId: string;
     id: string;
     status: string;
     createdAt: Date;
     updatedAt: Date;
+    userId: string;
 }>;
 export declare function addItem(userId: string, variantId: string, quantity: number, price: number): Promise<{
     items: ({
@@ -50,8 +50,8 @@ export declare function addItem(userId: string, variantId: string, quantity: num
             };
             media: {
                 url: string;
-                type: string;
                 id: string;
+                type: string;
                 variantId: string;
                 position: number | null;
             }[];
@@ -61,10 +61,10 @@ export declare function addItem(userId: string, variantId: string, quantity: num
             createdAt: Date;
             updatedAt: Date;
             image: string | null;
-            sku: string;
-            productId: string;
-            barcode: string | null;
             price: number;
+            productId: string;
+            sku: string;
+            barcode: string | null;
             comparePrice: number | null;
             costPrice: number | null;
             weight: number | null;
@@ -72,17 +72,17 @@ export declare function addItem(userId: string, variantId: string, quantity: num
     } & {
         id: string;
         createdAt: Date;
-        price: number;
-        quantity: number;
         variantId: string;
+        quantity: number;
+        price: number;
         cartId: string;
     })[];
 } & {
-    userId: string;
     id: string;
     status: string;
     createdAt: Date;
     updatedAt: Date;
+    userId: string;
 }>;
 export declare function updateItemQuantity(userId: string, itemId: string, quantity: number): Promise<{
     items: ({
@@ -93,8 +93,8 @@ export declare function updateItemQuantity(userId: string, itemId: string, quant
             };
             media: {
                 url: string;
-                type: string;
                 id: string;
+                type: string;
                 variantId: string;
                 position: number | null;
             }[];
@@ -104,10 +104,10 @@ export declare function updateItemQuantity(userId: string, itemId: string, quant
             createdAt: Date;
             updatedAt: Date;
             image: string | null;
-            sku: string;
-            productId: string;
-            barcode: string | null;
             price: number;
+            productId: string;
+            sku: string;
+            barcode: string | null;
             comparePrice: number | null;
             costPrice: number | null;
             weight: number | null;
@@ -115,17 +115,17 @@ export declare function updateItemQuantity(userId: string, itemId: string, quant
     } & {
         id: string;
         createdAt: Date;
-        price: number;
-        quantity: number;
         variantId: string;
+        quantity: number;
+        price: number;
         cartId: string;
     })[];
 } & {
-    userId: string;
     id: string;
     status: string;
     createdAt: Date;
     updatedAt: Date;
+    userId: string;
 }>;
 export declare function removeItem(userId: string, itemId: string): Promise<{
     items: ({
@@ -136,8 +136,8 @@ export declare function removeItem(userId: string, itemId: string): Promise<{
             };
             media: {
                 url: string;
-                type: string;
                 id: string;
+                type: string;
                 variantId: string;
                 position: number | null;
             }[];
@@ -147,10 +147,10 @@ export declare function removeItem(userId: string, itemId: string): Promise<{
             createdAt: Date;
             updatedAt: Date;
             image: string | null;
-            sku: string;
-            productId: string;
-            barcode: string | null;
             price: number;
+            productId: string;
+            sku: string;
+            barcode: string | null;
             comparePrice: number | null;
             costPrice: number | null;
             weight: number | null;
@@ -158,17 +158,17 @@ export declare function removeItem(userId: string, itemId: string): Promise<{
     } & {
         id: string;
         createdAt: Date;
-        price: number;
-        quantity: number;
         variantId: string;
+        quantity: number;
+        price: number;
         cartId: string;
     })[];
 } & {
-    userId: string;
     id: string;
     status: string;
     createdAt: Date;
     updatedAt: Date;
+    userId: string;
 }>;
 export declare function checkout(userId: string, data: {
     shopId: string;
@@ -204,13 +204,13 @@ export declare function handleChapaCallback(data: any): Promise<{
             orderId: string;
         } | null;
     } & {
-        userId: string;
         id: string;
         status: import("../generated/prisma/enums").OrderStatus;
         createdAt: Date;
         updatedAt: Date;
-        currency: string;
+        userId: string;
         shopId: string;
+        currency: string;
         orderNumber: string;
         subtotal: number;
         taxTotal: number;
@@ -222,11 +222,11 @@ export declare function handleChapaCallback(data: any): Promise<{
     status: import("../generated/prisma/enums").PaymentStatus;
     createdAt: Date;
     currency: string;
+    orderId: string;
     provider: string;
     providerTransactionId: string | null;
     amount: number;
     transactionId: string | null;
     paidAt: Date | null;
-    orderId: string;
 }>;
 //# sourceMappingURL=cart.service.d.ts.map

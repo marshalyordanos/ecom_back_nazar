@@ -30,6 +30,8 @@ async function getMe(userId) {
             emailVerifiedAt: true,
             phoneVerifiedAt: true,
             roles: { select: { id: true, name: true, description: true } },
+            locationId: true,
+            location: { select: { id: true, name: true, shopId: true } },
             createdAt: true,
             updatedAt: true,
         },
@@ -86,11 +88,19 @@ async function listUsers(query, onlyUsers) {
         searchableFields: userSearchableFields,
         dateFields: userDateFields,
     });
-    const { skip, take, where, orderBy } = feature.getQuery();
-    console.log('query', onlyUsers);
-    if (onlyUsers) {
-        where.roles = { some: { name: "user" } };
-    }
+    const { skip, take, where: rawWhere, orderBy } = feature.getQuery();
+    const w = { ...rawWhere };
+    const roleIdFromFilter = w.roleId;
+    delete w.roleId;
+    const roleId = query.roleId || roleIdFromFilter;
+    const parts = [];
+    if (Object.keys(w).length > 0)
+        parts.push(w);
+    if (onlyUsers)
+        parts.push({ roles: { some: { name: "user" } } });
+    if (roleId)
+        parts.push({ roles: { some: { id: roleId } } });
+    const where = parts.length === 0 ? {} : parts.length === 1 ? parts[0] : { AND: parts };
     const [users, total] = await Promise.all([
         prisma_1.prisma.user.findMany({
             where,
@@ -105,7 +115,9 @@ async function listUsers(query, onlyUsers) {
                 lastName: true,
                 avatarUrl: true,
                 status: true,
-                roles: { select: { name: true } },
+                locationId: true,
+                location: { select: { id: true, name: true, shopId: true } },
+                roles: { select: { id: true, name: true } },
                 createdAt: true,
                 updatedAt: true,
             },
@@ -131,10 +143,24 @@ async function updateUser(id, data) {
     if (data.roleIds !== undefined) {
         updateData.roles = { set: data.roleIds.map((rid) => ({ id: rid })) };
     }
+    if (data.locationId !== undefined) {
+        if (data.locationId === null) {
+            updateData.locationId = null;
+        }
+        else {
+            const loc = await prisma_1.prisma.shopLocation.findUnique({ where: { id: data.locationId } });
+            if (!loc)
+                throw new appError_1.default("Location not found", 404);
+            updateData.locationId = data.locationId;
+        }
+    }
     const user = await prisma_1.prisma.user.update({
         where: { id },
         data: updateData,
-        include: { roles: { select: { id: true, name: true } } },
+        include: {
+            roles: { select: { id: true, name: true } },
+            location: { select: { id: true, name: true, shopId: true } },
+        },
     });
     const { passwordHash, ...rest } = user;
     return rest;

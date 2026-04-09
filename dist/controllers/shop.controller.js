@@ -36,7 +36,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addSalesFromShop = exports.deleteLocation = exports.updateLocation = exports.addShopLocation = exports.listShopLocations = exports.createOrUpdateShop = exports.updateShop = exports.getShopById = exports.listShops = void 0;
+exports.deleteSalesFromShopById = exports.updateSalesFromShopById = exports.getSalesFromShopById = exports.getSalesFromShop = exports.getSalesFromShopStats = exports.addSalesFromShop = exports.deleteLocation = exports.updateLocation = exports.addShopLocation = exports.listShopLocations = exports.createOrUpdateShop = exports.updateShop = exports.getShopById = exports.listShops = void 0;
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 const shopService = __importStar(require("../services/shop.service"));
 const queryParser_1 = require("../utils/queryParser");
@@ -76,7 +76,30 @@ exports.deleteLocation = (0, catchAsync_1.default)(async (req, res, _next) => {
     res.status(200).json(result);
 });
 exports.addSalesFromShop = (0, catchAsync_1.default)(async (req, res, _next) => {
-    const sales = await shopService.addSalesFromShop({ locationId: req.body.locationId, variantId: req.body.variantId, quantity: req.body.quantity });
-    res.status(201).json(sales);
+    const result = await shopService.addSalesFromShop(req.body);
+    res.status(201).json(result);
+});
+exports.getSalesFromShopStats = (0, catchAsync_1.default)(async (_req, res, _next) => {
+    const stats = await shopService.getSalesFromShopStats();
+    res.status(200).json(stats);
+});
+exports.getSalesFromShop = (0, catchAsync_1.default)(async (req, res, _next) => {
+    const query = (0, queryParser_1.parseListQuery)(req);
+    const shopId = typeof req.query.shopId === "string" ? req.query.shopId : undefined;
+    const locationId = typeof req.query.locationId === "string" ? req.query.locationId : undefined;
+    const result = await shopService.listSalesFromShop({ ...query, shopId, locationId });
+    res.status(200).json(result);
+});
+exports.getSalesFromShopById = (0, catchAsync_1.default)(async (req, res, _next) => {
+    const sale = await shopService.getSaleFromShopById(req.params.id);
+    res.status(200).json(sale);
+});
+exports.updateSalesFromShopById = (0, catchAsync_1.default)(async (req, res, _next) => {
+    const sale = await shopService.updateSaleFromShop(req.params.id, req.body);
+    res.status(200).json(sale);
+});
+exports.deleteSalesFromShopById = (0, catchAsync_1.default)(async (req, res, _next) => {
+    const result = await shopService.deleteSaleFromShop(req.params.id);
+    res.status(200).json(result);
 });
 //# sourceMappingURL=shop.controller.js.map

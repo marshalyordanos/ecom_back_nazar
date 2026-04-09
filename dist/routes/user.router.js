@@ -37,12 +37,13 @@ const express_1 = require("express");
 const userController = __importStar(require("../controllers/user.controller"));
 const authController = __importStar(require("../controllers/auth.controller"));
 const auth_middleware_1 = require("../middleware/auth.middleware");
+const permission_middleware_1 = require("../middleware/permission.middleware");
 const router = (0, express_1.Router)();
 router.use(auth_middleware_1.protect);
 router.get("/me", userController.getMe);
 router.patch("/me", userController.updateMe);
 router.patch("/me/password", userController.updateMyPassword);
-router.post("/", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), authController.register);
+router.post("/", (0, auth_middleware_1.restrictTo)("admin"), (0, permission_middleware_1.requirePermission)("users", "create"), authController.register);
 // ===============================
 // CUSTOMER NOTIFICATIONS (ME)
 // ===============================
@@ -56,9 +57,9 @@ router.post("/notifications/:id/read", userController.markMyNotificationRead);
 router.get("/saved-addresses", userController.listMySavedAddresses);
 router.post("/saved-addresses", userController.addMySavedAddress);
 router.delete("/saved-addresses/:id", userController.deleteMySavedAddress);
-router.get("/", (0, auth_middleware_1.restrictTo)("admin"), userController.listUsers);
-router.get("/:id", (0, auth_middleware_1.restrictTo)("admin"), userController.getById);
-router.patch("/:id", (0, auth_middleware_1.restrictTo)("admin"), userController.updateUser);
-router.delete("/:id", (0, auth_middleware_1.restrictTo)("admin"), userController.deactivateUser);
+router.get("/", (0, auth_middleware_1.restrictTo)("admin"), (0, permission_middleware_1.requirePermission)("users", "read"), userController.listUsers);
+router.get("/:id", (0, auth_middleware_1.restrictTo)("admin"), (0, permission_middleware_1.requirePermission)("users", "read"), userController.getById);
+router.patch("/:id", (0, auth_middleware_1.restrictTo)("admin"), (0, permission_middleware_1.requirePermission)("users", "update"), userController.updateUser);
+router.delete("/:id", (0, auth_middleware_1.restrictTo)("admin"), (0, permission_middleware_1.requirePermission)("users", "delete"), userController.deactivateUser);
 exports.default = router;
 //# sourceMappingURL=user.router.js.map

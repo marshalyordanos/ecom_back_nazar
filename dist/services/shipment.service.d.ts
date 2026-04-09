@@ -30,13 +30,13 @@ export declare function listShipments(query: {
 }>;
 export declare function getShipmentById(id: string): Promise<{
     order: {
-        userId: string;
         id: string;
         status: import("../generated/prisma/enums").OrderStatus;
         createdAt: Date;
         updatedAt: Date;
-        currency: string;
+        userId: string;
         shopId: string;
+        currency: string;
         orderNumber: string;
         subtotal: number;
         taxTotal: number;

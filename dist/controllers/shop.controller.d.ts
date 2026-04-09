@@ -9,4 +9,9 @@ export declare const addShopLocation: (req: AuthRequest, res: Response, next: Ne
 export declare const updateLocation: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const deleteLocation: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const addSalesFromShop: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const getSalesFromShopStats: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const getSalesFromShop: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const getSalesFromShopById: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const updateSalesFromShopById: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const deleteSalesFromShopById: (req: AuthRequest, res: Response, next: NextFunction) => void;
 //# sourceMappingURL=shop.controller.d.ts.map

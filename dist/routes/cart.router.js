@@ -37,12 +37,12 @@ const express_1 = require("express");
 const cartController = __importStar(require("../controllers/cart.controller"));
 const auth_middleware_1 = require("../middleware/auth.middleware");
 const router = (0, express_1.Router)();
+router.all("/chapa-callback", cartController.handleChapaCallback);
 router.use(auth_middleware_1.protect);
 router.get("/", cartController.getCart);
 router.post("/", cartController.addToCart);
 router.patch("/items/:id", cartController.updateCartItem);
 router.delete("/items/:id", cartController.removeCartItem);
 router.post("/checkout", cartController.checkout);
-router.all("/chapa-callback", cartController.handleChapaCallback);
 exports.default = router;
 //# sourceMappingURL=cart.router.js.map

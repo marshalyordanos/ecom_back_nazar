@@ -36,10 +36,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const statController = __importStar(require("../controllers/stat.controller"));
 const auth_middleware_1 = require("../middleware/auth.middleware");
+const permission_middleware_1 = require("../middleware/permission.middleware");
 const router = (0, express_1.Router)();
 router.use(auth_middleware_1.protect);
 router.use((0, auth_middleware_1.restrictTo)('admin'));
-router.get('/ecommerce/users', statController.getEcommerceUsers);
-router.get('/ecommerce/summary', statController.getEcommerceSummary);
+router.get('/ecommerce/users', (0, permission_middleware_1.requirePermission)('statistics', 'read'), statController.getEcommerceUsers);
+router.get('/ecommerce/summary', (0, permission_middleware_1.requirePermission)('statistics', 'read'), statController.getEcommerceSummary);
 exports.default = router;
 //# sourceMappingURL=stat.router.js.map

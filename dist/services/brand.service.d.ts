@@ -29,13 +29,13 @@ export declare function getBrandById(id: string): Promise<{
         createdAt: Date;
         updatedAt: Date;
         description: string | null;
-        slug: string;
         shopId: string;
-        isFeatured: boolean;
-        track: string | null;
+        slug: string;
         shortDescription: string | null;
         brandId: string | null;
         categoryId: string | null;
+        track: string | null;
+        isFeatured: boolean;
     }[];
 } & {
     name: string;

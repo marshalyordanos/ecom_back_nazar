@@ -36,6 +36,7 @@ export declare const ModelName: {
     readonly Brand: "Brand";
     readonly ProductCategory: "ProductCategory";
     readonly Product: "Product";
+    readonly Favorite: "Favorite";
     readonly ProductVariant: "ProductVariant";
     readonly VariantOptionValue: "VariantOptionValue";
     readonly OptionValue: "OptionValue";
@@ -113,6 +114,7 @@ export declare const UserScalarFieldEnum: {
     readonly status: "status";
     readonly emailVerifiedAt: "emailVerifiedAt";
     readonly phoneVerifiedAt: "phoneVerifiedAt";
+    readonly locationId: "locationId";
     readonly createdAt: "createdAt";
     readonly updatedAt: "updatedAt";
 };
@@ -191,6 +193,13 @@ export declare const ProductScalarFieldEnum: {
     readonly updatedAt: "updatedAt";
 };
 export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum];
+export declare const FavoriteScalarFieldEnum: {
+    readonly id: "id";
+    readonly userId: "userId";
+    readonly productId: "productId";
+    readonly createdAt: "createdAt";
+};
+export type FavoriteScalarFieldEnum = (typeof FavoriteScalarFieldEnum)[keyof typeof FavoriteScalarFieldEnum];
 export declare const ProductVariantScalarFieldEnum: {
     readonly id: "id";
     readonly productId: "productId";

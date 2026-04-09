@@ -11,6 +11,9 @@ exports.updateProduct = updateProduct;
 exports.deleteProduct = deleteProduct;
 exports.listVariants = listVariants;
 exports.getFeaturedProducts = getFeaturedProducts;
+exports.getNewProducts = getNewProducts;
+exports.getPopularProducts = getPopularProducts;
+exports.getMostViewedProducts = getMostViewedProducts;
 exports.getVariantById = getVariantById;
 exports.createVariant = createVariant;
 exports.updateVariant = updateVariant;
@@ -205,6 +208,92 @@ async function getFeaturedProducts(shopId, limit = 10) {
     });
     return products;
 }
+async function getNewProducts(shopId, limit = 10) {
+    const where = { status: "ACTIVE" };
+    if (shopId)
+        where.shopId = shopId;
+    return prisma_1.prisma.product.findMany({
+        where,
+        orderBy: { createdAt: "desc" },
+        take: limit,
+        include: {
+            brand: { select: { id: true, name: true, slug: true } },
+            category: { select: { id: true, name: true, slug: true } },
+            variants: {
+                take: 3,
+                include: { media: { take: 1 } },
+            },
+        },
+    });
+}
+async function getPopularProducts(shopId, limit = 10) {
+    const grouped = await prisma_1.prisma.orderItem.groupBy({
+        by: ["variantId"],
+        _sum: { quantity: true },
+        where: shopId ? { order: { shopId } } : undefined,
+        orderBy: { _sum: { quantity: "desc" } },
+        take: Math.max(limit * 4, 20),
+    });
+    if (!grouped.length)
+        return [];
+    const variantIds = grouped.map((g) => g.variantId);
+    const variants = await prisma_1.prisma.productVariant.findMany({
+        where: { id: { in: variantIds } },
+        select: { id: true, productId: true },
+    });
+    const productIdsByVariantId = new Map(variants.map((v) => [v.id, v.productId]));
+    const seen = new Set();
+    const rankedProductIds = [];
+    for (const row of grouped) {
+        const productId = productIdsByVariantId.get(row.variantId);
+        if (!productId || seen.has(productId))
+            continue;
+        seen.add(productId);
+        rankedProductIds.push(productId);
+        if (rankedProductIds.length >= limit)
+            break;
+    }
+    if (!rankedProductIds.length)
+        return [];
+    const products = await prisma_1.prisma.product.findMany({
+        where: { id: { in: rankedProductIds }, status: "ACTIVE" },
+        include: {
+            brand: { select: { id: true, name: true, slug: true } },
+            category: { select: { id: true, name: true, slug: true } },
+            variants: {
+                take: 3,
+                include: { media: { take: 1 } },
+            },
+        },
+    });
+    const byId = new Map(products.map((p) => [p.id, p]));
+    return rankedProductIds.map((id) => byId.get(id)).filter(Boolean);
+}
+async function getMostViewedProducts(shopId, limit = 10) {
+    const grouped = await prisma_1.prisma.productView.groupBy({
+        by: ["productId"],
+        where: shopId ? { product: { shopId } } : undefined,
+        _count: { id: true },
+        orderBy: { _count: { id: "desc" } },
+        take: Math.max(limit * 2, 20),
+    });
+    if (!grouped.length)
+        return [];
+    const rankedIds = grouped.map((g) => g.productId);
+    const products = await prisma_1.prisma.product.findMany({
+        where: { id: { in: rankedIds }, status: "ACTIVE" },
+        include: {
+            brand: { select: { id: true, name: true, slug: true } },
+            category: { select: { id: true, name: true, slug: true } },
+            variants: {
+                take: 3,
+                include: { media: { take: 1 } },
+            },
+        },
+    });
+    const byId = new Map(products.map((p) => [p.id, p]));
+    return rankedIds.map((id) => byId.get(id)).filter(Boolean).slice(0, limit);
+}
 async function getVariantById(id) {
     const variant = await prisma_1.prisma.productVariant.findUnique({
         where: { id },
@@ -220,16 +309,6 @@ async function getVariantById(id) {
 }
 // --------- Variants ---------
 async function createVariant(productId, data, file) {
-    if (!data.locationId) {
-        throw new appError_1.default('Location is required', 400);
-    }
-    if (!data.type) {
-        throw new appError_1.default('Type is required', 400);
-    }
-    if (!data.quantity) {
-        throw new appError_1.default('Quantity is required', 400);
-    }
-    data.quantity = Number(data.quantity);
     if (!file) {
         throw new appError_1.default('No file uploaded', 400);
     }
@@ -262,40 +341,22 @@ async function createVariant(productId, data, file) {
             },
         });
         // 2. Inventory logic ported from inventory.service.ts
-        let inventory = await prismaTx.inventory.findFirst({
-            where: { variantId: variant.id, locationId: data.locationId },
+        let locations = await prismaTx.shopLocation.findMany({
+            where: {
+                shopId: product.shopId,
+            },
         });
-        if (!inventory) {
-            inventory = await prismaTx.inventory.create({
+        // create inventory for each location
+        await Promise.all(locations.map(async (location) => {
+            await prismaTx.inventory.create({
                 data: {
                     variantId: variant.id,
-                    locationId: data.locationId,
+                    locationId: location.id,
                     quantity: 0,
                     reservedQuantity: 0,
                 },
             });
-        }
-        const newQty = data.type === "PURCHASE" || data.type === "RETURN" || data.type === "TRANSFER"
-            ? inventory.quantity + data.quantity
-            : data.type === "SALE" || data.type === "ADJUSTMENT"
-                ? inventory.quantity - data.quantity
-                : inventory.quantity;
-        await Promise.all([
-            prismaTx.inventoryMovement.create({
-                data: {
-                    variantId: variant.id,
-                    locationId: data.locationId,
-                    inventoryId: inventory.id,
-                    type: data.type,
-                    quantity: data.quantity,
-                    referenceId: undefined, // Set if needed
-                },
-            }),
-            prismaTx.inventory.update({
-                where: { id: inventory.id },
-                data: { quantity: Math.max(0, newQty) },
-            }),
-        ]);
+        }));
         return await prismaTx.productVariant.findUnique({
             where: { id: variant.id },
             include: {

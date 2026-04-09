@@ -1,11 +1,10 @@
 export declare function listMySavedAddresses(userId: string): Promise<{
     name: string;
-    userId: string;
     id: string;
     phone: string;
     createdAt: Date;
     updatedAt: Date;
-    label: string;
+    userId: string;
     addressLine1: string;
     addressLine2: string | null;
     city: string;
@@ -14,6 +13,7 @@ export declare function listMySavedAddresses(userId: string): Promise<{
     postalCode: string | null;
     latitude: number | null;
     longitude: number | null;
+    label: string;
 }[]>;
 export declare function addMySavedAddress(userId: string, data: {
     label: string;
@@ -29,12 +29,11 @@ export declare function addMySavedAddress(userId: string, data: {
     longitude?: number;
 }): Promise<{
     name: string;
-    userId: string;
     id: string;
     phone: string;
     createdAt: Date;
     updatedAt: Date;
-    label: string;
+    userId: string;
     addressLine1: string;
     addressLine2: string | null;
     city: string;
@@ -43,6 +42,7 @@ export declare function addMySavedAddress(userId: string, data: {
     postalCode: string | null;
     latitude: number | null;
     longitude: number | null;
+    label: string;
 }>;
 export declare function deleteMySavedAddress(userId: string, addressId: string): Promise<{
     message: string;

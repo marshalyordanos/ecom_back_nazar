@@ -1,10 +1,5 @@
-export declare function listPermissions(query: {
-    page?: number;
-    pageSize?: number;
-    search?: string;
-    filter?: string;
-    sort?: string;
-}): Promise<{
+import type { ParsedQuery } from "../utils/queryParser";
+export declare function listPermissions(query: ParsedQuery): Promise<{
     data: ({
         rolePermissions: ({
             role: {

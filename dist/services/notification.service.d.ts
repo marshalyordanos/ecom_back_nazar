@@ -10,11 +10,11 @@ export interface CreateNotificationInput {
  * Create a notification in DB and publish to Redis for real-time delivery via Socket.io.
  */
 export declare function createNotification(input: CreateNotificationInput): Promise<{
-    userId: string | null;
-    type: string;
     id: string;
     createdAt: Date;
     updatedAt: Date;
+    userId: string | null;
+    type: string;
     message: string;
     title: string;
     readAt: Date | null;
@@ -29,11 +29,11 @@ export declare function listMyNotifications(userId: string, query?: {
     pageSize?: number;
 }): Promise<{
     data: {
-        userId: string | null;
-        type: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        userId: string | null;
+        type: string;
         message: string;
         title: string;
         readAt: Date | null;

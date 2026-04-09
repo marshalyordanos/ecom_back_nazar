@@ -222,6 +222,94 @@ export async function getFeaturedProducts(shopId?: string, limit = 10) {
   return products;
 }
 
+export async function getNewProducts(shopId?: string, limit = 10) {
+  const where: Record<string, unknown> = { status: "ACTIVE" };
+  if (shopId) (where as any).shopId = shopId;
+  return prisma.product.findMany({
+    where,
+    orderBy: { createdAt: "desc" },
+    take: limit,
+    include: {
+      brand: { select: { id: true, name: true, slug: true } },
+      category: { select: { id: true, name: true, slug: true } },
+      variants: {
+        take: 3,
+        include: { media: { take: 1 } },
+      },
+    },
+  });
+}
+
+export async function getPopularProducts(shopId?: string, limit = 10) {
+  const grouped = await prisma.orderItem.groupBy({
+    by: ["variantId"],
+    _sum: { quantity: true },
+    where: shopId ? { order: { shopId } } : undefined,
+    orderBy: { _sum: { quantity: "desc" } },
+    take: Math.max(limit * 4, 20),
+  });
+
+  if (!grouped.length) return [];
+
+  const variantIds = grouped.map((g) => g.variantId);
+  const variants = await prisma.productVariant.findMany({
+    where: { id: { in: variantIds } },
+    select: { id: true, productId: true },
+  });
+  const productIdsByVariantId = new Map(variants.map((v) => [v.id, v.productId]));
+
+  const seen = new Set<string>();
+  const rankedProductIds: string[] = [];
+  for (const row of grouped) {
+    const productId = productIdsByVariantId.get(row.variantId);
+    if (!productId || seen.has(productId)) continue;
+    seen.add(productId);
+    rankedProductIds.push(productId);
+    if (rankedProductIds.length >= limit) break;
+  }
+  if (!rankedProductIds.length) return [];
+
+  const products = await prisma.product.findMany({
+    where: { id: { in: rankedProductIds }, status: "ACTIVE" },
+    include: {
+      brand: { select: { id: true, name: true, slug: true } },
+      category: { select: { id: true, name: true, slug: true } },
+      variants: {
+        take: 3,
+        include: { media: { take: 1 } },
+      },
+    },
+  });
+  const byId = new Map(products.map((p) => [p.id, p]));
+  return rankedProductIds.map((id) => byId.get(id)).filter(Boolean);
+}
+
+export async function getMostViewedProducts(shopId?: string, limit = 10) {
+  const grouped = await prisma.productView.groupBy({
+    by: ["productId"],
+    where: shopId ? { product: { shopId } } : undefined,
+    _count: { id: true },
+    orderBy: { _count: { id: "desc" } },
+    take: Math.max(limit * 2, 20),
+  });
+
+  if (!grouped.length) return [];
+  const rankedIds = grouped.map((g) => g.productId);
+  const products = await prisma.product.findMany({
+    where: { id: { in: rankedIds }, status: "ACTIVE" },
+    include: {
+      brand: { select: { id: true, name: true, slug: true } },
+      category: { select: { id: true, name: true, slug: true } },
+      variants: {
+        take: 3,
+        include: { media: { take: 1 } },
+      },
+    },
+  });
+  const byId = new Map(products.map((p) => [p.id, p]));
+  return rankedIds.map((id) => byId.get(id)).filter(Boolean).slice(0, limit);
+}
+
 export async function getVariantById(id: string) {
   const variant = await prisma.productVariant.findUnique({
     where: { id },

@@ -240,6 +240,7 @@ export type ShopLocationWhereInput = {
     inventories?: Prisma.InventoryListRelationFilter;
     sales?: Prisma.SaleFromShopListRelationFilter;
     movements?: Prisma.InventoryMovementListRelationFilter;
+    users?: Prisma.UserListRelationFilter;
 };
 export type ShopLocationOrderByWithRelationInput = {
     id?: Prisma.SortOrder;
@@ -259,6 +260,7 @@ export type ShopLocationOrderByWithRelationInput = {
     inventories?: Prisma.InventoryOrderByRelationAggregateInput;
     sales?: Prisma.SaleFromShopOrderByRelationAggregateInput;
     movements?: Prisma.InventoryMovementOrderByRelationAggregateInput;
+    users?: Prisma.UserOrderByRelationAggregateInput;
 };
 export type ShopLocationWhereUniqueInput = Prisma.AtLeast<{
     id?: string;
@@ -281,6 +283,7 @@ export type ShopLocationWhereUniqueInput = Prisma.AtLeast<{
     inventories?: Prisma.InventoryListRelationFilter;
     sales?: Prisma.SaleFromShopListRelationFilter;
     movements?: Prisma.InventoryMovementListRelationFilter;
+    users?: Prisma.UserListRelationFilter;
 }, "id">;
 export type ShopLocationOrderByWithAggregationInput = {
     id?: Prisma.SortOrder;
@@ -337,6 +340,7 @@ export type ShopLocationCreateInput = {
     inventories?: Prisma.InventoryCreateNestedManyWithoutLocationInput;
     sales?: Prisma.SaleFromShopCreateNestedManyWithoutLocationInput;
     movements?: Prisma.InventoryMovementCreateNestedManyWithoutLocationInput;
+    users?: Prisma.UserCreateNestedManyWithoutLocationInput;
 };
 export type ShopLocationUncheckedCreateInput = {
     id?: string;
@@ -355,6 +359,7 @@ export type ShopLocationUncheckedCreateInput = {
     inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutLocationInput;
     sales?: Prisma.SaleFromShopUncheckedCreateNestedManyWithoutLocationInput;
     movements?: Prisma.InventoryMovementUncheckedCreateNestedManyWithoutLocationInput;
+    users?: Prisma.UserUncheckedCreateNestedManyWithoutLocationInput;
 };
 export type ShopLocationUpdateInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -373,6 +378,7 @@ export type ShopLocationUpdateInput = {
     inventories?: Prisma.InventoryUpdateManyWithoutLocationNestedInput;
     sales?: Prisma.SaleFromShopUpdateManyWithoutLocationNestedInput;
     movements?: Prisma.InventoryMovementUpdateManyWithoutLocationNestedInput;
+    users?: Prisma.UserUpdateManyWithoutLocationNestedInput;
 };
 export type ShopLocationUncheckedUpdateInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -391,6 +397,7 @@ export type ShopLocationUncheckedUpdateInput = {
     inventories?: Prisma.InventoryUncheckedUpdateManyWithoutLocationNestedInput;
     sales?: Prisma.SaleFromShopUncheckedUpdateManyWithoutLocationNestedInput;
     movements?: Prisma.InventoryMovementUncheckedUpdateManyWithoutLocationNestedInput;
+    users?: Prisma.UserUncheckedUpdateManyWithoutLocationNestedInput;
 };
 export type ShopLocationCreateManyInput = {
     id?: string;
@@ -497,6 +504,10 @@ export type ShopLocationSumOrderByAggregateInput = {
     latitude?: Prisma.SortOrder;
     longitude?: Prisma.SortOrder;
 };
+export type ShopLocationNullableScalarRelationFilter = {
+    is?: Prisma.ShopLocationWhereInput | null;
+    isNot?: Prisma.ShopLocationWhereInput | null;
+};
 export type ShopLocationScalarRelationFilter = {
     is?: Prisma.ShopLocationWhereInput;
     isNot?: Prisma.ShopLocationWhereInput;
@@ -545,6 +556,20 @@ export type NullableFloatFieldUpdateOperationsInput = {
     decrement?: number;
     multiply?: number;
     divide?: number;
+};
+export type ShopLocationCreateNestedOneWithoutUsersInput = {
+    create?: Prisma.XOR<Prisma.ShopLocationCreateWithoutUsersInput, Prisma.ShopLocationUncheckedCreateWithoutUsersInput>;
+    connectOrCreate?: Prisma.ShopLocationCreateOrConnectWithoutUsersInput;
+    connect?: Prisma.ShopLocationWhereUniqueInput;
+};
+export type ShopLocationUpdateOneWithoutUsersNestedInput = {
+    create?: Prisma.XOR<Prisma.ShopLocationCreateWithoutUsersInput, Prisma.ShopLocationUncheckedCreateWithoutUsersInput>;
+    connectOrCreate?: Prisma.ShopLocationCreateOrConnectWithoutUsersInput;
+    upsert?: Prisma.ShopLocationUpsertWithoutUsersInput;
+    disconnect?: Prisma.ShopLocationWhereInput | boolean;
+    delete?: Prisma.ShopLocationWhereInput | boolean;
+    connect?: Prisma.ShopLocationWhereUniqueInput;
+    update?: Prisma.XOR<Prisma.XOR<Prisma.ShopLocationUpdateToOneWithWhereWithoutUsersInput, Prisma.ShopLocationUpdateWithoutUsersInput>, Prisma.ShopLocationUncheckedUpdateWithoutUsersInput>;
 };
 export type ShopLocationCreateNestedOneWithoutInventoriesInput = {
     create?: Prisma.XOR<Prisma.ShopLocationCreateWithoutInventoriesInput, Prisma.ShopLocationUncheckedCreateWithoutInventoriesInput>;
@@ -598,6 +623,7 @@ export type ShopLocationCreateWithoutShopInput = {
     inventories?: Prisma.InventoryCreateNestedManyWithoutLocationInput;
     sales?: Prisma.SaleFromShopCreateNestedManyWithoutLocationInput;
     movements?: Prisma.InventoryMovementCreateNestedManyWithoutLocationInput;
+    users?: Prisma.UserCreateNestedManyWithoutLocationInput;
 };
 export type ShopLocationUncheckedCreateWithoutShopInput = {
     id?: string;
@@ -615,6 +641,7 @@ export type ShopLocationUncheckedCreateWithoutShopInput = {
     inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutLocationInput;
     sales?: Prisma.SaleFromShopUncheckedCreateNestedManyWithoutLocationInput;
     movements?: Prisma.InventoryMovementUncheckedCreateNestedManyWithoutLocationInput;
+    users?: Prisma.UserUncheckedCreateNestedManyWithoutLocationInput;
 };
 export type ShopLocationCreateOrConnectWithoutShopInput = {
     where: Prisma.ShopLocationWhereUniqueInput;
@@ -655,6 +682,91 @@ export type ShopLocationScalarWhereInput = {
     phone?: Prisma.StringNullableFilter<"ShopLocation"> | string | null;
     createdAt?: Prisma.DateTimeFilter<"ShopLocation"> | Date | string;
 };
+export type ShopLocationCreateWithoutUsersInput = {
+    id?: string;
+    name: string;
+    addressLine1: string;
+    addressLine2?: string | null;
+    city: string;
+    state?: string | null;
+    country: string;
+    postalCode?: string | null;
+    latitude?: number | null;
+    longitude?: number | null;
+    phone?: string | null;
+    createdAt?: Date | string;
+    shop: Prisma.ShopCreateNestedOneWithoutLocationsInput;
+    inventories?: Prisma.InventoryCreateNestedManyWithoutLocationInput;
+    sales?: Prisma.SaleFromShopCreateNestedManyWithoutLocationInput;
+    movements?: Prisma.InventoryMovementCreateNestedManyWithoutLocationInput;
+};
+export type ShopLocationUncheckedCreateWithoutUsersInput = {
+    id?: string;
+    shopId: string;
+    name: string;
+    addressLine1: string;
+    addressLine2?: string | null;
+    city: string;
+    state?: string | null;
+    country: string;
+    postalCode?: string | null;
+    latitude?: number | null;
+    longitude?: number | null;
+    phone?: string | null;
+    createdAt?: Date | string;
+    inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutLocationInput;
+    sales?: Prisma.SaleFromShopUncheckedCreateNestedManyWithoutLocationInput;
+    movements?: Prisma.InventoryMovementUncheckedCreateNestedManyWithoutLocationInput;
+};
+export type ShopLocationCreateOrConnectWithoutUsersInput = {
+    where: Prisma.ShopLocationWhereUniqueInput;
+    create: Prisma.XOR<Prisma.ShopLocationCreateWithoutUsersInput, Prisma.ShopLocationUncheckedCreateWithoutUsersInput>;
+};
+export type ShopLocationUpsertWithoutUsersInput = {
+    update: Prisma.XOR<Prisma.ShopLocationUpdateWithoutUsersInput, Prisma.ShopLocationUncheckedUpdateWithoutUsersInput>;
+    create: Prisma.XOR<Prisma.ShopLocationCreateWithoutUsersInput, Prisma.ShopLocationUncheckedCreateWithoutUsersInput>;
+    where?: Prisma.ShopLocationWhereInput;
+};
+export type ShopLocationUpdateToOneWithWhereWithoutUsersInput = {
+    where?: Prisma.ShopLocationWhereInput;
+    data: Prisma.XOR<Prisma.ShopLocationUpdateWithoutUsersInput, Prisma.ShopLocationUncheckedUpdateWithoutUsersInput>;
+};
+export type ShopLocationUpdateWithoutUsersInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    name?: Prisma.StringFieldUpdateOperationsInput | string;
+    addressLine1?: Prisma.StringFieldUpdateOperationsInput | string;
+    addressLine2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    city?: Prisma.StringFieldUpdateOperationsInput | string;
+    state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    country?: Prisma.StringFieldUpdateOperationsInput | string;
+    postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
+    longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
+    phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    shop?: Prisma.ShopUpdateOneRequiredWithoutLocationsNestedInput;
+    inventories?: Prisma.InventoryUpdateManyWithoutLocationNestedInput;
+    sales?: Prisma.SaleFromShopUpdateManyWithoutLocationNestedInput;
+    movements?: Prisma.InventoryMovementUpdateManyWithoutLocationNestedInput;
+};
+export type ShopLocationUncheckedUpdateWithoutUsersInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    shopId?: Prisma.StringFieldUpdateOperationsInput | string;
+    name?: Prisma.StringFieldUpdateOperationsInput | string;
+    addressLine1?: Prisma.StringFieldUpdateOperationsInput | string;
+    addressLine2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    city?: Prisma.StringFieldUpdateOperationsInput | string;
+    state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    country?: Prisma.StringFieldUpdateOperationsInput | string;
+    postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
+    longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
+    phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    inventories?: Prisma.InventoryUncheckedUpdateManyWithoutLocationNestedInput;
+    sales?: Prisma.SaleFromShopUncheckedUpdateManyWithoutLocationNestedInput;
+    movements?: Prisma.InventoryMovementUncheckedUpdateManyWithoutLocationNestedInput;
+};
 export type ShopLocationCreateWithoutInventoriesInput = {
     id?: string;
     name: string;
@@ -671,6 +783,7 @@ export type ShopLocationCreateWithoutInventoriesInput = {
     shop: Prisma.ShopCreateNestedOneWithoutLocationsInput;
     sales?: Prisma.SaleFromShopCreateNestedManyWithoutLocationInput;
     movements?: Prisma.InventoryMovementCreateNestedManyWithoutLocationInput;
+    users?: Prisma.UserCreateNestedManyWithoutLocationInput;
 };
 export type ShopLocationUncheckedCreateWithoutInventoriesInput = {
     id?: string;
@@ -688,6 +801,7 @@ export type ShopLocationUncheckedCreateWithoutInventoriesInput = {
     createdAt?: Date | string;
     sales?: Prisma.SaleFromShopUncheckedCreateNestedManyWithoutLocationInput;
     movements?: Prisma.InventoryMovementUncheckedCreateNestedManyWithoutLocationInput;
+    users?: Prisma.UserUncheckedCreateNestedManyWithoutLocationInput;
 };
 export type ShopLocationCreateOrConnectWithoutInventoriesInput = {
     where: Prisma.ShopLocationWhereUniqueInput;
@@ -718,6 +832,7 @@ export type ShopLocationUpdateWithoutInventoriesInput = {
     shop?: Prisma.ShopUpdateOneRequiredWithoutLocationsNestedInput;
     sales?: Prisma.SaleFromShopUpdateManyWithoutLocationNestedInput;
     movements?: Prisma.InventoryMovementUpdateManyWithoutLocationNestedInput;
+    users?: Prisma.UserUpdateManyWithoutLocationNestedInput;
 };
 export type ShopLocationUncheckedUpdateWithoutInventoriesInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -735,6 +850,7 @@ export type ShopLocationUncheckedUpdateWithoutInventoriesInput = {
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     sales?: Prisma.SaleFromShopUncheckedUpdateManyWithoutLocationNestedInput;
     movements?: Prisma.InventoryMovementUncheckedUpdateManyWithoutLocationNestedInput;
+    users?: Prisma.UserUncheckedUpdateManyWithoutLocationNestedInput;
 };
 export type ShopLocationCreateWithoutMovementsInput = {
     id?: string;
@@ -752,6 +868,7 @@ export type ShopLocationCreateWithoutMovementsInput = {
     shop: Prisma.ShopCreateNestedOneWithoutLocationsInput;
     inventories?: Prisma.InventoryCreateNestedManyWithoutLocationInput;
     sales?: Prisma.SaleFromShopCreateNestedManyWithoutLocationInput;
+    users?: Prisma.UserCreateNestedManyWithoutLocationInput;
 };
 export type ShopLocationUncheckedCreateWithoutMovementsInput = {
     id?: string;
@@ -769,6 +886,7 @@ export type ShopLocationUncheckedCreateWithoutMovementsInput = {
     createdAt?: Date | string;
     inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutLocationInput;
     sales?: Prisma.SaleFromShopUncheckedCreateNestedManyWithoutLocationInput;
+    users?: Prisma.UserUncheckedCreateNestedManyWithoutLocationInput;
 };
 export type ShopLocationCreateOrConnectWithoutMovementsInput = {
     where: Prisma.ShopLocationWhereUniqueInput;
@@ -799,6 +917,7 @@ export type ShopLocationUpdateWithoutMovementsInput = {
     shop?: Prisma.ShopUpdateOneRequiredWithoutLocationsNestedInput;
     inventories?: Prisma.InventoryUpdateManyWithoutLocationNestedInput;
     sales?: Prisma.SaleFromShopUpdateManyWithoutLocationNestedInput;
+    users?: Prisma.UserUpdateManyWithoutLocationNestedInput;
 };
 export type ShopLocationUncheckedUpdateWithoutMovementsInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -816,6 +935,7 @@ export type ShopLocationUncheckedUpdateWithoutMovementsInput = {
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     inventories?: Prisma.InventoryUncheckedUpdateManyWithoutLocationNestedInput;
     sales?: Prisma.SaleFromShopUncheckedUpdateManyWithoutLocationNestedInput;
+    users?: Prisma.UserUncheckedUpdateManyWithoutLocationNestedInput;
 };
 export type ShopLocationCreateWithoutSalesInput = {
     id?: string;
@@ -833,6 +953,7 @@ export type ShopLocationCreateWithoutSalesInput = {
     shop: Prisma.ShopCreateNestedOneWithoutLocationsInput;
     inventories?: Prisma.InventoryCreateNestedManyWithoutLocationInput;
     movements?: Prisma.InventoryMovementCreateNestedManyWithoutLocationInput;
+    users?: Prisma.UserCreateNestedManyWithoutLocationInput;
 };
 export type ShopLocationUncheckedCreateWithoutSalesInput = {
     id?: string;
@@ -850,6 +971,7 @@ export type ShopLocationUncheckedCreateWithoutSalesInput = {
     createdAt?: Date | string;
     inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutLocationInput;
     movements?: Prisma.InventoryMovementUncheckedCreateNestedManyWithoutLocationInput;
+    users?: Prisma.UserUncheckedCreateNestedManyWithoutLocationInput;
 };
 export type ShopLocationCreateOrConnectWithoutSalesInput = {
     where: Prisma.ShopLocationWhereUniqueInput;
@@ -880,6 +1002,7 @@ export type ShopLocationUpdateWithoutSalesInput = {
     shop?: Prisma.ShopUpdateOneRequiredWithoutLocationsNestedInput;
     inventories?: Prisma.InventoryUpdateManyWithoutLocationNestedInput;
     movements?: Prisma.InventoryMovementUpdateManyWithoutLocationNestedInput;
+    users?: Prisma.UserUpdateManyWithoutLocationNestedInput;
 };
 export type ShopLocationUncheckedUpdateWithoutSalesInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -897,6 +1020,7 @@ export type ShopLocationUncheckedUpdateWithoutSalesInput = {
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     inventories?: Prisma.InventoryUncheckedUpdateManyWithoutLocationNestedInput;
     movements?: Prisma.InventoryMovementUncheckedUpdateManyWithoutLocationNestedInput;
+    users?: Prisma.UserUncheckedUpdateManyWithoutLocationNestedInput;
 };
 export type ShopLocationCreateManyShopInput = {
     id?: string;
@@ -928,6 +1052,7 @@ export type ShopLocationUpdateWithoutShopInput = {
     inventories?: Prisma.InventoryUpdateManyWithoutLocationNestedInput;
     sales?: Prisma.SaleFromShopUpdateManyWithoutLocationNestedInput;
     movements?: Prisma.InventoryMovementUpdateManyWithoutLocationNestedInput;
+    users?: Prisma.UserUpdateManyWithoutLocationNestedInput;
 };
 export type ShopLocationUncheckedUpdateWithoutShopInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -945,6 +1070,7 @@ export type ShopLocationUncheckedUpdateWithoutShopInput = {
     inventories?: Prisma.InventoryUncheckedUpdateManyWithoutLocationNestedInput;
     sales?: Prisma.SaleFromShopUncheckedUpdateManyWithoutLocationNestedInput;
     movements?: Prisma.InventoryMovementUncheckedUpdateManyWithoutLocationNestedInput;
+    users?: Prisma.UserUncheckedUpdateManyWithoutLocationNestedInput;
 };
 export type ShopLocationUncheckedUpdateManyWithoutShopInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -967,11 +1093,13 @@ export type ShopLocationCountOutputType = {
     inventories: number;
     sales: number;
     movements: number;
+    users: number;
 };
 export type ShopLocationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     inventories?: boolean | ShopLocationCountOutputTypeCountInventoriesArgs;
     sales?: boolean | ShopLocationCountOutputTypeCountSalesArgs;
     movements?: boolean | ShopLocationCountOutputTypeCountMovementsArgs;
+    users?: boolean | ShopLocationCountOutputTypeCountUsersArgs;
 };
 /**
  * ShopLocationCountOutputType without action
@@ -1000,6 +1128,12 @@ export type ShopLocationCountOutputTypeCountSalesArgs<ExtArgs extends runtime.Ty
 export type ShopLocationCountOutputTypeCountMovementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     where?: Prisma.InventoryMovementWhereInput;
 };
+/**
+ * ShopLocationCountOutputType without action
+ */
+export type ShopLocationCountOutputTypeCountUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    where?: Prisma.UserWhereInput;
+};
 export type ShopLocationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
     shopId?: boolean;
@@ -1018,6 +1152,7 @@ export type ShopLocationSelect<ExtArgs extends runtime.Types.Extensions.Internal
     inventories?: boolean | Prisma.ShopLocation$inventoriesArgs<ExtArgs>;
     sales?: boolean | Prisma.ShopLocation$salesArgs<ExtArgs>;
     movements?: boolean | Prisma.ShopLocation$movementsArgs<ExtArgs>;
+    users?: boolean | Prisma.ShopLocation$usersArgs<ExtArgs>;
     _count?: boolean | Prisma.ShopLocationCountOutputTypeDefaultArgs<ExtArgs>;
 }, ExtArgs["result"]["shopLocation"]>;
 export type ShopLocationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1073,6 +1208,7 @@ export type ShopLocationInclude<ExtArgs extends runtime.Types.Extensions.Interna
     inventories?: boolean | Prisma.ShopLocation$inventoriesArgs<ExtArgs>;
     sales?: boolean | Prisma.ShopLocation$salesArgs<ExtArgs>;
     movements?: boolean | Prisma.ShopLocation$movementsArgs<ExtArgs>;
+    users?: boolean | Prisma.ShopLocation$usersArgs<ExtArgs>;
     _count?: boolean | Prisma.ShopLocationCountOutputTypeDefaultArgs<ExtArgs>;
 };
 export type ShopLocationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1088,6 +1224,7 @@ export type $ShopLocationPayload<ExtArgs extends runtime.Types.Extensions.Intern
         inventories: Prisma.$InventoryPayload<ExtArgs>[];
         sales: Prisma.$SaleFromShopPayload<ExtArgs>[];
         movements: Prisma.$InventoryMovementPayload<ExtArgs>[];
+        users: Prisma.$UserPayload<ExtArgs>[];
     };
     scalars: runtime.Types.Extensions.GetPayloadResult<{
         id: string;
@@ -1436,6 +1573,7 @@ export interface Prisma__ShopLocationClient<T, Null = never, ExtArgs extends run
     inventories<T extends Prisma.ShopLocation$inventoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ShopLocation$inventoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InventoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     sales<T extends Prisma.ShopLocation$salesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ShopLocation$salesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SaleFromShopPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     movements<T extends Prisma.ShopLocation$movementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ShopLocation$movementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InventoryMovementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+    users<T extends Prisma.ShopLocation$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ShopLocation$usersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1920,6 +2058,29 @@ export type ShopLocation$movementsArgs<ExtArgs extends runtime.Types.Extensions.
     take?: number;
     skip?: number;
     distinct?: Prisma.InventoryMovementScalarFieldEnum | Prisma.InventoryMovementScalarFieldEnum[];
+};
+/**
+ * ShopLocation.users
+ */
+export type ShopLocation$usersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: Prisma.UserSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: Prisma.UserOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.UserInclude<ExtArgs> | null;
+    where?: Prisma.UserWhereInput;
+    orderBy?: Prisma.UserOrderByWithRelationInput | Prisma.UserOrderByWithRelationInput[];
+    cursor?: Prisma.UserWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: Prisma.UserScalarFieldEnum | Prisma.UserScalarFieldEnum[];
 };
 /**
  * ShopLocation without action

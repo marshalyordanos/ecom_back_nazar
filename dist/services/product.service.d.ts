@@ -21,8 +21,8 @@ export declare function listProducts(shopId: string | undefined, track?: string,
         variants: ({
             media: {
                 url: string;
-                type: string;
                 id: string;
+                type: string;
                 variantId: string;
                 position: number | null;
             }[];
@@ -32,10 +32,10 @@ export declare function listProducts(shopId: string | undefined, track?: string,
             createdAt: Date;
             updatedAt: Date;
             image: string | null;
-            sku: string;
-            productId: string;
-            barcode: string | null;
             price: number;
+            productId: string;
+            sku: string;
+            barcode: string | null;
             comparePrice: number | null;
             costPrice: number | null;
             weight: number | null;
@@ -47,13 +47,13 @@ export declare function listProducts(shopId: string | undefined, track?: string,
         createdAt: Date;
         updatedAt: Date;
         description: string | null;
-        slug: string;
         shopId: string;
-        isFeatured: boolean;
-        track: string | null;
+        slug: string;
         shortDescription: string | null;
         brandId: string | null;
         categoryId: string | null;
+        track: string | null;
+        isFeatured: boolean;
     })[];
     pagination: {
         total: number;
@@ -84,8 +84,8 @@ export declare function getProductById(id: string, shopId?: string): Promise<{
         description: string | null;
         image: string | null;
         slug: string;
-        parentId: string | null;
         track: string | null;
+        parentId: string | null;
     } | null;
     variants: ({
         inventories: ({
@@ -94,6 +94,7 @@ export declare function getProductById(id: string, shopId?: string): Promise<{
                 id: string;
                 phone: string | null;
                 createdAt: Date;
+                shopId: string;
                 addressLine1: string;
                 addressLine2: string | null;
                 city: string;
@@ -102,22 +103,21 @@ export declare function getProductById(id: string, shopId?: string): Promise<{
                 postalCode: string | null;
                 latitude: number | null;
                 longitude: number | null;
-                shopId: string;
             };
         } & {
             id: string;
+            locationId: string;
             createdAt: Date;
             updatedAt: Date;
-            quantity: number;
-            locationId: string;
             variantId: string;
+            quantity: number;
             reservedQuantity: number;
             reorderLevel: number | null;
         })[];
         media: {
             url: string;
-            type: string;
             id: string;
+            type: string;
             variantId: string;
             position: number | null;
         }[];
@@ -146,10 +146,10 @@ export declare function getProductById(id: string, shopId?: string): Promise<{
         createdAt: Date;
         updatedAt: Date;
         image: string | null;
-        sku: string;
-        productId: string;
-        barcode: string | null;
         price: number;
+        productId: string;
+        sku: string;
+        barcode: string | null;
         comparePrice: number | null;
         costPrice: number | null;
         weight: number | null;
@@ -161,13 +161,13 @@ export declare function getProductById(id: string, shopId?: string): Promise<{
     createdAt: Date;
     updatedAt: Date;
     description: string | null;
-    slug: string;
     shopId: string;
-    isFeatured: boolean;
-    track: string | null;
+    slug: string;
     shortDescription: string | null;
     brandId: string | null;
     categoryId: string | null;
+    track: string | null;
+    isFeatured: boolean;
 }>;
 export declare function getProductByIdMobile(id: string, shopId?: string, userId?: string, sessionId?: string): Promise<{
     shop: {
@@ -191,8 +191,8 @@ export declare function getProductByIdMobile(id: string, shopId?: string, userId
         description: string | null;
         image: string | null;
         slug: string;
-        parentId: string | null;
         track: string | null;
+        parentId: string | null;
     } | null;
     variants: ({
         inventories: ({
@@ -201,6 +201,7 @@ export declare function getProductByIdMobile(id: string, shopId?: string, userId
                 id: string;
                 phone: string | null;
                 createdAt: Date;
+                shopId: string;
                 addressLine1: string;
                 addressLine2: string | null;
                 city: string;
@@ -209,22 +210,21 @@ export declare function getProductByIdMobile(id: string, shopId?: string, userId
                 postalCode: string | null;
                 latitude: number | null;
                 longitude: number | null;
-                shopId: string;
             };
         } & {
             id: string;
+            locationId: string;
             createdAt: Date;
             updatedAt: Date;
-            quantity: number;
-            locationId: string;
             variantId: string;
+            quantity: number;
             reservedQuantity: number;
             reorderLevel: number | null;
         })[];
         media: {
             url: string;
-            type: string;
             id: string;
+            type: string;
             variantId: string;
             position: number | null;
         }[];
@@ -253,10 +253,10 @@ export declare function getProductByIdMobile(id: string, shopId?: string, userId
         createdAt: Date;
         updatedAt: Date;
         image: string | null;
-        sku: string;
-        productId: string;
-        barcode: string | null;
         price: number;
+        productId: string;
+        sku: string;
+        barcode: string | null;
         comparePrice: number | null;
         costPrice: number | null;
         weight: number | null;
@@ -268,13 +268,13 @@ export declare function getProductByIdMobile(id: string, shopId?: string, userId
     createdAt: Date;
     updatedAt: Date;
     description: string | null;
-    slug: string;
     shopId: string;
-    isFeatured: boolean;
-    track: string | null;
+    slug: string;
     shortDescription: string | null;
     brandId: string | null;
     categoryId: string | null;
+    track: string | null;
+    isFeatured: boolean;
 }>;
 export declare function createProduct(shopId: string, data: {
     name: string;
@@ -292,13 +292,13 @@ export declare function createProduct(shopId: string, data: {
     createdAt: Date;
     updatedAt: Date;
     description: string | null;
-    slug: string;
     shopId: string;
-    isFeatured: boolean;
-    track: string | null;
+    slug: string;
     shortDescription: string | null;
     brandId: string | null;
     categoryId: string | null;
+    track: string | null;
+    isFeatured: boolean;
 }>;
 export declare function updateProduct(id: string, shopId: string, data: {
     name?: string;
@@ -316,13 +316,13 @@ export declare function updateProduct(id: string, shopId: string, data: {
     createdAt: Date;
     updatedAt: Date;
     description: string | null;
-    slug: string;
     shopId: string;
-    isFeatured: boolean;
-    track: string | null;
+    slug: string;
     shortDescription: string | null;
     brandId: string | null;
     categoryId: string | null;
+    track: string | null;
+    isFeatured: boolean;
 }>;
 export declare function deleteProduct(id: string, _shopId?: string): Promise<{
     message: string;
@@ -337,11 +337,11 @@ export declare function listVariants(shopId?: string, query?: {
     data: ({
         inventories: {
             id: string;
+            locationId: string;
             createdAt: Date;
             updatedAt: Date;
-            quantity: number;
-            locationId: string;
             variantId: string;
+            quantity: number;
             reservedQuantity: number;
             reorderLevel: number | null;
         }[];
@@ -362,8 +362,8 @@ export declare function listVariants(shopId?: string, query?: {
         };
         media: {
             url: string;
-            type: string;
             id: string;
+            type: string;
             variantId: string;
             position: number | null;
         }[];
@@ -392,10 +392,10 @@ export declare function listVariants(shopId?: string, query?: {
         createdAt: Date;
         updatedAt: Date;
         image: string | null;
-        sku: string;
-        productId: string;
-        barcode: string | null;
         price: number;
+        productId: string;
+        sku: string;
+        barcode: string | null;
         comparePrice: number | null;
         costPrice: number | null;
         weight: number | null;
@@ -421,8 +421,8 @@ export declare function getFeaturedProducts(shopId?: string, limit?: number): Pr
     variants: ({
         media: {
             url: string;
-            type: string;
             id: string;
+            type: string;
             variantId: string;
             position: number | null;
         }[];
@@ -432,10 +432,10 @@ export declare function getFeaturedProducts(shopId?: string, limit?: number): Pr
         createdAt: Date;
         updatedAt: Date;
         image: string | null;
-        sku: string;
-        productId: string;
-        barcode: string | null;
         price: number;
+        productId: string;
+        sku: string;
+        barcode: string | null;
         comparePrice: number | null;
         costPrice: number | null;
         weight: number | null;
@@ -447,29 +447,173 @@ export declare function getFeaturedProducts(shopId?: string, limit?: number): Pr
     createdAt: Date;
     updatedAt: Date;
     description: string | null;
-    slug: string;
     shopId: string;
-    isFeatured: boolean;
-    track: string | null;
+    slug: string;
     shortDescription: string | null;
     brandId: string | null;
     categoryId: string | null;
+    track: string | null;
+    isFeatured: boolean;
 })[]>;
+export declare function getNewProducts(shopId?: string, limit?: number): Promise<({
+    brand: {
+        name: string;
+        id: string;
+        slug: string;
+    } | null;
+    category: {
+        name: string;
+        id: string;
+        slug: string;
+    } | null;
+    variants: ({
+        media: {
+            url: string;
+            id: string;
+            type: string;
+            variantId: string;
+            position: number | null;
+        }[];
+    } & {
+        id: string;
+        status: import("../generated/prisma/enums").ProductStatus;
+        createdAt: Date;
+        updatedAt: Date;
+        image: string | null;
+        price: number;
+        productId: string;
+        sku: string;
+        barcode: string | null;
+        comparePrice: number | null;
+        costPrice: number | null;
+        weight: number | null;
+    })[];
+} & {
+    name: string;
+    id: string;
+    status: import("../generated/prisma/enums").ProductStatus;
+    createdAt: Date;
+    updatedAt: Date;
+    description: string | null;
+    shopId: string;
+    slug: string;
+    shortDescription: string | null;
+    brandId: string | null;
+    categoryId: string | null;
+    track: string | null;
+    isFeatured: boolean;
+})[]>;
+export declare function getPopularProducts(shopId?: string, limit?: number): Promise<(({
+    brand: {
+        name: string;
+        id: string;
+        slug: string;
+    } | null;
+    category: {
+        name: string;
+        id: string;
+        slug: string;
+    } | null;
+    variants: ({
+        media: {
+            url: string;
+            id: string;
+            type: string;
+            variantId: string;
+            position: number | null;
+        }[];
+    } & {
+        id: string;
+        status: import("../generated/prisma/enums").ProductStatus;
+        createdAt: Date;
+        updatedAt: Date;
+        image: string | null;
+        price: number;
+        productId: string;
+        sku: string;
+        barcode: string | null;
+        comparePrice: number | null;
+        costPrice: number | null;
+        weight: number | null;
+    })[];
+} & {
+    name: string;
+    id: string;
+    status: import("../generated/prisma/enums").ProductStatus;
+    createdAt: Date;
+    updatedAt: Date;
+    description: string | null;
+    shopId: string;
+    slug: string;
+    shortDescription: string | null;
+    brandId: string | null;
+    categoryId: string | null;
+    track: string | null;
+    isFeatured: boolean;
+}) | undefined)[]>;
+export declare function getMostViewedProducts(shopId?: string, limit?: number): Promise<(({
+    brand: {
+        name: string;
+        id: string;
+        slug: string;
+    } | null;
+    category: {
+        name: string;
+        id: string;
+        slug: string;
+    } | null;
+    variants: ({
+        media: {
+            url: string;
+            id: string;
+            type: string;
+            variantId: string;
+            position: number | null;
+        }[];
+    } & {
+        id: string;
+        status: import("../generated/prisma/enums").ProductStatus;
+        createdAt: Date;
+        updatedAt: Date;
+        image: string | null;
+        price: number;
+        productId: string;
+        sku: string;
+        barcode: string | null;
+        comparePrice: number | null;
+        costPrice: number | null;
+        weight: number | null;
+    })[];
+} & {
+    name: string;
+    id: string;
+    status: import("../generated/prisma/enums").ProductStatus;
+    createdAt: Date;
+    updatedAt: Date;
+    description: string | null;
+    shopId: string;
+    slug: string;
+    shortDescription: string | null;
+    brandId: string | null;
+    categoryId: string | null;
+    track: string | null;
+    isFeatured: boolean;
+}) | undefined)[]>;
 export declare function getVariantById(id: string): Promise<({
     inventories: {
         id: string;
+        locationId: string;
         createdAt: Date;
         updatedAt: Date;
-        quantity: number;
-        locationId: string;
         variantId: string;
+        quantity: number;
         reservedQuantity: number;
         reorderLevel: number | null;
     }[];
     media: {
         url: string;
-        type: string;
         id: string;
+        type: string;
         variantId: string;
         position: number | null;
     }[];
@@ -498,10 +642,10 @@ export declare function getVariantById(id: string): Promise<({
     createdAt: Date;
     updatedAt: Date;
     image: string | null;
-    sku: string;
-    productId: string;
-    barcode: string | null;
     price: number;
+    productId: string;
+    sku: string;
+    barcode: string | null;
     comparePrice: number | null;
     costPrice: number | null;
     weight: number | null;
@@ -520,11 +664,11 @@ export declare function createVariant(productId: string, data: {
 }, file?: any): Promise<({
     inventories: {
         id: string;
+        locationId: string;
         createdAt: Date;
         updatedAt: Date;
-        quantity: number;
-        locationId: string;
         variantId: string;
+        quantity: number;
         reservedQuantity: number;
         reorderLevel: number | null;
     }[];
@@ -534,10 +678,10 @@ export declare function createVariant(productId: string, data: {
     createdAt: Date;
     updatedAt: Date;
     image: string | null;
-    sku: string;
-    productId: string;
-    barcode: string | null;
     price: number;
+    productId: string;
+    sku: string;
+    barcode: string | null;
     comparePrice: number | null;
     costPrice: number | null;
     weight: number | null;
@@ -557,10 +701,10 @@ export declare function updateVariant(variantId: string, data: {
     createdAt: Date;
     updatedAt: Date;
     image: string | null;
-    sku: string;
-    productId: string;
-    barcode: string | null;
     price: number;
+    productId: string;
+    sku: string;
+    barcode: string | null;
     comparePrice: number | null;
     costPrice: number | null;
     weight: number | null;
@@ -570,8 +714,8 @@ export declare function deleteVariant(variantId: string): Promise<{
 }>;
 export declare function addVariantMedia(variantId: string, url: string, type: string, position?: number): Promise<{
     url: string;
-    type: string;
     id: string;
+    type: string;
     variantId: string;
     position: number | null;
 }>;
@@ -691,10 +835,10 @@ export declare function setVariantOptionValues(variantId: string, optionValueIds
     createdAt: Date;
     updatedAt: Date;
     image: string | null;
-    sku: string;
-    productId: string;
-    barcode: string | null;
     price: number;
+    productId: string;
+    sku: string;
+    barcode: string | null;
     comparePrice: number | null;
     costPrice: number | null;
     weight: number | null;

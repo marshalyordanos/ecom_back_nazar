@@ -1,5 +1,10 @@
 export declare function getMe(userId: string): Promise<{
     email: string;
+    roles: {
+        name: string;
+        id: string;
+        description: string | null;
+    }[];
     id: string;
     phone: string;
     firstName: string;
@@ -8,13 +13,14 @@ export declare function getMe(userId: string): Promise<{
     status: import("../generated/prisma/enums").UserStatus;
     emailVerifiedAt: Date | null;
     phoneVerifiedAt: Date | null;
+    locationId: string | null;
     createdAt: Date;
     updatedAt: Date;
-    roles: {
+    location: {
         name: string;
         id: string;
-        description: string | null;
-    }[];
+        shopId: string;
+    } | null;
 }>;
 export declare function updateMe(userId: string, data: {
     firstName?: string;
@@ -23,6 +29,9 @@ export declare function updateMe(userId: string, data: {
     avatarUrl?: string;
 }): Promise<{
     email: string;
+    roles: {
+        name: string;
+    }[];
     id: string;
     phone: string;
     firstName: string;
@@ -31,9 +40,6 @@ export declare function updateMe(userId: string, data: {
     status: import("../generated/prisma/enums").UserStatus;
     createdAt: Date;
     updatedAt: Date;
-    roles: {
-        name: string;
-    }[];
 }>;
 export declare function updatePassword(userId: string, newPassword: string): Promise<{
     message: string;
@@ -53,6 +59,7 @@ export declare function getById(id: string): Promise<{
     status: import("../generated/prisma/enums").UserStatus;
     emailVerifiedAt: Date | null;
     phoneVerifiedAt: Date | null;
+    locationId: string | null;
     createdAt: Date;
     updatedAt: Date;
 }>;
@@ -62,20 +69,28 @@ export declare function listUsers(query: {
     search?: string;
     filter?: string;
     sort?: string;
+    roleId?: string;
 }, onlyUsers?: boolean): Promise<{
     data: {
         email: string;
+        roles: {
+            name: string;
+            id: string;
+        }[];
         id: string;
         phone: string;
         firstName: string;
         lastName: string;
         avatarUrl: string | null;
         status: import("../generated/prisma/enums").UserStatus;
+        locationId: string | null;
         createdAt: Date;
         updatedAt: Date;
-        roles: {
+        location: {
             name: string;
-        }[];
+            id: string;
+            shopId: string;
+        } | null;
     }[];
     pagination: {
         total: number;
@@ -91,11 +106,17 @@ export declare function updateUser(id: string, data: {
     status?: string;
     avatarUrl?: string;
     roleIds?: string[];
+    locationId?: string | null;
 }): Promise<{
     roles: {
         name: string;
         id: string;
     }[];
+    location: {
+        name: string;
+        id: string;
+        shopId: string;
+    } | null;
     email: string;
     id: string;
     phone: string;
@@ -106,6 +127,7 @@ export declare function updateUser(id: string, data: {
     status: import("../generated/prisma/enums").UserStatus;
     emailVerifiedAt: Date | null;
     phoneVerifiedAt: Date | null;
+    locationId: string | null;
     createdAt: Date;
     updatedAt: Date;
 }>;

@@ -16,6 +16,12 @@ export const getOrderById = catchAsync(async (req: AuthRequest, res: Response, _
   res.status(200).json(order);
 });
 
+export const trackOrder = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const reference = String(req.query.reference || req.query.trackingNumber || req.query.orderNumber || "");
+  const order = await orderService.trackOrderByReference(reference);
+  res.status(200).json(order);
+});
+
 export const cancelOrder = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
   const order = await orderService.cancelOrder(req.params.id, req.user!.id);
   res.status(200).json(order);
@@ -41,4 +47,9 @@ export const listOrdersAdmin = catchAsync(async (req: AuthRequest, res: Response
 export const createOrderAdmin = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
   const order = await orderService.createOrderAdmin(req.body);
   res.status(201).json(order);
+});
+
+export const guestCheckout = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const result = await orderService.checkoutAsGuest(req.body);
+  res.status(201).json(result);
 });

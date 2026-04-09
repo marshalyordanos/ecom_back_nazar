@@ -39,6 +39,11 @@ const auth_middleware_1 = require("../middleware/auth.middleware");
 const router = (0, express_1.Router)();
 router.use(auth_middleware_1.protect);
 router.use((0, auth_middleware_1.restrictTo)("admin"));
+// Global admin chart data (no shopId)
+router.get("/global/revenue-series", dashboardController.getGlobalRevenueSeries);
+router.get("/global/orders-count-series", dashboardController.getGlobalOrdersCountSeries);
+router.get("/global/order-status-distribution", dashboardController.getGlobalOrderStatusDistribution);
+router.get("/global/payments-series", dashboardController.getGlobalPaymentsSeries);
 router.get("/overview", dashboardController.getOverview);
 router.get("/sales-summary", dashboardController.getSalesSummary);
 router.get("/orders-summary", dashboardController.getOrdersSummary);
@@ -168,5 +173,9 @@ router.get("/products/most-viewed", dashboardController.getMostViewedProducts);
 router.get("/health/summary", dashboardController.getSystemHealth);
 router.get("/sync/status", dashboardController.getSyncStatus);
 router.get("/notifications/unread", dashboardController.getUnreadNotifications);
+// ===============================
+// 👥 CUSTOMER DASHBOARD CARDS
+// ===============================
+router.get("/customers/cards", dashboardController.getCustomerDashboardCards);
 exports.default = router;
 //# sourceMappingURL=dashboard.router.js.map

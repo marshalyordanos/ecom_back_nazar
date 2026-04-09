@@ -20,6 +20,7 @@ export declare function listPayments(query: {
                 status: import("../generated/prisma/enums").UserStatus;
                 emailVerifiedAt: Date | null;
                 phoneVerifiedAt: Date | null;
+                locationId: string | null;
                 createdAt: Date;
                 updatedAt: Date;
             };
@@ -30,12 +31,12 @@ export declare function listPayments(query: {
         status: import("../generated/prisma/enums").PaymentStatus;
         createdAt: Date;
         currency: string;
+        orderId: string;
         provider: string;
         providerTransactionId: string | null;
         amount: number;
         transactionId: string | null;
         paidAt: Date | null;
-        orderId: string;
     })[];
     pagination: {
         total: number;
@@ -46,13 +47,13 @@ export declare function listPayments(query: {
 }>;
 export declare function getPaymentById(id: string): Promise<{
     order: {
-        userId: string;
         id: string;
         status: import("../generated/prisma/enums").OrderStatus;
         createdAt: Date;
         updatedAt: Date;
-        currency: string;
+        userId: string;
         shopId: string;
+        currency: string;
         orderNumber: string;
         subtotal: number;
         taxTotal: number;
@@ -64,35 +65,35 @@ export declare function getPaymentById(id: string): Promise<{
     status: import("../generated/prisma/enums").PaymentStatus;
     createdAt: Date;
     currency: string;
+    orderId: string;
     provider: string;
     providerTransactionId: string | null;
     amount: number;
     transactionId: string | null;
     paidAt: Date | null;
-    orderId: string;
 }>;
 export declare function capturePayment(id: string): Promise<{
     id: string;
     status: import("../generated/prisma/enums").PaymentStatus;
     createdAt: Date;
     currency: string;
+    orderId: string;
     provider: string;
     providerTransactionId: string | null;
     amount: number;
     transactionId: string | null;
     paidAt: Date | null;
-    orderId: string;
 }>;
 export declare function refundPayment(id: string): Promise<{
     id: string;
     status: import("../generated/prisma/enums").PaymentStatus;
     createdAt: Date;
     currency: string;
+    orderId: string;
     provider: string;
     providerTransactionId: string | null;
     amount: number;
     transactionId: string | null;
     paidAt: Date | null;
-    orderId: string;
 }>;
 //# sourceMappingURL=payment.service.d.ts.map

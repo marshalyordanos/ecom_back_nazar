@@ -9,6 +9,9 @@ const router = Router();
 
 router.get("/", productController.listProducts);
 router.get("/featured", productController.getFeatured);
+router.get("/popular", productController.getPopular);
+router.get("/new-arrivals", productController.getNewArrivals);
+router.get("/most-viewed", productController.getMostViewed);
 router.get(
   "/variants",
   protect,

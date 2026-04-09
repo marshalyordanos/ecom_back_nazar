@@ -1,6 +1,10 @@
 import { Response, NextFunction } from "express";
 import type { AuthRequest } from "../middleware/auth.middleware";
 export declare const getSummary: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const getGlobalRevenueSeries: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const getGlobalOrdersCountSeries: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const getGlobalOrderStatusDistribution: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const getGlobalPaymentsSeries: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const getOverview: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const getSalesSummary: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const getOrdersSummary: (req: AuthRequest, res: Response, next: NextFunction) => void;
@@ -66,4 +70,5 @@ export declare const getMostViewedProducts: (req: AuthRequest, res: Response, ne
 export declare const getSystemHealth: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const getSyncStatus: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const getUnreadNotifications: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const getCustomerDashboardCards: (req: AuthRequest, res: Response, next: NextFunction) => void;
 //# sourceMappingURL=dashboard.controller.d.ts.map

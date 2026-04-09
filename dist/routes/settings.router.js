@@ -36,11 +36,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const settingsController = __importStar(require("../controllers/settings.controller"));
 const auth_middleware_1 = require("../middleware/auth.middleware");
+const permission_middleware_1 = require("../middleware/permission.middleware");
 const router = (0, express_1.Router)();
 router.get("/", auth_middleware_1.protect, settingsController.getSettings);
 router.get("/:key", auth_middleware_1.protect, settingsController.getSettingByKey);
-router.post("/", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), settingsController.setSetting);
-router.put("/:key", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), settingsController.updateSetting);
-router.delete("/:key", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), settingsController.deleteSetting);
+router.post("/", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), (0, permission_middleware_1.requirePermission)("settings", "create"), settingsController.setSetting);
+router.put("/:key", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), (0, permission_middleware_1.requirePermission)("settings", "update"), settingsController.updateSetting);
+router.delete("/:key", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), (0, permission_middleware_1.requirePermission)("settings", "delete"), settingsController.deleteSetting);
 exports.default = router;
 //# sourceMappingURL=settings.router.js.map

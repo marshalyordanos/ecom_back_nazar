@@ -5,6 +5,9 @@ import { requirePermission } from "../middleware/permission.middleware";
 
 const router = Router();
 
+router.post("/guest/checkout", orderController.guestCheckout);
+router.get("/track", orderController.trackOrder);
+
 router.get("/", protect, orderController.listMyOrders);
 router.get(
   "/admin/list",

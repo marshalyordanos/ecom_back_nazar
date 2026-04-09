@@ -31,6 +31,37 @@ export declare function getGlobalDashboardSummary(): Promise<{
         amountChange: number;
     };
 }>;
+export declare function getGlobalRevenueSeries(days: number): Promise<{
+    days: number;
+    categories: string[];
+    series: {
+        name: string;
+        data: number[];
+    }[];
+    totalRevenue: number;
+}>;
+export declare function getGlobalOrdersCountSeries(days: number): Promise<{
+    days: number;
+    categories: string[];
+    series: {
+        name: string;
+        data: number[];
+    }[];
+    totalOrders: number;
+}>;
+export declare function getGlobalOrderStatusDistribution(): Promise<{
+    labels: string[];
+    values: number[];
+}>;
+export declare function getGlobalPaymentsSeries(days: number): Promise<{
+    days: number;
+    categories: string[];
+    series: {
+        name: string;
+        data: number[];
+    }[];
+    totalAmount: number;
+}>;
 export declare function getOverview(shopId: string): Promise<{
     totalOrders: number;
     totalRevenue: number;
@@ -57,6 +88,7 @@ export declare function getLowInventory(shopId: string): Promise<({
         id: string;
         phone: string | null;
         createdAt: Date;
+        shopId: string;
         addressLine1: string;
         addressLine2: string | null;
         city: string;
@@ -65,7 +97,6 @@ export declare function getLowInventory(shopId: string): Promise<({
         postalCode: string | null;
         latitude: number | null;
         longitude: number | null;
-        shopId: string;
     };
     variant: {
         product: {
@@ -78,21 +109,21 @@ export declare function getLowInventory(shopId: string): Promise<({
         createdAt: Date;
         updatedAt: Date;
         image: string | null;
-        sku: string;
-        productId: string;
-        barcode: string | null;
         price: number;
+        productId: string;
+        sku: string;
+        barcode: string | null;
         comparePrice: number | null;
         costPrice: number | null;
         weight: number | null;
     };
 } & {
     id: string;
+    locationId: string;
     createdAt: Date;
     updatedAt: Date;
-    quantity: number;
-    locationId: string;
     variantId: string;
+    quantity: number;
     reservedQuantity: number;
     reorderLevel: number | null;
 })[]>;
@@ -106,21 +137,21 @@ export declare function getRecentOrders(shopId: string, limit?: number): Promise
     items: {
         id: string;
         total: number;
-        price: number;
-        quantity: number;
         variantId: string;
+        quantity: number;
+        price: number;
         orderId: string;
         productName: string;
         variantName: string | null;
     }[];
 } & {
-    userId: string;
     id: string;
     status: import("../generated/prisma/enums").OrderStatus;
     createdAt: Date;
     updatedAt: Date;
-    currency: string;
+    userId: string;
     shopId: string;
+    currency: string;
     orderNumber: string;
     subtotal: number;
     taxTotal: number;
@@ -148,24 +179,24 @@ export declare function getRecentActivities(_shopId: string, limit?: number): Pr
             createdAt: Date;
             updatedAt: Date;
             image: string | null;
-            sku: string;
-            productId: string;
-            barcode: string | null;
             price: number;
+            productId: string;
+            sku: string;
+            barcode: string | null;
             comparePrice: number | null;
             costPrice: number | null;
             weight: number | null;
         };
     } & {
-        type: import("../generated/prisma/enums").InventoryMovementType;
         id: string;
+        locationId: string;
         createdAt: Date;
         updatedAt: Date;
-        quantity: number;
-        locationId: string;
+        type: import("../generated/prisma/enums").InventoryMovementType;
         variantId: string;
-        referenceId: string | null;
+        quantity: number;
         inventoryId: string | null;
+        referenceId: string | null;
     };
 })[]>;
 export declare function getSummaryWithDetails(shopId: string): Promise<{
@@ -602,9 +633,9 @@ export declare function getOrderActivities(shopId: string, limit?: number): Prom
         id: string;
         status: import("../generated/prisma/enums").PaymentStatus;
         createdAt: Date;
+        orderId: string;
         provider: string;
         amount: number;
-        orderId: string;
     };
 })[]>;
 export declare function getUserActivities(shopId: string, days?: number, limit?: number): Promise<{
@@ -620,10 +651,10 @@ export declare function getUserActivities(shopId: string, days?: number, limit?:
         createdAt: Date;
     }[];
     recentOrders: {
-        userId: string;
         id: string;
         status: import("../generated/prisma/enums").OrderStatus;
         createdAt: Date;
+        userId: string;
         orderNumber: string;
     }[];
 }>;

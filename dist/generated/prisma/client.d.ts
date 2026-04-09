@@ -70,6 +70,11 @@ export type ProductCategory = Prisma.ProductCategoryModel;
  */
 export type Product = Prisma.ProductModel;
 /**
+ * Model Favorite
+ *
+ */
+export type Favorite = Prisma.FavoriteModel;
+/**
  * Model ProductVariant
  *
  */

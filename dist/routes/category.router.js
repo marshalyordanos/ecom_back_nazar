@@ -36,12 +36,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const categoryController = __importStar(require("../controllers/category.controller"));
 const auth_middleware_1 = require("../middleware/auth.middleware");
+const permission_middleware_1 = require("../middleware/permission.middleware");
 const multer_1 = require("../config/multer");
 const router = (0, express_1.Router)();
 router.get("/", categoryController.listCategories);
 router.get("/:id", categoryController.getCategoryById);
-router.post("/", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), (0, multer_1.uploadSingleImage)('image'), categoryController.createCategory);
-router.patch("/:id", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), (0, multer_1.uploadSingleImage)('image'), categoryController.updateCategory);
-router.delete("/:id", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), categoryController.deleteCategory);
+router.post("/", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), (0, permission_middleware_1.requirePermission)("categories", "create"), (0, multer_1.uploadSingleImage)("image"), categoryController.createCategory);
+router.patch("/:id", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), (0, permission_middleware_1.requirePermission)("categories", "update"), (0, multer_1.uploadSingleImage)("image"), categoryController.updateCategory);
+router.delete("/:id", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), (0, permission_middleware_1.requirePermission)("categories", "delete"), categoryController.deleteCategory);
 exports.default = router;
 //# sourceMappingURL=category.router.js.map

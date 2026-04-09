@@ -36,7 +36,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createOrderAdmin = exports.listOrdersAdmin = exports.listOrderItems = exports.completeOrder = exports.cancelOrder = exports.getOrderById = exports.listMyOrders = void 0;
+exports.guestCheckout = exports.createOrderAdmin = exports.listOrdersAdmin = exports.listOrderItems = exports.completeOrder = exports.cancelOrder = exports.trackOrder = exports.getOrderById = exports.listMyOrders = void 0;
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 const orderService = __importStar(require("../services/order.service"));
 const queryParser_1 = require("../utils/queryParser");
@@ -48,6 +48,11 @@ exports.listMyOrders = (0, catchAsync_1.default)(async (req, res, _next) => {
 exports.getOrderById = (0, catchAsync_1.default)(async (req, res, _next) => {
     const userId = req.user ? req.user.id : undefined;
     const order = await orderService.getOrderById(req.params.id, userId);
+    res.status(200).json(order);
+});
+exports.trackOrder = (0, catchAsync_1.default)(async (req, res, _next) => {
+    const reference = String(req.query.reference || req.query.trackingNumber || req.query.orderNumber || "");
+    const order = await orderService.trackOrderByReference(reference);
     res.status(200).json(order);
 });
 exports.cancelOrder = (0, catchAsync_1.default)(async (req, res, _next) => {
@@ -71,5 +76,9 @@ exports.listOrdersAdmin = (0, catchAsync_1.default)(async (req, res, _next) => {
 exports.createOrderAdmin = (0, catchAsync_1.default)(async (req, res, _next) => {
     const order = await orderService.createOrderAdmin(req.body);
     res.status(201).json(order);
+});
+exports.guestCheckout = (0, catchAsync_1.default)(async (req, res, _next) => {
+    const result = await orderService.checkoutAsGuest(req.body);
+    res.status(201).json(result);
 });
 //# sourceMappingURL=order.controller.js.map
