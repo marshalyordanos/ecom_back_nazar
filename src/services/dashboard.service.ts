@@ -375,7 +375,7 @@ export async function getRecentOrders(shopId: string, limit = 10) {
   });
 }
 
-export async function getRecentActivities(_shopId: string, limit = 20) {
+export async function getRecentActivities(_shopId: string, limit = 10) {
   const [recentOrders, recentMovements] = await Promise.all([
     prisma.order.findMany({
       orderBy: { createdAt: "desc" },
@@ -766,6 +766,8 @@ export async function getProductSummary(shopId: string) {
     _count: { id: true },
   });
 
+  const totalSearchLogs = await prisma.searchLog.count({  });
+  const totalViewCount = await prisma.productView.count({  });
   const map = byStatus.reduce<Record<string, number>>((acc, s) => {
     acc[String(s.status)] = s._count.id;
     return acc;
@@ -778,6 +780,8 @@ export async function getProductSummary(shopId: string) {
     active: map.ACTIVE ?? 0,
     draft: map.DRAFT ?? 0,
     archived: map.ARCHIVED ?? 0,
+    totalSearchLogs,
+    totalViewCount,
   };
 }
 
@@ -976,47 +980,19 @@ export async function getNotificationSummary(shopId: string) {
 export async function getSearchSummary(shopId: string, days = 30) {
   const since = getSinceDate(days);
 
-  const [totalSearches, distinctQueries, failed] = await Promise.all([
+  const [totalSearches, distinctQueries] = await Promise.all([
     prisma.searchLog.count({ where: { createdAt: { gte: since } } }),
     prisma.searchLog.findMany({
       where: { createdAt: { gte: since } },
       distinct: ["query"],
       select: { query: true },
     }),
-    (async () => {
-      const byQuery = await prisma.searchLog.groupBy({
-        by: ["query"],
-        where: { createdAt: { gte: since }, query: { not: "" } },
-        _count: { id: true },
-      });
-
-      let failedSearches = 0;
-      for (const q of byQuery) {
-        const query = (q.query ?? "").trim();
-        if (!query) continue;
-        const exists = await prisma.product.findFirst({
-          where: {
-            shopId,
-            OR: [
-              { name: { contains: query, mode: "insensitive" } },
-              { slug: { contains: query, mode: "insensitive" } },
-              { description: { contains: query, mode: "insensitive" } },
-              { shortDescription: { contains: query, mode: "insensitive" } },
-            ],
-          },
-          select: { id: true },
-        });
-        if (!exists) failedSearches += q._count.id;
-      }
-      return failedSearches;
-    })(),
   ]);
 
   return {
     days,
     totalSearches,
     uniqueQueries: distinctQueries.length,
-    failedSearches: failed,
   };
 }
 
