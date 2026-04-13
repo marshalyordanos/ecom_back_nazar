@@ -5,7 +5,6 @@ import { tokenTypes } from "../config/tokens";
 import { prisma } from "../lib/prisma";
 import { hashPassword, comparePassword } from "../utils/hash";
 import AppError from "../utils/appError";
-<<<<<<< HEAD
 import { sendOTPViaAfroMessage, verifyOTPViaAfroMessage } from "./sms.service";
 import { sendOTPEmail } from "./email.service";
 import {
@@ -16,10 +15,8 @@ import {
   OTP_MAX_ATTEMPTS,
   verifyOTP,
 } from "./otp.service";
-=======
 import { sendEmail } from "../utils/email";
 import { getMergedPermissionsForUser, mergedMapToList } from "./rbacPermission.service";
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 
 const accessExpirationMinutes =
   parseInt(config.jwt.accessExpirationMinutes, 10) || 60;

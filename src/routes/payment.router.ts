@@ -1,20 +1,3 @@
-<<<<<<< HEAD
-import { Router } from "express";
-import * as paymentController from "../controllers/payment.controller";
-import { protect, restrictTo } from "../middleware/auth.middleware";
-
-const router = Router();
-
-router.use(protect);
-router.use(restrictTo("admin"));
-
-router.get("/", paymentController.listPayments);
-router.get("/:id", paymentController.getPaymentById);
-router.post("/:id/capture", paymentController.capturePayment);
-router.post("/:id/refund", paymentController.refundPayment);
-
-export default router;
-=======
 import { Router } from "express";
 import * as paymentController from "../controllers/payment.controller";
 import { protect, restrictTo } from "../middleware/auth.middleware";
@@ -31,4 +14,3 @@ router.post("/:id/capture", requirePermission("payments", "update"), paymentCont
 router.post("/:id/refund", requirePermission("payments", "update"), paymentController.refundPayment);
 
 export default router;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351

@@ -1,23 +1,3 @@
-<<<<<<< HEAD
-import { Router } from "express";
-import * as roleController from "../controllers/role.controller";
-import { protect, restrictTo } from "../middleware/auth.middleware";
-
-const router = Router();
-
-router.use(protect);
-router.use(restrictTo("admin"));
-
-router.get("/", roleController.listRoles);
-router.post("/", roleController.createRole);
-router.get("/:id", roleController.getRoleById);
-router.patch("/:id", roleController.updateRole);
-router.delete("/:id", roleController.deleteRole);
-router.post("/:id/permissions", roleController.assignPermissions);
-router.delete("/:id/permissions", roleController.removePermissions);
-
-export default router;
-=======
 import { Router } from "express";
 import * as roleController from "../controllers/role.controller";
 import { protect, restrictTo } from "../middleware/auth.middleware";
@@ -37,4 +17,3 @@ router.post("/:id/permissions", requirePermission("roles", "update"), roleContro
 router.delete("/:id/permissions", requirePermission("roles", "update"), roleController.removePermissions);
 router.post("/:id/assign", requirePermission("roles", "update"), roleController.assignRoleToUser);
 export default router;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
