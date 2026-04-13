@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import type { MergedPermissionMap } from "../services/rbacPermission.service";
 export interface JwtPayload {
     userId: string;
     email: string;
@@ -10,7 +11,10 @@ export interface AuthRequest extends Request {
         email: string;
         roles: string[];
         isSuperAdmin: boolean;
+        locationId?: string | null;
     };
+    /** Cached merged RBAC map for non–super-admins (set by permission middleware). */
+    mergedPermissions?: MergedPermissionMap;
 }
 /**
  * Protect routes: require valid JWT access token.

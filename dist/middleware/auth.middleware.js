@@ -40,6 +40,7 @@ const protect = async (req, _res, next) => {
             email: user.email,
             isSuperAdmin: user.isSuperAdmin,
             roles: user.roles.map((r) => r.name),
+            locationId: user.locationId ?? null,
         };
         console.log("req.user222222: ", req.user);
         next();
@@ -79,6 +80,7 @@ const optionalAuth = async (req, _res, next) => {
             email: user.email,
             isSuperAdmin: user.isSuperAdmin,
             roles: user.roles.map((r) => r.name),
+            locationId: user.locationId ?? null,
         };
     }
     catch {

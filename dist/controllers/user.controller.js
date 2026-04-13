@@ -64,7 +64,8 @@ exports.getById = (0, catchAsync_1.default)(async (req, res, _next) => {
 });
 exports.listUsers = (0, catchAsync_1.default)(async (req, res, _next) => {
     const query = (0, queryParser_1.parseListQuery)(req);
-    const result = await userService.listUsers(query);
+    const roleId = typeof req.query.roleId === "string" ? req.query.roleId : undefined;
+    const result = await userService.listUsers({ ...query, roleId }, Boolean(req.query.onlyUsers));
     res.status(200).json(result);
 });
 exports.updateUser = (0, catchAsync_1.default)(async (req, res, _next) => {

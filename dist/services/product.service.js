@@ -9,7 +9,14 @@ exports.getProductByIdMobile = getProductByIdMobile;
 exports.createProduct = createProduct;
 exports.updateProduct = updateProduct;
 exports.deleteProduct = deleteProduct;
+exports.listVariants = listVariants;
 exports.getFeaturedProducts = getFeaturedProducts;
+<<<<<<< HEAD
+=======
+exports.getNewProducts = getNewProducts;
+exports.getPopularProducts = getPopularProducts;
+exports.getMostViewedProducts = getMostViewedProducts;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 exports.getVariantById = getVariantById;
 exports.createVariant = createVariant;
 exports.updateVariant = updateVariant;
@@ -34,7 +41,8 @@ const appError_1 = __importDefault(require("../utils/appError"));
 const apiFeature_1 = require("../utils/apiFeature");
 const fs_1 = __importDefault(require("fs"));
 const cloudinary_1 = require("../config/cloudinary");
-const searchableFields = ["name", "slug", "description", "shortDescription"];
+const searchableFieldsforVariant = ["product.name", "sku", "product.brand.name", "product.category.name", "product.description", "product.shortDescription"];
+const searchableFields = ["name", "slug", "brand.name", "category.name", "description", "shortDescription"];
 const dateFields = ["createdAt", "updatedAt"];
 async function listProducts(shopId, track, query, req) {
     // 🔥 Save search log
@@ -160,6 +168,31 @@ async function deleteProduct(id, _shopId) {
     await prisma_1.prisma.product.delete({ where: { id } });
     return { message: "Product deleted successfully" };
 }
+async function listVariants(shopId, query) {
+    const feature = new apiFeature_1.PrismaQueryFeature({
+        ...query,
+        searchableFields: searchableFieldsforVariant,
+        dateFields,
+    });
+    const { skip, take, where, orderBy } = feature.getQuery();
+    let whereWithShop = shopId ? { ...where, shopId } : where;
+    const variants = await prisma_1.prisma.productVariant.findMany({
+        where: whereWithShop,
+        orderBy,
+        skip,
+        take,
+        include: {
+            product: { select: { id: true, name: true, slug: true, brand: { select: { id: true, name: true, slug: true } }, category: { select: { id: true, name: true, slug: true } } } },
+            inventories: true,
+            variantOptionValues: {
+                include: { optionValue: { include: { option: true } } },
+            },
+            media: { orderBy: { position: "asc" } },
+        },
+    });
+    const total = await prisma_1.prisma.productVariant.count({ where: whereWithShop });
+    return { data: variants, pagination: feature.getPagination(total) };
+}
 async function getFeaturedProducts(shopId, limit = 10) {
     const where = { isFeatured: true, status: "ACTIVE" };
     if (shopId)
@@ -178,6 +211,95 @@ async function getFeaturedProducts(shopId, limit = 10) {
     });
     return products;
 }
+<<<<<<< HEAD
+=======
+async function getNewProducts(shopId, limit = 10) {
+    const where = { status: "ACTIVE" };
+    if (shopId)
+        where.shopId = shopId;
+    return prisma_1.prisma.product.findMany({
+        where,
+        orderBy: { createdAt: "desc" },
+        take: limit,
+        include: {
+            brand: { select: { id: true, name: true, slug: true } },
+            category: { select: { id: true, name: true, slug: true } },
+            variants: {
+                take: 3,
+                include: { media: { take: 1 } },
+            },
+        },
+    });
+}
+async function getPopularProducts(shopId, limit = 10) {
+    const grouped = await prisma_1.prisma.orderItem.groupBy({
+        by: ["variantId"],
+        _sum: { quantity: true },
+        where: shopId ? { order: { shopId } } : undefined,
+        orderBy: { _sum: { quantity: "desc" } },
+        take: Math.max(limit * 4, 20),
+    });
+    if (!grouped.length)
+        return [];
+    const variantIds = grouped.map((g) => g.variantId);
+    const variants = await prisma_1.prisma.productVariant.findMany({
+        where: { id: { in: variantIds } },
+        select: { id: true, productId: true },
+    });
+    const productIdsByVariantId = new Map(variants.map((v) => [v.id, v.productId]));
+    const seen = new Set();
+    const rankedProductIds = [];
+    for (const row of grouped) {
+        const productId = productIdsByVariantId.get(row.variantId);
+        if (!productId || seen.has(productId))
+            continue;
+        seen.add(productId);
+        rankedProductIds.push(productId);
+        if (rankedProductIds.length >= limit)
+            break;
+    }
+    if (!rankedProductIds.length)
+        return [];
+    const products = await prisma_1.prisma.product.findMany({
+        where: { id: { in: rankedProductIds }, status: "ACTIVE" },
+        include: {
+            brand: { select: { id: true, name: true, slug: true } },
+            category: { select: { id: true, name: true, slug: true } },
+            variants: {
+                take: 3,
+                include: { media: { take: 1 } },
+            },
+        },
+    });
+    const byId = new Map(products.map((p) => [p.id, p]));
+    return rankedProductIds.map((id) => byId.get(id)).filter(Boolean);
+}
+async function getMostViewedProducts(shopId, limit = 10) {
+    const grouped = await prisma_1.prisma.productView.groupBy({
+        by: ["productId"],
+        where: shopId ? { product: { shopId } } : undefined,
+        _count: { id: true },
+        orderBy: { _count: { id: "desc" } },
+        take: Math.max(limit * 2, 20),
+    });
+    if (!grouped.length)
+        return [];
+    const rankedIds = grouped.map((g) => g.productId);
+    const products = await prisma_1.prisma.product.findMany({
+        where: { id: { in: rankedIds }, status: "ACTIVE" },
+        include: {
+            brand: { select: { id: true, name: true, slug: true } },
+            category: { select: { id: true, name: true, slug: true } },
+            variants: {
+                take: 3,
+                include: { media: { take: 1 } },
+            },
+        },
+    });
+    const byId = new Map(products.map((p) => [p.id, p]));
+    return rankedIds.map((id) => byId.get(id)).filter(Boolean).slice(0, limit);
+}
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 async function getVariantById(id) {
     const variant = await prisma_1.prisma.productVariant.findUnique({
         where: { id },
@@ -235,6 +357,7 @@ async function createVariant(productId, data, file) {
             },
         });
         // 2. Inventory logic ported from inventory.service.ts
+<<<<<<< HEAD
         let inventory = await prismaTx.inventory.findFirst({
             where: { variantId: variant.id, locationId: data.locationId },
         });
@@ -243,10 +366,24 @@ async function createVariant(productId, data, file) {
                 data: {
                     variantId: variant.id,
                     locationId: data.locationId,
+=======
+        let locations = await prismaTx.shopLocation.findMany({
+            where: {
+                shopId: product.shopId,
+            },
+        });
+        // create inventory for each location
+        await Promise.all(locations.map(async (location) => {
+            await prismaTx.inventory.create({
+                data: {
+                    variantId: variant.id,
+                    locationId: location.id,
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
                     quantity: 0,
                     reservedQuantity: 0,
                 },
             });
+<<<<<<< HEAD
         }
         const newQty = data.type === "PURCHASE" || data.type === "RETURN" || data.type === "TRANSFER"
             ? inventory.quantity + data.quantity
@@ -269,6 +406,9 @@ async function createVariant(productId, data, file) {
                 data: { quantity: Math.max(0, newQty) },
             }),
         ]);
+=======
+        }));
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
         return await prismaTx.productVariant.findUnique({
             where: { id: variant.id },
             include: {

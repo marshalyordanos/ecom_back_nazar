@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Router } from "express";
 import * as orderController from "../controllers/order.controller";
 import { protect, restrictTo } from "../middleware/auth.middleware";
@@ -13,3 +14,42 @@ router.post("/:id/complete", protect, restrictTo("admin"), orderController.compl
 router.get("/:id/items", protect, orderController.listOrderItems);
 
 export default router;
+=======
+import { Router } from "express";
+import * as orderController from "../controllers/order.controller";
+import { protect, restrictTo } from "../middleware/auth.middleware";
+import { requirePermission } from "../middleware/permission.middleware";
+
+const router = Router();
+
+router.post("/guest/checkout", orderController.guestCheckout);
+router.get("/track", orderController.trackOrder);
+
+router.get("/", protect, orderController.listMyOrders);
+router.get(
+  "/admin/list",
+  protect,
+  restrictTo("admin"),
+  requirePermission("orders", "read"),
+  orderController.listOrdersAdmin
+);
+router.post(
+  "/admin/create",
+  protect,
+  restrictTo("admin"),
+  requirePermission("orders", "create"),
+  orderController.createOrderAdmin
+);
+router.get("/:id", protect, orderController.getOrderById);
+router.post("/:id/cancel", protect, orderController.cancelOrder);
+router.post(
+  "/:id/complete",
+  protect,
+  restrictTo("admin"),
+  requirePermission("orders", "update"),
+  orderController.completeOrder
+);
+router.get("/:id/items", protect, orderController.listOrderItems);
+
+export default router;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351

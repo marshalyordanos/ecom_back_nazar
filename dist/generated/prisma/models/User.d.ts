@@ -23,6 +23,7 @@ export type UserMinAggregateOutputType = {
     status: $Enums.UserStatus | null;
     emailVerifiedAt: Date | null;
     phoneVerifiedAt: Date | null;
+    locationId: string | null;
     createdAt: Date | null;
     updatedAt: Date | null;
 };
@@ -38,6 +39,7 @@ export type UserMaxAggregateOutputType = {
     status: $Enums.UserStatus | null;
     emailVerifiedAt: Date | null;
     phoneVerifiedAt: Date | null;
+    locationId: string | null;
     createdAt: Date | null;
     updatedAt: Date | null;
 };
@@ -53,6 +55,7 @@ export type UserCountAggregateOutputType = {
     status: number;
     emailVerifiedAt: number;
     phoneVerifiedAt: number;
+    locationId: number;
     createdAt: number;
     updatedAt: number;
     _all: number;
@@ -69,6 +72,7 @@ export type UserMinAggregateInputType = {
     status?: true;
     emailVerifiedAt?: true;
     phoneVerifiedAt?: true;
+    locationId?: true;
     createdAt?: true;
     updatedAt?: true;
 };
@@ -84,6 +88,7 @@ export type UserMaxAggregateInputType = {
     status?: true;
     emailVerifiedAt?: true;
     phoneVerifiedAt?: true;
+    locationId?: true;
     createdAt?: true;
     updatedAt?: true;
 };
@@ -99,6 +104,7 @@ export type UserCountAggregateInputType = {
     status?: true;
     emailVerifiedAt?: true;
     phoneVerifiedAt?: true;
+    locationId?: true;
     createdAt?: true;
     updatedAt?: true;
     _all?: true;
@@ -177,6 +183,7 @@ export type UserGroupByOutputType = {
     status: $Enums.UserStatus;
     emailVerifiedAt: Date | null;
     phoneVerifiedAt: Date | null;
+    locationId: string | null;
     createdAt: Date;
     updatedAt: Date;
     _count: UserCountAggregateOutputType | null;
@@ -201,6 +208,7 @@ export type UserWhereInput = {
     status?: Prisma.EnumUserStatusFilter<"User"> | $Enums.UserStatus;
     emailVerifiedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null;
     phoneVerifiedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null;
+    locationId?: Prisma.StringNullableFilter<"User"> | string | null;
     createdAt?: Prisma.DateTimeFilter<"User"> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string;
     roles?: Prisma.RoleListRelationFilter;
@@ -214,6 +222,11 @@ export type UserWhereInput = {
     searchLogs?: Prisma.SearchLogListRelationFilter;
     notifications?: Prisma.NotificationListRelationFilter;
     savedAddresses?: Prisma.SavedAddressListRelationFilter;
+<<<<<<< HEAD
+=======
+    favorites?: Prisma.FavoriteListRelationFilter;
+    location?: Prisma.XOR<Prisma.ShopLocationNullableScalarRelationFilter, Prisma.ShopLocationWhereInput> | null;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserOrderByWithRelationInput = {
     id?: Prisma.SortOrder;
@@ -227,6 +240,7 @@ export type UserOrderByWithRelationInput = {
     status?: Prisma.SortOrder;
     emailVerifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder;
     phoneVerifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder;
+    locationId?: Prisma.SortOrderInput | Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
     roles?: Prisma.RoleOrderByRelationAggregateInput;
@@ -240,6 +254,11 @@ export type UserOrderByWithRelationInput = {
     searchLogs?: Prisma.SearchLogOrderByRelationAggregateInput;
     notifications?: Prisma.NotificationOrderByRelationAggregateInput;
     savedAddresses?: Prisma.SavedAddressOrderByRelationAggregateInput;
+<<<<<<< HEAD
+=======
+    favorites?: Prisma.FavoriteOrderByRelationAggregateInput;
+    location?: Prisma.ShopLocationOrderByWithRelationInput;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: string;
@@ -256,6 +275,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
     status?: Prisma.EnumUserStatusFilter<"User"> | $Enums.UserStatus;
     emailVerifiedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null;
     phoneVerifiedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null;
+    locationId?: Prisma.StringNullableFilter<"User"> | string | null;
     createdAt?: Prisma.DateTimeFilter<"User"> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string;
     roles?: Prisma.RoleListRelationFilter;
@@ -269,6 +289,11 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
     searchLogs?: Prisma.SearchLogListRelationFilter;
     notifications?: Prisma.NotificationListRelationFilter;
     savedAddresses?: Prisma.SavedAddressListRelationFilter;
+<<<<<<< HEAD
+=======
+    favorites?: Prisma.FavoriteListRelationFilter;
+    location?: Prisma.XOR<Prisma.ShopLocationNullableScalarRelationFilter, Prisma.ShopLocationWhereInput> | null;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 }, "id" | "email" | "phone">;
 export type UserOrderByWithAggregationInput = {
     id?: Prisma.SortOrder;
@@ -282,6 +307,7 @@ export type UserOrderByWithAggregationInput = {
     status?: Prisma.SortOrder;
     emailVerifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder;
     phoneVerifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder;
+    locationId?: Prisma.SortOrderInput | Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
     _count?: Prisma.UserCountOrderByAggregateInput;
@@ -303,6 +329,7 @@ export type UserScalarWhereWithAggregatesInput = {
     status?: Prisma.EnumUserStatusWithAggregatesFilter<"User"> | $Enums.UserStatus;
     emailVerifiedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null;
     phoneVerifiedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null;
+    locationId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null;
     createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string;
     updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string;
 };
@@ -331,6 +358,11 @@ export type UserCreateInput = {
     searchLogs?: Prisma.SearchLogCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressCreateNestedManyWithoutUserInput;
+<<<<<<< HEAD
+=======
+    favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput;
+    location?: Prisma.ShopLocationCreateNestedOneWithoutUsersInput;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUncheckedCreateInput = {
     id?: string;
@@ -344,6 +376,7 @@ export type UserUncheckedCreateInput = {
     status?: $Enums.UserStatus;
     emailVerifiedAt?: Date | string | null;
     phoneVerifiedAt?: Date | string | null;
+    locationId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUsersInput;
@@ -357,6 +390,10 @@ export type UserUncheckedCreateInput = {
     searchLogs?: Prisma.SearchLogUncheckedCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressUncheckedCreateNestedManyWithoutUserInput;
+<<<<<<< HEAD
+=======
+    favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUpdateInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -383,6 +420,11 @@ export type UserUpdateInput = {
     searchLogs?: Prisma.SearchLogUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUpdateManyWithoutUserNestedInput;
+<<<<<<< HEAD
+=======
+    favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput;
+    location?: Prisma.ShopLocationUpdateOneWithoutUsersNestedInput;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUncheckedUpdateInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -396,6 +438,7 @@ export type UserUncheckedUpdateInput = {
     status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus;
     emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     roles?: Prisma.RoleUncheckedUpdateManyWithoutUsersNestedInput;
@@ -409,6 +452,10 @@ export type UserUncheckedUpdateInput = {
     searchLogs?: Prisma.SearchLogUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUncheckedUpdateManyWithoutUserNestedInput;
+<<<<<<< HEAD
+=======
+    favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserCreateManyInput = {
     id?: string;
@@ -422,6 +469,7 @@ export type UserCreateManyInput = {
     status?: $Enums.UserStatus;
     emailVerifiedAt?: Date | string | null;
     phoneVerifiedAt?: Date | string | null;
+    locationId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
 };
@@ -452,8 +500,17 @@ export type UserUncheckedUpdateManyInput = {
     status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus;
     emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+};
+export type UserListRelationFilter = {
+    every?: Prisma.UserWhereInput;
+    some?: Prisma.UserWhereInput;
+    none?: Prisma.UserWhereInput;
+};
+export type UserOrderByRelationAggregateInput = {
+    _count?: Prisma.SortOrder;
 };
 export type UserCountOrderByAggregateInput = {
     id?: Prisma.SortOrder;
@@ -467,6 +524,7 @@ export type UserCountOrderByAggregateInput = {
     status?: Prisma.SortOrder;
     emailVerifiedAt?: Prisma.SortOrder;
     phoneVerifiedAt?: Prisma.SortOrder;
+    locationId?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
 };
@@ -482,6 +540,7 @@ export type UserMaxOrderByAggregateInput = {
     status?: Prisma.SortOrder;
     emailVerifiedAt?: Prisma.SortOrder;
     phoneVerifiedAt?: Prisma.SortOrder;
+    locationId?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
 };
@@ -497,6 +556,7 @@ export type UserMinOrderByAggregateInput = {
     status?: Prisma.SortOrder;
     emailVerifiedAt?: Prisma.SortOrder;
     phoneVerifiedAt?: Prisma.SortOrder;
+    locationId?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
 };
@@ -504,17 +564,47 @@ export type UserScalarRelationFilter = {
     is?: Prisma.UserWhereInput;
     isNot?: Prisma.UserWhereInput;
 };
-export type UserListRelationFilter = {
-    every?: Prisma.UserWhereInput;
-    some?: Prisma.UserWhereInput;
-    none?: Prisma.UserWhereInput;
-};
-export type UserOrderByRelationAggregateInput = {
-    _count?: Prisma.SortOrder;
-};
 export type UserNullableScalarRelationFilter = {
     is?: Prisma.UserWhereInput | null;
     isNot?: Prisma.UserWhereInput | null;
+};
+export type UserCreateNestedManyWithoutLocationInput = {
+    create?: Prisma.XOR<Prisma.UserCreateWithoutLocationInput, Prisma.UserUncheckedCreateWithoutLocationInput> | Prisma.UserCreateWithoutLocationInput[] | Prisma.UserUncheckedCreateWithoutLocationInput[];
+    connectOrCreate?: Prisma.UserCreateOrConnectWithoutLocationInput | Prisma.UserCreateOrConnectWithoutLocationInput[];
+    createMany?: Prisma.UserCreateManyLocationInputEnvelope;
+    connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[];
+};
+export type UserUncheckedCreateNestedManyWithoutLocationInput = {
+    create?: Prisma.XOR<Prisma.UserCreateWithoutLocationInput, Prisma.UserUncheckedCreateWithoutLocationInput> | Prisma.UserCreateWithoutLocationInput[] | Prisma.UserUncheckedCreateWithoutLocationInput[];
+    connectOrCreate?: Prisma.UserCreateOrConnectWithoutLocationInput | Prisma.UserCreateOrConnectWithoutLocationInput[];
+    createMany?: Prisma.UserCreateManyLocationInputEnvelope;
+    connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[];
+};
+export type UserUpdateManyWithoutLocationNestedInput = {
+    create?: Prisma.XOR<Prisma.UserCreateWithoutLocationInput, Prisma.UserUncheckedCreateWithoutLocationInput> | Prisma.UserCreateWithoutLocationInput[] | Prisma.UserUncheckedCreateWithoutLocationInput[];
+    connectOrCreate?: Prisma.UserCreateOrConnectWithoutLocationInput | Prisma.UserCreateOrConnectWithoutLocationInput[];
+    upsert?: Prisma.UserUpsertWithWhereUniqueWithoutLocationInput | Prisma.UserUpsertWithWhereUniqueWithoutLocationInput[];
+    createMany?: Prisma.UserCreateManyLocationInputEnvelope;
+    set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[];
+    disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[];
+    delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[];
+    connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[];
+    update?: Prisma.UserUpdateWithWhereUniqueWithoutLocationInput | Prisma.UserUpdateWithWhereUniqueWithoutLocationInput[];
+    updateMany?: Prisma.UserUpdateManyWithWhereWithoutLocationInput | Prisma.UserUpdateManyWithWhereWithoutLocationInput[];
+    deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[];
+};
+export type UserUncheckedUpdateManyWithoutLocationNestedInput = {
+    create?: Prisma.XOR<Prisma.UserCreateWithoutLocationInput, Prisma.UserUncheckedCreateWithoutLocationInput> | Prisma.UserCreateWithoutLocationInput[] | Prisma.UserUncheckedCreateWithoutLocationInput[];
+    connectOrCreate?: Prisma.UserCreateOrConnectWithoutLocationInput | Prisma.UserCreateOrConnectWithoutLocationInput[];
+    upsert?: Prisma.UserUpsertWithWhereUniqueWithoutLocationInput | Prisma.UserUpsertWithWhereUniqueWithoutLocationInput[];
+    createMany?: Prisma.UserCreateManyLocationInputEnvelope;
+    set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[];
+    disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[];
+    delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[];
+    connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[];
+    update?: Prisma.UserUpdateWithWhereUniqueWithoutLocationInput | Prisma.UserUpdateWithWhereUniqueWithoutLocationInput[];
+    updateMany?: Prisma.UserUpdateManyWithWhereWithoutLocationInput | Prisma.UserUpdateManyWithWhereWithoutLocationInput[];
+    deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[];
 };
 export type BoolFieldUpdateOperationsInput = {
     set?: boolean;
@@ -582,6 +672,18 @@ export type UserUncheckedUpdateManyWithoutRolesNestedInput = {
     update?: Prisma.UserUpdateWithWhereUniqueWithoutRolesInput | Prisma.UserUpdateWithWhereUniqueWithoutRolesInput[];
     updateMany?: Prisma.UserUpdateManyWithWhereWithoutRolesInput | Prisma.UserUpdateManyWithWhereWithoutRolesInput[];
     deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[];
+};
+export type UserCreateNestedOneWithoutFavoritesInput = {
+    create?: Prisma.XOR<Prisma.UserCreateWithoutFavoritesInput, Prisma.UserUncheckedCreateWithoutFavoritesInput>;
+    connectOrCreate?: Prisma.UserCreateOrConnectWithoutFavoritesInput;
+    connect?: Prisma.UserWhereUniqueInput;
+};
+export type UserUpdateOneRequiredWithoutFavoritesNestedInput = {
+    create?: Prisma.XOR<Prisma.UserCreateWithoutFavoritesInput, Prisma.UserUncheckedCreateWithoutFavoritesInput>;
+    connectOrCreate?: Prisma.UserCreateOrConnectWithoutFavoritesInput;
+    upsert?: Prisma.UserUpsertWithoutFavoritesInput;
+    connect?: Prisma.UserWhereUniqueInput;
+    update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutFavoritesInput, Prisma.UserUpdateWithoutFavoritesInput>, Prisma.UserUncheckedUpdateWithoutFavoritesInput>;
 };
 export type UserCreateNestedOneWithoutCartsInput = {
     create?: Prisma.XOR<Prisma.UserCreateWithoutCartsInput, Prisma.UserUncheckedCreateWithoutCartsInput>;
@@ -685,6 +787,98 @@ export type UserUpdateOneWithoutNotificationsNestedInput = {
     connect?: Prisma.UserWhereUniqueInput;
     update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutNotificationsInput, Prisma.UserUpdateWithoutNotificationsInput>, Prisma.UserUncheckedUpdateWithoutNotificationsInput>;
 };
+export type UserCreateWithoutLocationInput = {
+    id?: string;
+    email: string;
+    phone: string;
+    passwordHash: string;
+    firstName: string;
+    lastName: string;
+    avatarUrl?: string | null;
+    isSuperAdmin: boolean;
+    status?: $Enums.UserStatus;
+    emailVerifiedAt?: Date | string | null;
+    phoneVerifiedAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    roles?: Prisma.RoleCreateNestedManyWithoutUsersInput;
+    tokens?: Prisma.TokenCreateNestedManyWithoutUserInput;
+    carts?: Prisma.CartCreateNestedManyWithoutUserInput;
+    orders?: Prisma.OrderCreateNestedManyWithoutUserInput;
+    reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput;
+    couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput;
+    productViews?: Prisma.ProductViewCreateNestedManyWithoutUserInput;
+    searchLogs?: Prisma.SearchLogCreateNestedManyWithoutUserInput;
+    notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
+    savedAddresses?: Prisma.SavedAddressCreateNestedManyWithoutUserInput;
+    favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput;
+};
+export type UserUncheckedCreateWithoutLocationInput = {
+    id?: string;
+    email: string;
+    phone: string;
+    passwordHash: string;
+    firstName: string;
+    lastName: string;
+    avatarUrl?: string | null;
+    isSuperAdmin: boolean;
+    status?: $Enums.UserStatus;
+    emailVerifiedAt?: Date | string | null;
+    phoneVerifiedAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUsersInput;
+    tokens?: Prisma.TokenUncheckedCreateNestedManyWithoutUserInput;
+    carts?: Prisma.CartUncheckedCreateNestedManyWithoutUserInput;
+    orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput;
+    reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput;
+    couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput;
+    productViews?: Prisma.ProductViewUncheckedCreateNestedManyWithoutUserInput;
+    searchLogs?: Prisma.SearchLogUncheckedCreateNestedManyWithoutUserInput;
+    notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
+    savedAddresses?: Prisma.SavedAddressUncheckedCreateNestedManyWithoutUserInput;
+    favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput;
+};
+export type UserCreateOrConnectWithoutLocationInput = {
+    where: Prisma.UserWhereUniqueInput;
+    create: Prisma.XOR<Prisma.UserCreateWithoutLocationInput, Prisma.UserUncheckedCreateWithoutLocationInput>;
+};
+export type UserCreateManyLocationInputEnvelope = {
+    data: Prisma.UserCreateManyLocationInput | Prisma.UserCreateManyLocationInput[];
+    skipDuplicates?: boolean;
+};
+export type UserUpsertWithWhereUniqueWithoutLocationInput = {
+    where: Prisma.UserWhereUniqueInput;
+    update: Prisma.XOR<Prisma.UserUpdateWithoutLocationInput, Prisma.UserUncheckedUpdateWithoutLocationInput>;
+    create: Prisma.XOR<Prisma.UserCreateWithoutLocationInput, Prisma.UserUncheckedCreateWithoutLocationInput>;
+};
+export type UserUpdateWithWhereUniqueWithoutLocationInput = {
+    where: Prisma.UserWhereUniqueInput;
+    data: Prisma.XOR<Prisma.UserUpdateWithoutLocationInput, Prisma.UserUncheckedUpdateWithoutLocationInput>;
+};
+export type UserUpdateManyWithWhereWithoutLocationInput = {
+    where: Prisma.UserScalarWhereInput;
+    data: Prisma.XOR<Prisma.UserUpdateManyMutationInput, Prisma.UserUncheckedUpdateManyWithoutLocationInput>;
+};
+export type UserScalarWhereInput = {
+    AND?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[];
+    OR?: Prisma.UserScalarWhereInput[];
+    NOT?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[];
+    id?: Prisma.StringFilter<"User"> | string;
+    email?: Prisma.StringFilter<"User"> | string;
+    phone?: Prisma.StringFilter<"User"> | string;
+    passwordHash?: Prisma.StringFilter<"User"> | string;
+    firstName?: Prisma.StringFilter<"User"> | string;
+    lastName?: Prisma.StringFilter<"User"> | string;
+    avatarUrl?: Prisma.StringNullableFilter<"User"> | string | null;
+    isSuperAdmin?: Prisma.BoolFilter<"User"> | boolean;
+    status?: Prisma.EnumUserStatusFilter<"User"> | $Enums.UserStatus;
+    emailVerifiedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null;
+    phoneVerifiedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null;
+    locationId?: Prisma.StringNullableFilter<"User"> | string | null;
+    createdAt?: Prisma.DateTimeFilter<"User"> | Date | string;
+    updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string;
+};
 export type UserCreateWithoutTokensInput = {
     id?: string;
     email?: string | null;
@@ -709,6 +903,11 @@ export type UserCreateWithoutTokensInput = {
     searchLogs?: Prisma.SearchLogCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressCreateNestedManyWithoutUserInput;
+<<<<<<< HEAD
+=======
+    favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput;
+    location?: Prisma.ShopLocationCreateNestedOneWithoutUsersInput;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUncheckedCreateWithoutTokensInput = {
     id?: string;
@@ -722,6 +921,7 @@ export type UserUncheckedCreateWithoutTokensInput = {
     status?: $Enums.UserStatus;
     emailVerifiedAt?: Date | string | null;
     phoneVerifiedAt?: Date | string | null;
+    locationId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUsersInput;
@@ -734,6 +934,10 @@ export type UserUncheckedCreateWithoutTokensInput = {
     searchLogs?: Prisma.SearchLogUncheckedCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressUncheckedCreateNestedManyWithoutUserInput;
+<<<<<<< HEAD
+=======
+    favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserCreateOrConnectWithoutTokensInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -772,6 +976,11 @@ export type UserUpdateWithoutTokensInput = {
     searchLogs?: Prisma.SearchLogUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUpdateManyWithoutUserNestedInput;
+<<<<<<< HEAD
+=======
+    favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput;
+    location?: Prisma.ShopLocationUpdateOneWithoutUsersNestedInput;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUncheckedUpdateWithoutTokensInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -785,6 +994,7 @@ export type UserUncheckedUpdateWithoutTokensInput = {
     status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus;
     emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     roles?: Prisma.RoleUncheckedUpdateManyWithoutUsersNestedInput;
@@ -797,6 +1007,7 @@ export type UserUncheckedUpdateWithoutTokensInput = {
     searchLogs?: Prisma.SearchLogUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUncheckedUpdateManyWithoutUserNestedInput;
+<<<<<<< HEAD
 };
 export type UserCreateWithoutOtpRecordsInput = {
     id?: string;
@@ -910,6 +1121,9 @@ export type UserUncheckedUpdateWithoutOtpRecordsInput = {
     searchLogs?: Prisma.SearchLogUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUncheckedUpdateManyWithoutUserNestedInput;
+=======
+    favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserCreateWithoutRolesInput = {
     id?: string;
@@ -935,6 +1149,11 @@ export type UserCreateWithoutRolesInput = {
     searchLogs?: Prisma.SearchLogCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressCreateNestedManyWithoutUserInput;
+<<<<<<< HEAD
+=======
+    favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput;
+    location?: Prisma.ShopLocationCreateNestedOneWithoutUsersInput;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUncheckedCreateWithoutRolesInput = {
     id?: string;
@@ -948,6 +1167,7 @@ export type UserUncheckedCreateWithoutRolesInput = {
     status?: $Enums.UserStatus;
     emailVerifiedAt?: Date | string | null;
     phoneVerifiedAt?: Date | string | null;
+    locationId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     tokens?: Prisma.TokenUncheckedCreateNestedManyWithoutUserInput;
@@ -960,6 +1180,10 @@ export type UserUncheckedCreateWithoutRolesInput = {
     searchLogs?: Prisma.SearchLogUncheckedCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressUncheckedCreateNestedManyWithoutUserInput;
+<<<<<<< HEAD
+=======
+    favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserCreateOrConnectWithoutRolesInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -978,6 +1202,7 @@ export type UserUpdateManyWithWhereWithoutRolesInput = {
     where: Prisma.UserScalarWhereInput;
     data: Prisma.XOR<Prisma.UserUpdateManyMutationInput, Prisma.UserUncheckedUpdateManyWithoutRolesInput>;
 };
+<<<<<<< HEAD
 export type UserScalarWhereInput = {
     AND?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[];
     OR?: Prisma.UserScalarWhereInput[];
@@ -995,6 +1220,124 @@ export type UserScalarWhereInput = {
     phoneVerifiedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null;
     createdAt?: Prisma.DateTimeFilter<"User"> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string;
+=======
+export type UserCreateWithoutFavoritesInput = {
+    id?: string;
+    email: string;
+    phone: string;
+    passwordHash: string;
+    firstName: string;
+    lastName: string;
+    avatarUrl?: string | null;
+    isSuperAdmin: boolean;
+    status?: $Enums.UserStatus;
+    emailVerifiedAt?: Date | string | null;
+    phoneVerifiedAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    roles?: Prisma.RoleCreateNestedManyWithoutUsersInput;
+    tokens?: Prisma.TokenCreateNestedManyWithoutUserInput;
+    carts?: Prisma.CartCreateNestedManyWithoutUserInput;
+    orders?: Prisma.OrderCreateNestedManyWithoutUserInput;
+    reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput;
+    couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput;
+    productViews?: Prisma.ProductViewCreateNestedManyWithoutUserInput;
+    searchLogs?: Prisma.SearchLogCreateNestedManyWithoutUserInput;
+    notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
+    savedAddresses?: Prisma.SavedAddressCreateNestedManyWithoutUserInput;
+    location?: Prisma.ShopLocationCreateNestedOneWithoutUsersInput;
+};
+export type UserUncheckedCreateWithoutFavoritesInput = {
+    id?: string;
+    email: string;
+    phone: string;
+    passwordHash: string;
+    firstName: string;
+    lastName: string;
+    avatarUrl?: string | null;
+    isSuperAdmin: boolean;
+    status?: $Enums.UserStatus;
+    emailVerifiedAt?: Date | string | null;
+    phoneVerifiedAt?: Date | string | null;
+    locationId?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUsersInput;
+    tokens?: Prisma.TokenUncheckedCreateNestedManyWithoutUserInput;
+    carts?: Prisma.CartUncheckedCreateNestedManyWithoutUserInput;
+    orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput;
+    reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput;
+    couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput;
+    productViews?: Prisma.ProductViewUncheckedCreateNestedManyWithoutUserInput;
+    searchLogs?: Prisma.SearchLogUncheckedCreateNestedManyWithoutUserInput;
+    notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
+    savedAddresses?: Prisma.SavedAddressUncheckedCreateNestedManyWithoutUserInput;
+};
+export type UserCreateOrConnectWithoutFavoritesInput = {
+    where: Prisma.UserWhereUniqueInput;
+    create: Prisma.XOR<Prisma.UserCreateWithoutFavoritesInput, Prisma.UserUncheckedCreateWithoutFavoritesInput>;
+};
+export type UserUpsertWithoutFavoritesInput = {
+    update: Prisma.XOR<Prisma.UserUpdateWithoutFavoritesInput, Prisma.UserUncheckedUpdateWithoutFavoritesInput>;
+    create: Prisma.XOR<Prisma.UserCreateWithoutFavoritesInput, Prisma.UserUncheckedCreateWithoutFavoritesInput>;
+    where?: Prisma.UserWhereInput;
+};
+export type UserUpdateToOneWithWhereWithoutFavoritesInput = {
+    where?: Prisma.UserWhereInput;
+    data: Prisma.XOR<Prisma.UserUpdateWithoutFavoritesInput, Prisma.UserUncheckedUpdateWithoutFavoritesInput>;
+};
+export type UserUpdateWithoutFavoritesInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
+    phone?: Prisma.StringFieldUpdateOperationsInput | string;
+    passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
+    firstName?: Prisma.StringFieldUpdateOperationsInput | string;
+    lastName?: Prisma.StringFieldUpdateOperationsInput | string;
+    avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus;
+    emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    roles?: Prisma.RoleUpdateManyWithoutUsersNestedInput;
+    tokens?: Prisma.TokenUpdateManyWithoutUserNestedInput;
+    carts?: Prisma.CartUpdateManyWithoutUserNestedInput;
+    orders?: Prisma.OrderUpdateManyWithoutUserNestedInput;
+    reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput;
+    couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput;
+    productViews?: Prisma.ProductViewUpdateManyWithoutUserNestedInput;
+    searchLogs?: Prisma.SearchLogUpdateManyWithoutUserNestedInput;
+    notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
+    savedAddresses?: Prisma.SavedAddressUpdateManyWithoutUserNestedInput;
+    location?: Prisma.ShopLocationUpdateOneWithoutUsersNestedInput;
+};
+export type UserUncheckedUpdateWithoutFavoritesInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
+    phone?: Prisma.StringFieldUpdateOperationsInput | string;
+    passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
+    firstName?: Prisma.StringFieldUpdateOperationsInput | string;
+    lastName?: Prisma.StringFieldUpdateOperationsInput | string;
+    avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus;
+    emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    roles?: Prisma.RoleUncheckedUpdateManyWithoutUsersNestedInput;
+    tokens?: Prisma.TokenUncheckedUpdateManyWithoutUserNestedInput;
+    carts?: Prisma.CartUncheckedUpdateManyWithoutUserNestedInput;
+    orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput;
+    reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput;
+    couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput;
+    productViews?: Prisma.ProductViewUncheckedUpdateManyWithoutUserNestedInput;
+    searchLogs?: Prisma.SearchLogUncheckedUpdateManyWithoutUserNestedInput;
+    notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    savedAddresses?: Prisma.SavedAddressUncheckedUpdateManyWithoutUserNestedInput;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserCreateWithoutCartsInput = {
     id?: string;
@@ -1020,6 +1363,11 @@ export type UserCreateWithoutCartsInput = {
     searchLogs?: Prisma.SearchLogCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressCreateNestedManyWithoutUserInput;
+<<<<<<< HEAD
+=======
+    favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput;
+    location?: Prisma.ShopLocationCreateNestedOneWithoutUsersInput;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUncheckedCreateWithoutCartsInput = {
     id?: string;
@@ -1033,6 +1381,7 @@ export type UserUncheckedCreateWithoutCartsInput = {
     status?: $Enums.UserStatus;
     emailVerifiedAt?: Date | string | null;
     phoneVerifiedAt?: Date | string | null;
+    locationId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUsersInput;
@@ -1045,6 +1394,10 @@ export type UserUncheckedCreateWithoutCartsInput = {
     searchLogs?: Prisma.SearchLogUncheckedCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressUncheckedCreateNestedManyWithoutUserInput;
+<<<<<<< HEAD
+=======
+    favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserCreateOrConnectWithoutCartsInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -1083,6 +1436,11 @@ export type UserUpdateWithoutCartsInput = {
     searchLogs?: Prisma.SearchLogUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUpdateManyWithoutUserNestedInput;
+<<<<<<< HEAD
+=======
+    favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput;
+    location?: Prisma.ShopLocationUpdateOneWithoutUsersNestedInput;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUncheckedUpdateWithoutCartsInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1096,6 +1454,7 @@ export type UserUncheckedUpdateWithoutCartsInput = {
     status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus;
     emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     roles?: Prisma.RoleUncheckedUpdateManyWithoutUsersNestedInput;
@@ -1108,6 +1467,10 @@ export type UserUncheckedUpdateWithoutCartsInput = {
     searchLogs?: Prisma.SearchLogUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUncheckedUpdateManyWithoutUserNestedInput;
+<<<<<<< HEAD
+=======
+    favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserCreateWithoutOrdersInput = {
     id?: string;
@@ -1133,6 +1496,11 @@ export type UserCreateWithoutOrdersInput = {
     searchLogs?: Prisma.SearchLogCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressCreateNestedManyWithoutUserInput;
+<<<<<<< HEAD
+=======
+    favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput;
+    location?: Prisma.ShopLocationCreateNestedOneWithoutUsersInput;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUncheckedCreateWithoutOrdersInput = {
     id?: string;
@@ -1146,6 +1514,7 @@ export type UserUncheckedCreateWithoutOrdersInput = {
     status?: $Enums.UserStatus;
     emailVerifiedAt?: Date | string | null;
     phoneVerifiedAt?: Date | string | null;
+    locationId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUsersInput;
@@ -1158,6 +1527,10 @@ export type UserUncheckedCreateWithoutOrdersInput = {
     searchLogs?: Prisma.SearchLogUncheckedCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressUncheckedCreateNestedManyWithoutUserInput;
+<<<<<<< HEAD
+=======
+    favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserCreateOrConnectWithoutOrdersInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -1196,6 +1569,11 @@ export type UserUpdateWithoutOrdersInput = {
     searchLogs?: Prisma.SearchLogUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUpdateManyWithoutUserNestedInput;
+<<<<<<< HEAD
+=======
+    favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput;
+    location?: Prisma.ShopLocationUpdateOneWithoutUsersNestedInput;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUncheckedUpdateWithoutOrdersInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1209,6 +1587,7 @@ export type UserUncheckedUpdateWithoutOrdersInput = {
     status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus;
     emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     roles?: Prisma.RoleUncheckedUpdateManyWithoutUsersNestedInput;
@@ -1221,6 +1600,127 @@ export type UserUncheckedUpdateWithoutOrdersInput = {
     searchLogs?: Prisma.SearchLogUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUncheckedUpdateManyWithoutUserNestedInput;
+<<<<<<< HEAD
+=======
+    favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput;
+};
+export type UserCreateWithoutSavedAddressesInput = {
+    id?: string;
+    email: string;
+    phone: string;
+    passwordHash: string;
+    firstName: string;
+    lastName: string;
+    avatarUrl?: string | null;
+    isSuperAdmin: boolean;
+    status?: $Enums.UserStatus;
+    emailVerifiedAt?: Date | string | null;
+    phoneVerifiedAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    roles?: Prisma.RoleCreateNestedManyWithoutUsersInput;
+    tokens?: Prisma.TokenCreateNestedManyWithoutUserInput;
+    carts?: Prisma.CartCreateNestedManyWithoutUserInput;
+    orders?: Prisma.OrderCreateNestedManyWithoutUserInput;
+    reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput;
+    couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput;
+    productViews?: Prisma.ProductViewCreateNestedManyWithoutUserInput;
+    searchLogs?: Prisma.SearchLogCreateNestedManyWithoutUserInput;
+    notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
+    favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput;
+    location?: Prisma.ShopLocationCreateNestedOneWithoutUsersInput;
+};
+export type UserUncheckedCreateWithoutSavedAddressesInput = {
+    id?: string;
+    email: string;
+    phone: string;
+    passwordHash: string;
+    firstName: string;
+    lastName: string;
+    avatarUrl?: string | null;
+    isSuperAdmin: boolean;
+    status?: $Enums.UserStatus;
+    emailVerifiedAt?: Date | string | null;
+    phoneVerifiedAt?: Date | string | null;
+    locationId?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUsersInput;
+    tokens?: Prisma.TokenUncheckedCreateNestedManyWithoutUserInput;
+    carts?: Prisma.CartUncheckedCreateNestedManyWithoutUserInput;
+    orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput;
+    reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput;
+    couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput;
+    productViews?: Prisma.ProductViewUncheckedCreateNestedManyWithoutUserInput;
+    searchLogs?: Prisma.SearchLogUncheckedCreateNestedManyWithoutUserInput;
+    notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
+    favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput;
+};
+export type UserCreateOrConnectWithoutSavedAddressesInput = {
+    where: Prisma.UserWhereUniqueInput;
+    create: Prisma.XOR<Prisma.UserCreateWithoutSavedAddressesInput, Prisma.UserUncheckedCreateWithoutSavedAddressesInput>;
+};
+export type UserUpsertWithoutSavedAddressesInput = {
+    update: Prisma.XOR<Prisma.UserUpdateWithoutSavedAddressesInput, Prisma.UserUncheckedUpdateWithoutSavedAddressesInput>;
+    create: Prisma.XOR<Prisma.UserCreateWithoutSavedAddressesInput, Prisma.UserUncheckedCreateWithoutSavedAddressesInput>;
+    where?: Prisma.UserWhereInput;
+};
+export type UserUpdateToOneWithWhereWithoutSavedAddressesInput = {
+    where?: Prisma.UserWhereInput;
+    data: Prisma.XOR<Prisma.UserUpdateWithoutSavedAddressesInput, Prisma.UserUncheckedUpdateWithoutSavedAddressesInput>;
+};
+export type UserUpdateWithoutSavedAddressesInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
+    phone?: Prisma.StringFieldUpdateOperationsInput | string;
+    passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
+    firstName?: Prisma.StringFieldUpdateOperationsInput | string;
+    lastName?: Prisma.StringFieldUpdateOperationsInput | string;
+    avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus;
+    emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    roles?: Prisma.RoleUpdateManyWithoutUsersNestedInput;
+    tokens?: Prisma.TokenUpdateManyWithoutUserNestedInput;
+    carts?: Prisma.CartUpdateManyWithoutUserNestedInput;
+    orders?: Prisma.OrderUpdateManyWithoutUserNestedInput;
+    reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput;
+    couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput;
+    productViews?: Prisma.ProductViewUpdateManyWithoutUserNestedInput;
+    searchLogs?: Prisma.SearchLogUpdateManyWithoutUserNestedInput;
+    notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
+    favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput;
+    location?: Prisma.ShopLocationUpdateOneWithoutUsersNestedInput;
+};
+export type UserUncheckedUpdateWithoutSavedAddressesInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
+    phone?: Prisma.StringFieldUpdateOperationsInput | string;
+    passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
+    firstName?: Prisma.StringFieldUpdateOperationsInput | string;
+    lastName?: Prisma.StringFieldUpdateOperationsInput | string;
+    avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus;
+    emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    roles?: Prisma.RoleUncheckedUpdateManyWithoutUsersNestedInput;
+    tokens?: Prisma.TokenUncheckedUpdateManyWithoutUserNestedInput;
+    carts?: Prisma.CartUncheckedUpdateManyWithoutUserNestedInput;
+    orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput;
+    reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput;
+    couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput;
+    productViews?: Prisma.ProductViewUncheckedUpdateManyWithoutUserNestedInput;
+    searchLogs?: Prisma.SearchLogUncheckedUpdateManyWithoutUserNestedInput;
+    notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserCreateWithoutSavedAddressesInput = {
     id?: string;
@@ -1246,6 +1746,9 @@ export type UserCreateWithoutSavedAddressesInput = {
     productViews?: Prisma.ProductViewCreateNestedManyWithoutUserInput;
     searchLogs?: Prisma.SearchLogCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
+    savedAddresses?: Prisma.SavedAddressCreateNestedManyWithoutUserInput;
+    favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput;
+    location?: Prisma.ShopLocationCreateNestedOneWithoutUsersInput;
 };
 export type UserUncheckedCreateWithoutSavedAddressesInput = {
     id?: string;
@@ -1259,6 +1762,7 @@ export type UserUncheckedCreateWithoutSavedAddressesInput = {
     status?: $Enums.UserStatus;
     emailVerifiedAt?: Date | string | null;
     phoneVerifiedAt?: Date | string | null;
+    locationId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUsersInput;
@@ -1384,6 +1888,10 @@ export type UserUncheckedCreateWithoutCouponUsagesInput = {
     searchLogs?: Prisma.SearchLogUncheckedCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressUncheckedCreateNestedManyWithoutUserInput;
+<<<<<<< HEAD
+=======
+    favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserCreateOrConnectWithoutCouponUsagesInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -1422,6 +1930,11 @@ export type UserUpdateWithoutCouponUsagesInput = {
     searchLogs?: Prisma.SearchLogUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUpdateManyWithoutUserNestedInput;
+<<<<<<< HEAD
+=======
+    favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput;
+    location?: Prisma.ShopLocationUpdateOneWithoutUsersNestedInput;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUncheckedUpdateWithoutCouponUsagesInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1435,6 +1948,7 @@ export type UserUncheckedUpdateWithoutCouponUsagesInput = {
     status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus;
     emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     roles?: Prisma.RoleUncheckedUpdateManyWithoutUsersNestedInput;
@@ -1447,6 +1961,10 @@ export type UserUncheckedUpdateWithoutCouponUsagesInput = {
     searchLogs?: Prisma.SearchLogUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUncheckedUpdateManyWithoutUserNestedInput;
+<<<<<<< HEAD
+=======
+    favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserCreateWithoutReviewsInput = {
     id?: string;
@@ -1472,6 +1990,11 @@ export type UserCreateWithoutReviewsInput = {
     searchLogs?: Prisma.SearchLogCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressCreateNestedManyWithoutUserInput;
+<<<<<<< HEAD
+=======
+    favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput;
+    location?: Prisma.ShopLocationCreateNestedOneWithoutUsersInput;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUncheckedCreateWithoutReviewsInput = {
     id?: string;
@@ -1485,6 +2008,7 @@ export type UserUncheckedCreateWithoutReviewsInput = {
     status?: $Enums.UserStatus;
     emailVerifiedAt?: Date | string | null;
     phoneVerifiedAt?: Date | string | null;
+    locationId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUsersInput;
@@ -1497,6 +2021,10 @@ export type UserUncheckedCreateWithoutReviewsInput = {
     searchLogs?: Prisma.SearchLogUncheckedCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressUncheckedCreateNestedManyWithoutUserInput;
+<<<<<<< HEAD
+=======
+    favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserCreateOrConnectWithoutReviewsInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -1535,6 +2063,11 @@ export type UserUpdateWithoutReviewsInput = {
     searchLogs?: Prisma.SearchLogUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUpdateManyWithoutUserNestedInput;
+<<<<<<< HEAD
+=======
+    favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput;
+    location?: Prisma.ShopLocationUpdateOneWithoutUsersNestedInput;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUncheckedUpdateWithoutReviewsInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1548,6 +2081,7 @@ export type UserUncheckedUpdateWithoutReviewsInput = {
     status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus;
     emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     roles?: Prisma.RoleUncheckedUpdateManyWithoutUsersNestedInput;
@@ -1560,6 +2094,10 @@ export type UserUncheckedUpdateWithoutReviewsInput = {
     searchLogs?: Prisma.SearchLogUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUncheckedUpdateManyWithoutUserNestedInput;
+<<<<<<< HEAD
+=======
+    favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserCreateWithoutProductViewsInput = {
     id?: string;
@@ -1585,6 +2123,11 @@ export type UserCreateWithoutProductViewsInput = {
     searchLogs?: Prisma.SearchLogCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressCreateNestedManyWithoutUserInput;
+<<<<<<< HEAD
+=======
+    favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput;
+    location?: Prisma.ShopLocationCreateNestedOneWithoutUsersInput;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUncheckedCreateWithoutProductViewsInput = {
     id?: string;
@@ -1598,6 +2141,7 @@ export type UserUncheckedCreateWithoutProductViewsInput = {
     status?: $Enums.UserStatus;
     emailVerifiedAt?: Date | string | null;
     phoneVerifiedAt?: Date | string | null;
+    locationId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUsersInput;
@@ -1610,6 +2154,10 @@ export type UserUncheckedCreateWithoutProductViewsInput = {
     searchLogs?: Prisma.SearchLogUncheckedCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressUncheckedCreateNestedManyWithoutUserInput;
+<<<<<<< HEAD
+=======
+    favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserCreateOrConnectWithoutProductViewsInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -1648,6 +2196,11 @@ export type UserUpdateWithoutProductViewsInput = {
     searchLogs?: Prisma.SearchLogUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUpdateManyWithoutUserNestedInput;
+<<<<<<< HEAD
+=======
+    favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput;
+    location?: Prisma.ShopLocationUpdateOneWithoutUsersNestedInput;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUncheckedUpdateWithoutProductViewsInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1661,6 +2214,7 @@ export type UserUncheckedUpdateWithoutProductViewsInput = {
     status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus;
     emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     roles?: Prisma.RoleUncheckedUpdateManyWithoutUsersNestedInput;
@@ -1673,6 +2227,10 @@ export type UserUncheckedUpdateWithoutProductViewsInput = {
     searchLogs?: Prisma.SearchLogUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUncheckedUpdateManyWithoutUserNestedInput;
+<<<<<<< HEAD
+=======
+    favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserCreateWithoutSearchLogsInput = {
     id?: string;
@@ -1698,6 +2256,11 @@ export type UserCreateWithoutSearchLogsInput = {
     productViews?: Prisma.ProductViewCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressCreateNestedManyWithoutUserInput;
+<<<<<<< HEAD
+=======
+    favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput;
+    location?: Prisma.ShopLocationCreateNestedOneWithoutUsersInput;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUncheckedCreateWithoutSearchLogsInput = {
     id?: string;
@@ -1711,6 +2274,7 @@ export type UserUncheckedCreateWithoutSearchLogsInput = {
     status?: $Enums.UserStatus;
     emailVerifiedAt?: Date | string | null;
     phoneVerifiedAt?: Date | string | null;
+    locationId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUsersInput;
@@ -1723,6 +2287,10 @@ export type UserUncheckedCreateWithoutSearchLogsInput = {
     productViews?: Prisma.ProductViewUncheckedCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressUncheckedCreateNestedManyWithoutUserInput;
+<<<<<<< HEAD
+=======
+    favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserCreateOrConnectWithoutSearchLogsInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -1761,6 +2329,11 @@ export type UserUpdateWithoutSearchLogsInput = {
     productViews?: Prisma.ProductViewUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUpdateManyWithoutUserNestedInput;
+<<<<<<< HEAD
+=======
+    favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput;
+    location?: Prisma.ShopLocationUpdateOneWithoutUsersNestedInput;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUncheckedUpdateWithoutSearchLogsInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1774,6 +2347,7 @@ export type UserUncheckedUpdateWithoutSearchLogsInput = {
     status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus;
     emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     roles?: Prisma.RoleUncheckedUpdateManyWithoutUsersNestedInput;
@@ -1786,6 +2360,10 @@ export type UserUncheckedUpdateWithoutSearchLogsInput = {
     productViews?: Prisma.ProductViewUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUncheckedUpdateManyWithoutUserNestedInput;
+<<<<<<< HEAD
+=======
+    favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserCreateWithoutNotificationsInput = {
     id?: string;
@@ -1811,6 +2389,11 @@ export type UserCreateWithoutNotificationsInput = {
     productViews?: Prisma.ProductViewCreateNestedManyWithoutUserInput;
     searchLogs?: Prisma.SearchLogCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressCreateNestedManyWithoutUserInput;
+<<<<<<< HEAD
+=======
+    favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput;
+    location?: Prisma.ShopLocationCreateNestedOneWithoutUsersInput;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUncheckedCreateWithoutNotificationsInput = {
     id?: string;
@@ -1824,6 +2407,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
     status?: $Enums.UserStatus;
     emailVerifiedAt?: Date | string | null;
     phoneVerifiedAt?: Date | string | null;
+    locationId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUsersInput;
@@ -1836,6 +2420,10 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
     productViews?: Prisma.ProductViewUncheckedCreateNestedManyWithoutUserInput;
     searchLogs?: Prisma.SearchLogUncheckedCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressUncheckedCreateNestedManyWithoutUserInput;
+<<<<<<< HEAD
+=======
+    favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserCreateOrConnectWithoutNotificationsInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -1874,11 +2462,83 @@ export type UserUpdateWithoutNotificationsInput = {
     productViews?: Prisma.ProductViewUpdateManyWithoutUserNestedInput;
     searchLogs?: Prisma.SearchLogUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUpdateManyWithoutUserNestedInput;
+<<<<<<< HEAD
+=======
+    favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput;
+    location?: Prisma.ShopLocationUpdateOneWithoutUsersNestedInput;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUncheckedUpdateWithoutNotificationsInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
+    firstName?: Prisma.StringFieldUpdateOperationsInput | string;
+    lastName?: Prisma.StringFieldUpdateOperationsInput | string;
+    avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus;
+    emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    roles?: Prisma.RoleUncheckedUpdateManyWithoutUsersNestedInput;
+    tokens?: Prisma.TokenUncheckedUpdateManyWithoutUserNestedInput;
+    carts?: Prisma.CartUncheckedUpdateManyWithoutUserNestedInput;
+    orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput;
+    reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput;
+    couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput;
+    productViews?: Prisma.ProductViewUncheckedUpdateManyWithoutUserNestedInput;
+    searchLogs?: Prisma.SearchLogUncheckedUpdateManyWithoutUserNestedInput;
+    savedAddresses?: Prisma.SavedAddressUncheckedUpdateManyWithoutUserNestedInput;
+    favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput;
+};
+export type UserCreateManyLocationInput = {
+    id?: string;
+    email: string;
+    phone: string;
+    passwordHash: string;
+    firstName: string;
+    lastName: string;
+    avatarUrl?: string | null;
+    isSuperAdmin: boolean;
+    status?: $Enums.UserStatus;
+    emailVerifiedAt?: Date | string | null;
+    phoneVerifiedAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+};
+export type UserUpdateWithoutLocationInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
+    phone?: Prisma.StringFieldUpdateOperationsInput | string;
+    passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
+    firstName?: Prisma.StringFieldUpdateOperationsInput | string;
+    lastName?: Prisma.StringFieldUpdateOperationsInput | string;
+    avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus;
+    emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    roles?: Prisma.RoleUpdateManyWithoutUsersNestedInput;
+    tokens?: Prisma.TokenUpdateManyWithoutUserNestedInput;
+    carts?: Prisma.CartUpdateManyWithoutUserNestedInput;
+    orders?: Prisma.OrderUpdateManyWithoutUserNestedInput;
+    reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput;
+    couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput;
+    productViews?: Prisma.ProductViewUpdateManyWithoutUserNestedInput;
+    searchLogs?: Prisma.SearchLogUpdateManyWithoutUserNestedInput;
+    notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
+    savedAddresses?: Prisma.SavedAddressUpdateManyWithoutUserNestedInput;
+    favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput;
+};
+export type UserUncheckedUpdateWithoutLocationInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
+    phone?: Prisma.StringFieldUpdateOperationsInput | string;
     passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
     firstName?: Prisma.StringFieldUpdateOperationsInput | string;
     lastName?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1898,7 +2558,28 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
     couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput;
     productViews?: Prisma.ProductViewUncheckedUpdateManyWithoutUserNestedInput;
     searchLogs?: Prisma.SearchLogUncheckedUpdateManyWithoutUserNestedInput;
+<<<<<<< HEAD
     savedAddresses?: Prisma.SavedAddressUncheckedUpdateManyWithoutUserNestedInput;
+=======
+    notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    savedAddresses?: Prisma.SavedAddressUncheckedUpdateManyWithoutUserNestedInput;
+    favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput;
+};
+export type UserUncheckedUpdateManyWithoutLocationInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
+    phone?: Prisma.StringFieldUpdateOperationsInput | string;
+    passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
+    firstName?: Prisma.StringFieldUpdateOperationsInput | string;
+    lastName?: Prisma.StringFieldUpdateOperationsInput | string;
+    avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus;
+    emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUpdateWithoutRolesInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1924,6 +2605,11 @@ export type UserUpdateWithoutRolesInput = {
     searchLogs?: Prisma.SearchLogUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUpdateManyWithoutUserNestedInput;
+<<<<<<< HEAD
+=======
+    favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput;
+    location?: Prisma.ShopLocationUpdateOneWithoutUsersNestedInput;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUncheckedUpdateWithoutRolesInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1937,6 +2623,7 @@ export type UserUncheckedUpdateWithoutRolesInput = {
     status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus;
     emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     tokens?: Prisma.TokenUncheckedUpdateManyWithoutUserNestedInput;
@@ -1949,6 +2636,10 @@ export type UserUncheckedUpdateWithoutRolesInput = {
     searchLogs?: Prisma.SearchLogUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUncheckedUpdateManyWithoutUserNestedInput;
+<<<<<<< HEAD
+=======
+    favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUncheckedUpdateManyWithoutRolesInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1962,6 +2653,7 @@ export type UserUncheckedUpdateManyWithoutRolesInput = {
     status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus;
     emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -1980,6 +2672,10 @@ export type UserCountOutputType = {
     searchLogs: number;
     notifications: number;
     savedAddresses: number;
+<<<<<<< HEAD
+=======
+    favorites: number;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     roles?: boolean | UserCountOutputTypeCountRolesArgs;
@@ -1993,6 +2689,10 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
     searchLogs?: boolean | UserCountOutputTypeCountSearchLogsArgs;
     notifications?: boolean | UserCountOutputTypeCountNotificationsArgs;
     savedAddresses?: boolean | UserCountOutputTypeCountSavedAddressesArgs;
+<<<<<<< HEAD
+=======
+    favorites?: boolean | UserCountOutputTypeCountFavoritesArgs;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 /**
  * UserCountOutputType without action
@@ -2069,6 +2769,15 @@ export type UserCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Ty
 export type UserCountOutputTypeCountSavedAddressesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     where?: Prisma.SavedAddressWhereInput;
 };
+<<<<<<< HEAD
+=======
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountFavoritesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    where?: Prisma.FavoriteWhereInput;
+};
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
     email?: boolean;
@@ -2081,6 +2790,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
     status?: boolean;
     emailVerifiedAt?: boolean;
     phoneVerifiedAt?: boolean;
+    locationId?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
     roles?: boolean | Prisma.User$rolesArgs<ExtArgs>;
@@ -2094,6 +2804,11 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
     searchLogs?: boolean | Prisma.User$searchLogsArgs<ExtArgs>;
     notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>;
     savedAddresses?: boolean | Prisma.User$savedAddressesArgs<ExtArgs>;
+<<<<<<< HEAD
+=======
+    favorites?: boolean | Prisma.User$favoritesArgs<ExtArgs>;
+    location?: boolean | Prisma.User$locationArgs<ExtArgs>;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>;
 }, ExtArgs["result"]["user"]>;
 export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -2108,8 +2823,10 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
     status?: boolean;
     emailVerifiedAt?: boolean;
     phoneVerifiedAt?: boolean;
+    locationId?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
+    location?: boolean | Prisma.User$locationArgs<ExtArgs>;
 }, ExtArgs["result"]["user"]>;
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
@@ -2123,8 +2840,10 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
     status?: boolean;
     emailVerifiedAt?: boolean;
     phoneVerifiedAt?: boolean;
+    locationId?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
+    location?: boolean | Prisma.User$locationArgs<ExtArgs>;
 }, ExtArgs["result"]["user"]>;
 export type UserSelectScalar = {
     id?: boolean;
@@ -2138,10 +2857,11 @@ export type UserSelectScalar = {
     status?: boolean;
     emailVerifiedAt?: boolean;
     phoneVerifiedAt?: boolean;
+    locationId?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
 };
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "phone" | "passwordHash" | "firstName" | "lastName" | "avatarUrl" | "isSuperAdmin" | "status" | "emailVerifiedAt" | "phoneVerifiedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>;
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "phone" | "passwordHash" | "firstName" | "lastName" | "avatarUrl" | "isSuperAdmin" | "status" | "emailVerifiedAt" | "phoneVerifiedAt" | "locationId" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>;
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     roles?: boolean | Prisma.User$rolesArgs<ExtArgs>;
     tokens?: boolean | Prisma.User$tokensArgs<ExtArgs>;
@@ -2154,10 +2874,19 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
     searchLogs?: boolean | Prisma.User$searchLogsArgs<ExtArgs>;
     notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>;
     savedAddresses?: boolean | Prisma.User$savedAddressesArgs<ExtArgs>;
+<<<<<<< HEAD
+=======
+    favorites?: boolean | Prisma.User$favoritesArgs<ExtArgs>;
+    location?: boolean | Prisma.User$locationArgs<ExtArgs>;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>;
 };
-export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {};
-export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {};
+export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    location?: boolean | Prisma.User$locationArgs<ExtArgs>;
+};
+export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    location?: boolean | Prisma.User$locationArgs<ExtArgs>;
+};
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     name: "User";
     objects: {
@@ -2172,6 +2901,11 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
         searchLogs: Prisma.$SearchLogPayload<ExtArgs>[];
         notifications: Prisma.$NotificationPayload<ExtArgs>[];
         savedAddresses: Prisma.$SavedAddressPayload<ExtArgs>[];
+<<<<<<< HEAD
+=======
+        favorites: Prisma.$FavoritePayload<ExtArgs>[];
+        location: Prisma.$ShopLocationPayload<ExtArgs> | null;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     };
     scalars: runtime.Types.Extensions.GetPayloadResult<{
         id: string;
@@ -2185,6 +2919,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
         status: $Enums.UserStatus;
         emailVerifiedAt: Date | null;
         phoneVerifiedAt: Date | null;
+        locationId: string | null;
         createdAt: Date;
         updatedAt: Date;
     }, ExtArgs["result"]["user"]>;
@@ -2527,6 +3262,11 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
     searchLogs<T extends Prisma.User$searchLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$searchLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SearchLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     savedAddresses<T extends Prisma.User$savedAddressesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$savedAddressesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SavedAddressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+<<<<<<< HEAD
+=======
+    favorites<T extends Prisma.User$favoritesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$favoritesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FavoritePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+    location<T extends Prisma.User$locationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$locationArgs<ExtArgs>>): Prisma.Prisma__ShopLocationClient<runtime.Types.Result.GetResult<Prisma.$ShopLocationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2563,6 +3303,7 @@ export interface UserFieldRefs {
     readonly status: Prisma.FieldRef<"User", 'UserStatus'>;
     readonly emailVerifiedAt: Prisma.FieldRef<"User", 'DateTime'>;
     readonly phoneVerifiedAt: Prisma.FieldRef<"User", 'DateTime'>;
+    readonly locationId: Prisma.FieldRef<"User", 'String'>;
     readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>;
     readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>;
 }
@@ -2804,6 +3545,10 @@ export type UserCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
      */
     data: Prisma.UserCreateManyInput | Prisma.UserCreateManyInput[];
     skipDuplicates?: boolean;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.UserIncludeCreateManyAndReturn<ExtArgs> | null;
 };
 /**
  * User update
@@ -2871,6 +3616,10 @@ export type UserUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
      * Limit how many Users to update.
      */
     limit?: number;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.UserIncludeUpdateManyAndReturn<ExtArgs> | null;
 };
 /**
  * User upsert
@@ -3189,6 +3938,50 @@ export type User$savedAddressesArgs<ExtArgs extends runtime.Types.Extensions.Int
     distinct?: Prisma.SavedAddressScalarFieldEnum | Prisma.SavedAddressScalarFieldEnum[];
 };
 /**
+<<<<<<< HEAD
+=======
+ * User.favorites
+ */
+export type User$favoritesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Favorite
+     */
+    select?: Prisma.FavoriteSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Favorite
+     */
+    omit?: Prisma.FavoriteOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.FavoriteInclude<ExtArgs> | null;
+    where?: Prisma.FavoriteWhereInput;
+    orderBy?: Prisma.FavoriteOrderByWithRelationInput | Prisma.FavoriteOrderByWithRelationInput[];
+    cursor?: Prisma.FavoriteWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: Prisma.FavoriteScalarFieldEnum | Prisma.FavoriteScalarFieldEnum[];
+};
+/**
+ * User.location
+ */
+export type User$locationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShopLocation
+     */
+    select?: Prisma.ShopLocationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ShopLocation
+     */
+    omit?: Prisma.ShopLocationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.ShopLocationInclude<ExtArgs> | null;
+    where?: Prisma.ShopLocationWhereInput;
+};
+/**
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
  * User without action
  */
 export type UserDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {

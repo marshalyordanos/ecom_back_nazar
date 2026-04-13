@@ -25,9 +25,14 @@ const tokens_1 = require("../config/tokens");
 const prisma_1 = require("../lib/prisma");
 const hash_1 = require("../utils/hash");
 const appError_1 = __importDefault(require("../utils/appError"));
+<<<<<<< HEAD
 const sms_service_1 = require("./sms.service");
 const email_service_1 = require("./email.service");
 const otp_service_1 = require("./otp.service");
+=======
+const email_1 = require("../utils/email");
+const rbacPermission_service_1 = require("./rbacPermission.service");
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 const accessExpirationMinutes = parseInt(config_1.default.jwt.accessExpirationMinutes, 10) || 60;
 const refreshExpirationDays = parseInt(config_1.default.jwt.refreshExpirationDays, 10) || 60;
 const resetTokenExpirationMinutes = 15;
@@ -321,13 +326,17 @@ async function login(emailPhone, password) {
             expiresAt: new Date(Date.now() + refreshExpirationDays * 24 * 60 * 60 * 1000),
         },
     });
+    const permMap = await (0, rbacPermission_service_1.getMergedPermissionsForUser)(user.id);
     return {
         user: {
             id: user.id,
             email: user.email,
             firstName: user.firstName,
             lastName: user.lastName,
+            phone: user.phone,
+            isSuperAdmin: user.isSuperAdmin,
             roles: user.roles.map((r) => r.name),
+            permissions: (0, rbacPermission_service_1.mergedMapToList)(permMap),
         },
         accessToken,
         refreshToken,
@@ -364,10 +373,28 @@ async function refresh(refreshToken) {
             expiresAt: new Date(Date.now() + refreshExpirationDays * 24 * 60 * 60 * 1000),
         },
     });
+    const fullUser = await prisma_1.prisma.user.findUnique({
+        where: { id: tokenRecord.userId },
+        include: { roles: { select: { name: true } } },
+    });
+    if (!fullUser) {
+        throw new appError_1.default("User no longer exists", 401);
+    }
+    const permMap = await (0, rbacPermission_service_1.getMergedPermissionsForUser)(fullUser.id);
     return {
         accessToken: newAccessToken,
         refreshToken: newRefreshToken,
         expiresIn: accessExpirationMinutes * 60,
+        user: {
+            id: fullUser.id,
+            email: fullUser.email,
+            firstName: fullUser.firstName,
+            lastName: fullUser.lastName,
+            phone: fullUser.phone,
+            isSuperAdmin: fullUser.isSuperAdmin,
+            roles: fullUser.roles.map((r) => r.name),
+            permissions: (0, rbacPermission_service_1.mergedMapToList)(permMap),
+        },
     };
 }
 async function forgotPassword(email) {

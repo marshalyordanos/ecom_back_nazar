@@ -5,17 +5,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listUserOrders = listUserOrders;
 exports.getOrderById = getOrderById;
+exports.trackOrderByReference = trackOrderByReference;
 exports.cancelOrder = cancelOrder;
 exports.completeOrder = completeOrder;
 exports.listOrderItems = listOrderItems;
 exports.listOrdersAdmin = listOrdersAdmin;
 exports.createOrderAdmin = createOrderAdmin;
+exports.checkoutAsGuest = checkoutAsGuest;
 const prisma_1 = require("../lib/prisma");
 const appError_1 = __importDefault(require("../utils/appError"));
 const apiFeature_1 = require("../utils/apiFeature");
 const notification_service_1 = require("./notification.service");
-const orderSearchableFields = ["orderNumber"];
+const axios_1 = __importDefault(require("axios"));
+const bcrypt_1 = __importDefault(require("bcrypt"));
+const helper_1 = require("../utils/helper");
+const orderSearchableFields = ["orderNumber", "user.firstName", "user.lastName", "user.email"];
 const orderDateFields = ["createdAt", "updatedAt"];
+const CHAPA_INIT_URL = "https://api.chapa.co/v1/transaction/initialize";
+const generateOrderNumber = (counter) => {
+    const year = new Date().getFullYear();
+    const paddedCounter = String(counter).padStart(7, "0");
+    return `ORD-${year}-${paddedCounter}`;
+};
 async function listUserOrders(userId, query) {
     const feature = new apiFeature_1.PrismaQueryFeature({
         ...query,
@@ -52,6 +63,75 @@ async function getOrderById(orderId, userId) {
     if (!order)
         throw new appError_1.default("Order not found", 404);
     return order;
+}
+async function trackOrderByReference(reference) {
+    const ref = String(reference || "").trim();
+    if (!ref)
+        throw new appError_1.default("tracking number is required", 400);
+    const order = await prisma_1.prisma.order.findFirst({
+        where: {
+            OR: [
+                { orderNumber: ref },
+                { shipments: { some: { trackingNumber: ref } } },
+            ],
+        },
+        include: {
+            items: {
+                select: {
+                    id: true,
+                    productName: true,
+                    variantName: true,
+                    price: true,
+                    quantity: true,
+                    total: true,
+                },
+            },
+            address: {
+                select: {
+                    name: true,
+                    city: true,
+                    state: true,
+                    country: true,
+                    phone: true,
+                },
+            },
+            shipments: {
+                select: {
+                    id: true,
+                    status: true,
+                    trackingNumber: true,
+                    carrier: true,
+                    shippedAt: true,
+                    deliveredAt: true,
+                },
+            },
+            payments: {
+                select: {
+                    id: true,
+                    provider: true,
+                    status: true,
+                    amount: true,
+                    currency: true,
+                    paidAt: true,
+                    createdAt: true,
+                },
+            },
+        },
+    });
+    if (!order)
+        throw new appError_1.default("Order not found", 404);
+    return {
+        id: order.id,
+        orderNumber: order.orderNumber,
+        status: order.status,
+        grandTotal: order.grandTotal,
+        currency: order.currency,
+        createdAt: order.createdAt,
+        address: order.address,
+        items: order.items,
+        shipments: order.shipments,
+        payments: order.payments,
+    };
 }
 async function cancelOrder(orderId, userId) {
     const order = await prisma_1.prisma.order.findFirst({
@@ -115,7 +195,7 @@ async function listOrdersAdmin(query) {
             orderBy,
             skip,
             take,
-            include: { items: true, address: true, user: { select: { id: true, email: true, firstName: true, lastName: true } } },
+            include: { items: { include: { variant: { include: { variantOptionValues: { include: { optionValue: { include: { option: true } } } } } } } }, address: true, user: { select: { id: true, email: true, firstName: true, lastName: true } } },
         }),
         prisma_1.prisma.order.count({ where: whereShop }),
     ]);
@@ -163,5 +243,183 @@ async function createOrderAdmin(data) {
         metadata: { orderId: order.id },
     });
     return full;
+}
+async function checkoutAsGuest(data) {
+    if (!data.shopId)
+        throw new appError_1.default("shopId required", 400);
+    if (!data.items?.length)
+        throw new appError_1.default("Cart is empty", 400);
+    if (!data.shippingAddress?.name || !data.shippingAddress?.phone || !data.shippingAddress?.addressLine1 || !data.shippingAddress?.city) {
+        throw new appError_1.default("Incomplete shippingAddress", 400);
+    }
+    const paymentMethod = data.paymentMethod === "pickup" ? "pickup" : "chapa";
+    const shop = await prisma_1.prisma.shop.findUnique({ where: { id: data.shopId } });
+    if (!shop)
+        throw new appError_1.default("Shop not found", 404);
+    const variantIds = data.items.map((i) => i.variantId);
+    const variants = await prisma_1.prisma.productVariant.findMany({
+        where: { id: { in: variantIds } },
+        include: { product: { select: { id: true, name: true, shopId: true } } },
+    });
+    const variantById = new Map(variants.map((v) => [v.id, v]));
+    if (variantById.size !== variantIds.length)
+        throw new appError_1.default("Some cart items are invalid", 400);
+    let subtotal = 0;
+    const normalizedItems = data.items.map((item) => {
+        const variant = variantById.get(item.variantId);
+        if (variant.product.shopId !== data.shopId)
+            throw new appError_1.default("Item does not belong to selected shop", 400);
+        if (Number(item.price) !== Number(variant.price))
+            throw new appError_1.default("Price changed, refresh your cart", 400);
+        const quantity = Math.max(1, Number(item.quantity || 1));
+        const lineTotal = Number(variant.price) * quantity;
+        subtotal += lineTotal;
+        return { item, variant, quantity, lineTotal };
+    });
+    let discountTotal = 0;
+    let couponId;
+    if (data.couponCode) {
+        const coupon = await prisma_1.prisma.coupon.findFirst({ where: { code: data.couponCode } });
+        if (coupon && (!coupon.expiresAt || coupon.expiresAt > new Date()) && (coupon.usageLimit == null || coupon.usedCount < coupon.usageLimit)) {
+            if (coupon.minOrderAmount == null || subtotal >= coupon.minOrderAmount) {
+                discountTotal = coupon.type === "PERCENTAGE" ? (subtotal * coupon.value) / 100 : Math.min(coupon.value, subtotal);
+                couponId = coupon.id;
+            }
+        }
+    }
+    const taxTotal = 0;
+    const grandTotal = subtotal - discountTotal + taxTotal;
+    const phone = (0, helper_1.formatPhoneTo251)(data.shippingAddress.phone || "");
+    const phoneDigits = phone.replace(/\D/g, "");
+    const firstName = "registerd";
+    const lastName = "byadmin";
+    const email = `user+${phoneDigits}@gmail.com`;
+    let user = await prisma_1.prisma.user.findFirst({
+        where: { OR: [{ phone }, { email }] },
+    });
+    if (!user) {
+        const passwordHash = await bcrypt_1.default.hash("12345678", 10);
+        const defaultRole = await prisma_1.prisma.role.findFirst({ where: { name: "user" } });
+        if (!defaultRole) {
+            throw new appError_1.default("Default role 'user' not found. Run seed.", 500);
+        }
+        user = await prisma_1.prisma.user.create({
+            data: {
+                email,
+                phone,
+                passwordHash,
+                firstName,
+                lastName,
+                isSuperAdmin: false,
+                roles: { connect: [{ id: defaultRole.id }] },
+            },
+        });
+    }
+    const orderCount = await prisma_1.prisma.order.count({
+        where: {
+            createdAt: {
+                gte: new Date(`${new Date().getFullYear()}-01-01`),
+                lt: new Date(`${new Date().getFullYear() + 1}-01-01`),
+            },
+        },
+    });
+    const orderNumber = generateOrderNumber(orderCount + 1);
+    return prisma_1.prisma.$transaction(async (tx) => {
+        const newOrder = await tx.order.create({
+            data: {
+                shopId: data.shopId,
+                userId: user.id,
+                orderNumber,
+                status: "PENDING",
+                subtotal,
+                taxTotal,
+                discountTotal,
+                grandTotal,
+                currency: shop.currency,
+                address: {
+                    create: {
+                        name: data.shippingAddress.name || `${firstName} ${lastName}`,
+                        phone,
+                        addressLine1: data.shippingAddress.addressLine1,
+                        addressLine2: data.shippingAddress.addressLine2,
+                        city: data.shippingAddress.city,
+                        state: data.shippingAddress.state,
+                        country: data.shippingAddress.country || "—",
+                        postalCode: data.shippingAddress.postalCode,
+                    },
+                },
+            },
+        });
+        for (const row of normalizedItems) {
+            await tx.orderItem.create({
+                data: {
+                    orderId: newOrder.id,
+                    variantId: row.variant.id,
+                    productName: row.variant.product?.name || "Product",
+                    variantName: row.variant.sku,
+                    price: Number(row.variant.price),
+                    quantity: row.quantity,
+                    total: row.lineTotal,
+                },
+            });
+        }
+        if (couponId) {
+            await tx.couponUsage.create({
+                data: { couponId, userId: user.id, orderId: newOrder.id },
+            });
+            await tx.coupon.update({
+                where: { id: couponId },
+                data: { usedCount: { increment: 1 } },
+            });
+        }
+        let checkout_url = null;
+        if (paymentMethod === "pickup") {
+            await tx.payment.create({
+                data: {
+                    orderId: newOrder.id,
+                    provider: "PICKUP",
+                    amount: grandTotal,
+                    currency: shop.currency,
+                    status: "PENDING",
+                },
+            });
+        }
+        else {
+            const txRef = `${Date.now()}-order-${newOrder.id}`;
+            const chapaResponse = await axios_1.default.post(CHAPA_INIT_URL, {
+                amount: grandTotal,
+                currency: "ETB",
+                tx_ref: txRef,
+                phone_number: phone,
+                callback_url: `${process.env.BACKEND_URL || ""}/cart/chapa-callback`,
+                return_url: `${process.env.FRONTEND_URL || ""}/orders/${newOrder.id}?paid=1`,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${process.env.CHAPA_SECRET_KEY}`,
+                    "Content-Type": "application/json",
+                },
+            });
+            const chapaRes = chapaResponse.data;
+            if (chapaRes?.status !== "success") {
+                throw new appError_1.default("Failed to initialize Chapa payment", 500);
+            }
+            checkout_url = chapaRes?.data?.checkout_url || null;
+            await tx.payment.create({
+                data: {
+                    orderId: newOrder.id,
+                    provider: "CHAPA",
+                    providerTransactionId: txRef,
+                    amount: grandTotal,
+                    currency: "ETB",
+                    status: "PENDING",
+                },
+            });
+        }
+        const fullOrder = await tx.order.findUnique({
+            where: { id: newOrder.id },
+            include: { items: true, address: true, payments: true },
+        });
+        return { order: fullOrder, checkout_url };
+    });
 }
 //# sourceMappingURL=order.service.js.map

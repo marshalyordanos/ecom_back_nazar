@@ -36,7 +36,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+<<<<<<< HEAD
 exports.assignVariantOptionValue = exports.removeVariantOptionValue = exports.setVariantOptionValues = exports.deleteOptionValue = exports.updateOptionValue = exports.createOptionValue = exports.getOptionValueById = exports.listOptionValues = exports.deleteVariantOption = exports.updateVariantOption = exports.createVariantOption = exports.getVariantOptionById = exports.listVariantOptions = exports.removeVariantMedia = exports.addVariantMedia = exports.deleteVariant = exports.updateVariant = exports.createVariant = exports.getVariantById = exports.getFeatured = exports.deleteProduct = exports.updateProduct = exports.createProduct = exports.getProductByIdMobile = exports.getProductById = exports.listProducts = void 0;
+=======
+exports.assignVariantOptionValue = exports.removeVariantOptionValue = exports.setVariantOptionValues = exports.deleteOptionValue = exports.updateOptionValue = exports.createOptionValue = exports.getOptionValueById = exports.listOptionValues = exports.deleteVariantOption = exports.updateVariantOption = exports.createVariantOption = exports.getVariantOptionById = exports.listVariantOptions = exports.removeVariantMedia = exports.addVariantMedia = exports.deleteVariant = exports.updateVariant = exports.createVariant = exports.getVariantById = exports.getMostViewed = exports.getNewArrivals = exports.getPopular = exports.getFeatured = exports.listVariants = exports.deleteProduct = exports.updateProduct = exports.createProduct = exports.getProductByIdMobile = exports.getProductById = exports.listProducts = void 0;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 const productService = __importStar(require("../services/product.service"));
 const queryParser_1 = require("../utils/queryParser");
@@ -76,12 +80,39 @@ exports.deleteProduct = (0, catchAsync_1.default)(async (req, res, _next) => {
     await productService.deleteProduct(req.params.id, shopId);
     res.status(200).json({ message: "Product deleted successfully" });
 });
+exports.listVariants = (0, catchAsync_1.default)(async (req, res, _next) => {
+    const query = (0, queryParser_1.parseListQuery)(req);
+    const shopId = req.query.shopId;
+    const result = await productService.listVariants(shopId, query);
+    res.status(200).json(result);
+});
 exports.getFeatured = (0, catchAsync_1.default)(async (req, res, _next) => {
     const shopId = req.query.shopId;
     const limit = Math.min(parseInt(String(req.query.limit), 10) || 10, 50);
     const products = await productService.getFeaturedProducts(shopId, limit);
     res.status(200).json(products);
 });
+<<<<<<< HEAD
+=======
+exports.getPopular = (0, catchAsync_1.default)(async (req, res, _next) => {
+    const shopId = req.query.shopId;
+    const limit = Math.min(parseInt(String(req.query.limit), 10) || 10, 50);
+    const products = await productService.getPopularProducts(shopId, limit);
+    res.status(200).json(products);
+});
+exports.getNewArrivals = (0, catchAsync_1.default)(async (req, res, _next) => {
+    const shopId = req.query.shopId;
+    const limit = Math.min(parseInt(String(req.query.limit), 10) || 10, 50);
+    const products = await productService.getNewProducts(shopId, limit);
+    res.status(200).json(products);
+});
+exports.getMostViewed = (0, catchAsync_1.default)(async (req, res, _next) => {
+    const shopId = req.query.shopId;
+    const limit = Math.min(parseInt(String(req.query.limit), 10) || 10, 50);
+    const products = await productService.getMostViewedProducts(shopId, limit);
+    res.status(200).json(products);
+});
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 exports.getVariantById = (0, catchAsync_1.default)(async (req, res, _next) => {
     const variant = await productService.getVariantById(req.params.id);
     res.status(200).json(variant);

@@ -1,5 +1,10 @@
 import { Response, NextFunction } from "express";
 import type { AuthRequest } from "../middleware/auth.middleware";
+export declare const getSummary: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const getGlobalRevenueSeries: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const getGlobalOrdersCountSeries: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const getGlobalOrderStatusDistribution: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const getGlobalPaymentsSeries: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const getOverview: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const getSalesSummary: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const getOrdersSummary: (req: AuthRequest, res: Response, next: NextFunction) => void;
@@ -8,7 +13,8 @@ export declare const getLowInventory: (req: AuthRequest, res: Response, next: Ne
 export declare const getNewCustomers: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const getRecentOrders: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const getRecentActivities: (req: AuthRequest, res: Response, next: NextFunction) => void;
-export declare const getDashboardSummary: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const getShopDashboardSummary: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const getSummaryWithDetails: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const getUserSummary: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const getUserVerificationStats: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const getOrderSummaryExtended: (req: AuthRequest, res: Response, next: NextFunction) => void;
@@ -64,4 +70,5 @@ export declare const getMostViewedProducts: (req: AuthRequest, res: Response, ne
 export declare const getSystemHealth: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const getSyncStatus: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const getUnreadNotifications: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const getCustomerDashboardCards: (req: AuthRequest, res: Response, next: NextFunction) => void;
 //# sourceMappingURL=dashboard.controller.d.ts.map

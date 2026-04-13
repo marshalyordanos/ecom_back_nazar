@@ -242,6 +242,7 @@ export declare const ModelName: {
     readonly Brand: "Brand";
     readonly ProductCategory: "ProductCategory";
     readonly Product: "Product";
+    readonly Favorite: "Favorite";
     readonly ProductVariant: "ProductVariant";
     readonly VariantOptionValue: "VariantOptionValue";
     readonly OptionValue: "OptionValue";
@@ -266,6 +267,7 @@ export declare const ModelName: {
     readonly SyncLog: "SyncLog";
     readonly SyncedProduct: "SyncedProduct";
     readonly ShopSetting: "ShopSetting";
+    readonly SaleFromShop: "SaleFromShop";
 };
 export type ModelName = (typeof ModelName)[keyof typeof ModelName];
 export interface TypeMapCb<GlobalOmitOptions = {}> extends runtime.Types.Utils.Fn<{
@@ -278,7 +280,11 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         omit: GlobalOmitOptions;
     };
     meta: {
+<<<<<<< HEAD
         modelProps: "shop" | "shopLocation" | "user" | "token" | "otpRecord" | "role" | "permission" | "rolePermission" | "brand" | "productCategory" | "product" | "productVariant" | "variantOptionValue" | "optionValue" | "variantOption" | "variantMedia" | "inventory" | "inventoryMovement" | "cart" | "cartItem" | "order" | "orderItem" | "payment" | "shipment" | "shippingAddress" | "savedAddress" | "coupon" | "couponUsage" | "review" | "productView" | "searchLog" | "notification" | "syncLog" | "syncedProduct" | "shopSetting";
+=======
+        modelProps: "shop" | "shopLocation" | "user" | "token" | "role" | "permission" | "rolePermission" | "brand" | "productCategory" | "product" | "favorite" | "productVariant" | "variantOptionValue" | "optionValue" | "variantOption" | "variantMedia" | "inventory" | "inventoryMovement" | "cart" | "cartItem" | "order" | "orderItem" | "payment" | "shipment" | "shippingAddress" | "savedAddress" | "coupon" | "couponUsage" | "review" | "productView" | "searchLog" | "notification" | "syncLog" | "syncedProduct" | "shopSetting" | "saleFromShop";
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
         txIsolationLevel: TransactionIsolationLevel;
     };
     model: {
@@ -1093,6 +1099,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
                 count: {
                     args: Prisma.ProductCountArgs<ExtArgs>;
                     result: runtime.Types.Utils.Optional<Prisma.ProductCountAggregateOutputType> | number;
+                };
+            };
+        };
+        Favorite: {
+            payload: Prisma.$FavoritePayload<ExtArgs>;
+            fields: Prisma.FavoriteFieldRefs;
+            operations: {
+                findUnique: {
+                    args: Prisma.FavoriteFindUniqueArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$FavoritePayload> | null;
+                };
+                findUniqueOrThrow: {
+                    args: Prisma.FavoriteFindUniqueOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$FavoritePayload>;
+                };
+                findFirst: {
+                    args: Prisma.FavoriteFindFirstArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$FavoritePayload> | null;
+                };
+                findFirstOrThrow: {
+                    args: Prisma.FavoriteFindFirstOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$FavoritePayload>;
+                };
+                findMany: {
+                    args: Prisma.FavoriteFindManyArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$FavoritePayload>[];
+                };
+                create: {
+                    args: Prisma.FavoriteCreateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$FavoritePayload>;
+                };
+                createMany: {
+                    args: Prisma.FavoriteCreateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                createManyAndReturn: {
+                    args: Prisma.FavoriteCreateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$FavoritePayload>[];
+                };
+                delete: {
+                    args: Prisma.FavoriteDeleteArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$FavoritePayload>;
+                };
+                update: {
+                    args: Prisma.FavoriteUpdateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$FavoritePayload>;
+                };
+                deleteMany: {
+                    args: Prisma.FavoriteDeleteManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateMany: {
+                    args: Prisma.FavoriteUpdateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateManyAndReturn: {
+                    args: Prisma.FavoriteUpdateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$FavoritePayload>[];
+                };
+                upsert: {
+                    args: Prisma.FavoriteUpsertArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$FavoritePayload>;
+                };
+                aggregate: {
+                    args: Prisma.FavoriteAggregateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.AggregateFavorite>;
+                };
+                groupBy: {
+                    args: Prisma.FavoriteGroupByArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.FavoriteGroupByOutputType>[];
+                };
+                count: {
+                    args: Prisma.FavoriteCountArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.FavoriteCountAggregateOutputType> | number;
                 };
             };
         };
@@ -2872,6 +2952,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
                 };
             };
         };
+        SaleFromShop: {
+            payload: Prisma.$SaleFromShopPayload<ExtArgs>;
+            fields: Prisma.SaleFromShopFieldRefs;
+            operations: {
+                findUnique: {
+                    args: Prisma.SaleFromShopFindUniqueArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SaleFromShopPayload> | null;
+                };
+                findUniqueOrThrow: {
+                    args: Prisma.SaleFromShopFindUniqueOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SaleFromShopPayload>;
+                };
+                findFirst: {
+                    args: Prisma.SaleFromShopFindFirstArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SaleFromShopPayload> | null;
+                };
+                findFirstOrThrow: {
+                    args: Prisma.SaleFromShopFindFirstOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SaleFromShopPayload>;
+                };
+                findMany: {
+                    args: Prisma.SaleFromShopFindManyArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SaleFromShopPayload>[];
+                };
+                create: {
+                    args: Prisma.SaleFromShopCreateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SaleFromShopPayload>;
+                };
+                createMany: {
+                    args: Prisma.SaleFromShopCreateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                createManyAndReturn: {
+                    args: Prisma.SaleFromShopCreateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SaleFromShopPayload>[];
+                };
+                delete: {
+                    args: Prisma.SaleFromShopDeleteArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SaleFromShopPayload>;
+                };
+                update: {
+                    args: Prisma.SaleFromShopUpdateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SaleFromShopPayload>;
+                };
+                deleteMany: {
+                    args: Prisma.SaleFromShopDeleteManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateMany: {
+                    args: Prisma.SaleFromShopUpdateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateManyAndReturn: {
+                    args: Prisma.SaleFromShopUpdateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SaleFromShopPayload>[];
+                };
+                upsert: {
+                    args: Prisma.SaleFromShopUpsertArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SaleFromShopPayload>;
+                };
+                aggregate: {
+                    args: Prisma.SaleFromShopAggregateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.AggregateSaleFromShop>;
+                };
+                groupBy: {
+                    args: Prisma.SaleFromShopGroupByArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.SaleFromShopGroupByOutputType>[];
+                };
+                count: {
+                    args: Prisma.SaleFromShopCountArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.SaleFromShopCountAggregateOutputType> | number;
+                };
+            };
+        };
     };
 } & {
     other: {
@@ -2949,6 +3103,7 @@ export declare const UserScalarFieldEnum: {
     readonly status: "status";
     readonly emailVerifiedAt: "emailVerifiedAt";
     readonly phoneVerifiedAt: "phoneVerifiedAt";
+    readonly locationId: "locationId";
     readonly createdAt: "createdAt";
     readonly updatedAt: "updatedAt";
 };
@@ -3042,6 +3197,13 @@ export declare const ProductScalarFieldEnum: {
     readonly updatedAt: "updatedAt";
 };
 export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum];
+export declare const FavoriteScalarFieldEnum: {
+    readonly id: "id";
+    readonly userId: "userId";
+    readonly productId: "productId";
+    readonly createdAt: "createdAt";
+};
+export type FavoriteScalarFieldEnum = (typeof FavoriteScalarFieldEnum)[keyof typeof FavoriteScalarFieldEnum];
 export declare const ProductVariantScalarFieldEnum: {
     readonly id: "id";
     readonly productId: "productId";
@@ -3159,6 +3321,7 @@ export declare const PaymentScalarFieldEnum: {
     readonly amount: "amount";
     readonly currency: "currency";
     readonly status: "status";
+    readonly transactionId: "transactionId";
     readonly paidAt: "paidAt";
     readonly createdAt: "createdAt";
 };
@@ -3296,6 +3459,17 @@ export declare const ShopSettingScalarFieldEnum: {
     readonly updatedAt: "updatedAt";
 };
 export type ShopSettingScalarFieldEnum = (typeof ShopSettingScalarFieldEnum)[keyof typeof ShopSettingScalarFieldEnum];
+export declare const SaleFromShopScalarFieldEnum: {
+    readonly id: "id";
+    readonly locationId: "locationId";
+    readonly variantId: "variantId";
+    readonly quantity: "quantity";
+    readonly price: "price";
+    readonly total: "total";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type SaleFromShopScalarFieldEnum = (typeof SaleFromShopScalarFieldEnum)[keyof typeof SaleFromShopScalarFieldEnum];
 export declare const SortOrder: {
     readonly asc: "asc";
     readonly desc: "desc";
@@ -3546,6 +3720,7 @@ export type GlobalOmitConfig = {
     brand?: Prisma.BrandOmit;
     productCategory?: Prisma.ProductCategoryOmit;
     product?: Prisma.ProductOmit;
+    favorite?: Prisma.FavoriteOmit;
     productVariant?: Prisma.ProductVariantOmit;
     variantOptionValue?: Prisma.VariantOptionValueOmit;
     optionValue?: Prisma.OptionValueOmit;
@@ -3570,6 +3745,7 @@ export type GlobalOmitConfig = {
     syncLog?: Prisma.SyncLogOmit;
     syncedProduct?: Prisma.SyncedProductOmit;
     shopSetting?: Prisma.ShopSettingOmit;
+    saleFromShop?: Prisma.SaleFromShopOmit;
 };
 export type LogLevel = 'info' | 'query' | 'warn' | 'error';
 export type LogDefinition = {

@@ -91,9 +91,18 @@ async function updateReview(id, userId, data, isAdmin = false) {
         throw new appError_1.default("Review not found", 404);
     if (!isAdmin && review.userId !== userId)
         throw new appError_1.default("You can only edit your own review", 403);
+    const incoming = data || {};
+    if (incoming.status != null) {
+        if (!isAdmin)
+            throw new appError_1.default("Forbidden", 403);
+        const allowed = new Set(["PENDING", "APPROVED", "REJECTED"]);
+        if (!allowed.has(String(incoming.status))) {
+            throw new appError_1.default("Invalid review status", 400);
+        }
+    }
     const updated = await prisma_1.prisma.review.update({
         where: { id },
-        data: data,
+        data: incoming,
     });
     return updated;
 }

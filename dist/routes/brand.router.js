@@ -36,12 +36,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const brandController = __importStar(require("../controllers/brand.controller"));
 const auth_middleware_1 = require("../middleware/auth.middleware");
+const permission_middleware_1 = require("../middleware/permission.middleware");
 const multer_1 = require("../config/multer");
 const router = (0, express_1.Router)();
 router.get("/", brandController.listBrands);
 router.get("/:id", brandController.getBrandById);
-router.post("/", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), (0, multer_1.uploadSingleImage)('image'), brandController.createBrand);
-router.patch("/:id", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), (0, multer_1.uploadSingleImage)('image'), brandController.updateBrand);
-router.delete("/:id", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), brandController.deleteBrand);
+router.post("/", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), (0, permission_middleware_1.requirePermission)("brands", "create"), (0, multer_1.uploadSingleImage)("image"), brandController.createBrand);
+router.patch("/:id", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), (0, permission_middleware_1.requirePermission)("brands", "update"), (0, multer_1.uploadSingleImage)("image"), brandController.updateBrand);
+router.delete("/:id", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), (0, permission_middleware_1.requirePermission)("brands", "delete"), brandController.deleteBrand);
 exports.default = router;
 //# sourceMappingURL=brand.router.js.map

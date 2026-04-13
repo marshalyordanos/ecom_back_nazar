@@ -4,5 +4,6 @@ export declare const listInventory: (req: AuthRequest, res: Response, next: Next
 export declare const getByVariantId: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const updateInventory: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const listMovements: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const getInventoryById: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const addMovement: (req: AuthRequest, res: Response, next: NextFunction) => void;
 //# sourceMappingURL=inventory.controller.d.ts.map

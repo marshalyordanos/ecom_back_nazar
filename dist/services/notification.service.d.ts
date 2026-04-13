@@ -10,12 +10,19 @@ export interface CreateNotificationInput {
  * Create a notification in DB and publish to Redis for real-time delivery via Socket.io.
  */
 export declare function createNotification(input: CreateNotificationInput): Promise<{
+<<<<<<< HEAD
     message: string;
+=======
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     id: string;
     createdAt: Date;
     updatedAt: Date;
     userId: string | null;
     type: string;
+<<<<<<< HEAD
+=======
+    message: string;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     title: string;
     readAt: Date | null;
     metadata: import("@prisma/client/runtime/client").JsonValue | null;
@@ -29,12 +36,19 @@ export declare function listMyNotifications(userId: string, query?: {
     pageSize?: number;
 }): Promise<{
     data: {
+<<<<<<< HEAD
         message: string;
+=======
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
         id: string;
         createdAt: Date;
         updatedAt: Date;
         userId: string | null;
         type: string;
+<<<<<<< HEAD
+=======
+        message: string;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
         title: string;
         readAt: Date | null;
         metadata: import("@prisma/client/runtime/client").JsonValue | null;

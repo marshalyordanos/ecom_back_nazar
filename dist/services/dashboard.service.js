@@ -1,5 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getGlobalDashboardSummary = getGlobalDashboardSummary;
+exports.getGlobalRevenueSeries = getGlobalRevenueSeries;
+exports.getGlobalOrdersCountSeries = getGlobalOrdersCountSeries;
+exports.getGlobalOrderStatusDistribution = getGlobalOrderStatusDistribution;
+exports.getGlobalPaymentsSeries = getGlobalPaymentsSeries;
 exports.getOverview = getOverview;
 exports.getSalesSummary = getSalesSummary;
 exports.getOrdersSummary = getOrdersSummary;
@@ -8,7 +13,8 @@ exports.getLowInventory = getLowInventory;
 exports.getNewCustomers = getNewCustomers;
 exports.getRecentOrders = getRecentOrders;
 exports.getRecentActivities = getRecentActivities;
-exports.getDashboardSummary = getDashboardSummary;
+exports.getSummaryWithDetails = getSummaryWithDetails;
+exports.getShopDashboardSummary = getShopDashboardSummary;
 exports.getUserSummary = getUserSummary;
 exports.getUserVerificationStats = getUserVerificationStats;
 exports.getOrderSummaryExtended = getOrderSummaryExtended;
@@ -65,6 +71,199 @@ exports.getSystemHealth = getSystemHealth;
 exports.getSyncStatus = getSyncStatus;
 exports.getUnreadNotifications = getUnreadNotifications;
 const prisma_1 = require("../lib/prisma");
+function percentChangeGlobal(current, previous) {
+    if (previous === 0)
+        return current > 0 ? 100 : 0;
+    return ((current - previous) / previous) * 100;
+}
+/** Admin dashboard cards: global counts + week-over-week trend metrics */
+async function getGlobalDashboardSummary() {
+    const now = new Date();
+    const currentWindowStart = new Date(now);
+    currentWindowStart.setDate(currentWindowStart.getDate() - 7);
+    const prevWindowStart = new Date(currentWindowStart);
+    prevWindowStart.setDate(prevWindowStart.getDate() - 7);
+    const [totalUsers, activeUsers, suspendedUsers, verifiedEmails, usersThisWeek, usersPrevWeek, inventoryAgg, lowStockRows, totalVariants, variantsThisWeek, variantsPrevWeek, totalOrders, completedOrders, pendingOrders, totalRevenueAgg, ordersThisWeek, ordersPrevWeek, revenueThisWeek, revenuePrevWeek, totalPayments, paidPayments, failedPayments, totalPaymentAmountAgg, paymentsThisWeek, paymentsPrevWeek, payAmountThisWeek, payAmountPrevWeek,] = await Promise.all([
+        prisma_1.prisma.user.count(),
+        prisma_1.prisma.user.count({ where: { status: "ACTIVE", } }),
+        prisma_1.prisma.user.count({ where: { status: "SUSPENDED" } }),
+        prisma_1.prisma.user.count({ where: { emailVerifiedAt: { not: null } } }),
+        prisma_1.prisma.user.count({ where: { createdAt: { gte: currentWindowStart } } }),
+        prisma_1.prisma.user.count({ where: { createdAt: { gte: prevWindowStart, lt: currentWindowStart } } }),
+        prisma_1.prisma.inventory.aggregate({ _sum: { quantity: true, reservedQuantity: true } }),
+        prisma_1.prisma.inventory.count({
+            where: {
+                reorderLevel: {
+                    not: null, // optional, since it's nullable
+                },
+                quantity: {
+                    lte: prisma_1.prisma.inventory.fields.reorderLevel,
+                },
+            },
+        }),
+        prisma_1.prisma.productVariant.count(),
+        prisma_1.prisma.productVariant.count({ where: { createdAt: { gte: currentWindowStart } } }),
+        prisma_1.prisma.productVariant.count({
+            where: { createdAt: { gte: prevWindowStart, lt: currentWindowStart } },
+        }),
+        prisma_1.prisma.order.count(),
+        prisma_1.prisma.order.count({ where: { status: "COMPLETED" } }),
+        prisma_1.prisma.order.count({ where: { status: "PENDING" } }),
+        prisma_1.prisma.order.aggregate({ _sum: { grandTotal: true } }),
+        prisma_1.prisma.order.count({ where: { createdAt: { gte: currentWindowStart } } }),
+        prisma_1.prisma.order.count({ where: { createdAt: { gte: prevWindowStart, lt: currentWindowStart } } }),
+        prisma_1.prisma.order.aggregate({
+            _sum: { grandTotal: true },
+            where: { createdAt: { gte: currentWindowStart } },
+        }),
+        prisma_1.prisma.order.aggregate({
+            _sum: { grandTotal: true },
+            where: { createdAt: { gte: prevWindowStart, lt: currentWindowStart } },
+        }),
+        prisma_1.prisma.payment.count(),
+        prisma_1.prisma.payment.count({ where: { status: "PAID" } }),
+        prisma_1.prisma.payment.count({ where: { status: "FAILED" } }),
+        prisma_1.prisma.payment.aggregate({ _sum: { amount: true } }),
+        prisma_1.prisma.payment.count({ where: { createdAt: { gte: currentWindowStart } } }),
+        prisma_1.prisma.payment.count({ where: { createdAt: { gte: prevWindowStart, lt: currentWindowStart } } }),
+        prisma_1.prisma.payment.aggregate({
+            _sum: { amount: true },
+            where: { createdAt: { gte: currentWindowStart } },
+        }),
+        prisma_1.prisma.payment.aggregate({
+            _sum: { amount: true },
+            where: { createdAt: { gte: prevWindowStart, lt: currentWindowStart } },
+        }),
+    ]);
+    const lowStockAlerts = lowStockRows;
+    const invSum = inventoryAgg._sum;
+    const totalRevenue = totalRevenueAgg._sum.grandTotal ?? 0;
+    const rtThis = revenueThisWeek._sum.grandTotal ?? 0;
+    const rtPrev = revenuePrevWeek._sum.grandTotal ?? 0;
+    const totalPaymentAmount = totalPaymentAmountAgg._sum.amount ?? 0;
+    const paThis = payAmountThisWeek._sum.amount ?? 0;
+    const paPrev = payAmountPrevWeek._sum.amount ?? 0;
+    return {
+        users: {
+            total: totalUsers,
+            active: activeUsers,
+            suspended: suspendedUsers,
+            verifiedEmails,
+            percentChange: percentChangeGlobal(usersThisWeek, usersPrevWeek),
+        },
+        inventory: {
+            totalStock: invSum.quantity ?? 0,
+            reservedQuantity: invSum.reservedQuantity ?? 0,
+            lowStockAlerts,
+            totalVariants,
+            percentChange: percentChangeGlobal(variantsThisWeek, variantsPrevWeek),
+        },
+        orders: {
+            totalOrders,
+            completedOrders,
+            pendingOrders,
+            totalRevenue,
+            percentChange: percentChangeGlobal(ordersThisWeek, ordersPrevWeek),
+            revenueChange: percentChangeGlobal(rtThis, rtPrev),
+        },
+        payments: {
+            totalPayments,
+            paidPayments,
+            failedPayments,
+            totalPaymentAmount,
+            percentChange: percentChangeGlobal(paymentsThisWeek, paymentsPrevWeek),
+            amountChange: percentChangeGlobal(paThis, paPrev),
+        },
+    };
+}
+// ===============================
+// Global admin (no shopId) — chart-friendly series
+// ===============================
+function fillDailyBucketsFromSince(since, buckets) {
+    const categories = [];
+    const data = [];
+    const cursor = new Date(since);
+    cursor.setHours(0, 0, 0, 0);
+    const end = new Date();
+    end.setHours(0, 0, 0, 0);
+    while (cursor <= end) {
+        const k = toISODate(cursor);
+        categories.push(k);
+        data.push(buckets[k] ?? 0);
+        cursor.setDate(cursor.getDate() + 1);
+    }
+    return { categories, data };
+}
+async function getGlobalRevenueSeries(days) {
+    const clamped = Math.min(Math.max(Number(days) || 30, 1), 90);
+    const since = getSinceDate(clamped);
+    const orders = await prisma_1.prisma.order.findMany({
+        where: { createdAt: { gte: since } },
+        select: { createdAt: true, grandTotal: true },
+    });
+    const buckets = {};
+    for (const o of orders) {
+        const key = toISODate(new Date(o.createdAt));
+        buckets[key] = (buckets[key] || 0) + o.grandTotal;
+    }
+    const { categories, data } = fillDailyBucketsFromSince(since, buckets);
+    return {
+        days: clamped,
+        categories,
+        series: [{ name: "Revenue", data }],
+        totalRevenue: data.reduce((a, b) => a + b, 0),
+    };
+}
+async function getGlobalOrdersCountSeries(days) {
+    const clamped = Math.min(Math.max(Number(days) || 30, 1), 90);
+    const since = getSinceDate(clamped);
+    const orders = await prisma_1.prisma.order.findMany({
+        where: { createdAt: { gte: since } },
+        select: { createdAt: true },
+    });
+    const buckets = {};
+    for (const o of orders) {
+        const key = toISODate(new Date(o.createdAt));
+        buckets[key] = (buckets[key] || 0) + 1;
+    }
+    const { categories, data } = fillDailyBucketsFromSince(since, buckets);
+    return {
+        days: clamped,
+        categories,
+        series: [{ name: "Orders", data }],
+        totalOrders: orders.length,
+    };
+}
+async function getGlobalOrderStatusDistribution() {
+    const grouped = await prisma_1.prisma.order.groupBy({
+        by: ["status"],
+        _count: { id: true },
+    });
+    return {
+        labels: grouped.map((g) => String(g.status)),
+        values: grouped.map((g) => g._count.id),
+    };
+}
+async function getGlobalPaymentsSeries(days) {
+    const clamped = Math.min(Math.max(Number(days) || 30, 1), 90);
+    const since = getSinceDate(clamped);
+    const payments = await prisma_1.prisma.payment.findMany({
+        where: { createdAt: { gte: since }, status: "PAID" },
+        select: { createdAt: true, amount: true },
+    });
+    const buckets = {};
+    for (const p of payments) {
+        const key = toISODate(new Date(p.createdAt));
+        buckets[key] = (buckets[key] || 0) + p.amount;
+    }
+    const { categories, data } = fillDailyBucketsFromSince(since, buckets);
+    return {
+        days: clamped,
+        categories,
+        series: [{ name: "Payments", data }],
+        totalAmount: data.reduce((a, b) => a + b, 0),
+    };
+}
 async function getOverview(shopId) {
     const [totalOrders, totalRevenue, ordersByStatus, lowInventoryCount] = await Promise.all([
         prisma_1.prisma.order.count({ where: { shopId } }),
@@ -87,7 +286,7 @@ async function getOverview(shopId) {
     ]);
     const topProducts = await prisma_1.prisma.orderItem.groupBy({
         by: ["variantId"],
-        where: { order: { shopId } },
+        where: { order: { shopId, status: "COMPLETED" } },
         _sum: { total: true },
         _count: { id: true },
         orderBy: { _sum: { total: "desc" } },
@@ -176,7 +375,7 @@ async function getLowInventory(shopId) {
             location: true,
         },
     });
-    return inventories.filter((inv) => inv.reorderLevel != null && inv.quantity <= inv.reorderLevel);
+    return inventories.filter((inv) => inv.quantity <= 0);
 }
 async function getNewCustomers(shopId, days = 30) {
     const since = new Date();
@@ -242,15 +441,103 @@ function bucketKey(d, groupBy) {
 function safeNumber(n) {
     return n ?? 0;
 }
+// Returns summary details for the current month and growth compared to previous month:
+// - New customers this month + percent growth
+// - Orders this month + percent growth
+// - Sales this month + percent growth
+async function getSummaryWithDetails(shopId) {
+    const now = new Date();
+    // Current Month - first day & last day
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+    // Previous Month - first day & last day
+    const prevMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const prevMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59, 999);
+    // New Customers (users with 'user' role) - created in this month and last month
+    const [thisMonthNewCustomers, prevMonthNewCustomers] = await Promise.all([
+        prisma_1.prisma.user.count({
+            where: {
+                roles: { some: { name: "user" } },
+                createdAt: { gte: startOfMonth, lte: endOfMonth }
+            }
+        }),
+        prisma_1.prisma.user.count({
+            where: {
+                roles: { some: { name: "user" } },
+                createdAt: { gte: prevMonthStart, lte: prevMonthEnd }
+            }
+        }),
+    ]);
+    // Orders in current and previous month
+    const [thisMonthOrders, prevMonthOrders] = await Promise.all([
+        prisma_1.prisma.order.count({
+            where: {
+                shopId,
+                createdAt: { gte: startOfMonth, lte: endOfMonth },
+            },
+        }),
+        prisma_1.prisma.order.count({
+            where: {
+                shopId,
+                createdAt: { gte: prevMonthStart, lte: prevMonthEnd },
+            },
+        }),
+    ]);
+    // Sales (payments, PAID or REFUNDED) in current and previous month
+    const [thisMonthSalesAgg, prevMonthSalesAgg] = await Promise.all([
+        prisma_1.prisma.payment.aggregate({
+            where: {
+                status: { in: ["PAID", "REFUNDED"] },
+                createdAt: { gte: startOfMonth, lte: endOfMonth },
+            },
+            _sum: { amount: true },
+        }),
+        prisma_1.prisma.payment.aggregate({
+            where: {
+                status: { in: ["PAID", "REFUNDED"] },
+                createdAt: { gte: prevMonthStart, lte: prevMonthEnd },
+            },
+            _sum: { amount: true },
+        }),
+    ]);
+    const thisMonthSales = thisMonthSalesAgg._sum?.amount ?? 0;
+    const prevMonthSales = prevMonthSalesAgg._sum?.amount ?? 0;
+    // Helper for percent change (avoid division by zero and fallback to 100 or 0)
+    function percentChange(current, prev) {
+        if (prev === 0) {
+            if (current === 0)
+                return 0;
+            return 100;
+        }
+        return ((current - prev) / Math.abs(prev)) * 100;
+    }
+    return {
+        customers: {
+            thisMonth: thisMonthNewCustomers,
+            prevMonth: prevMonthNewCustomers,
+            growth: percentChange(thisMonthNewCustomers, prevMonthNewCustomers),
+        },
+        orders: {
+            thisMonth: thisMonthOrders,
+            prevMonth: prevMonthOrders,
+            growth: percentChange(thisMonthOrders, prevMonthOrders),
+        },
+        sales: {
+            thisMonth: thisMonthSales,
+            prevMonth: prevMonthSales,
+            growth: percentChange(thisMonthSales, prevMonthSales),
+        },
+    };
+}
 // ===============================
-// 📊 GLOBAL SUMMARY (MAIN API)
+// 📊 SHOP KPI SUMMARY (per shop, requires shopId)
 // ===============================
-async function getDashboardSummary(shopId) {
-    const [ordersCount, revenueAgg, productsCount, userIds] = await Promise.all([
+async function getShopDashboardSummary(shopId) {
+    const [ordersCount, revenueAgg, productsCount, userIds, customersCount, totalTransactions] = await Promise.all([
         prisma_1.prisma.order.count({ where: { shopId } }),
-        prisma_1.prisma.order.aggregate({
-            where: { shopId, status: { in: ["PAID", "PROCESSING", "SHIPPED", "COMPLETED"] } },
-            _sum: { grandTotal: true },
+        prisma_1.prisma.payment.aggregate({
+            where: { status: { in: ["PAID", "REFUNDED"] } },
+            _sum: { amount: true },
         }),
         prisma_1.prisma.product.count({ where: { shopId } }),
         prisma_1.prisma.order.findMany({
@@ -258,77 +545,73 @@ async function getDashboardSummary(shopId) {
             distinct: ["userId"],
             select: { userId: true },
         }),
+        prisma_1.prisma.user.count({ where: { roles: { some: { name: "user" } } } }),
+        prisma_1.prisma.payment.count({ where: { status: "PAID" } }),
     ]);
     const lowInventoryCount = (await getLowStockCount(shopId)).count;
     const usersCount = userIds.length;
-    const revenue = safeNumber(revenueAgg._sum.grandTotal);
+    console.log("revenueAgg", revenueAgg);
+    const revenue = safeNumber(revenueAgg._sum?.amount ?? 0);
     return {
+        totalTransactions,
         revenue,
         users: usersCount,
         orders: ordersCount,
         products: productsCount,
         alerts: lowInventoryCount,
+        customers: customersCount,
     };
 }
 // ===============================
 // 👤 USER SUMMARY
 // ===============================
 async function getUserSummary(shopId, days = 30) {
-    const firstOrderByUser = await prisma_1.prisma.order.groupBy({
-        by: ["userId"],
-        where: { shopId },
-        _min: { createdAt: true },
-    });
-    const totalUsers = firstOrderByUser.length;
     const since = getSinceDate(days);
-    const newUsers = firstOrderByUser.filter((u) => u._min.createdAt && u._min.createdAt >= since).length;
-    const userIds = firstOrderByUser.map((u) => u.userId);
-    const statuses = userIds.length
-        ? await prisma_1.prisma.user.groupBy({
-            by: ["status"],
-            where: { id: { in: userIds } },
-            _count: { id: true },
-        })
-        : [];
-    const statusCounts = statuses.reduce((acc, s) => {
-        acc[String(s.status)] = s._count.id;
-        return acc;
-    }, {});
+    // Only include users directly associated with this shop via location 
+    // (users table, users might be staff or customers, depending on schema)
+    // Total users: user.location.shopId == shopId
+    const totalUsers = await prisma_1.prisma.user.count({});
+    // New users in last X days: user.location.shopId == shopId AND createdAt >= since
+    const newUsers = await prisma_1.prisma.user.count({
+        where: { createdAt: { gte: since } }
+    });
+    // Active users: user.location.shopId == shopId AND status == ACTIVE
+    const active = await prisma_1.prisma.user.count({
+        where: { status: "ACTIVE" }
+    });
+    // Inactive users: 0 (as per your requirements)
+    const inactive = await prisma_1.prisma.user.count({
+        where: { status: "INACTIVE" }
+    });
+    // Suspended users: 0 (as per your requirements)
+    const suspended = await prisma_1.prisma.user.count({
+        where: { status: "SUSPENDED" }
+    });
     return {
         totalUsers,
         newUsers,
-        active: statusCounts.ACTIVE ?? 0,
-        inactive: statusCounts.INACTIVE ?? 0,
-        suspended: statusCounts.SUSPENDED ?? 0,
+        active,
+        inactive,
+        suspended
     };
 }
 async function getUserVerificationStats(shopId) {
-    const userIds = await prisma_1.prisma.order.findMany({
-        where: { shopId },
-        distinct: ["userId"],
-        select: { userId: true },
+    // Find all users whose location.shopId == shopId, using 'user' model as per schema.prisma
+    // location is a relation, so we must filter where: { location: { shopId } }
+    // We only use .count()
+    const totalUsers = await prisma_1.prisma.user.count({});
+    const emailVerified = await prisma_1.prisma.user.count({
+        where: { emailVerifiedAt: { not: null } }
     });
-    const ids = userIds.map((u) => u.userId);
-    const totalUsers = ids.length;
-    if (!ids.length) {
-        return {
-            totalUsers: 0,
-            emailVerified: 0,
-            emailNotVerified: 0,
-            phoneVerified: 0,
-            phoneNotVerified: 0,
-        };
-    }
-    const [emailVerified, phoneVerified] = await Promise.all([
-        prisma_1.prisma.user.count({ where: { id: { in: ids }, emailVerifiedAt: { not: null } } }),
-        prisma_1.prisma.user.count({ where: { id: { in: ids }, phoneVerifiedAt: { not: null } } }),
-    ]);
+    const phoneVerified = await prisma_1.prisma.user.count({
+        where: { phoneVerifiedAt: { not: null } }
+    });
     return {
         totalUsers,
         emailVerified,
         emailNotVerified: totalUsers - emailVerified,
         phoneVerified,
-        phoneNotVerified: totalUsers - phoneVerified,
+        phoneNotVerified: totalUsers - phoneVerified
     };
 }
 // ===============================
@@ -683,14 +966,14 @@ async function getSearchSummary(shopId, days = 30) {
 // ===============================
 async function getSalesTrends(shopId, groupBy, days = 30) {
     const since = getSinceDate(days);
-    const orders = await prisma_1.prisma.order.findMany({
-        where: { shopId, createdAt: { gte: since } },
-        select: { createdAt: true, grandTotal: true },
+    const orders = await prisma_1.prisma.payment.findMany({
+        where: { status: "PAID", createdAt: { gte: since } },
+        select: { createdAt: true, amount: true },
     });
     const buckets = {};
     for (const o of orders) {
         const key = bucketKey(o.createdAt, groupBy);
-        buckets[key] = (buckets[key] || 0) + o.grandTotal;
+        buckets[key] = (buckets[key] || 0) + o.amount;
     }
     return {
         groupBy,
@@ -719,14 +1002,14 @@ async function getSalesByChannel(shopId, days = 30) {
 }
 async function getSalesForecast(shopId, historyDays = 30, forecastDays = 7) {
     const since = getSinceDate(historyDays);
-    const orders = await prisma_1.prisma.order.findMany({
-        where: { shopId, createdAt: { gte: since } },
-        select: { createdAt: true, grandTotal: true },
+    const orders = await prisma_1.prisma.payment.findMany({
+        where: { createdAt: { gte: since } },
+        select: { createdAt: true, amount: true },
     });
     const buckets = {};
     for (const o of orders) {
         const key = toISODate(o.createdAt);
-        buckets[key] = (buckets[key] || 0) + o.grandTotal;
+        buckets[key] = (buckets[key] || 0) + o.amount;
     }
     const historyTotal = Object.values(buckets).reduce((a, b) => a + b, 0);
     const avgPerDay = historyDays > 0 ? historyTotal / historyDays : 0;
@@ -876,7 +1159,7 @@ async function getProductPerformance(shopId, days = 90, limit = 10) {
     const since = getSinceDate(days);
     const byVariant = await prisma_1.prisma.orderItem.groupBy({
         by: ["variantId"],
-        where: { order: { shopId, createdAt: { gte: since } } },
+        where: { order: { shopId, status: "COMPLETED", createdAt: { gte: since } } },
         _sum: { total: true },
         _count: { id: true },
         orderBy: { _sum: { total: "desc" } },
@@ -1093,7 +1376,7 @@ async function getCustomerLTV(shopId, days = 90) {
     const since = getSinceDate(days);
     const grouped = await prisma_1.prisma.order.groupBy({
         by: ["userId"],
-        where: { shopId, createdAt: { gte: since } },
+        where: { shopId, status: "COMPLETED", createdAt: { gte: since } },
         _sum: { grandTotal: true },
     });
     const customersCount = grouped.length;

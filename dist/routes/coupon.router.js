@@ -36,12 +36,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const couponController = __importStar(require("../controllers/coupon.controller"));
 const auth_middleware_1 = require("../middleware/auth.middleware");
+const permission_middleware_1 = require("../middleware/permission.middleware");
 const router = (0, express_1.Router)();
 router.get("/", couponController.listCoupons);
 router.get("/:id", couponController.getCouponById);
-router.post("/", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), couponController.createCoupon);
-router.put("/:id", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), couponController.updateCoupon);
-router.delete("/:id", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), couponController.deleteCoupon);
+router.post("/", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), (0, permission_middleware_1.requirePermission)("coupons", "create"), couponController.createCoupon);
+router.put("/:id", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), (0, permission_middleware_1.requirePermission)("coupons", "update"), couponController.updateCoupon);
+router.delete("/:id", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), (0, permission_middleware_1.requirePermission)("coupons", "delete"), couponController.deleteCoupon);
 router.post("/:id/use", auth_middleware_1.protect, couponController.useCoupon);
 exports.default = router;
 //# sourceMappingURL=coupon.router.js.map

@@ -233,6 +233,17 @@ export interface PrismaClient<in LogOpts extends Prisma.LogLevel = never, in out
         omit: OmitOpts;
     }>;
     /**
+     * `prisma.favorite`: Exposes CRUD operations for the **Favorite** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more Favorites
+      * const favorites = await prisma.favorite.findMany()
+      * ```
+      */
+    get favorite(): Prisma.FavoriteDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    /**
      * `prisma.productVariant`: Exposes CRUD operations for the **ProductVariant** model.
       * Example usage:
       * ```ts
@@ -494,6 +505,17 @@ export interface PrismaClient<in LogOpts extends Prisma.LogLevel = never, in out
       * ```
       */
     get shopSetting(): Prisma.ShopSettingDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    /**
+     * `prisma.saleFromShop`: Exposes CRUD operations for the **SaleFromShop** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more SaleFromShops
+      * const saleFromShops = await prisma.saleFromShop.findMany()
+      * ```
+      */
+    get saleFromShop(): Prisma.SaleFromShopDelegate<ExtArgs, {
         omit: OmitOpts;
     }>;
 }

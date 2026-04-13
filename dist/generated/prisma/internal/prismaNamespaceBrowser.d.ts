@@ -37,6 +37,7 @@ export declare const ModelName: {
     readonly Brand: "Brand";
     readonly ProductCategory: "ProductCategory";
     readonly Product: "Product";
+    readonly Favorite: "Favorite";
     readonly ProductVariant: "ProductVariant";
     readonly VariantOptionValue: "VariantOptionValue";
     readonly OptionValue: "OptionValue";
@@ -61,6 +62,7 @@ export declare const ModelName: {
     readonly SyncLog: "SyncLog";
     readonly SyncedProduct: "SyncedProduct";
     readonly ShopSetting: "ShopSetting";
+    readonly SaleFromShop: "SaleFromShop";
 };
 export type ModelName = (typeof ModelName)[keyof typeof ModelName];
 export declare const TransactionIsolationLevel: {
@@ -113,6 +115,7 @@ export declare const UserScalarFieldEnum: {
     readonly status: "status";
     readonly emailVerifiedAt: "emailVerifiedAt";
     readonly phoneVerifiedAt: "phoneVerifiedAt";
+    readonly locationId: "locationId";
     readonly createdAt: "createdAt";
     readonly updatedAt: "updatedAt";
 };
@@ -206,6 +209,13 @@ export declare const ProductScalarFieldEnum: {
     readonly updatedAt: "updatedAt";
 };
 export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum];
+export declare const FavoriteScalarFieldEnum: {
+    readonly id: "id";
+    readonly userId: "userId";
+    readonly productId: "productId";
+    readonly createdAt: "createdAt";
+};
+export type FavoriteScalarFieldEnum = (typeof FavoriteScalarFieldEnum)[keyof typeof FavoriteScalarFieldEnum];
 export declare const ProductVariantScalarFieldEnum: {
     readonly id: "id";
     readonly productId: "productId";
@@ -323,6 +333,7 @@ export declare const PaymentScalarFieldEnum: {
     readonly amount: "amount";
     readonly currency: "currency";
     readonly status: "status";
+    readonly transactionId: "transactionId";
     readonly paidAt: "paidAt";
     readonly createdAt: "createdAt";
 };
@@ -460,6 +471,17 @@ export declare const ShopSettingScalarFieldEnum: {
     readonly updatedAt: "updatedAt";
 };
 export type ShopSettingScalarFieldEnum = (typeof ShopSettingScalarFieldEnum)[keyof typeof ShopSettingScalarFieldEnum];
+export declare const SaleFromShopScalarFieldEnum: {
+    readonly id: "id";
+    readonly locationId: "locationId";
+    readonly variantId: "variantId";
+    readonly quantity: "quantity";
+    readonly price: "price";
+    readonly total: "total";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type SaleFromShopScalarFieldEnum = (typeof SaleFromShopScalarFieldEnum)[keyof typeof SaleFromShopScalarFieldEnum];
 export declare const SortOrder: {
     readonly asc: "asc";
     readonly desc: "desc";

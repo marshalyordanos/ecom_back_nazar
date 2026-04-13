@@ -36,12 +36,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const paymentController = __importStar(require("../controllers/payment.controller"));
 const auth_middleware_1 = require("../middleware/auth.middleware");
+const permission_middleware_1 = require("../middleware/permission.middleware");
 const router = (0, express_1.Router)();
 router.use(auth_middleware_1.protect);
 router.use((0, auth_middleware_1.restrictTo)("admin"));
-router.get("/", paymentController.listPayments);
-router.get("/:id", paymentController.getPaymentById);
-router.post("/:id/capture", paymentController.capturePayment);
-router.post("/:id/refund", paymentController.refundPayment);
+router.get("/", (0, permission_middleware_1.requirePermission)("payments", "read"), paymentController.listPayments);
+router.get("/:id", (0, permission_middleware_1.requirePermission)("payments", "read"), paymentController.getPaymentById);
+router.post("/:id/capture", (0, permission_middleware_1.requirePermission)("payments", "update"), paymentController.capturePayment);
+router.post("/:id/refund", (0, permission_middleware_1.requirePermission)("payments", "update"), paymentController.refundPayment);
 exports.default = router;
 //# sourceMappingURL=payment.router.js.map

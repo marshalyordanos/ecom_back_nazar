@@ -58,6 +58,11 @@ export type ProductCategory = Prisma.ProductCategoryModel;
  */
 export type Product = Prisma.ProductModel;
 /**
+ * Model Favorite
+ *
+ */
+export type Favorite = Prisma.FavoriteModel;
+/**
  * Model ProductVariant
  *
  */
@@ -177,4 +182,9 @@ export type SyncedProduct = Prisma.SyncedProductModel;
  *
  */
 export type ShopSetting = Prisma.ShopSettingModel;
+/**
+ * Model SaleFromShop
+ *
+ */
+export type SaleFromShop = Prisma.SaleFromShopModel;
 //# sourceMappingURL=browser.d.ts.map

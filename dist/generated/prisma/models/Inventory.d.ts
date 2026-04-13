@@ -219,6 +219,7 @@ export type InventoryOrderByWithRelationInput = {
 };
 export type InventoryWhereUniqueInput = Prisma.AtLeast<{
     id?: string;
+    variantId_locationId?: Prisma.InventoryVariantIdLocationIdCompoundUniqueInput;
     AND?: Prisma.InventoryWhereInput | Prisma.InventoryWhereInput[];
     OR?: Prisma.InventoryWhereInput[];
     NOT?: Prisma.InventoryWhereInput | Prisma.InventoryWhereInput[];
@@ -232,7 +233,7 @@ export type InventoryWhereUniqueInput = Prisma.AtLeast<{
     variant?: Prisma.XOR<Prisma.ProductVariantScalarRelationFilter, Prisma.ProductVariantWhereInput>;
     location?: Prisma.XOR<Prisma.ShopLocationScalarRelationFilter, Prisma.ShopLocationWhereInput>;
     movements?: Prisma.InventoryMovementListRelationFilter;
-}, "id">;
+}, "id" | "variantId_locationId">;
 export type InventoryOrderByWithAggregationInput = {
     id?: Prisma.SortOrder;
     variantId?: Prisma.SortOrder;
@@ -340,6 +341,10 @@ export type InventoryListRelationFilter = {
 };
 export type InventoryOrderByRelationAggregateInput = {
     _count?: Prisma.SortOrder;
+};
+export type InventoryVariantIdLocationIdCompoundUniqueInput = {
+    variantId: string;
+    locationId: string;
 };
 export type InventoryCountOrderByAggregateInput = {
     id?: Prisma.SortOrder;

@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 {"version":3,"file":"product.router.d.ts","sourceRoot":"","sources":["../../src/routes/product.router.ts"],"names":[],"mappings":"AAMA,QAAA,MAAM,MAAM,4CAAW,CAAC;AAoCxB,eAAe,MAAM,CAAC"}
+=======
+{"version":3,"file":"product.router.d.ts","sourceRoot":"","sources":["../../src/routes/product.router.ts"],"names":[],"mappings":"AAOA,QAAA,MAAM,MAAM,4CAAW,CAAC;AA6JxB,eAAe,MAAM,CAAC"}
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351

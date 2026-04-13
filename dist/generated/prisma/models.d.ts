@@ -9,6 +9,7 @@ export type * from './models/RolePermission';
 export type * from './models/Brand';
 export type * from './models/ProductCategory';
 export type * from './models/Product';
+export type * from './models/Favorite';
 export type * from './models/ProductVariant';
 export type * from './models/VariantOptionValue';
 export type * from './models/OptionValue';
@@ -33,5 +34,6 @@ export type * from './models/Notification';
 export type * from './models/SyncLog';
 export type * from './models/SyncedProduct';
 export type * from './models/ShopSetting';
+export type * from './models/SaleFromShop';
 export type * from './commonInputTypes';
 //# sourceMappingURL=models.d.ts.map

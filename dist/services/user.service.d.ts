@@ -1,20 +1,30 @@
 export declare function getMe(userId: string): Promise<{
+<<<<<<< HEAD
     email: string | null;
     status: import("../generated/prisma/enums").UserStatus;
     phone: string | null;
+=======
+    email: string;
+    roles: {
+        name: string;
+        id: string;
+        description: string | null;
+    }[];
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     id: string;
     firstName: string;
     lastName: string;
     avatarUrl: string | null;
     emailVerifiedAt: Date | null;
     phoneVerifiedAt: Date | null;
+    locationId: string | null;
     createdAt: Date;
     updatedAt: Date;
-    roles: {
+    location: {
         name: string;
         id: string;
-        description: string | null;
-    }[];
+        shopId: string;
+    } | null;
 }>;
 export declare function updateMe(userId: string, data: {
     firstName?: string;
@@ -22,18 +32,22 @@ export declare function updateMe(userId: string, data: {
     phone?: string;
     avatarUrl?: string;
 }): Promise<{
+<<<<<<< HEAD
     email: string | null;
     status: import("../generated/prisma/enums").UserStatus;
     phone: string | null;
+=======
+    email: string;
+    roles: {
+        name: string;
+    }[];
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     id: string;
     firstName: string;
     lastName: string;
     avatarUrl: string | null;
     createdAt: Date;
     updatedAt: Date;
-    roles: {
-        name: string;
-    }[];
 }>;
 export declare function updatePassword(userId: string, newPassword: string): Promise<{
     message: string;
@@ -53,6 +67,7 @@ export declare function getById(id: string): Promise<{
     isSuperAdmin: boolean;
     emailVerifiedAt: Date | null;
     phoneVerifiedAt: Date | null;
+    locationId: string | null;
     createdAt: Date;
     updatedAt: Date;
 }>;
@@ -62,20 +77,36 @@ export declare function listUsers(query: {
     search?: string;
     filter?: string;
     sort?: string;
-}): Promise<{
+    roleId?: string;
+}, onlyUsers?: boolean): Promise<{
     data: {
+<<<<<<< HEAD
         email: string | null;
         status: import("../generated/prisma/enums").UserStatus;
         phone: string | null;
+=======
+        email: string;
+        roles: {
+            name: string;
+            id: string;
+        }[];
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
         id: string;
         firstName: string;
         lastName: string;
         avatarUrl: string | null;
+<<<<<<< HEAD
+=======
+        status: import("../generated/prisma/enums").UserStatus;
+        locationId: string | null;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
         createdAt: Date;
         updatedAt: Date;
-        roles: {
+        location: {
             name: string;
-        }[];
+            id: string;
+            shopId: string;
+        } | null;
     }[];
     pagination: {
         total: number;
@@ -91,14 +122,24 @@ export declare function updateUser(id: string, data: {
     status?: string;
     avatarUrl?: string;
     roleIds?: string[];
+    locationId?: string | null;
 }): Promise<{
     roles: {
         name: string;
         id: string;
     }[];
+<<<<<<< HEAD
     email: string | null;
     status: import("../generated/prisma/enums").UserStatus;
     phone: string | null;
+=======
+    location: {
+        name: string;
+        id: string;
+        shopId: string;
+    } | null;
+    email: string;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     id: string;
     firstName: string;
     lastName: string;
@@ -106,6 +147,7 @@ export declare function updateUser(id: string, data: {
     isSuperAdmin: boolean;
     emailVerifiedAt: Date | null;
     phoneVerifiedAt: Date | null;
+    locationId: string | null;
     createdAt: Date;
     updatedAt: Date;
 }>;

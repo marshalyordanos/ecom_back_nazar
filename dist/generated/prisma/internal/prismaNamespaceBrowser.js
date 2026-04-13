@@ -48,7 +48,11 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+<<<<<<< HEAD
 exports.JsonNullValueFilter = exports.NullsOrder = exports.QueryMode = exports.NullableJsonNullValueInput = exports.SortOrder = exports.ShopSettingScalarFieldEnum = exports.SyncedProductScalarFieldEnum = exports.SyncLogScalarFieldEnum = exports.NotificationScalarFieldEnum = exports.SearchLogScalarFieldEnum = exports.ProductViewScalarFieldEnum = exports.ReviewScalarFieldEnum = exports.CouponUsageScalarFieldEnum = exports.CouponScalarFieldEnum = exports.SavedAddressScalarFieldEnum = exports.ShippingAddressScalarFieldEnum = exports.ShipmentScalarFieldEnum = exports.PaymentScalarFieldEnum = exports.OrderItemScalarFieldEnum = exports.OrderScalarFieldEnum = exports.CartItemScalarFieldEnum = exports.CartScalarFieldEnum = exports.InventoryMovementScalarFieldEnum = exports.InventoryScalarFieldEnum = exports.VariantMediaScalarFieldEnum = exports.VariantOptionScalarFieldEnum = exports.OptionValueScalarFieldEnum = exports.VariantOptionValueScalarFieldEnum = exports.ProductVariantScalarFieldEnum = exports.ProductScalarFieldEnum = exports.ProductCategoryScalarFieldEnum = exports.BrandScalarFieldEnum = exports.RolePermissionScalarFieldEnum = exports.PermissionScalarFieldEnum = exports.RoleScalarFieldEnum = exports.OtpRecordScalarFieldEnum = exports.TokenScalarFieldEnum = exports.UserScalarFieldEnum = exports.ShopLocationScalarFieldEnum = exports.ShopScalarFieldEnum = exports.TransactionIsolationLevel = exports.ModelName = exports.AnyNull = exports.JsonNull = exports.DbNull = exports.NullTypes = exports.Decimal = void 0;
+=======
+exports.JsonNullValueFilter = exports.NullsOrder = exports.QueryMode = exports.NullableJsonNullValueInput = exports.SortOrder = exports.SaleFromShopScalarFieldEnum = exports.ShopSettingScalarFieldEnum = exports.SyncedProductScalarFieldEnum = exports.SyncLogScalarFieldEnum = exports.NotificationScalarFieldEnum = exports.SearchLogScalarFieldEnum = exports.ProductViewScalarFieldEnum = exports.ReviewScalarFieldEnum = exports.CouponUsageScalarFieldEnum = exports.CouponScalarFieldEnum = exports.SavedAddressScalarFieldEnum = exports.ShippingAddressScalarFieldEnum = exports.ShipmentScalarFieldEnum = exports.PaymentScalarFieldEnum = exports.OrderItemScalarFieldEnum = exports.OrderScalarFieldEnum = exports.CartItemScalarFieldEnum = exports.CartScalarFieldEnum = exports.InventoryMovementScalarFieldEnum = exports.InventoryScalarFieldEnum = exports.VariantMediaScalarFieldEnum = exports.VariantOptionScalarFieldEnum = exports.OptionValueScalarFieldEnum = exports.VariantOptionValueScalarFieldEnum = exports.ProductVariantScalarFieldEnum = exports.FavoriteScalarFieldEnum = exports.ProductScalarFieldEnum = exports.ProductCategoryScalarFieldEnum = exports.BrandScalarFieldEnum = exports.RolePermissionScalarFieldEnum = exports.PermissionScalarFieldEnum = exports.RoleScalarFieldEnum = exports.TokenScalarFieldEnum = exports.UserScalarFieldEnum = exports.ShopLocationScalarFieldEnum = exports.ShopScalarFieldEnum = exports.TransactionIsolationLevel = exports.ModelName = exports.AnyNull = exports.JsonNull = exports.DbNull = exports.NullTypes = exports.Decimal = void 0;
+>>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 const runtime = __importStar(require("@prisma/client/runtime/index-browser"));
 exports.Decimal = runtime.Decimal;
 exports.NullTypes = {
@@ -86,6 +90,7 @@ exports.ModelName = {
     Brand: 'Brand',
     ProductCategory: 'ProductCategory',
     Product: 'Product',
+    Favorite: 'Favorite',
     ProductVariant: 'ProductVariant',
     VariantOptionValue: 'VariantOptionValue',
     OptionValue: 'OptionValue',
@@ -109,7 +114,8 @@ exports.ModelName = {
     Notification: 'Notification',
     SyncLog: 'SyncLog',
     SyncedProduct: 'SyncedProduct',
-    ShopSetting: 'ShopSetting'
+    ShopSetting: 'ShopSetting',
+    SaleFromShop: 'SaleFromShop'
 };
 /*
  * Enums
@@ -161,6 +167,7 @@ exports.UserScalarFieldEnum = {
     status: 'status',
     emailVerifiedAt: 'emailVerifiedAt',
     phoneVerifiedAt: 'phoneVerifiedAt',
+    locationId: 'locationId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
 };
@@ -244,6 +251,12 @@ exports.ProductScalarFieldEnum = {
     status: 'status',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
+};
+exports.FavoriteScalarFieldEnum = {
+    id: 'id',
+    userId: 'userId',
+    productId: 'productId',
+    createdAt: 'createdAt'
 };
 exports.ProductVariantScalarFieldEnum = {
     id: 'id',
@@ -351,6 +364,7 @@ exports.PaymentScalarFieldEnum = {
     amount: 'amount',
     currency: 'currency',
     status: 'status',
+    transactionId: 'transactionId',
     paidAt: 'paidAt',
     createdAt: 'createdAt'
 };
@@ -473,6 +487,16 @@ exports.ShopSettingScalarFieldEnum = {
     shopId: 'shopId',
     key: 'key',
     value: 'value',
+    updatedAt: 'updatedAt'
+};
+exports.SaleFromShopScalarFieldEnum = {
+    id: 'id',
+    locationId: 'locationId',
+    variantId: 'variantId',
+    quantity: 'quantity',
+    price: 'price',
+    total: 'total',
+    createdAt: 'createdAt',
     updatedAt: 'updatedAt'
 };
 exports.SortOrder = {

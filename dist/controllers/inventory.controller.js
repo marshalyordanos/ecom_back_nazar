@@ -36,30 +36,41 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addMovement = exports.listMovements = exports.updateInventory = exports.getByVariantId = exports.listInventory = void 0;
+exports.addMovement = exports.getInventoryById = exports.listMovements = exports.updateInventory = exports.getByVariantId = exports.listInventory = void 0;
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 const inventoryService = __importStar(require("../services/inventory.service"));
 const queryParser_1 = require("../utils/queryParser");
+function scopeFromReq(req) {
+    return {
+        isSuperAdmin: req.user.isSuperAdmin,
+        locationId: req.user.locationId ?? null,
+    };
+}
 exports.listInventory = (0, catchAsync_1.default)(async (req, res, _next) => {
     const query = (0, queryParser_1.parseListQuery)(req);
-    const result = await inventoryService.listInventory(query);
+    const result = await inventoryService.listInventory(query, scopeFromReq(req));
     res.status(200).json(result);
 });
 exports.getByVariantId = (0, catchAsync_1.default)(async (req, res, _next) => {
-    const inventories = await inventoryService.getInventoryByVariantId(req.params.variantId);
+    const inventories = await inventoryService.getInventoryByVariantId(req.params.variantId, scopeFromReq(req));
     res.status(200).json(inventories);
 });
 exports.updateInventory = (0, catchAsync_1.default)(async (req, res, _next) => {
     const { locationId } = req.body;
     if (!locationId)
         return res.status(400).json({ status: "fail", message: "locationId required" });
-    const inventory = await inventoryService.updateInventoryQuantity(req.params.variantId, locationId, req.body);
+    const { quantity, reservedQuantity, reorderLevel } = req.body;
+    const inventory = await inventoryService.updateInventoryQuantity(req.params.variantId, locationId, { quantity, reservedQuantity, reorderLevel }, scopeFromReq(req));
     res.status(200).json(inventory);
 });
 exports.listMovements = (0, catchAsync_1.default)(async (req, res, _next) => {
     const query = (0, queryParser_1.parseListQuery)(req);
-    const result = await inventoryService.listMovements(query);
+    const result = await inventoryService.listMovements(query, scopeFromReq(req));
     res.status(200).json(result);
+});
+exports.getInventoryById = (0, catchAsync_1.default)(async (req, res, _next) => {
+    const inventory = await inventoryService.getInventoryById(req.params.id, scopeFromReq(req));
+    res.status(200).json(inventory);
 });
 exports.addMovement = (0, catchAsync_1.default)(async (req, res, _next) => {
     const { variantId, locationId, type, quantity, referenceId } = req.body;
@@ -72,7 +83,7 @@ exports.addMovement = (0, catchAsync_1.default)(async (req, res, _next) => {
         type,
         quantity: Number(quantity),
         referenceId,
-    });
+    }, scopeFromReq(req));
     res.status(201).json(movement);
 });
 //# sourceMappingURL=inventory.controller.js.map
