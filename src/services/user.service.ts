@@ -2,6 +2,8 @@ import { prisma } from "../lib/prisma";
 import AppError from "../utils/appError";
 import { hashPassword } from "../utils/hash";
 import { PrismaQueryFeature } from "../utils/apiFeature";
+import fs from "fs";
+import { uploadToCloudinary } from "../config/cloudinary";
 const userSearchableFields = ["email", "firstName", "lastName", "phone"];
 const userDateFields = ["createdAt", "updatedAt", "emailVerifiedAt", "phoneVerifiedAt"];
 
@@ -29,15 +31,25 @@ export async function getMe(userId: string) {
 
 export async function updateMe(
   userId: string,
-  data: { firstName?: string; lastName?: string; phone?: string; avatarUrl?: string }
+  data: { firstName?: string; lastName?: string; phone?: string; avatarUrl?: string },
+  file?: Express.Multer.File
 ) {
+  let resolvedAvatarUrl = data.avatarUrl;
+
+  if (file?.path) {
+    const fileBuffer = fs.readFileSync(file.path);
+    const uploadResult = await uploadToCloudinary(fileBuffer, "ecommerce/users", "image");
+    fs.unlinkSync(file.path);
+    resolvedAvatarUrl = uploadResult.secure_url || uploadResult.url;
+  }
+
   const user = await prisma.user.update({
     where: { id: userId },
     data: {
       ...(data.firstName !== undefined && { firstName: data.firstName }),
       ...(data.lastName !== undefined && { lastName: data.lastName }),
       ...(data.phone !== undefined && { phone: data.phone }),
-      ...(data.avatarUrl !== undefined && { avatarUrl: data.avatarUrl }),
+      ...(resolvedAvatarUrl !== undefined && { avatarUrl: resolvedAvatarUrl }),
     },
     select: {
       id: true,

@@ -11,8 +11,8 @@ export declare function listPayments(query: {
             orderNumber: string;
         };
     } & {
-        id: string;
         status: import("../generated/prisma/enums").PaymentStatus;
+        id: string;
         createdAt: Date;
         currency: string;
         orderId: string;
@@ -30,11 +30,11 @@ export declare function listPayments(query: {
 }>;
 export declare function getPaymentById(id: string): Promise<{
     order: {
-        userId: string;
-        id: string;
         status: import("../generated/prisma/enums").OrderStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
+        userId: string;
         currency: string;
         shopId: string;
         orderNumber: string;
@@ -44,8 +44,8 @@ export declare function getPaymentById(id: string): Promise<{
         grandTotal: number;
     };
 } & {
-    id: string;
     status: import("../generated/prisma/enums").PaymentStatus;
+    id: string;
     createdAt: Date;
     currency: string;
     orderId: string;
@@ -55,8 +55,8 @@ export declare function getPaymentById(id: string): Promise<{
     paidAt: Date | null;
 }>;
 export declare function capturePayment(id: string): Promise<{
-    id: string;
     status: import("../generated/prisma/enums").PaymentStatus;
+    id: string;
     createdAt: Date;
     currency: string;
     orderId: string;
@@ -66,8 +66,8 @@ export declare function capturePayment(id: string): Promise<{
     paidAt: Date | null;
 }>;
 export declare function refundPayment(id: string): Promise<{
-    id: string;
     status: import("../generated/prisma/enums").PaymentStatus;
+    id: string;
     createdAt: Date;
     currency: string;
     orderId: string;

@@ -1,11 +1,11 @@
 export declare function getMe(userId: string): Promise<{
-    email: string;
+    email: string | null;
+    status: import("../generated/prisma/enums").UserStatus;
+    phone: string | null;
     id: string;
-    phone: string;
     firstName: string;
     lastName: string;
     avatarUrl: string | null;
-    status: import("../generated/prisma/enums").UserStatus;
     emailVerifiedAt: Date | null;
     phoneVerifiedAt: Date | null;
     createdAt: Date;
@@ -22,13 +22,13 @@ export declare function updateMe(userId: string, data: {
     phone?: string;
     avatarUrl?: string;
 }): Promise<{
-    email: string;
+    email: string | null;
+    status: import("../generated/prisma/enums").UserStatus;
+    phone: string | null;
     id: string;
-    phone: string;
     firstName: string;
     lastName: string;
     avatarUrl: string | null;
-    status: import("../generated/prisma/enums").UserStatus;
     createdAt: Date;
     updatedAt: Date;
     roles: {
@@ -43,14 +43,14 @@ export declare function getById(id: string): Promise<{
         name: string;
         id: string;
     }[];
-    email: string;
+    email: string | null;
+    status: import("../generated/prisma/enums").UserStatus;
+    phone: string | null;
     id: string;
-    phone: string;
     firstName: string;
     lastName: string;
     avatarUrl: string | null;
     isSuperAdmin: boolean;
-    status: import("../generated/prisma/enums").UserStatus;
     emailVerifiedAt: Date | null;
     phoneVerifiedAt: Date | null;
     createdAt: Date;
@@ -64,13 +64,13 @@ export declare function listUsers(query: {
     sort?: string;
 }): Promise<{
     data: {
-        email: string;
+        email: string | null;
+        status: import("../generated/prisma/enums").UserStatus;
+        phone: string | null;
         id: string;
-        phone: string;
         firstName: string;
         lastName: string;
         avatarUrl: string | null;
-        status: import("../generated/prisma/enums").UserStatus;
         createdAt: Date;
         updatedAt: Date;
         roles: {
@@ -96,14 +96,14 @@ export declare function updateUser(id: string, data: {
         name: string;
         id: string;
     }[];
-    email: string;
+    email: string | null;
+    status: import("../generated/prisma/enums").UserStatus;
+    phone: string | null;
     id: string;
-    phone: string;
     firstName: string;
     lastName: string;
     avatarUrl: string | null;
     isSuperAdmin: boolean;
-    status: import("../generated/prisma/enums").UserStatus;
     emailVerifiedAt: Date | null;
     phoneVerifiedAt: Date | null;
     createdAt: Date;

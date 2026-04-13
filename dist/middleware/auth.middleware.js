@@ -44,7 +44,11 @@ const protect = async (req, _res, next) => {
         console.log("req.user222222: ", req.user);
         next();
     }
-    catch {
+    catch (err) {
+        // If token is expired, jwt.verify throws with err.name === 'TokenExpiredError'
+        if (err && err.name === 'TokenExpiredError') {
+            return next(new appError_1.default("Token is expired", 401));
+        }
         return next(new appError_1.default("Invalid or expired token", 401));
     }
 };

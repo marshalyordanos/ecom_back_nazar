@@ -36,10 +36,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteReview = exports.updateReview = exports.createReview = exports.getReviewById = exports.listByProduct = void 0;
+exports.deleteReview = exports.updateReview = exports.createReview = exports.getReviewById = exports.listByProduct = exports.listReviews = void 0;
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 const reviewService = __importStar(require("../services/review.service"));
 const queryParser_1 = require("../utils/queryParser");
+exports.listReviews = (0, catchAsync_1.default)(async (req, res, _next) => {
+    const query = (0, queryParser_1.parseListQuery)(req);
+    const productId = req.query.productId;
+    const result = await reviewService.listReviews({ ...query, productId });
+    res.status(200).json(result);
+});
 exports.listByProduct = (0, catchAsync_1.default)(async (req, res, _next) => {
     const query = (0, queryParser_1.parseListQuery)(req);
     const result = await reviewService.listReviewsByProduct(req.params.id, query);
@@ -58,7 +64,8 @@ exports.createReview = (0, catchAsync_1.default)(async (req, res, _next) => {
     res.status(201).json(review);
 });
 exports.updateReview = (0, catchAsync_1.default)(async (req, res, _next) => {
-    const review = await reviewService.updateReview(req.params.id, req.user.id, req.body);
+    const isAdmin = req.user.roles.includes("admin");
+    const review = await reviewService.updateReview(req.params.id, req.user.id, req.body, isAdmin);
     res.status(200).json(review);
 });
 exports.deleteReview = (0, catchAsync_1.default)(async (req, res, _next) => {

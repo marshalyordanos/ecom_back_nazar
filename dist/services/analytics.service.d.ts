@@ -10,10 +10,10 @@ export declare function getProductViews(filters: {
             slug: string;
         };
     } & {
-        userId: string | null;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        userId: string | null;
         productId: string;
         sessionId: string | null;
     })[];
@@ -29,10 +29,10 @@ export declare function getSearchLogs(filters: {
 }): Promise<{
     logs: {
         query: string;
-        userId: string | null;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        userId: string | null;
     }[];
     byQuery: Record<string, number>;
 }>;
@@ -46,19 +46,19 @@ export declare function getSalesReport(filters: {
         items: {
             id: string;
             total: number;
+            quantity: number;
             price: number;
             variantId: string;
-            quantity: number;
             orderId: string;
             productName: string;
             variantName: string | null;
         }[];
     } & {
-        userId: string;
-        id: string;
         status: import("../generated/prisma/enums").OrderStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
+        userId: string;
         currency: string;
         shopId: string;
         orderNumber: string;
@@ -80,26 +80,26 @@ export declare function getOrdersReport(filters: {
 }): Promise<{
     data: ({
         user: {
-            email: string;
+            email: string | null;
             firstName: string;
             lastName: string;
         };
         items: {
             id: string;
             total: number;
+            quantity: number;
             price: number;
             variantId: string;
-            quantity: number;
             orderId: string;
             productName: string;
             variantName: string | null;
         }[];
     } & {
-        userId: string;
-        id: string;
         status: import("../generated/prisma/enums").OrderStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
+        userId: string;
         currency: string;
         shopId: string;
         orderNumber: string;

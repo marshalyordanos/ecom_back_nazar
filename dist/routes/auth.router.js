@@ -44,6 +44,12 @@ router.post("/logout", authController.logout);
 router.post("/refresh", authController.refresh);
 router.post("/forgot-password", authController.forgotPassword);
 router.post("/reset-password", authController.resetPassword);
+router.post("/send-verification-otp", authController.sendVerificationOtp);
+router.post("/verify-account", authController.verifyAccount);
+router.post("/resend-verification-otp", authController.resendVerificationOtp);
+router.post("/request-password-reset", authController.requestPasswordReset);
+router.post("/verify-reset-otp", authController.verifyResetOtp);
+router.post("/resend-reset-otp", authController.resendResetOtp);
 router.post("/change-password", auth_middleware_1.protect, authController.changePassword);
 exports.default = router;
 //# sourceMappingURL=auth.router.js.map

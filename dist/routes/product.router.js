@@ -42,6 +42,7 @@ const router = (0, express_1.Router)();
 router.get("/", productController.listProducts);
 router.get("/featured", productController.getFeatured);
 router.patch("/variants/:variantId", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), (0, multer_1.uploadSingleImage)("image"), productController.updateVariant);
+router.get("/variants/:id", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), productController.getVariantById);
 router.delete("/variants/:variantId", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), productController.deleteVariant);
 router.post("/variants/:variantId/media", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), productController.addVariantMedia);
 router.delete("/variants/media/:mediaId", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), productController.removeVariantMedia);

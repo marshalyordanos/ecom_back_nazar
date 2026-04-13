@@ -52,6 +52,62 @@ export const forgotPassword = catchAsync(async (req: AuthRequest, res: Response)
   return res.status(200).json(result);
 });
 
+export const sendVerificationOtp = catchAsync(async (req: AuthRequest, res: Response) => {
+  const result = await authService.sendVerificationOtp({
+    email: req.body.email,
+    phone: req.body.phone,
+    otpType: req.body.otpType,
+  });
+  return res.status(200).json(result);
+});
+
+export const resendVerificationOtp = catchAsync(async (req: AuthRequest, res: Response) => {
+  const result = await authService.resendVerificationOtp({
+    email: req.body.email,
+    phone: req.body.phone,
+    otpType: req.body.otpType,
+  });
+  return res.status(200).json(result);
+});
+
+export const verifyAccount = catchAsync(async (req: AuthRequest, res: Response) => {
+  const result = await authService.verifyAccount({
+    email: req.body.email,
+    phone: req.body.phone,
+    otpType: req.body.otpType,
+    otpCode: req.body.otpCode,
+  });
+  return res.status(200).json(result);
+});
+
+export const requestPasswordReset = catchAsync(async (req: AuthRequest, res: Response) => {
+  const result = await authService.requestPasswordReset({
+    email: req.body.email,
+    phone: req.body.phone,
+    otpType: req.body.otpType,
+  });
+  return res.status(200).json(result);
+});
+
+export const resendResetOtp = catchAsync(async (req: AuthRequest, res: Response) => {
+  const result = await authService.resendResetOtp({
+    email: req.body.email,
+    phone: req.body.phone,
+    otpType: req.body.otpType,
+  });
+  return res.status(200).json(result);
+});
+
+export const verifyResetOtp = catchAsync(async (req: AuthRequest, res: Response) => {
+  const result = await authService.verifyResetOtp({
+    email: req.body.email,
+    phone: req.body.phone,
+    otpType: req.body.otpType,
+    otpCode: req.body.otpCode,
+  });
+  return res.status(200).json(result);
+});
+
 export const resetPassword = catchAsync(async (req: AuthRequest, res: Response) => {
   const { token, password } = req.body;
   if (!token || !password) {

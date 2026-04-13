@@ -12,7 +12,7 @@ export const getMe = catchAsync(async (req: AuthRequest, res: Response, _next: N
 });
 
 export const updateMe = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
-  const user = await userService.updateMe(req.user!.id, req.body);
+  const user = await userService.updateMe(req.user!.id, req.body, req.file);
   res.status(200).json(user);
 });
 

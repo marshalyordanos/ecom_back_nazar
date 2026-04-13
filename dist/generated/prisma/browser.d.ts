@@ -23,6 +23,11 @@ export type User = Prisma.UserModel;
  */
 export type Token = Prisma.TokenModel;
 /**
+ * Model OtpRecord
+ *
+ */
+export type OtpRecord = Prisma.OtpRecordModel;
+/**
  * Model Role
  *
  */
@@ -122,6 +127,11 @@ export type Shipment = Prisma.ShipmentModel;
  *
  */
 export type ShippingAddress = Prisma.ShippingAddressModel;
+/**
+ * Model SavedAddress
+ *
+ */
+export type SavedAddress = Prisma.SavedAddressModel;
 /**
  * Model Coupon
  *

@@ -1,6 +1,6 @@
 export declare function triggerProductSync(shopId: string): Promise<{
-    id: string;
     status: import("../generated/prisma/enums").SyncStatus;
+    id: string;
     shopId: string;
     productsSynced: number;
     startedAt: Date;
@@ -11,8 +11,8 @@ export declare function listSyncLogs(shopId: string | undefined, query: {
     pageSize?: number;
 }): Promise<{
     data: {
-        id: string;
         status: import("../generated/prisma/enums").SyncStatus;
+        id: string;
         shopId: string;
         productsSynced: number;
         startedAt: Date;
@@ -26,8 +26,8 @@ export declare function listSyncLogs(shopId: string | undefined, query: {
     };
 }>;
 export declare function getSyncLogById(id: string): Promise<{
-    id: string;
     status: import("../generated/prisma/enums").SyncStatus;
+    id: string;
     shopId: string;
     productsSynced: number;
     startedAt: Date;

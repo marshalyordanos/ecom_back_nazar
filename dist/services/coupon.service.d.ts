@@ -7,22 +7,22 @@ export declare function listCoupons(query: {
 }): Promise<{
     data: ({
         usages: {
-            userId: string;
             id: string;
             createdAt: Date;
             updatedAt: Date;
+            userId: string;
             orderId: string | null;
             usedAt: Date;
             couponId: string;
         }[];
     } & {
-        type: import("../generated/prisma/enums").CouponType;
+        code: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        type: import("../generated/prisma/enums").CouponType;
         expiresAt: Date | null;
         value: number;
-        code: string;
         minOrderAmount: number | null;
         usageLimit: number | null;
         usedCount: number;
@@ -37,29 +37,29 @@ export declare function listCoupons(query: {
 export declare function getCouponById(id: string): Promise<{
     usages: ({
         user: {
-            email: string;
+            email: string | null;
             id: string;
         };
         order: {
             orderNumber: string;
         } | null;
     } & {
-        userId: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        userId: string;
         orderId: string | null;
         usedAt: Date;
         couponId: string;
     })[];
 } & {
-    type: import("../generated/prisma/enums").CouponType;
+    code: string;
     id: string;
     createdAt: Date;
     updatedAt: Date;
+    type: import("../generated/prisma/enums").CouponType;
     expiresAt: Date | null;
     value: number;
-    code: string;
     minOrderAmount: number | null;
     usageLimit: number | null;
     usedCount: number;
@@ -72,13 +72,13 @@ export declare function createCoupon(data: {
     usageLimit?: number;
     expiresAt?: Date;
 }): Promise<{
-    type: import("../generated/prisma/enums").CouponType;
+    code: string;
     id: string;
     createdAt: Date;
     updatedAt: Date;
+    type: import("../generated/prisma/enums").CouponType;
     expiresAt: Date | null;
     value: number;
-    code: string;
     minOrderAmount: number | null;
     usageLimit: number | null;
     usedCount: number;
@@ -91,13 +91,13 @@ export declare function updateCoupon(id: string, data: {
     usageLimit?: number;
     expiresAt?: Date;
 }): Promise<{
-    type: import("../generated/prisma/enums").CouponType;
+    code: string;
     id: string;
     createdAt: Date;
     updatedAt: Date;
+    type: import("../generated/prisma/enums").CouponType;
     expiresAt: Date | null;
     value: number;
-    code: string;
     minOrderAmount: number | null;
     usageLimit: number | null;
     usedCount: number;
@@ -109,17 +109,17 @@ export declare function applyCouponToOrder(orderId: string, couponId: string, us
     items: {
         id: string;
         total: number;
+        quantity: number;
         price: number;
         variantId: string;
-        quantity: number;
         orderId: string;
         productName: string;
         variantName: string | null;
     }[];
     address: {
         name: string;
-        id: string;
         phone: string;
+        id: string;
         addressLine1: string;
         addressLine2: string | null;
         city: string;
@@ -131,11 +131,11 @@ export declare function applyCouponToOrder(orderId: string, couponId: string, us
         orderId: string;
     } | null;
 } & {
-    userId: string;
-    id: string;
     status: import("../generated/prisma/enums").OrderStatus;
+    id: string;
     createdAt: Date;
     updatedAt: Date;
+    userId: string;
     currency: string;
     shopId: string;
     orderNumber: string;

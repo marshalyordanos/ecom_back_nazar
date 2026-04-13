@@ -21,8 +21,10 @@ export declare function listCategories(query: {
         id: string;
         createdAt: Date;
         description: string | null;
+        image: string | null;
         slug: string;
         parentId: string | null;
+        track: string | null;
     })[];
     pagination: {
         total: number;
@@ -32,43 +34,72 @@ export declare function listCategories(query: {
     };
 }>;
 /** Get categories as a tree (root categories with nested children). */
-export declare function listCategoriesTree(): Promise<({
+/**
+ * Returns product categories as a tree, each category includes:
+ * - totalSalesAmount: Total money sales for the category and all its descendants.
+ * - totalProductsSold: Total quantity of products sold for the category and all its descendants.
+ */
+type CategoryNode = {
+    id: string;
+    parentId: string | null;
+    name: string;
+    slug: string;
+    description: string | null;
+    image: string | null;
+    track: string;
+    children?: CategoryNode[];
+    totalSalesAmount: number;
+    totalProductsSold: number;
+};
+/** Get categories as a tree (root categories with nested children). */
+export declare function listCategoriesTree2(): Promise<({
     children: ({
         children: {
             name: string;
             id: string;
             createdAt: Date;
             description: string | null;
+            image: string | null;
             slug: string;
             parentId: string | null;
+            track: string | null;
         }[];
     } & {
         name: string;
         id: string;
         createdAt: Date;
         description: string | null;
+        image: string | null;
         slug: string;
         parentId: string | null;
+        track: string | null;
     })[];
 } & {
     name: string;
     id: string;
     createdAt: Date;
     description: string | null;
+    image: string | null;
     slug: string;
     parentId: string | null;
+    track: string | null;
+})[]>;
+export declare function listCategoriesTree(): Promise<(CategoryNode & {
+    totalProducts: number;
+    children?: (CategoryNode & /*elided*/ any)[];
 })[]>;
 export declare function getCategoryById(id: string): Promise<{
     products: {
         name: string;
-        id: string;
         status: import("../generated/prisma/enums").ProductStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         description: string | null;
         slug: string;
         shopId: string;
         isFeatured: boolean;
+        track: string | null;
         shortDescription: string | null;
         brandId: string | null;
         categoryId: string | null;
@@ -78,52 +109,66 @@ export declare function getCategoryById(id: string): Promise<{
         id: string;
         createdAt: Date;
         description: string | null;
+        image: string | null;
         slug: string;
         parentId: string | null;
+        track: string | null;
     } | null;
     children: {
         name: string;
         id: string;
         createdAt: Date;
         description: string | null;
+        image: string | null;
         slug: string;
         parentId: string | null;
+        track: string | null;
     }[];
 } & {
     name: string;
     id: string;
     createdAt: Date;
     description: string | null;
+    image: string | null;
     slug: string;
     parentId: string | null;
+    track: string | null;
 }>;
 export declare function createCategory(data: {
     name: string;
     slug: string;
     description?: string;
     parentId?: string;
-}): Promise<{
+    track?: string;
+}, file: any): Promise<{
     name: string;
     id: string;
     createdAt: Date;
     description: string | null;
+    image: string | null;
     slug: string;
     parentId: string | null;
+    track: string | null;
 }>;
 export declare function updateCategory(id: string, data: {
     name?: string;
     slug?: string;
     description?: string;
     parentId?: string;
-}): Promise<{
+    image?: string;
+    track?: string;
+}, file: any): Promise<{
     name: string;
     id: string;
     createdAt: Date;
     description: string | null;
+    image: string | null;
     slug: string;
     parentId: string | null;
+    track: string | null;
 }>;
 export declare function deleteCategory(id: string): Promise<{
     message: string;
 }>;
+export {};
 //# sourceMappingURL=category.service.d.ts.map

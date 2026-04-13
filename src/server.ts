@@ -2,6 +2,7 @@ import http from "http";
 import app from "./app";
 import dotenv from "dotenv";
 import { initSocket } from "./lib/socket";
+import { startInactiveAccountPurge } from "./jobs/purgeInactiveAccounts";
 
 dotenv.config();
 
@@ -13,4 +14,5 @@ const PORT = process.env.PORT || 8000;
 
 server.listen(PORT, () => {
   console.log("Server running on port " + PORT);
+  startInactiveAccountPurge();
 });

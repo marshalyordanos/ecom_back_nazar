@@ -36,14 +36,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.assignVariantOptionValue = exports.removeVariantOptionValue = exports.setVariantOptionValues = exports.deleteOptionValue = exports.updateOptionValue = exports.createOptionValue = exports.getOptionValueById = exports.listOptionValues = exports.deleteVariantOption = exports.updateVariantOption = exports.createVariantOption = exports.getVariantOptionById = exports.listVariantOptions = exports.removeVariantMedia = exports.addVariantMedia = exports.deleteVariant = exports.updateVariant = exports.createVariant = exports.getFeatured = exports.deleteProduct = exports.updateProduct = exports.createProduct = exports.getProductByIdMobile = exports.getProductById = exports.listProducts = void 0;
+exports.assignVariantOptionValue = exports.removeVariantOptionValue = exports.setVariantOptionValues = exports.deleteOptionValue = exports.updateOptionValue = exports.createOptionValue = exports.getOptionValueById = exports.listOptionValues = exports.deleteVariantOption = exports.updateVariantOption = exports.createVariantOption = exports.getVariantOptionById = exports.listVariantOptions = exports.removeVariantMedia = exports.addVariantMedia = exports.deleteVariant = exports.updateVariant = exports.createVariant = exports.getVariantById = exports.getFeatured = exports.deleteProduct = exports.updateProduct = exports.createProduct = exports.getProductByIdMobile = exports.getProductById = exports.listProducts = void 0;
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 const productService = __importStar(require("../services/product.service"));
 const queryParser_1 = require("../utils/queryParser");
 exports.listProducts = (0, catchAsync_1.default)(async (req, res, _next) => {
     const query = (0, queryParser_1.parseListQuery)(req);
     const shopId = req.query.shopId;
-    const result = await productService.listProducts(shopId, query, req);
+    const track = req.query.track;
+    const result = await productService.listProducts(shopId, track, query, req);
     res.status(200).json(result);
 });
 exports.getProductById = (0, catchAsync_1.default)(async (req, res, _next) => {
@@ -80,6 +81,10 @@ exports.getFeatured = (0, catchAsync_1.default)(async (req, res, _next) => {
     const limit = Math.min(parseInt(String(req.query.limit), 10) || 10, 50);
     const products = await productService.getFeaturedProducts(shopId, limit);
     res.status(200).json(products);
+});
+exports.getVariantById = (0, catchAsync_1.default)(async (req, res, _next) => {
+    const variant = await productService.getVariantById(req.params.id);
+    res.status(200).json(variant);
 });
 exports.createVariant = (0, catchAsync_1.default)(async (req, res, _next) => {
     const variant = await productService.createVariant(req.params.id, req.body, req.file);

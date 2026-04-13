@@ -1,6 +1,4 @@
-import { PrismaClient } from "../src/generated/prisma/client";
-
-const prisma = new PrismaClient();
+import { prisma } from "../src/lib/prisma";
 
 async function main() {
   const userRole = await prisma.role.upsert({
@@ -28,10 +26,17 @@ async function main() {
     });
   }
 
-  const usersPerm = await prisma.permission.findUnique({ where: { resource: "users" } });
+  const usersPerm = await prisma.permission.findUnique({
+    where: { resource: "users" },
+  });
   if (usersPerm) {
     await prisma.rolePermission.upsert({
-      where: { roleId_permissionId: { roleId: adminRole.id, permissionId: usersPerm.id } },
+      where: {
+        roleId_permissionId: {
+          roleId: adminRole.id,
+          permissionId: usersPerm.id,
+        },
+      },
       create: {
         roleId: adminRole.id,
         permissionId: usersPerm.id,

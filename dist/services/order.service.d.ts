@@ -9,17 +9,17 @@ export declare function listUserOrders(userId: string, query: {
         items: {
             id: string;
             total: number;
+            quantity: number;
             price: number;
             variantId: string;
-            quantity: number;
             orderId: string;
             productName: string;
             variantName: string | null;
         }[];
         address: {
             name: string;
-            id: string;
             phone: string;
+            id: string;
             addressLine1: string;
             addressLine2: string | null;
             city: string;
@@ -31,11 +31,11 @@ export declare function listUserOrders(userId: string, query: {
             orderId: string;
         } | null;
     } & {
-        userId: string;
-        id: string;
         status: import("../generated/prisma/enums").OrderStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
+        userId: string;
         currency: string;
         shopId: string;
         orderNumber: string;
@@ -55,16 +55,16 @@ export declare function getOrderById(orderId: string, userId?: string): Promise<
     items: {
         id: string;
         total: number;
+        quantity: number;
         price: number;
         variantId: string;
-        quantity: number;
         orderId: string;
         productName: string;
         variantName: string | null;
     }[];
     payments: {
-        id: string;
         status: import("../generated/prisma/enums").PaymentStatus;
+        id: string;
         createdAt: Date;
         currency: string;
         orderId: string;
@@ -74,8 +74,8 @@ export declare function getOrderById(orderId: string, userId?: string): Promise<
         paidAt: Date | null;
     }[];
     shipments: {
-        id: string;
         status: import("../generated/prisma/enums").ShipmentStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         orderId: string;
@@ -86,8 +86,8 @@ export declare function getOrderById(orderId: string, userId?: string): Promise<
     }[];
     address: {
         name: string;
-        id: string;
         phone: string;
+        id: string;
         addressLine1: string;
         addressLine2: string | null;
         city: string;
@@ -99,11 +99,11 @@ export declare function getOrderById(orderId: string, userId?: string): Promise<
         orderId: string;
     } | null;
 } & {
-    userId: string;
-    id: string;
     status: import("../generated/prisma/enums").OrderStatus;
+    id: string;
     createdAt: Date;
     updatedAt: Date;
+    userId: string;
     currency: string;
     shopId: string;
     orderNumber: string;
@@ -113,11 +113,11 @@ export declare function getOrderById(orderId: string, userId?: string): Promise<
     grandTotal: number;
 }>;
 export declare function cancelOrder(orderId: string, userId: string): Promise<{
-    userId: string;
-    id: string;
     status: import("../generated/prisma/enums").OrderStatus;
+    id: string;
     createdAt: Date;
     updatedAt: Date;
+    userId: string;
     currency: string;
     shopId: string;
     orderNumber: string;
@@ -127,11 +127,11 @@ export declare function cancelOrder(orderId: string, userId: string): Promise<{
     grandTotal: number;
 }>;
 export declare function completeOrder(orderId: string): Promise<{
-    userId: string;
-    id: string;
     status: import("../generated/prisma/enums").OrderStatus;
+    id: string;
     createdAt: Date;
     updatedAt: Date;
+    userId: string;
     currency: string;
     shopId: string;
     orderNumber: string;
@@ -147,8 +147,8 @@ export declare function listOrderItems(orderId: string): Promise<({
             slug: string;
         };
     } & {
-        id: string;
         status: import("../generated/prisma/enums").ProductStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         image: string | null;
@@ -163,9 +163,9 @@ export declare function listOrderItems(orderId: string): Promise<({
 } & {
     id: string;
     total: number;
+    quantity: number;
     price: number;
     variantId: string;
-    quantity: number;
     orderId: string;
     productName: string;
     variantName: string | null;
@@ -180,7 +180,7 @@ export declare function listOrdersAdmin(query: {
 }): Promise<{
     data: ({
         user: {
-            email: string;
+            email: string | null;
             id: string;
             firstName: string;
             lastName: string;
@@ -188,17 +188,17 @@ export declare function listOrdersAdmin(query: {
         items: {
             id: string;
             total: number;
+            quantity: number;
             price: number;
             variantId: string;
-            quantity: number;
             orderId: string;
             productName: string;
             variantName: string | null;
         }[];
         address: {
             name: string;
-            id: string;
             phone: string;
+            id: string;
             addressLine1: string;
             addressLine2: string | null;
             city: string;
@@ -210,11 +210,11 @@ export declare function listOrdersAdmin(query: {
             orderId: string;
         } | null;
     } & {
-        userId: string;
-        id: string;
         status: import("../generated/prisma/enums").OrderStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
+        userId: string;
         currency: string;
         shopId: string;
         orderNumber: string;
@@ -264,17 +264,17 @@ export declare function createOrderAdmin(data: {
     items: {
         id: string;
         total: number;
+        quantity: number;
         price: number;
         variantId: string;
-        quantity: number;
         orderId: string;
         productName: string;
         variantName: string | null;
     }[];
     address: {
         name: string;
-        id: string;
         phone: string;
+        id: string;
         addressLine1: string;
         addressLine2: string | null;
         city: string;
@@ -286,11 +286,11 @@ export declare function createOrderAdmin(data: {
         orderId: string;
     } | null;
 } & {
-    userId: string;
-    id: string;
     status: import("../generated/prisma/enums").OrderStatus;
+    id: string;
     createdAt: Date;
     updatedAt: Date;
+    userId: string;
     currency: string;
     shopId: string;
     orderNumber: string;

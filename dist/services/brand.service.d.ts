@@ -24,14 +24,15 @@ export declare function listBrands(query: {
 export declare function getBrandById(id: string): Promise<{
     products: {
         name: string;
-        id: string;
         status: import("../generated/prisma/enums").ProductStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         description: string | null;
         slug: string;
         shopId: string;
         isFeatured: boolean;
+        track: string | null;
         shortDescription: string | null;
         brandId: string | null;
         categoryId: string | null;

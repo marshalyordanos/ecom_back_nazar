@@ -1,10 +1,10 @@
-export declare function listProducts(shopId: string | undefined, query: {
+export declare function listProducts(shopId: string | undefined, track?: string, query?: {
     page?: number;
     pageSize?: number;
     search?: string;
     filter?: string;
     sort?: string;
-}, req: any): Promise<{
+}, req?: any): Promise<{
     data: ({
         brand: {
             name: string;
@@ -14,19 +14,21 @@ export declare function listProducts(shopId: string | undefined, query: {
         category: {
             name: string;
             id: string;
+            image: string | null;
             slug: string;
+            track: string | null;
         } | null;
         variants: ({
             media: {
                 url: string;
-                type: string;
                 id: string;
+                type: string;
                 position: number | null;
                 variantId: string;
             }[];
         } & {
-            id: string;
             status: import("../generated/prisma/enums").ProductStatus;
+            id: string;
             createdAt: Date;
             updatedAt: Date;
             image: string | null;
@@ -40,14 +42,15 @@ export declare function listProducts(shopId: string | undefined, query: {
         })[];
     } & {
         name: string;
-        id: string;
         status: import("../generated/prisma/enums").ProductStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         description: string | null;
         slug: string;
         shopId: string;
         isFeatured: boolean;
+        track: string | null;
         shortDescription: string | null;
         brandId: string | null;
         categoryId: string | null;
@@ -79,17 +82,18 @@ export declare function getProductById(id: string, shopId?: string): Promise<{
         id: string;
         createdAt: Date;
         description: string | null;
+        image: string | null;
         slug: string;
         parentId: string | null;
+        track: string | null;
     } | null;
     variants: ({
         inventories: ({
             location: {
                 name: string;
-                id: string;
                 phone: string | null;
+                id: string;
                 createdAt: Date;
-                shopId: string;
                 addressLine1: string;
                 addressLine2: string | null;
                 city: string;
@@ -98,21 +102,22 @@ export declare function getProductById(id: string, shopId?: string): Promise<{
                 postalCode: string | null;
                 latitude: number | null;
                 longitude: number | null;
+                shopId: string;
             };
         } & {
             id: string;
             createdAt: Date;
             updatedAt: Date;
             locationId: string;
-            variantId: string;
             quantity: number;
+            variantId: string;
             reservedQuantity: number;
             reorderLevel: number | null;
         })[];
         media: {
             url: string;
-            type: string;
             id: string;
+            type: string;
             position: number | null;
             variantId: string;
         }[];
@@ -136,8 +141,8 @@ export declare function getProductById(id: string, shopId?: string): Promise<{
             optionValueId: string;
         })[];
     } & {
-        id: string;
         status: import("../generated/prisma/enums").ProductStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         image: string | null;
@@ -151,14 +156,15 @@ export declare function getProductById(id: string, shopId?: string): Promise<{
     })[];
 } & {
     name: string;
-    id: string;
     status: import("../generated/prisma/enums").ProductStatus;
+    id: string;
     createdAt: Date;
     updatedAt: Date;
     description: string | null;
     slug: string;
     shopId: string;
     isFeatured: boolean;
+    track: string | null;
     shortDescription: string | null;
     brandId: string | null;
     categoryId: string | null;
@@ -183,17 +189,18 @@ export declare function getProductByIdMobile(id: string, shopId?: string, userId
         id: string;
         createdAt: Date;
         description: string | null;
+        image: string | null;
         slug: string;
         parentId: string | null;
+        track: string | null;
     } | null;
     variants: ({
         inventories: ({
             location: {
                 name: string;
-                id: string;
                 phone: string | null;
+                id: string;
                 createdAt: Date;
-                shopId: string;
                 addressLine1: string;
                 addressLine2: string | null;
                 city: string;
@@ -202,21 +209,22 @@ export declare function getProductByIdMobile(id: string, shopId?: string, userId
                 postalCode: string | null;
                 latitude: number | null;
                 longitude: number | null;
+                shopId: string;
             };
         } & {
             id: string;
             createdAt: Date;
             updatedAt: Date;
             locationId: string;
-            variantId: string;
             quantity: number;
+            variantId: string;
             reservedQuantity: number;
             reorderLevel: number | null;
         })[];
         media: {
             url: string;
-            type: string;
             id: string;
+            type: string;
             position: number | null;
             variantId: string;
         }[];
@@ -240,8 +248,8 @@ export declare function getProductByIdMobile(id: string, shopId?: string, userId
             optionValueId: string;
         })[];
     } & {
-        id: string;
         status: import("../generated/prisma/enums").ProductStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         image: string | null;
@@ -255,14 +263,15 @@ export declare function getProductByIdMobile(id: string, shopId?: string, userId
     })[];
 } & {
     name: string;
-    id: string;
     status: import("../generated/prisma/enums").ProductStatus;
+    id: string;
     createdAt: Date;
     updatedAt: Date;
     description: string | null;
     slug: string;
     shopId: string;
     isFeatured: boolean;
+    track: string | null;
     shortDescription: string | null;
     brandId: string | null;
     categoryId: string | null;
@@ -278,14 +287,15 @@ export declare function createProduct(shopId: string, data: {
     status: string;
 }): Promise<{
     name: string;
-    id: string;
     status: import("../generated/prisma/enums").ProductStatus;
+    id: string;
     createdAt: Date;
     updatedAt: Date;
     description: string | null;
     slug: string;
     shopId: string;
     isFeatured: boolean;
+    track: string | null;
     shortDescription: string | null;
     brandId: string | null;
     categoryId: string | null;
@@ -301,14 +311,15 @@ export declare function updateProduct(id: string, shopId: string, data: {
     status?: string;
 }): Promise<{
     name: string;
-    id: string;
     status: import("../generated/prisma/enums").ProductStatus;
+    id: string;
     createdAt: Date;
     updatedAt: Date;
     description: string | null;
     slug: string;
     shopId: string;
     isFeatured: boolean;
+    track: string | null;
     shortDescription: string | null;
     brandId: string | null;
     categoryId: string | null;
@@ -330,14 +341,14 @@ export declare function getFeaturedProducts(shopId?: string, limit?: number): Pr
     variants: ({
         media: {
             url: string;
-            type: string;
             id: string;
+            type: string;
             position: number | null;
             variantId: string;
         }[];
     } & {
-        id: string;
         status: import("../generated/prisma/enums").ProductStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         image: string | null;
@@ -351,29 +362,59 @@ export declare function getFeaturedProducts(shopId?: string, limit?: number): Pr
     })[];
 } & {
     name: string;
-    id: string;
     status: import("../generated/prisma/enums").ProductStatus;
+    id: string;
     createdAt: Date;
     updatedAt: Date;
     description: string | null;
     slug: string;
     shopId: string;
     isFeatured: boolean;
+    track: string | null;
     shortDescription: string | null;
     brandId: string | null;
     categoryId: string | null;
 })[]>;
-export declare function createVariant(productId: string, data: {
-    sku: string;
-    barcode?: string;
-    price: number;
-    comparePrice?: number;
-    costPrice?: number;
-    weight?: number;
-    status: string;
-}, file?: any): Promise<{
-    id: string;
+export declare function getVariantById(id: string): Promise<({
+    inventories: {
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        locationId: string;
+        quantity: number;
+        variantId: string;
+        reservedQuantity: number;
+        reorderLevel: number | null;
+    }[];
+    media: {
+        url: string;
+        id: string;
+        type: string;
+        position: number | null;
+        variantId: string;
+    }[];
+    variantOptionValues: ({
+        optionValue: {
+            option: {
+                name: string;
+                id: string;
+                createdAt: Date;
+                updatedAt: Date;
+            };
+        } & {
+            id: string;
+            createdAt: Date;
+            value: string;
+            optionId: string;
+        };
+    } & {
+        id: string;
+        variantId: string;
+        optionValueId: string;
+    })[];
+} & {
     status: import("../generated/prisma/enums").ProductStatus;
+    id: string;
     createdAt: Date;
     updatedAt: Date;
     image: string | null;
@@ -384,7 +425,43 @@ export declare function createVariant(productId: string, data: {
     comparePrice: number | null;
     costPrice: number | null;
     weight: number | null;
-}>;
+}) | null>;
+export declare function createVariant(productId: string, data: {
+    sku: string;
+    barcode?: string;
+    price: number;
+    comparePrice?: number;
+    costPrice?: number;
+    weight?: number;
+    status: string;
+    locationId: string;
+    type: string;
+    quantity: number;
+}, file?: any): Promise<({
+    inventories: {
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        locationId: string;
+        quantity: number;
+        variantId: string;
+        reservedQuantity: number;
+        reorderLevel: number | null;
+    }[];
+} & {
+    status: import("../generated/prisma/enums").ProductStatus;
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    image: string | null;
+    productId: string;
+    sku: string;
+    barcode: string | null;
+    price: number;
+    comparePrice: number | null;
+    costPrice: number | null;
+    weight: number | null;
+}) | null>;
 export declare function updateVariant(variantId: string, data: {
     sku?: string;
     barcode?: string;
@@ -395,8 +472,8 @@ export declare function updateVariant(variantId: string, data: {
     status?: string;
     image?: string;
 }, file?: any): Promise<{
-    id: string;
     status: import("../generated/prisma/enums").ProductStatus;
+    id: string;
     createdAt: Date;
     updatedAt: Date;
     image: string | null;
@@ -413,8 +490,8 @@ export declare function deleteVariant(variantId: string): Promise<{
 }>;
 export declare function addVariantMedia(variantId: string, url: string, type: string, position?: number): Promise<{
     url: string;
-    type: string;
     id: string;
+    type: string;
     position: number | null;
     variantId: string;
 }>;
@@ -529,8 +606,8 @@ export declare function setVariantOptionValues(variantId: string, optionValueIds
         optionValueId: string;
     })[];
 } & {
-    id: string;
     status: import("../generated/prisma/enums").ProductStatus;
+    id: string;
     createdAt: Date;
     updatedAt: Date;
     image: string | null;

@@ -11,8 +11,8 @@ export declare function listShipments(query: {
             orderNumber: string;
         };
     } & {
-        id: string;
         status: import("../generated/prisma/enums").ShipmentStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         orderId: string;
@@ -30,11 +30,11 @@ export declare function listShipments(query: {
 }>;
 export declare function getShipmentById(id: string): Promise<{
     order: {
-        userId: string;
-        id: string;
         status: import("../generated/prisma/enums").OrderStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
+        userId: string;
         currency: string;
         shopId: string;
         orderNumber: string;
@@ -44,8 +44,8 @@ export declare function getShipmentById(id: string): Promise<{
         grandTotal: number;
     };
 } & {
-    id: string;
     status: import("../generated/prisma/enums").ShipmentStatus;
+    id: string;
     createdAt: Date;
     updatedAt: Date;
     orderId: string;
@@ -63,8 +63,8 @@ export declare function getTrackingInfo(id: string): Promise<{
     orderNumber: string;
     address: {
         name: string;
-        id: string;
         phone: string;
+        id: string;
         addressLine1: string;
         addressLine2: string | null;
         city: string;
@@ -83,8 +83,8 @@ export declare function updateShipmentStatus(id: string, data: {
     shippedAt?: Date;
     deliveredAt?: Date;
 }): Promise<{
-    id: string;
     status: import("../generated/prisma/enums").ShipmentStatus;
+    id: string;
     createdAt: Date;
     updatedAt: Date;
     orderId: string;

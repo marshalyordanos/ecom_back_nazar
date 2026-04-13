@@ -36,7 +36,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.changePassword = exports.resetPassword = exports.forgotPassword = exports.refresh = exports.logout = exports.login = exports.createSuperAdmin = exports.register = void 0;
+exports.changePassword = exports.resetPassword = exports.verifyResetOtp = exports.resendResetOtp = exports.requestPasswordReset = exports.verifyAccount = exports.resendVerificationOtp = exports.sendVerificationOtp = exports.forgotPassword = exports.refresh = exports.logout = exports.login = exports.createSuperAdmin = exports.register = void 0;
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 const authService = __importStar(require("../services/auth.service"));
 exports.register = (0, catchAsync_1.default)(async (req, res) => {
@@ -78,6 +78,56 @@ exports.refresh = (0, catchAsync_1.default)(async (req, res) => {
 });
 exports.forgotPassword = (0, catchAsync_1.default)(async (req, res) => {
     const result = await authService.forgotPassword(req.body.email);
+    return res.status(200).json(result);
+});
+exports.sendVerificationOtp = (0, catchAsync_1.default)(async (req, res) => {
+    const result = await authService.sendVerificationOtp({
+        email: req.body.email,
+        phone: req.body.phone,
+        otpType: req.body.otpType,
+    });
+    return res.status(200).json(result);
+});
+exports.resendVerificationOtp = (0, catchAsync_1.default)(async (req, res) => {
+    const result = await authService.resendVerificationOtp({
+        email: req.body.email,
+        phone: req.body.phone,
+        otpType: req.body.otpType,
+    });
+    return res.status(200).json(result);
+});
+exports.verifyAccount = (0, catchAsync_1.default)(async (req, res) => {
+    const result = await authService.verifyAccount({
+        email: req.body.email,
+        phone: req.body.phone,
+        otpType: req.body.otpType,
+        otpCode: req.body.otpCode,
+    });
+    return res.status(200).json(result);
+});
+exports.requestPasswordReset = (0, catchAsync_1.default)(async (req, res) => {
+    const result = await authService.requestPasswordReset({
+        email: req.body.email,
+        phone: req.body.phone,
+        otpType: req.body.otpType,
+    });
+    return res.status(200).json(result);
+});
+exports.resendResetOtp = (0, catchAsync_1.default)(async (req, res) => {
+    const result = await authService.resendResetOtp({
+        email: req.body.email,
+        phone: req.body.phone,
+        otpType: req.body.otpType,
+    });
+    return res.status(200).json(result);
+});
+exports.verifyResetOtp = (0, catchAsync_1.default)(async (req, res) => {
+    const result = await authService.verifyResetOtp({
+        email: req.body.email,
+        phone: req.body.phone,
+        otpType: req.body.otpType,
+        otpCode: req.body.otpCode,
+    });
     return res.status(200).json(result);
 });
 exports.resetPassword = (0, catchAsync_1.default)(async (req, res) => {

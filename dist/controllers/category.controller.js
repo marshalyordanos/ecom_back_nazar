@@ -55,11 +55,11 @@ exports.getCategoryById = (0, catchAsync_1.default)(async (req, res, _next) => {
     res.status(200).json(category);
 });
 exports.createCategory = (0, catchAsync_1.default)(async (req, res, _next) => {
-    const category = await categoryService.createCategory(req.body);
+    const category = await categoryService.createCategory(req.body, req.file);
     res.status(201).json(category);
 });
 exports.updateCategory = (0, catchAsync_1.default)(async (req, res, _next) => {
-    const category = await categoryService.updateCategory(req.params.id, req.body);
+    const category = await categoryService.updateCategory(req.params.id, req.body, req.file);
     res.status(200).json(category);
 });
 exports.deleteCategory = (0, catchAsync_1.default)(async (req, res, _next) => {

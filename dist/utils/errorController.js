@@ -79,8 +79,10 @@ const errHandling = (err, _req, res, _next) => {
         error.isOperational === true ||
         error.isOprational === true // handle typo
     ) {
-        console.log("error2222222222222", error?.statusCode);
-        res.status(400).json({
+        const statusCode = typeof error.statusCode === "number" && error.statusCode >= 100 && error.statusCode < 600
+            ? error.statusCode
+            : 500;
+        res.status(statusCode).json({
             status: error.status || "fail",
             message: error.message,
             code: error.code || err.code || undefined,

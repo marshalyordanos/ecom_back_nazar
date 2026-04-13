@@ -30,6 +30,7 @@ export declare const ModelName: {
     readonly ShopLocation: "ShopLocation";
     readonly User: "User";
     readonly Token: "Token";
+    readonly OtpRecord: "OtpRecord";
     readonly Role: "Role";
     readonly Permission: "Permission";
     readonly RolePermission: "RolePermission";
@@ -50,6 +51,7 @@ export declare const ModelName: {
     readonly Payment: "Payment";
     readonly Shipment: "Shipment";
     readonly ShippingAddress: "ShippingAddress";
+    readonly SavedAddress: "SavedAddress";
     readonly Coupon: "Coupon";
     readonly CouponUsage: "CouponUsage";
     readonly Review: "Review";
@@ -124,6 +126,21 @@ export declare const TokenScalarFieldEnum: {
     readonly createdAt: "createdAt";
 };
 export type TokenScalarFieldEnum = (typeof TokenScalarFieldEnum)[keyof typeof TokenScalarFieldEnum];
+export declare const OtpRecordScalarFieldEnum: {
+    readonly id: "id";
+    readonly userId: "userId";
+    readonly channelValue: "channelValue";
+    readonly otpType: "otpType";
+    readonly otpPurpose: "otpPurpose";
+    readonly verificationId: "verificationId";
+    readonly otpHash: "otpHash";
+    readonly otpExpiresAt: "otpExpiresAt";
+    readonly otpAttempts: "otpAttempts";
+    readonly otpCooldownUntil: "otpCooldownUntil";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type OtpRecordScalarFieldEnum = (typeof OtpRecordScalarFieldEnum)[keyof typeof OtpRecordScalarFieldEnum];
 export declare const RoleScalarFieldEnum: {
     readonly id: "id";
     readonly name: "name";
@@ -167,7 +184,9 @@ export declare const ProductCategoryScalarFieldEnum: {
     readonly name: "name";
     readonly slug: "slug";
     readonly description: "description";
+    readonly image: "image";
     readonly parentId: "parentId";
+    readonly track: "track";
     readonly createdAt: "createdAt";
 };
 export type ProductCategoryScalarFieldEnum = (typeof ProductCategoryScalarFieldEnum)[keyof typeof ProductCategoryScalarFieldEnum];
@@ -180,6 +199,7 @@ export declare const ProductScalarFieldEnum: {
     readonly shortDescription: "shortDescription";
     readonly brandId: "brandId";
     readonly categoryId: "categoryId";
+    readonly track: "track";
     readonly isFeatured: "isFeatured";
     readonly status: "status";
     readonly createdAt: "createdAt";
@@ -334,6 +354,24 @@ export declare const ShippingAddressScalarFieldEnum: {
     readonly longitude: "longitude";
 };
 export type ShippingAddressScalarFieldEnum = (typeof ShippingAddressScalarFieldEnum)[keyof typeof ShippingAddressScalarFieldEnum];
+export declare const SavedAddressScalarFieldEnum: {
+    readonly id: "id";
+    readonly userId: "userId";
+    readonly label: "label";
+    readonly name: "name";
+    readonly phone: "phone";
+    readonly addressLine1: "addressLine1";
+    readonly addressLine2: "addressLine2";
+    readonly city: "city";
+    readonly state: "state";
+    readonly country: "country";
+    readonly postalCode: "postalCode";
+    readonly latitude: "latitude";
+    readonly longitude: "longitude";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type SavedAddressScalarFieldEnum = (typeof SavedAddressScalarFieldEnum)[keyof typeof SavedAddressScalarFieldEnum];
 export declare const CouponScalarFieldEnum: {
     readonly id: "id";
     readonly code: "code";

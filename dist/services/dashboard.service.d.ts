@@ -21,10 +21,9 @@ export declare function getTopProducts(shopId: string, limit?: number): Promise<
 export declare function getLowInventory(shopId: string): Promise<({
     location: {
         name: string;
-        id: string;
         phone: string | null;
+        id: string;
         createdAt: Date;
-        shopId: string;
         addressLine1: string;
         addressLine2: string | null;
         city: string;
@@ -33,6 +32,7 @@ export declare function getLowInventory(shopId: string): Promise<({
         postalCode: string | null;
         latitude: number | null;
         longitude: number | null;
+        shopId: string;
     };
     variant: {
         product: {
@@ -40,8 +40,8 @@ export declare function getLowInventory(shopId: string): Promise<({
             slug: string;
         };
     } & {
-        id: string;
         status: import("../generated/prisma/enums").ProductStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         image: string | null;
@@ -58,34 +58,34 @@ export declare function getLowInventory(shopId: string): Promise<({
     createdAt: Date;
     updatedAt: Date;
     locationId: string;
-    variantId: string;
     quantity: number;
+    variantId: string;
     reservedQuantity: number;
     reorderLevel: number | null;
 })[]>;
 export declare function getNewCustomers(shopId: string, days?: number): Promise<number>;
 export declare function getRecentOrders(shopId: string, limit?: number): Promise<({
     user: {
-        email: string;
+        email: string | null;
         firstName: string;
         lastName: string;
     };
     items: {
         id: string;
         total: number;
+        quantity: number;
         price: number;
         variantId: string;
-        quantity: number;
         orderId: string;
         productName: string;
         variantName: string | null;
     }[];
 } & {
-    userId: string;
-    id: string;
     status: import("../generated/prisma/enums").OrderStatus;
+    id: string;
     createdAt: Date;
     updatedAt: Date;
+    userId: string;
     currency: string;
     shopId: string;
     orderNumber: string;
@@ -97,8 +97,8 @@ export declare function getRecentOrders(shopId: string, limit?: number): Promise
 export declare function getRecentActivities(_shopId: string, limit?: number): Promise<({
     type: string;
     data: {
-        id: string;
         status: import("../generated/prisma/enums").OrderStatus;
+        id: string;
         createdAt: Date;
         orderNumber: string;
     };
@@ -110,8 +110,8 @@ export declare function getRecentActivities(_shopId: string, limit?: number): Pr
                 name: string;
             };
         } & {
-            id: string;
             status: import("../generated/prisma/enums").ProductStatus;
+            id: string;
             createdAt: Date;
             updatedAt: Date;
             image: string | null;
@@ -124,15 +124,15 @@ export declare function getRecentActivities(_shopId: string, limit?: number): Pr
             weight: number | null;
         };
     } & {
-        type: import("../generated/prisma/enums").InventoryMovementType;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        type: import("../generated/prisma/enums").InventoryMovementType;
         locationId: string;
-        variantId: string;
         quantity: number;
-        inventoryId: string | null;
+        variantId: string;
         referenceId: string | null;
+        inventoryId: string | null;
     };
 })[]>;
 export declare function getDashboardSummary(shopId: string): Promise<{
@@ -498,7 +498,7 @@ export declare function getRecentReviews(shopId: string, limit?: number): Promis
     userId: string;
     user: {
         id: string;
-        email: string;
+        email: string | null;
         name: string;
     } | null;
     rating: number;
@@ -514,7 +514,7 @@ export declare function getPendingReviews(shopId: string, limit?: number): Promi
     userId: string;
     user: {
         id: string;
-        email: string;
+        email: string | null;
         name: string;
     } | null;
     rating: number;
@@ -527,8 +527,8 @@ export declare function getOrderActivities(shopId: string, limit?: number): Prom
     type: string;
     createdAt: Date;
     data: {
-        id: string;
         status: import("../generated/prisma/enums").OrderStatus;
+        id: string;
         createdAt: Date;
         orderNumber: string;
     };
@@ -536,8 +536,8 @@ export declare function getOrderActivities(shopId: string, limit?: number): Prom
     type: string;
     createdAt: Date;
     data: {
-        id: string;
         status: import("../generated/prisma/enums").ShipmentStatus;
+        id: string;
         createdAt: Date;
         orderId: string;
         trackingNumber: string | null;
@@ -547,8 +547,8 @@ export declare function getOrderActivities(shopId: string, limit?: number): Prom
     type: string;
     createdAt: Date;
     data: {
-        id: string;
         status: import("../generated/prisma/enums").PaymentStatus;
+        id: string;
         createdAt: Date;
         orderId: string;
         provider: string;
@@ -563,15 +563,15 @@ export declare function getUserActivities(shopId: string, days?: number, limit?:
     days: number;
     registrations: {
         id: string;
-        email: string;
+        email: string | null;
         name: string;
         createdAt: Date;
     }[];
     recentOrders: {
-        userId: string;
-        id: string;
         status: import("../generated/prisma/enums").OrderStatus;
+        id: string;
         createdAt: Date;
+        userId: string;
         orderNumber: string;
     }[];
 }>;
@@ -628,8 +628,8 @@ export declare function getSyncStatus(shopId?: string, limit?: number): Promise<
     total: number;
     byStatus: Record<string, number>;
     recent: {
-        id: string;
         status: import("../generated/prisma/enums").SyncStatus;
+        id: string;
         shopId: string;
         productsSynced: number;
         startedAt: Date;
