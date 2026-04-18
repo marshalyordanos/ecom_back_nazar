@@ -82,6 +82,33 @@ export declare function getTopProducts(shopId: string, limit?: number): Promise<
     orderCount: number;
     productName: string | undefined;
 }[]>;
+export declare function getEcommerceHighlights(shopId: string, limit?: number): Promise<{
+    visitsSummary: {
+        totalVisits: number;
+        totalOrders: number;
+        conversionRate: number;
+        visitsChangePct: number;
+        ordersChangePct: number;
+    };
+    categoryHighlights: {
+        categoryId: string;
+        categoryName: string;
+        track: string | null;
+        image: string | null;
+        revenue: number;
+        orderCount: number;
+        totalViews: number;
+        topProduct: {
+            productId: string;
+            productName: string;
+            productSlug: string;
+            revenue: number;
+            orderCount: number;
+            views: number;
+            image: string | null;
+        };
+    }[];
+}>;
 export declare function getLowInventory(shopId: string): Promise<({
     location: {
         name: string;
@@ -287,6 +314,8 @@ export declare function getProductSummary(shopId: string): Promise<{
     active: number;
     draft: number;
     archived: number;
+    totalSearchLogs: number;
+    totalViewCount: number;
 }>;
 export declare function getVariantSummary(shopId: string): Promise<{
     totalVariants: number;
@@ -351,7 +380,6 @@ export declare function getSearchSummary(shopId: string, days?: number): Promise
     days: number;
     totalSearches: number;
     uniqueQueries: number;
-    failedSearches: number;
 }>;
 export declare function getSalesTrends(shopId: string, groupBy: "day" | "week" | "month", days?: number): Promise<{
     groupBy: "week" | "day" | "month";

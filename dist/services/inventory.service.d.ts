@@ -46,6 +46,7 @@ export declare function listInventory(query: {
                     id: string;
                     createdAt: Date;
                     value: string;
+                    colorValue: string | null;
                     optionId: string;
                 };
             } & {

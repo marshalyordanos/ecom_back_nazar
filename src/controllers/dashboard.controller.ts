@@ -63,6 +63,14 @@ export const getTopProducts = catchAsync(async (req: AuthRequest, res: Response,
   res.status(200).json(data);
 });
 
+export const getEcommerceHighlights = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string;
+  const limit = Math.min(parseInt(String(req.query.limit), 10) || 3, 6);
+  if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
+  const data = await dashboardService.getEcommerceHighlights(shopId, limit);
+  res.status(200).json(data);
+});
+
 export const getLowInventory = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
   const shopId = req.query.shopId as string;
   if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });

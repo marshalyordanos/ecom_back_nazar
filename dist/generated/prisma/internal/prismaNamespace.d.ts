@@ -3134,6 +3134,7 @@ export type VariantOptionValueScalarFieldEnum = (typeof VariantOptionValueScalar
 export declare const OptionValueScalarFieldEnum: {
     readonly id: "id";
     readonly value: "value";
+    readonly colorValue: "colorValue";
     readonly optionId: "optionId";
     readonly createdAt: "createdAt";
 };

@@ -9,6 +9,7 @@ export declare const getOverview: (req: AuthRequest, res: Response, next: NextFu
 export declare const getSalesSummary: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const getOrdersSummary: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const getTopProducts: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const getEcommerceHighlights: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const getLowInventory: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const getNewCustomers: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const getRecentOrders: (req: AuthRequest, res: Response, next: NextFunction) => void;

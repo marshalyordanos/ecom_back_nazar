@@ -13,18 +13,21 @@ export type AggregateOptionValue = {
 export type OptionValueMinAggregateOutputType = {
     id: string | null;
     value: string | null;
+    colorValue: string | null;
     optionId: string | null;
     createdAt: Date | null;
 };
 export type OptionValueMaxAggregateOutputType = {
     id: string | null;
     value: string | null;
+    colorValue: string | null;
     optionId: string | null;
     createdAt: Date | null;
 };
 export type OptionValueCountAggregateOutputType = {
     id: number;
     value: number;
+    colorValue: number;
     optionId: number;
     createdAt: number;
     _all: number;
@@ -32,18 +35,21 @@ export type OptionValueCountAggregateOutputType = {
 export type OptionValueMinAggregateInputType = {
     id?: true;
     value?: true;
+    colorValue?: true;
     optionId?: true;
     createdAt?: true;
 };
 export type OptionValueMaxAggregateInputType = {
     id?: true;
     value?: true;
+    colorValue?: true;
     optionId?: true;
     createdAt?: true;
 };
 export type OptionValueCountAggregateInputType = {
     id?: true;
     value?: true;
+    colorValue?: true;
     optionId?: true;
     createdAt?: true;
     _all?: true;
@@ -113,6 +119,7 @@ export type OptionValueGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inte
 export type OptionValueGroupByOutputType = {
     id: string;
     value: string;
+    colorValue: string | null;
     optionId: string;
     createdAt: Date;
     _count: OptionValueCountAggregateOutputType | null;
@@ -128,6 +135,7 @@ export type OptionValueWhereInput = {
     NOT?: Prisma.OptionValueWhereInput | Prisma.OptionValueWhereInput[];
     id?: Prisma.StringFilter<"OptionValue"> | string;
     value?: Prisma.StringFilter<"OptionValue"> | string;
+    colorValue?: Prisma.StringNullableFilter<"OptionValue"> | string | null;
     optionId?: Prisma.StringFilter<"OptionValue"> | string;
     createdAt?: Prisma.DateTimeFilter<"OptionValue"> | Date | string;
     option?: Prisma.XOR<Prisma.VariantOptionScalarRelationFilter, Prisma.VariantOptionWhereInput>;
@@ -136,6 +144,7 @@ export type OptionValueWhereInput = {
 export type OptionValueOrderByWithRelationInput = {
     id?: Prisma.SortOrder;
     value?: Prisma.SortOrder;
+    colorValue?: Prisma.SortOrderInput | Prisma.SortOrder;
     optionId?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     option?: Prisma.VariantOptionOrderByWithRelationInput;
@@ -148,6 +157,7 @@ export type OptionValueWhereUniqueInput = Prisma.AtLeast<{
     OR?: Prisma.OptionValueWhereInput[];
     NOT?: Prisma.OptionValueWhereInput | Prisma.OptionValueWhereInput[];
     value?: Prisma.StringFilter<"OptionValue"> | string;
+    colorValue?: Prisma.StringNullableFilter<"OptionValue"> | string | null;
     optionId?: Prisma.StringFilter<"OptionValue"> | string;
     createdAt?: Prisma.DateTimeFilter<"OptionValue"> | Date | string;
     option?: Prisma.XOR<Prisma.VariantOptionScalarRelationFilter, Prisma.VariantOptionWhereInput>;
@@ -156,6 +166,7 @@ export type OptionValueWhereUniqueInput = Prisma.AtLeast<{
 export type OptionValueOrderByWithAggregationInput = {
     id?: Prisma.SortOrder;
     value?: Prisma.SortOrder;
+    colorValue?: Prisma.SortOrderInput | Prisma.SortOrder;
     optionId?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     _count?: Prisma.OptionValueCountOrderByAggregateInput;
@@ -168,12 +179,14 @@ export type OptionValueScalarWhereWithAggregatesInput = {
     NOT?: Prisma.OptionValueScalarWhereWithAggregatesInput | Prisma.OptionValueScalarWhereWithAggregatesInput[];
     id?: Prisma.StringWithAggregatesFilter<"OptionValue"> | string;
     value?: Prisma.StringWithAggregatesFilter<"OptionValue"> | string;
+    colorValue?: Prisma.StringNullableWithAggregatesFilter<"OptionValue"> | string | null;
     optionId?: Prisma.StringWithAggregatesFilter<"OptionValue"> | string;
     createdAt?: Prisma.DateTimeWithAggregatesFilter<"OptionValue"> | Date | string;
 };
 export type OptionValueCreateInput = {
     id?: string;
     value: string;
+    colorValue?: string | null;
     createdAt?: Date | string;
     option: Prisma.VariantOptionCreateNestedOneWithoutValuesInput;
     variants?: Prisma.VariantOptionValueCreateNestedManyWithoutOptionValueInput;
@@ -181,6 +194,7 @@ export type OptionValueCreateInput = {
 export type OptionValueUncheckedCreateInput = {
     id?: string;
     value: string;
+    colorValue?: string | null;
     optionId: string;
     createdAt?: Date | string;
     variants?: Prisma.VariantOptionValueUncheckedCreateNestedManyWithoutOptionValueInput;
@@ -188,6 +202,7 @@ export type OptionValueUncheckedCreateInput = {
 export type OptionValueUpdateInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     value?: Prisma.StringFieldUpdateOperationsInput | string;
+    colorValue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     option?: Prisma.VariantOptionUpdateOneRequiredWithoutValuesNestedInput;
     variants?: Prisma.VariantOptionValueUpdateManyWithoutOptionValueNestedInput;
@@ -195,6 +210,7 @@ export type OptionValueUpdateInput = {
 export type OptionValueUncheckedUpdateInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     value?: Prisma.StringFieldUpdateOperationsInput | string;
+    colorValue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     optionId?: Prisma.StringFieldUpdateOperationsInput | string;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     variants?: Prisma.VariantOptionValueUncheckedUpdateManyWithoutOptionValueNestedInput;
@@ -202,17 +218,20 @@ export type OptionValueUncheckedUpdateInput = {
 export type OptionValueCreateManyInput = {
     id?: string;
     value: string;
+    colorValue?: string | null;
     optionId: string;
     createdAt?: Date | string;
 };
 export type OptionValueUpdateManyMutationInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     value?: Prisma.StringFieldUpdateOperationsInput | string;
+    colorValue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 export type OptionValueUncheckedUpdateManyInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     value?: Prisma.StringFieldUpdateOperationsInput | string;
+    colorValue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     optionId?: Prisma.StringFieldUpdateOperationsInput | string;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -227,18 +246,21 @@ export type OptionValueOptionIdValueCompoundUniqueInput = {
 export type OptionValueCountOrderByAggregateInput = {
     id?: Prisma.SortOrder;
     value?: Prisma.SortOrder;
+    colorValue?: Prisma.SortOrder;
     optionId?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
 };
 export type OptionValueMaxOrderByAggregateInput = {
     id?: Prisma.SortOrder;
     value?: Prisma.SortOrder;
+    colorValue?: Prisma.SortOrder;
     optionId?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
 };
 export type OptionValueMinOrderByAggregateInput = {
     id?: Prisma.SortOrder;
     value?: Prisma.SortOrder;
+    colorValue?: Prisma.SortOrder;
     optionId?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
 };
@@ -303,12 +325,14 @@ export type OptionValueUncheckedUpdateManyWithoutOptionNestedInput = {
 export type OptionValueCreateWithoutVariantsInput = {
     id?: string;
     value: string;
+    colorValue?: string | null;
     createdAt?: Date | string;
     option: Prisma.VariantOptionCreateNestedOneWithoutValuesInput;
 };
 export type OptionValueUncheckedCreateWithoutVariantsInput = {
     id?: string;
     value: string;
+    colorValue?: string | null;
     optionId: string;
     createdAt?: Date | string;
 };
@@ -328,24 +352,28 @@ export type OptionValueUpdateToOneWithWhereWithoutVariantsInput = {
 export type OptionValueUpdateWithoutVariantsInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     value?: Prisma.StringFieldUpdateOperationsInput | string;
+    colorValue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     option?: Prisma.VariantOptionUpdateOneRequiredWithoutValuesNestedInput;
 };
 export type OptionValueUncheckedUpdateWithoutVariantsInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     value?: Prisma.StringFieldUpdateOperationsInput | string;
+    colorValue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     optionId?: Prisma.StringFieldUpdateOperationsInput | string;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 export type OptionValueCreateWithoutOptionInput = {
     id?: string;
     value: string;
+    colorValue?: string | null;
     createdAt?: Date | string;
     variants?: Prisma.VariantOptionValueCreateNestedManyWithoutOptionValueInput;
 };
 export type OptionValueUncheckedCreateWithoutOptionInput = {
     id?: string;
     value: string;
+    colorValue?: string | null;
     createdAt?: Date | string;
     variants?: Prisma.VariantOptionValueUncheckedCreateNestedManyWithoutOptionValueInput;
 };
@@ -376,29 +404,34 @@ export type OptionValueScalarWhereInput = {
     NOT?: Prisma.OptionValueScalarWhereInput | Prisma.OptionValueScalarWhereInput[];
     id?: Prisma.StringFilter<"OptionValue"> | string;
     value?: Prisma.StringFilter<"OptionValue"> | string;
+    colorValue?: Prisma.StringNullableFilter<"OptionValue"> | string | null;
     optionId?: Prisma.StringFilter<"OptionValue"> | string;
     createdAt?: Prisma.DateTimeFilter<"OptionValue"> | Date | string;
 };
 export type OptionValueCreateManyOptionInput = {
     id?: string;
     value: string;
+    colorValue?: string | null;
     createdAt?: Date | string;
 };
 export type OptionValueUpdateWithoutOptionInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     value?: Prisma.StringFieldUpdateOperationsInput | string;
+    colorValue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     variants?: Prisma.VariantOptionValueUpdateManyWithoutOptionValueNestedInput;
 };
 export type OptionValueUncheckedUpdateWithoutOptionInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     value?: Prisma.StringFieldUpdateOperationsInput | string;
+    colorValue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     variants?: Prisma.VariantOptionValueUncheckedUpdateManyWithoutOptionValueNestedInput;
 };
 export type OptionValueUncheckedUpdateManyWithoutOptionInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     value?: Prisma.StringFieldUpdateOperationsInput | string;
+    colorValue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 /**
@@ -428,6 +461,7 @@ export type OptionValueCountOutputTypeCountVariantsArgs<ExtArgs extends runtime.
 export type OptionValueSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
     value?: boolean;
+    colorValue?: boolean;
     optionId?: boolean;
     createdAt?: boolean;
     option?: boolean | Prisma.VariantOptionDefaultArgs<ExtArgs>;
@@ -437,6 +471,7 @@ export type OptionValueSelect<ExtArgs extends runtime.Types.Extensions.InternalA
 export type OptionValueSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
     value?: boolean;
+    colorValue?: boolean;
     optionId?: boolean;
     createdAt?: boolean;
     option?: boolean | Prisma.VariantOptionDefaultArgs<ExtArgs>;
@@ -444,6 +479,7 @@ export type OptionValueSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
 export type OptionValueSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
     value?: boolean;
+    colorValue?: boolean;
     optionId?: boolean;
     createdAt?: boolean;
     option?: boolean | Prisma.VariantOptionDefaultArgs<ExtArgs>;
@@ -451,10 +487,11 @@ export type OptionValueSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
 export type OptionValueSelectScalar = {
     id?: boolean;
     value?: boolean;
+    colorValue?: boolean;
     optionId?: boolean;
     createdAt?: boolean;
 };
-export type OptionValueOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "value" | "optionId" | "createdAt", ExtArgs["result"]["optionValue"]>;
+export type OptionValueOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "value" | "colorValue" | "optionId" | "createdAt", ExtArgs["result"]["optionValue"]>;
 export type OptionValueInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     option?: boolean | Prisma.VariantOptionDefaultArgs<ExtArgs>;
     variants?: boolean | Prisma.OptionValue$variantsArgs<ExtArgs>;
@@ -475,6 +512,7 @@ export type $OptionValuePayload<ExtArgs extends runtime.Types.Extensions.Interna
     scalars: runtime.Types.Extensions.GetPayloadResult<{
         id: string;
         value: string;
+        colorValue: string | null;
         optionId: string;
         createdAt: Date;
     }, ExtArgs["result"]["optionValue"]>;
@@ -835,6 +873,7 @@ export interface Prisma__OptionValueClient<T, Null = never, ExtArgs extends runt
 export interface OptionValueFieldRefs {
     readonly id: Prisma.FieldRef<"OptionValue", 'String'>;
     readonly value: Prisma.FieldRef<"OptionValue", 'String'>;
+    readonly colorValue: Prisma.FieldRef<"OptionValue", 'String'>;
     readonly optionId: Prisma.FieldRef<"OptionValue", 'String'>;
     readonly createdAt: Prisma.FieldRef<"OptionValue", 'DateTime'>;
 }

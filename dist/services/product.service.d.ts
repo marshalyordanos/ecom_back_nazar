@@ -133,6 +133,7 @@ export declare function getProductById(id: string, shopId?: string): Promise<{
                 id: string;
                 createdAt: Date;
                 value: string;
+                colorValue: string | null;
                 optionId: string;
             };
         } & {
@@ -240,6 +241,7 @@ export declare function getProductByIdMobile(id: string, shopId?: string, userId
                 id: string;
                 createdAt: Date;
                 value: string;
+                colorValue: string | null;
                 optionId: string;
             };
         } & {
@@ -379,6 +381,7 @@ export declare function listVariants(shopId?: string, query?: {
                 id: string;
                 createdAt: Date;
                 value: string;
+                colorValue: string | null;
                 optionId: string;
             };
         } & {
@@ -629,6 +632,7 @@ export declare function getVariantById(id: string): Promise<({
             id: string;
             createdAt: Date;
             value: string;
+            colorValue: string | null;
             optionId: string;
         };
     } & {
@@ -727,6 +731,7 @@ export declare function listVariantOptions(): Promise<({
         id: string;
         createdAt: Date;
         value: string;
+        colorValue: string | null;
         optionId: string;
     }[];
 } & {
@@ -740,6 +745,7 @@ export declare function getVariantOptionById(optionId: string): Promise<{
         id: string;
         createdAt: Date;
         value: string;
+        colorValue: string | null;
         optionId: string;
     }[];
 } & {
@@ -771,6 +777,7 @@ export declare function listOptionValues(optionId: string): Promise<{
     id: string;
     createdAt: Date;
     value: string;
+    colorValue: string | null;
     optionId: string;
 }[]>;
 export declare function getOptionValueById(valueId: string): Promise<{
@@ -784,22 +791,27 @@ export declare function getOptionValueById(valueId: string): Promise<{
     id: string;
     createdAt: Date;
     value: string;
+    colorValue: string | null;
     optionId: string;
 }>;
 export declare function createOptionValue(optionId: string, data: {
     value: string;
+    colorValue?: string | null;
 }): Promise<{
     id: string;
     createdAt: Date;
     value: string;
+    colorValue: string | null;
     optionId: string;
 }>;
 export declare function updateOptionValue(valueId: string, data: {
     value?: string;
+    colorValue?: string | null;
 }): Promise<{
     id: string;
     createdAt: Date;
     value: string;
+    colorValue: string | null;
     optionId: string;
 }>;
 export declare function deleteOptionValue(valueId: string): Promise<{
@@ -822,6 +834,7 @@ export declare function setVariantOptionValues(variantId: string, optionValueIds
             id: string;
             createdAt: Date;
             value: string;
+            colorValue: string | null;
             optionId: string;
         };
     } & {

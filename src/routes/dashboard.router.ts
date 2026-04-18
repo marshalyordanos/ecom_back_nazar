@@ -22,6 +22,7 @@ router.get("/overview", dashboardController.getOverview);
 router.get("/sales-summary", dashboardController.getSalesSummary);
 router.get("/orders-summary", dashboardController.getOrdersSummary);
 router.get("/top-products", dashboardController.getTopProducts);
+router.get("/ecommerce/highlights", dashboardController.getEcommerceHighlights);
 router.get("/low-inventory", dashboardController.getLowInventory);
 router.get("/new-customers", dashboardController.getNewCustomers);
 router.get("/recent-orders", dashboardController.getRecentOrders);

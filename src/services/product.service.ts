@@ -523,19 +523,38 @@ export async function getOptionValueById(valueId: string) {
   return value;
 }
 
-export async function createOptionValue(optionId: string, data: { value: string }) {
+export async function createOptionValue(
+  optionId: string,
+  data: { value: string; colorValue?: string | null }
+) {
   const option = await prisma.variantOption.findUnique({ where: { id: optionId } });
   if (!option) throw new AppError("Variant option not found", 404);
+  const isColorOption = option.name.trim().toLowerCase() === "color";
   const optionValue = await prisma.optionValue.create({
-    data: { optionId, value: data.value },
+    data: {
+      optionId,
+      value: data.value,
+      colorValue: isColorOption ? data.colorValue ?? null : null,
+    },
   });
   return optionValue;
 }
 
-export async function updateOptionValue(valueId: string, data: { value?: string }) {
+export async function updateOptionValue(valueId: string, data: { value?: string; colorValue?: string | null }) {
+  const existing = await prisma.optionValue.findUnique({
+    where: { id: valueId },
+    include: { option: true },
+  });
+  if (!existing) throw new AppError("Option value not found", 404);
+  const isColorOption = existing.option.name.trim().toLowerCase() === "color";
   const optionValue = await prisma.optionValue.update({
     where: { id: valueId },
-    data: data as Parameters<typeof prisma.optionValue.update>[0]["data"],
+    data: {
+      ...(typeof data.value === "string" ? { value: data.value } : {}),
+      ...(isColorOption
+        ? { colorValue: data.colorValue ?? existing.colorValue ?? null }
+        : { colorValue: null }),
+    } as Parameters<typeof prisma.optionValue.update>[0]["data"],
   });
   return optionValue;
 }
