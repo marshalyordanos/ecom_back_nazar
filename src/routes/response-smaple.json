@@ -1,0 +1,197 @@
+{
+  "id": "cmnat4den00027466swocaqsm",
+  "shopId": "cmna1rdg700021w66m6n7tk24",
+  "name": "Saumsung S-25",
+  "slug": "Saumsung S-25",
+  "description": "Comwfortable and stylish sneakers for everyday wear.",
+  "shortDescription": "Men’s running shoes",
+  "brandId": "cmnat1gr200017466sv28mz44",
+  "categoryId": "cmn9z9usi0001uc66aoexr2pi",
+  "track": null,
+  "isFeatured": false,
+  "status": "ACTIVE",
+  "createdAt": "2026-03-28T20:52:58.463Z",
+  "updatedAt": "2026-03-28T20:52:58.463Z",
+  "shop": {
+    "id": "cmna1rdg700021w66m6n7tk24",
+    "name": "Tech Haven Stor",
+    "slug": "tech-haven-store2"
+  },
+  "brand": {
+    "id": "cmnat1gr200017466sv28mz44",
+    "name": "Samsung",
+    "slug": "Samsung",
+    "logoUrl": "https://res.cloudinary.com/dpzqvtwrc/image/upload/v1774731043/ecommerce/brands/pihsvb9zt3feod761bpv.png",
+    "description": "Global brand معروف for sportswear, shoes, and athletic equipment.",
+    "isFeatured": true,
+    "createdAt": "2026-03-28T20:50:42.830Z"
+  },
+  "category": {
+    "id": "cmn9z9usi0001uc66aoexr2pi",
+    "name": "Electronics",
+    "slug": "electronics",
+    "description": null,
+    "image": "https://res.cloudinary.com/dpzqvtwrc/image/upload/v1774681045/ecommerce/categories/uhvrm2d7yo1wvdtfbbdh.png",
+    "parentId": null,
+    "track": "cmn9z9usi0001uc66aoexr2pi",
+    "createdAt": "2026-03-28T06:57:25.794Z"
+  },
+  "variants": [
+    {
+      "id": "cmnfo9clg000u3066mnr9wb7s",
+      "productId": "cmnat4den00027466swocaqsm",
+      "sku": "S25-BLK-128",
+      "barcode": "300000001",
+      "price": 900,
+      "comparePrice": 950,
+      "costPrice": 750,
+      "weight": 0.19,
+      "status": "ACTIVE",
+      "image": "https://res.cloudinary.com/dpzqvtwrc/image/upload/v1775025343/ecommerce/variants/aoukewax4qwzmdzyhndt.webp",
+      "createdAt": "2026-04-01T06:35:43.492Z",
+      "updatedAt": "2026-04-01T06:35:43.492Z",
+      "media": [],
+      "inventories": [
+        {
+          "id": "cmnfo9cm0000v3066013feurg",
+          "variantId": "cmnfo9clg000u3066mnr9wb7s",
+          "locationId": "cmnfnoal2000630664mekvio6",
+          "quantity": 10,
+          "reservedQuantity": 0,
+          "reorderLevel": null,
+          "createdAt": "2026-04-01T06:35:43.512Z",
+          "updatedAt": "2026-04-01T06:35:43.519Z",
+          "location": {
+            "id": "cmnfnoal2000630664mekvio6",
+            "shopId": "cmna1rdg700021w66m6n7tk24",
+            "name": "Main Branch",
+            "addressLine1": "Bole Road, Friendship Building",
+            "addressLine2": "2nd Floor, Office 201",
+            "city": "Addis Ababa",
+            "state": "Addis Ababa",
+            "country": "Ethiopia",
+            "postalCode": "1000",
+            "latitude": 8.9806,
+            "longitude": 38.7578,
+            "phone": "+251911223344",
+            "createdAt": "2026-04-01T06:19:21.110Z"
+          }
+        }
+      ],
+      "variantOptionValues": [
+        {
+          "id": "cmnh3agkb000b3w66x9tochpm",
+          "variantId": "cmnfo9clg000u3066mnr9wb7s",
+          "optionValueId": "cmnfoj7pg00103066l7l7brck",
+          "optionValue": {
+            "id": "cmnfoj7pg00103066l7l7brck",
+            "value": "Black",
+            "optionId": "cmne7cn5r0007iw66sj84dpmy",
+            "createdAt": "2026-04-01T06:43:23.716Z",
+            "option": {
+              "id": "cmne7cn5r0007iw66sj84dpmy",
+              "name": "color",
+              "createdAt": "2026-03-31T05:54:37.503Z",
+              "updatedAt": "2026-03-31T05:54:37.503Z"
+            }
+          }
+        },
+        {
+          "id": "cmnh3aqtz000d3w66qegprxqv",
+          "variantId": "cmnfo9clg000u3066mnr9wb7s",
+          "optionValueId": "cmne7q2jx001iiw661k4g467r",
+          "optionValue": {
+            "id": "cmne7q2jx001iiw661k4g467r",
+            "value": "128GB",
+            "optionId": "cmne7cran0008iw66lb55inpc",
+            "createdAt": "2026-03-31T06:05:03.981Z",
+            "option": {
+              "id": "cmne7cran0008iw66lb55inpc",
+              "name": "storage",
+              "createdAt": "2026-03-31T05:54:42.863Z",
+              "updatedAt": "2026-03-31T05:54:42.863Z"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "cmnfoanqq000x3066sa7095mp",
+      "productId": "cmnat4den00027466swocaqsm",
+      "sku": "S25-SLV-256",
+      "barcode": "300000002",
+      "price": 1050,
+      "comparePrice": 1100,
+      "costPrice": 850,
+      "weight": 0.19,
+      "status": "ACTIVE",
+      "image": "https://res.cloudinary.com/dpzqvtwrc/image/upload/v1775025404/ecommerce/variants/ml0woofz84sbgo0cdlxr.jpg",
+      "createdAt": "2026-04-01T06:36:44.594Z",
+      "updatedAt": "2026-04-01T06:36:44.594Z",
+      "media": [],
+      "inventories": [
+        {
+          "id": "cmnfoanr1000y3066uvpgrltc",
+          "variantId": "cmnfoanqq000x3066sa7095mp",
+          "locationId": "cmnfnoal2000630664mekvio6",
+          "quantity": 10,
+          "reservedQuantity": 0,
+          "reorderLevel": null,
+          "createdAt": "2026-04-01T06:36:44.605Z",
+          "updatedAt": "2026-04-01T06:36:44.615Z",
+          "location": {
+            "id": "cmnfnoal2000630664mekvio6",
+            "shopId": "cmna1rdg700021w66m6n7tk24",
+            "name": "Main Branch",
+            "addressLine1": "Bole Road, Friendship Building",
+            "addressLine2": "2nd Floor, Office 201",
+            "city": "Addis Ababa",
+            "state": "Addis Ababa",
+            "country": "Ethiopia",
+            "postalCode": "1000",
+            "latitude": 8.9806,
+            "longitude": 38.7578,
+            "phone": "+251911223344",
+            "createdAt": "2026-04-01T06:19:21.110Z"
+          }
+        }
+      ],
+      "variantOptionValues": [
+        {
+          "id": "cmnk33jjc0007ug66npyhilbd",
+          "variantId": "cmnfoanqq000x3066sa7095mp",
+          "optionValueId": "cmnfojdh500113066bmxeqtuh",
+          "optionValue": {
+            "id": "cmnfojdh500113066bmxeqtuh",
+            "value": "Silver",
+            "optionId": "cmne7cn5r0007iw66sj84dpmy",
+            "createdAt": "2026-04-01T06:43:31.193Z",
+            "option": {
+              "id": "cmne7cn5r0007iw66sj84dpmy",
+              "name": "color",
+              "createdAt": "2026-03-31T05:54:37.503Z",
+              "updatedAt": "2026-03-31T05:54:37.503Z"
+            }
+          }
+        },
+        {
+          "id": "cmnk33not0008ug66bgcqgp1q",
+          "variantId": "cmnfoanqq000x3066sa7095mp",
+          "optionValueId": "cmne7q5fs001jiw66lwj5ny7g",
+          "optionValue": {
+            "id": "cmne7q5fs001jiw66lwj5ny7g",
+            "value": "256GB",
+            "optionId": "cmne7cran0008iw66lb55inpc",
+            "createdAt": "2026-03-31T06:05:07.720Z",
+            "option": {
+              "id": "cmne7cran0008iw66lb55inpc",
+              "name": "storage",
+              "createdAt": "2026-03-31T05:54:42.863Z",
+              "updatedAt": "2026-03-31T05:54:42.863Z"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
