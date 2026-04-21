@@ -135,8 +135,8 @@ export declare function getLowInventory(shopId: string): Promise<({
         status: import("../generated/prisma/enums").ProductStatus;
         createdAt: Date;
         updatedAt: Date;
-        image: string | null;
         price: number;
+        image: string | null;
         productId: string;
         sku: string;
         barcode: string | null;
@@ -163,10 +163,10 @@ export declare function getRecentOrders(shopId: string, limit?: number): Promise
     };
     items: {
         id: string;
+        price: number;
         total: number;
         variantId: string;
         quantity: number;
-        price: number;
         orderId: string;
         productName: string;
         variantName: string | null;
@@ -205,8 +205,8 @@ export declare function getRecentActivities(_shopId: string, limit?: number): Pr
             status: import("../generated/prisma/enums").ProductStatus;
             createdAt: Date;
             updatedAt: Date;
-            image: string | null;
             price: number;
+            image: string | null;
             productId: string;
             sku: string;
             barcode: string | null;

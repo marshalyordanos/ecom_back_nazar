@@ -44,7 +44,20 @@ exports.listProducts = (0, catchAsync_1.default)(async (req, res, _next) => {
     const query = (0, queryParser_1.parseListQuery)(req);
     const shopId = req.query.shopId;
     const track = req.query.track;
-    const result = await productService.listProducts(shopId, track, query, req);
+    const minPriceRaw = req.query.minPrice;
+    const maxPriceRaw = req.query.maxPrice;
+    const minPrice = typeof minPriceRaw === "string" && minPriceRaw.trim() !== "" ? Number(minPriceRaw) : undefined;
+    const maxPrice = typeof maxPriceRaw === "string" && maxPriceRaw.trim() !== "" ? Number(maxPriceRaw) : undefined;
+    const normalizedMinPrice = Number.isFinite(minPrice) && Number.isFinite(maxPrice) && minPrice > maxPrice
+        ? maxPrice
+        : (Number.isFinite(minPrice) ? minPrice : undefined);
+    const normalizedMaxPrice = Number.isFinite(minPrice) && Number.isFinite(maxPrice) && minPrice > maxPrice
+        ? minPrice
+        : (Number.isFinite(maxPrice) ? maxPrice : undefined);
+    const result = await productService.listProducts(shopId, track, query, req, {
+        minPrice: normalizedMinPrice,
+        maxPrice: normalizedMaxPrice,
+    });
     res.status(200).json(result);
 });
 exports.getProductById = (0, catchAsync_1.default)(async (req, res, _next) => {

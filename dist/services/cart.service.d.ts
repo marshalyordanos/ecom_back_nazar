@@ -17,8 +17,8 @@ export declare function getOrCreateCart(userId: string): Promise<{
             status: import("../generated/prisma/enums").ProductStatus;
             createdAt: Date;
             updatedAt: Date;
-            image: string | null;
             price: number;
+            image: string | null;
             productId: string;
             sku: string;
             barcode: string | null;
@@ -29,9 +29,9 @@ export declare function getOrCreateCart(userId: string): Promise<{
     } & {
         id: string;
         createdAt: Date;
+        price: number;
         variantId: string;
         quantity: number;
-        price: number;
         cartId: string;
     })[];
 } & {
@@ -60,8 +60,8 @@ export declare function addItem(userId: string, variantId: string, quantity: num
             status: import("../generated/prisma/enums").ProductStatus;
             createdAt: Date;
             updatedAt: Date;
-            image: string | null;
             price: number;
+            image: string | null;
             productId: string;
             sku: string;
             barcode: string | null;
@@ -72,9 +72,9 @@ export declare function addItem(userId: string, variantId: string, quantity: num
     } & {
         id: string;
         createdAt: Date;
+        price: number;
         variantId: string;
         quantity: number;
-        price: number;
         cartId: string;
     })[];
 } & {
@@ -103,8 +103,8 @@ export declare function updateItemQuantity(userId: string, itemId: string, quant
             status: import("../generated/prisma/enums").ProductStatus;
             createdAt: Date;
             updatedAt: Date;
-            image: string | null;
             price: number;
+            image: string | null;
             productId: string;
             sku: string;
             barcode: string | null;
@@ -115,9 +115,9 @@ export declare function updateItemQuantity(userId: string, itemId: string, quant
     } & {
         id: string;
         createdAt: Date;
+        price: number;
         variantId: string;
         quantity: number;
-        price: number;
         cartId: string;
     })[];
 } & {
@@ -146,8 +146,8 @@ export declare function removeItem(userId: string, itemId: string): Promise<{
             status: import("../generated/prisma/enums").ProductStatus;
             createdAt: Date;
             updatedAt: Date;
-            image: string | null;
             price: number;
+            image: string | null;
             productId: string;
             sku: string;
             barcode: string | null;
@@ -158,9 +158,9 @@ export declare function removeItem(userId: string, itemId: string): Promise<{
     } & {
         id: string;
         createdAt: Date;
+        price: number;
         variantId: string;
         quantity: number;
-        price: number;
         cartId: string;
     })[];
 } & {

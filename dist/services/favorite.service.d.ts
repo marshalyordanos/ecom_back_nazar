@@ -26,8 +26,8 @@ export declare function listFavorites(userId: string, shopId: string | undefined
             status: import("../generated/prisma/enums").ProductStatus;
             createdAt: Date;
             updatedAt: Date;
-            image: string | null;
             price: number;
+            image: string | null;
             productId: string;
             sku: string;
             barcode: string | null;

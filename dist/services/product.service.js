@@ -41,7 +41,7 @@ const cloudinary_1 = require("../config/cloudinary");
 const searchableFieldsforVariant = ["product.name", "sku", "product.brand.name", "product.category.name", "product.description", "product.shortDescription"];
 const searchableFields = ["name", "slug", "brand.name", "category.name", "description", "shortDescription"];
 const dateFields = ["createdAt", "updatedAt"];
-async function listProducts(shopId, track, query, req) {
+async function listProducts(shopId, track, query, req, options) {
     // 🔥 Save search log
     if ((query && query?.search !== "" || query?.filter !== "") && req?.user?.roles.includes("user")) {
         await prisma_1.prisma.searchLog.create({
@@ -51,8 +51,17 @@ async function listProducts(shopId, track, query, req) {
             },
         });
     }
+    const rawSort = query?.sort;
+    const sortWithoutVariantPrice = rawSort
+        ?.split(",")
+        .filter((item) => {
+        const key = item.split(":")[0]?.trim();
+        return key !== "variants.price" && key !== "vareints.price" && key !== "price";
+    })
+        .join(",");
     const feature = new apiFeature_1.PrismaQueryFeature({
         ...query,
+        sort: sortWithoutVariantPrice || undefined,
         searchableFields,
         dateFields,
     });
@@ -61,6 +70,24 @@ async function listProducts(shopId, track, query, req) {
     if (track) {
         whereWithShop = { ...whereWithShop, category: { track: { contains: track } } };
     }
+    if (options?.minPrice != null || options?.maxPrice != null) {
+        const priceRange = {};
+        if (options.minPrice != null)
+            priceRange.gte = options.minPrice;
+        if (options.maxPrice != null)
+            priceRange.lte = options.maxPrice;
+        whereWithShop = {
+            ...whereWithShop,
+            variants: {
+                some: {
+                    ...(Object.keys(priceRange).length > 0 ? { price: priceRange } : {}),
+                },
+            },
+        };
+    }
+    const sortByPrice = rawSort
+        ?.split(",")
+        .find((item) => item.startsWith("variants.price:") || item.startsWith("vareints.price:") || item.startsWith("price:"));
     const [data, total] = await Promise.all([
         prisma_1.prisma.product.findMany({
             where: whereWithShop,
@@ -78,7 +105,14 @@ async function listProducts(shopId, track, query, req) {
         }),
         prisma_1.prisma.product.count({ where: whereWithShop }),
     ]);
-    return { data, pagination: feature.getPagination(total) };
+    const sortedData = sortByPrice
+        ? [...data].sort((a, b) => {
+            const pa = a?.variants?.[0]?.price ?? 0;
+            const pb = b?.variants?.[0]?.price ?? 0;
+            return sortByPrice.endsWith(":desc") ? pb - pa : pa - pb;
+        })
+        : data;
+    return { data: sortedData, pagination: feature.getPagination(total) };
 }
 async function getProductById(id, shopId) {
     const where = { id };
