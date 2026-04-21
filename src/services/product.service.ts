@@ -17,7 +17,12 @@ export async function listProducts(
     search?: string;
     filter?: string;
     sort?: string;
-  },req?: any
+  },
+  req?: any,
+  options?: {
+    minPrice?: number;
+    maxPrice?: number;
+  }
 ) {
    // 🔥 Save search log
    if ((query && query?.search !== "" || query?.filter !== "")&& req?.user?.roles.includes("user")) {
@@ -28,8 +33,18 @@ export async function listProducts(
       },
     });
   }
+  const rawSort = query?.sort;
+  const sortWithoutVariantPrice = rawSort
+    ?.split(",")
+    .filter((item) => {
+      const key = item.split(":")[0]?.trim();
+      return key !== "variants.price" && key !== "vareints.price" && key !== "price";
+    })
+    .join(",");
+
   const feature = new PrismaQueryFeature<Record<string, unknown>, Record<string, string>>({
     ...query,
+    sort: sortWithoutVariantPrice || undefined,
     searchableFields,
     dateFields,
   });
@@ -38,6 +53,25 @@ export async function listProducts(
   if(track){
     whereWithShop = { ...whereWithShop, category: { track: { contains: track } } };
   }
+  if (options?.minPrice != null || options?.maxPrice != null) {
+    const priceRange: Record<string, number> = {};
+    if (options.minPrice != null) priceRange.gte = options.minPrice;
+    if (options.maxPrice != null) priceRange.lte = options.maxPrice;
+
+    whereWithShop = {
+      ...whereWithShop,
+      variants: {
+        some: {
+          ...(Object.keys(priceRange).length > 0 ? { price: priceRange } : {}),
+        },
+      },
+    };
+  }
+
+  const sortByPrice = rawSort
+    ?.split(",")
+    .find((item) => item.startsWith("variants.price:") || item.startsWith("vareints.price:") || item.startsWith("price:"));
+
   const [data, total] = await Promise.all([
     prisma.product.findMany({
       where: whereWithShop,
@@ -55,7 +89,15 @@ export async function listProducts(
     }),
     prisma.product.count({ where: whereWithShop }),
   ]);
-  return { data, pagination: feature.getPagination(total) };
+  const sortedData = sortByPrice
+    ? [...data].sort((a: any, b: any) => {
+        const pa = a?.variants?.[0]?.price ?? 0;
+        const pb = b?.variants?.[0]?.price ?? 0;
+        return sortByPrice.endsWith(":desc") ? pb - pa : pa - pb;
+      })
+    : data;
+
+  return { data: sortedData, pagination: feature.getPagination(total) };
 }
 
 export async function getProductById(id: string, shopId?: string) {
