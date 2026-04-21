@@ -250,6 +250,14 @@ export async function updateCategory(
   if (data.parentId === "") {
     (data as { parentId?: string | null }).parentId = null;
   }
+  if(data.parentId){
+    const parent = await prisma.productCategory.findUnique({ where: { id: data.parentId } });
+    if(parent){
+      data.track = String(parent.track)+'/'+String(id);
+    }
+  }else{
+    data.track = String(id);
+  }
   const category = await prisma.productCategory.update({
     where: { id },
     data: data as Parameters<typeof prisma.productCategory.update>[0]["data"],

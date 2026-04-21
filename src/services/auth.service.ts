@@ -8,8 +8,8 @@ import AppError from "../utils/appError";
 import { sendEmail } from "../utils/email";
 import { getMergedPermissionsForUser, mergedMapToList } from "./rbacPermission.service";
 
-// const accessExpirationMinutes = parseInt(config.jwt.accessExpirationMinutes, 10) || 1;
-const accessExpirationMinutes = 1;
+const accessExpirationMinutes = parseInt(config.jwt.accessExpirationMinutes, 10) || 60;
+// const accessExpirationMinutes = 1;
 const refreshExpirationDays = parseInt(config.jwt.refreshExpirationDays, 10) || 60;
 
 function generateAccessToken(userId: string, email: string): string {
@@ -138,6 +138,7 @@ export async function register(data: {
     expiresIn: accessExpirationMinutes * 60,
   };
 }
+//
 
 export async function login(emailPhone: string, password: string) {
   const user = await prisma.user.findFirst({
