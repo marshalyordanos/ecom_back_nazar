@@ -8,7 +8,8 @@ import AppError from "../utils/appError";
 import { sendEmail } from "../utils/email";
 import { getMergedPermissionsForUser, mergedMapToList } from "./rbacPermission.service";
 
-const accessExpirationMinutes = parseInt(config.jwt.accessExpirationMinutes, 10) || 60;
+// const accessExpirationMinutes = parseInt(config.jwt.accessExpirationMinutes, 10) || 1;
+const accessExpirationMinutes = 1;
 const refreshExpirationDays = parseInt(config.jwt.refreshExpirationDays, 10) || 60;
 
 function generateAccessToken(userId: string, email: string): string {
@@ -196,10 +197,20 @@ export async function refresh(refreshToken: string) {
     where: { token: refreshToken, type: tokenTypes.REFRESH },
     include: { user: true },
   });
-  if (!tokenRecord || tokenRecord.expiresAt < new Date()) {
-    throw new AppError("Invalid or expired refresh token", 401);
+  if (!tokenRecord) {
+    throw new AppError("Session expired. Please log in again", 401);
+  }
+
+  if (tokenRecord.expiresAt < new Date()) {
+    await prisma.token.deleteMany({
+      where: { token: refreshToken, type: tokenTypes.REFRESH },
+    });
+    throw new AppError("Session expired. Please log in again", 401);
   }
   if (tokenRecord.user.status !== "ACTIVE") {
+    await prisma.token.deleteMany({
+      where: { token: refreshToken, type: tokenTypes.REFRESH },
+    });
     throw new AppError("Account is inactive", 401);
   }
 
