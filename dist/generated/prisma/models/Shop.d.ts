@@ -175,7 +175,7 @@ export type ShopGroupByOutputType = {
     _min: ShopMinAggregateOutputType | null;
     _max: ShopMaxAggregateOutputType | null;
 };
-type GetShopGroupByPayload<T extends ShopGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<ShopGroupByOutputType, T['by']> & {
+export type GetShopGroupByPayload<T extends ShopGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<ShopGroupByOutputType, T['by']> & {
     [P in ((keyof T) & (keyof ShopGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], ShopGroupByOutputType[P]> : Prisma.GetScalarType<T[P], ShopGroupByOutputType[P]>;
 }>>;
 export type ShopWhereInput = {
@@ -1388,6 +1388,11 @@ export type ShopFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
      * Skip the first `n` Shops.
      */
     skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of Shops.
+     */
     distinct?: Prisma.ShopScalarFieldEnum | Prisma.ShopScalarFieldEnum[];
 };
 /**
@@ -1655,5 +1660,4 @@ export type ShopDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
      */
     include?: Prisma.ShopInclude<ExtArgs> | null;
 };
-export {};
 //# sourceMappingURL=Shop.d.ts.map

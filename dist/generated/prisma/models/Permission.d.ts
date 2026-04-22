@@ -126,7 +126,7 @@ export type PermissionGroupByOutputType = {
     _min: PermissionMinAggregateOutputType | null;
     _max: PermissionMaxAggregateOutputType | null;
 };
-type GetPermissionGroupByPayload<T extends PermissionGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<PermissionGroupByOutputType, T['by']> & {
+export type GetPermissionGroupByPayload<T extends PermissionGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<PermissionGroupByOutputType, T['by']> & {
     [P in ((keyof T) & (keyof PermissionGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], PermissionGroupByOutputType[P]> : Prisma.GetScalarType<T[P], PermissionGroupByOutputType[P]>;
 }>>;
 export type PermissionWhereInput = {
@@ -931,6 +931,11 @@ export type PermissionFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
      * Skip the first `n` Permissions.
      */
     skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of Permissions.
+     */
     distinct?: Prisma.PermissionScalarFieldEnum | Prisma.PermissionScalarFieldEnum[];
 };
 /**
@@ -1152,5 +1157,4 @@ export type PermissionDefaultArgs<ExtArgs extends runtime.Types.Extensions.Inter
      */
     include?: Prisma.PermissionInclude<ExtArgs> | null;
 };
-export {};
 //# sourceMappingURL=Permission.d.ts.map

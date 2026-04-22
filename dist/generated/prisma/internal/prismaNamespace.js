@@ -48,13 +48,8 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-<<<<<<< HEAD
-exports.SearchLogScalarFieldEnum = exports.ProductViewScalarFieldEnum = exports.ReviewScalarFieldEnum = exports.CouponUsageScalarFieldEnum = exports.CouponScalarFieldEnum = exports.SavedAddressScalarFieldEnum = exports.ShippingAddressScalarFieldEnum = exports.ShipmentScalarFieldEnum = exports.PaymentScalarFieldEnum = exports.OrderItemScalarFieldEnum = exports.OrderScalarFieldEnum = exports.CartItemScalarFieldEnum = exports.CartScalarFieldEnum = exports.InventoryMovementScalarFieldEnum = exports.InventoryScalarFieldEnum = exports.VariantMediaScalarFieldEnum = exports.VariantOptionScalarFieldEnum = exports.OptionValueScalarFieldEnum = exports.VariantOptionValueScalarFieldEnum = exports.ProductVariantScalarFieldEnum = exports.ProductScalarFieldEnum = exports.ProductCategoryScalarFieldEnum = exports.BrandScalarFieldEnum = exports.RolePermissionScalarFieldEnum = exports.PermissionScalarFieldEnum = exports.RoleScalarFieldEnum = exports.OtpRecordScalarFieldEnum = exports.TokenScalarFieldEnum = exports.UserScalarFieldEnum = exports.ShopLocationScalarFieldEnum = exports.ShopScalarFieldEnum = exports.TransactionIsolationLevel = exports.ModelName = exports.AnyNull = exports.JsonNull = exports.DbNull = exports.NullTypes = exports.prismaVersion = exports.getExtensionContext = exports.Decimal = exports.Sql = exports.raw = exports.join = exports.empty = exports.sql = exports.PrismaClientValidationError = exports.PrismaClientInitializationError = exports.PrismaClientRustPanicError = exports.PrismaClientUnknownRequestError = exports.PrismaClientKnownRequestError = void 0;
-exports.defineExtension = exports.JsonNullValueFilter = exports.NullsOrder = exports.QueryMode = exports.NullableJsonNullValueInput = exports.SortOrder = exports.ShopSettingScalarFieldEnum = exports.SyncedProductScalarFieldEnum = exports.SyncLogScalarFieldEnum = exports.NotificationScalarFieldEnum = void 0;
-=======
-exports.SearchLogScalarFieldEnum = exports.ProductViewScalarFieldEnum = exports.ReviewScalarFieldEnum = exports.CouponUsageScalarFieldEnum = exports.CouponScalarFieldEnum = exports.SavedAddressScalarFieldEnum = exports.ShippingAddressScalarFieldEnum = exports.ShipmentScalarFieldEnum = exports.PaymentScalarFieldEnum = exports.OrderItemScalarFieldEnum = exports.OrderScalarFieldEnum = exports.CartItemScalarFieldEnum = exports.CartScalarFieldEnum = exports.InventoryMovementScalarFieldEnum = exports.InventoryScalarFieldEnum = exports.VariantMediaScalarFieldEnum = exports.VariantOptionScalarFieldEnum = exports.OptionValueScalarFieldEnum = exports.VariantOptionValueScalarFieldEnum = exports.ProductVariantScalarFieldEnum = exports.FavoriteScalarFieldEnum = exports.ProductScalarFieldEnum = exports.ProductCategoryScalarFieldEnum = exports.BrandScalarFieldEnum = exports.RolePermissionScalarFieldEnum = exports.PermissionScalarFieldEnum = exports.RoleScalarFieldEnum = exports.TokenScalarFieldEnum = exports.UserScalarFieldEnum = exports.ShopLocationScalarFieldEnum = exports.ShopScalarFieldEnum = exports.TransactionIsolationLevel = exports.ModelName = exports.AnyNull = exports.JsonNull = exports.DbNull = exports.NullTypes = exports.prismaVersion = exports.getExtensionContext = exports.Decimal = exports.Sql = exports.raw = exports.join = exports.empty = exports.sql = exports.PrismaClientValidationError = exports.PrismaClientInitializationError = exports.PrismaClientRustPanicError = exports.PrismaClientUnknownRequestError = exports.PrismaClientKnownRequestError = void 0;
-exports.defineExtension = exports.JsonNullValueFilter = exports.NullsOrder = exports.QueryMode = exports.NullableJsonNullValueInput = exports.SortOrder = exports.SaleFromShopScalarFieldEnum = exports.ShopSettingScalarFieldEnum = exports.SyncedProductScalarFieldEnum = exports.SyncLogScalarFieldEnum = exports.NotificationScalarFieldEnum = void 0;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
+exports.ProductViewScalarFieldEnum = exports.ReviewScalarFieldEnum = exports.CouponUsageScalarFieldEnum = exports.CouponScalarFieldEnum = exports.SavedAddressScalarFieldEnum = exports.ShippingAddressScalarFieldEnum = exports.ShipmentScalarFieldEnum = exports.PaymentScalarFieldEnum = exports.OrderItemScalarFieldEnum = exports.OrderScalarFieldEnum = exports.CartItemScalarFieldEnum = exports.CartScalarFieldEnum = exports.InventoryMovementScalarFieldEnum = exports.InventoryScalarFieldEnum = exports.VariantMediaScalarFieldEnum = exports.VariantOptionScalarFieldEnum = exports.OptionValueScalarFieldEnum = exports.VariantOptionValueScalarFieldEnum = exports.ProductVariantScalarFieldEnum = exports.FavoriteScalarFieldEnum = exports.ProductScalarFieldEnum = exports.ProductCategoryScalarFieldEnum = exports.BrandScalarFieldEnum = exports.RolePermissionScalarFieldEnum = exports.PermissionScalarFieldEnum = exports.RoleScalarFieldEnum = exports.OtpRecordScalarFieldEnum = exports.TokenScalarFieldEnum = exports.UserScalarFieldEnum = exports.ShopLocationScalarFieldEnum = exports.ShopScalarFieldEnum = exports.TransactionIsolationLevel = exports.ModelName = exports.AnyNull = exports.JsonNull = exports.DbNull = exports.NullTypes = exports.prismaVersion = exports.getExtensionContext = exports.Decimal = exports.Sql = exports.raw = exports.join = exports.empty = exports.sql = exports.PrismaClientValidationError = exports.PrismaClientInitializationError = exports.PrismaClientRustPanicError = exports.PrismaClientUnknownRequestError = exports.PrismaClientKnownRequestError = void 0;
+exports.defineExtension = exports.JsonNullValueFilter = exports.NullsOrder = exports.QueryMode = exports.NullableJsonNullValueInput = exports.SortOrder = exports.SaleFromShopScalarFieldEnum = exports.StaticPageScalarFieldEnum = exports.FaqScalarFieldEnum = exports.ShopSettingScalarFieldEnum = exports.SyncedProductScalarFieldEnum = exports.SyncLogScalarFieldEnum = exports.NotificationScalarFieldEnum = exports.SearchLogScalarFieldEnum = void 0;
 const runtime = __importStar(require("@prisma/client/runtime/client"));
 /**
  * Prisma Errors
@@ -78,12 +73,12 @@ exports.Sql = runtime.Sql;
 exports.Decimal = runtime.Decimal;
 exports.getExtensionContext = runtime.Extensions.getExtensionContext;
 /**
- * Prisma Client JS version: 7.2.0
- * Query Engine version: 0c8ef2ce45c83248ab3df073180d5eda9e8be7a3
+ * Prisma Client JS version: 7.7.0
+ * Query Engine version: 75cbdc1eb7150937890ad5465d861175c6624711
  */
 exports.prismaVersion = {
-    client: "7.2.0",
-    engine: "0c8ef2ce45c83248ab3df073180d5eda9e8be7a3"
+    client: "7.7.0",
+    engine: "75cbdc1eb7150937890ad5465d861175c6624711"
 };
 exports.NullTypes = {
     DbNull: runtime.NullTypes.DbNull,
@@ -145,6 +140,8 @@ exports.ModelName = {
     SyncLog: 'SyncLog',
     SyncedProduct: 'SyncedProduct',
     ShopSetting: 'ShopSetting',
+    Faq: 'Faq',
+    StaticPage: 'StaticPage',
     SaleFromShop: 'SaleFromShop'
 };
 /**
@@ -517,6 +514,22 @@ exports.ShopSettingScalarFieldEnum = {
     shopId: 'shopId',
     key: 'key',
     value: 'value',
+    updatedAt: 'updatedAt'
+};
+exports.FaqScalarFieldEnum = {
+    id: 'id',
+    question: 'question',
+    answer: 'answer',
+    status: 'status',
+    sortOrder: 'sortOrder',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+};
+exports.StaticPageScalarFieldEnum = {
+    id: 'id',
+    type: 'type',
+    content: 'content',
+    createdAt: 'createdAt',
     updatedAt: 'updatedAt'
 };
 exports.SaleFromShopScalarFieldEnum = {

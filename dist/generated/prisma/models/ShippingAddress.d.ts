@@ -209,7 +209,7 @@ export type ShippingAddressGroupByOutputType = {
     _min: ShippingAddressMinAggregateOutputType | null;
     _max: ShippingAddressMaxAggregateOutputType | null;
 };
-type GetShippingAddressGroupByPayload<T extends ShippingAddressGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<ShippingAddressGroupByOutputType, T['by']> & {
+export type GetShippingAddressGroupByPayload<T extends ShippingAddressGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<ShippingAddressGroupByOutputType, T['by']> & {
     [P in ((keyof T) & (keyof ShippingAddressGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], ShippingAddressGroupByOutputType[P]> : Prisma.GetScalarType<T[P], ShippingAddressGroupByOutputType[P]>;
 }>>;
 export type ShippingAddressWhereInput = {
@@ -1186,6 +1186,11 @@ export type ShippingAddressFindManyArgs<ExtArgs extends runtime.Types.Extensions
      * Skip the first `n` ShippingAddresses.
      */
     skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of ShippingAddresses.
+     */
     distinct?: Prisma.ShippingAddressScalarFieldEnum | Prisma.ShippingAddressScalarFieldEnum[];
 };
 /**
@@ -1392,5 +1397,4 @@ export type ShippingAddressDefaultArgs<ExtArgs extends runtime.Types.Extensions.
      */
     include?: Prisma.ShippingAddressInclude<ExtArgs> | null;
 };
-export {};
 //# sourceMappingURL=ShippingAddress.d.ts.map

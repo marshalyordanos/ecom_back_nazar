@@ -156,7 +156,7 @@ export type VariantMediaGroupByOutputType = {
     _min: VariantMediaMinAggregateOutputType | null;
     _max: VariantMediaMaxAggregateOutputType | null;
 };
-type GetVariantMediaGroupByPayload<T extends VariantMediaGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<VariantMediaGroupByOutputType, T['by']> & {
+export type GetVariantMediaGroupByPayload<T extends VariantMediaGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<VariantMediaGroupByOutputType, T['by']> & {
     [P in ((keyof T) & (keyof VariantMediaGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], VariantMediaGroupByOutputType[P]> : Prisma.GetScalarType<T[P], VariantMediaGroupByOutputType[P]>;
 }>>;
 export type VariantMediaWhereInput = {
@@ -1007,6 +1007,11 @@ export type VariantMediaFindManyArgs<ExtArgs extends runtime.Types.Extensions.In
      * Skip the first `n` VariantMedias.
      */
     skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of VariantMedias.
+     */
     distinct?: Prisma.VariantMediaScalarFieldEnum | Prisma.VariantMediaScalarFieldEnum[];
 };
 /**
@@ -1213,5 +1218,4 @@ export type VariantMediaDefaultArgs<ExtArgs extends runtime.Types.Extensions.Int
      */
     include?: Prisma.VariantMediaInclude<ExtArgs> | null;
 };
-export {};
 //# sourceMappingURL=VariantMedia.d.ts.map

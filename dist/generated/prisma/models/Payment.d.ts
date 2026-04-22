@@ -192,7 +192,7 @@ export type PaymentGroupByOutputType = {
     _min: PaymentMinAggregateOutputType | null;
     _max: PaymentMaxAggregateOutputType | null;
 };
-type GetPaymentGroupByPayload<T extends PaymentGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<PaymentGroupByOutputType, T['by']> & {
+export type GetPaymentGroupByPayload<T extends PaymentGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<PaymentGroupByOutputType, T['by']> & {
     [P in ((keyof T) & (keyof PaymentGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], PaymentGroupByOutputType[P]> : Prisma.GetScalarType<T[P], PaymentGroupByOutputType[P]>;
 }>>;
 export type PaymentWhereInput = {
@@ -1179,6 +1179,11 @@ export type PaymentFindManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
      * Skip the first `n` Payments.
      */
     skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of Payments.
+     */
     distinct?: Prisma.PaymentScalarFieldEnum | Prisma.PaymentScalarFieldEnum[];
 };
 /**
@@ -1385,5 +1390,4 @@ export type PaymentDefaultArgs<ExtArgs extends runtime.Types.Extensions.Internal
      */
     include?: Prisma.PaymentInclude<ExtArgs> | null;
 };
-export {};
 //# sourceMappingURL=Payment.d.ts.map

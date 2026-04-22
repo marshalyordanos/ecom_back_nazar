@@ -9,7 +9,7 @@
 * 🟢 You can import this file directly.
 */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SyncStatus = exports.ReviewStatus = exports.CouponType = exports.InventoryMovementType = exports.ShipmentStatus = exports.PaymentStatus = exports.OrderStatus = exports.ProductStatus = exports.UserStatus = void 0;
+exports.StaticPageType = exports.FaqStatus = exports.SyncStatus = exports.ReviewStatus = exports.CouponType = exports.InventoryMovementType = exports.ShipmentStatus = exports.PaymentStatus = exports.OrderStatus = exports.ProductStatus = exports.UserStatus = void 0;
 exports.UserStatus = {
     ACTIVE: 'ACTIVE',
     INACTIVE: 'INACTIVE',
@@ -60,5 +60,14 @@ exports.SyncStatus = {
     STARTED: 'STARTED',
     SUCCESS: 'SUCCESS',
     FAILED: 'FAILED'
+};
+exports.FaqStatus = {
+    DRAFT: 'DRAFT',
+    PUBLISHED: 'PUBLISHED'
+};
+exports.StaticPageType = {
+    privacy: 'privacy',
+    terms: 'terms',
+    about: 'about'
 };
 //# sourceMappingURL=enums.js.map

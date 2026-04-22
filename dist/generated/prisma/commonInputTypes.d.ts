@@ -396,6 +396,36 @@ export type EnumSyncStatusWithAggregatesFilter<$PrismaModel = never> = {
     _min?: Prisma.NestedEnumSyncStatusFilter<$PrismaModel>;
     _max?: Prisma.NestedEnumSyncStatusFilter<$PrismaModel>;
 };
+export type EnumFaqStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.FaqStatus | Prisma.EnumFaqStatusFieldRefInput<$PrismaModel>;
+    in?: $Enums.FaqStatus[] | Prisma.ListEnumFaqStatusFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.FaqStatus[] | Prisma.ListEnumFaqStatusFieldRefInput<$PrismaModel>;
+    not?: Prisma.NestedEnumFaqStatusFilter<$PrismaModel> | $Enums.FaqStatus;
+};
+export type EnumFaqStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.FaqStatus | Prisma.EnumFaqStatusFieldRefInput<$PrismaModel>;
+    in?: $Enums.FaqStatus[] | Prisma.ListEnumFaqStatusFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.FaqStatus[] | Prisma.ListEnumFaqStatusFieldRefInput<$PrismaModel>;
+    not?: Prisma.NestedEnumFaqStatusWithAggregatesFilter<$PrismaModel> | $Enums.FaqStatus;
+    _count?: Prisma.NestedIntFilter<$PrismaModel>;
+    _min?: Prisma.NestedEnumFaqStatusFilter<$PrismaModel>;
+    _max?: Prisma.NestedEnumFaqStatusFilter<$PrismaModel>;
+};
+export type EnumStaticPageTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.StaticPageType | Prisma.EnumStaticPageTypeFieldRefInput<$PrismaModel>;
+    in?: $Enums.StaticPageType[] | Prisma.ListEnumStaticPageTypeFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.StaticPageType[] | Prisma.ListEnumStaticPageTypeFieldRefInput<$PrismaModel>;
+    not?: Prisma.NestedEnumStaticPageTypeFilter<$PrismaModel> | $Enums.StaticPageType;
+};
+export type EnumStaticPageTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.StaticPageType | Prisma.EnumStaticPageTypeFieldRefInput<$PrismaModel>;
+    in?: $Enums.StaticPageType[] | Prisma.ListEnumStaticPageTypeFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.StaticPageType[] | Prisma.ListEnumStaticPageTypeFieldRefInput<$PrismaModel>;
+    not?: Prisma.NestedEnumStaticPageTypeWithAggregatesFilter<$PrismaModel> | $Enums.StaticPageType;
+    _count?: Prisma.NestedIntFilter<$PrismaModel>;
+    _min?: Prisma.NestedEnumStaticPageTypeFilter<$PrismaModel>;
+    _max?: Prisma.NestedEnumStaticPageTypeFilter<$PrismaModel>;
+};
 export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | Prisma.StringFieldRefInput<$PrismaModel>;
     in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>;
@@ -762,5 +792,35 @@ export type NestedEnumSyncStatusWithAggregatesFilter<$PrismaModel = never> = {
     _count?: Prisma.NestedIntFilter<$PrismaModel>;
     _min?: Prisma.NestedEnumSyncStatusFilter<$PrismaModel>;
     _max?: Prisma.NestedEnumSyncStatusFilter<$PrismaModel>;
+};
+export type NestedEnumFaqStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.FaqStatus | Prisma.EnumFaqStatusFieldRefInput<$PrismaModel>;
+    in?: $Enums.FaqStatus[] | Prisma.ListEnumFaqStatusFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.FaqStatus[] | Prisma.ListEnumFaqStatusFieldRefInput<$PrismaModel>;
+    not?: Prisma.NestedEnumFaqStatusFilter<$PrismaModel> | $Enums.FaqStatus;
+};
+export type NestedEnumFaqStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.FaqStatus | Prisma.EnumFaqStatusFieldRefInput<$PrismaModel>;
+    in?: $Enums.FaqStatus[] | Prisma.ListEnumFaqStatusFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.FaqStatus[] | Prisma.ListEnumFaqStatusFieldRefInput<$PrismaModel>;
+    not?: Prisma.NestedEnumFaqStatusWithAggregatesFilter<$PrismaModel> | $Enums.FaqStatus;
+    _count?: Prisma.NestedIntFilter<$PrismaModel>;
+    _min?: Prisma.NestedEnumFaqStatusFilter<$PrismaModel>;
+    _max?: Prisma.NestedEnumFaqStatusFilter<$PrismaModel>;
+};
+export type NestedEnumStaticPageTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.StaticPageType | Prisma.EnumStaticPageTypeFieldRefInput<$PrismaModel>;
+    in?: $Enums.StaticPageType[] | Prisma.ListEnumStaticPageTypeFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.StaticPageType[] | Prisma.ListEnumStaticPageTypeFieldRefInput<$PrismaModel>;
+    not?: Prisma.NestedEnumStaticPageTypeFilter<$PrismaModel> | $Enums.StaticPageType;
+};
+export type NestedEnumStaticPageTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.StaticPageType | Prisma.EnumStaticPageTypeFieldRefInput<$PrismaModel>;
+    in?: $Enums.StaticPageType[] | Prisma.ListEnumStaticPageTypeFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.StaticPageType[] | Prisma.ListEnumStaticPageTypeFieldRefInput<$PrismaModel>;
+    not?: Prisma.NestedEnumStaticPageTypeWithAggregatesFilter<$PrismaModel> | $Enums.StaticPageType;
+    _count?: Prisma.NestedIntFilter<$PrismaModel>;
+    _min?: Prisma.NestedEnumStaticPageTypeFilter<$PrismaModel>;
+    _max?: Prisma.NestedEnumStaticPageTypeFilter<$PrismaModel>;
 };
 //# sourceMappingURL=commonInputTypes.d.ts.map

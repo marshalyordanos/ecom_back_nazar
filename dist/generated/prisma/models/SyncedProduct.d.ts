@@ -119,7 +119,7 @@ export type SyncedProductGroupByOutputType = {
     _min: SyncedProductMinAggregateOutputType | null;
     _max: SyncedProductMaxAggregateOutputType | null;
 };
-type GetSyncedProductGroupByPayload<T extends SyncedProductGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<SyncedProductGroupByOutputType, T['by']> & {
+export type GetSyncedProductGroupByPayload<T extends SyncedProductGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<SyncedProductGroupByOutputType, T['by']> & {
     [P in ((keyof T) & (keyof SyncedProductGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], SyncedProductGroupByOutputType[P]> : Prisma.GetScalarType<T[P], SyncedProductGroupByOutputType[P]>;
 }>>;
 export type SyncedProductWhereInput = {
@@ -784,6 +784,11 @@ export type SyncedProductFindManyArgs<ExtArgs extends runtime.Types.Extensions.I
      * Skip the first `n` SyncedProducts.
      */
     skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of SyncedProducts.
+     */
     distinct?: Prisma.SyncedProductScalarFieldEnum | Prisma.SyncedProductScalarFieldEnum[];
 };
 /**
@@ -962,5 +967,4 @@ export type SyncedProductDefaultArgs<ExtArgs extends runtime.Types.Extensions.In
      */
     omit?: Prisma.SyncedProductOmit<ExtArgs> | null;
 };
-export {};
 //# sourceMappingURL=SyncedProduct.d.ts.map

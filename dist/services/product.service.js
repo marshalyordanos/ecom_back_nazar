@@ -11,12 +11,9 @@ exports.updateProduct = updateProduct;
 exports.deleteProduct = deleteProduct;
 exports.listVariants = listVariants;
 exports.getFeaturedProducts = getFeaturedProducts;
-<<<<<<< HEAD
-=======
 exports.getNewProducts = getNewProducts;
 exports.getPopularProducts = getPopularProducts;
 exports.getMostViewedProducts = getMostViewedProducts;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 exports.getVariantById = getVariantById;
 exports.createVariant = createVariant;
 exports.updateVariant = updateVariant;
@@ -211,8 +208,6 @@ async function getFeaturedProducts(shopId, limit = 10) {
     });
     return products;
 }
-<<<<<<< HEAD
-=======
 async function getNewProducts(shopId, limit = 10) {
     const where = { status: "ACTIVE" };
     if (shopId)
@@ -299,7 +294,6 @@ async function getMostViewedProducts(shopId, limit = 10) {
     const byId = new Map(products.map((p) => [p.id, p]));
     return rankedIds.map((id) => byId.get(id)).filter(Boolean).slice(0, limit);
 }
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 async function getVariantById(id) {
     const variant = await prisma_1.prisma.productVariant.findUnique({
         where: { id },
@@ -315,16 +309,6 @@ async function getVariantById(id) {
 }
 // --------- Variants ---------
 async function createVariant(productId, data, file) {
-    if (!data.locationId) {
-        throw new appError_1.default('Location is required', 400);
-    }
-    if (!data.type) {
-        throw new appError_1.default('Type is required', 400);
-    }
-    if (!data.quantity) {
-        throw new appError_1.default('Quantity is required', 400);
-    }
-    data.quantity = Number(data.quantity);
     if (!file) {
         throw new appError_1.default('No file uploaded', 400);
     }
@@ -357,16 +341,6 @@ async function createVariant(productId, data, file) {
             },
         });
         // 2. Inventory logic ported from inventory.service.ts
-<<<<<<< HEAD
-        let inventory = await prismaTx.inventory.findFirst({
-            where: { variantId: variant.id, locationId: data.locationId },
-        });
-        if (!inventory) {
-            inventory = await prismaTx.inventory.create({
-                data: {
-                    variantId: variant.id,
-                    locationId: data.locationId,
-=======
         let locations = await prismaTx.shopLocation.findMany({
             where: {
                 shopId: product.shopId,
@@ -378,37 +352,11 @@ async function createVariant(productId, data, file) {
                 data: {
                     variantId: variant.id,
                     locationId: location.id,
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
                     quantity: 0,
                     reservedQuantity: 0,
                 },
             });
-<<<<<<< HEAD
-        }
-        const newQty = data.type === "PURCHASE" || data.type === "RETURN" || data.type === "TRANSFER"
-            ? inventory.quantity + data.quantity
-            : data.type === "SALE" || data.type === "ADJUSTMENT"
-                ? inventory.quantity - data.quantity
-                : inventory.quantity;
-        await Promise.all([
-            prismaTx.inventoryMovement.create({
-                data: {
-                    variantId: variant.id,
-                    locationId: data.locationId,
-                    inventoryId: inventory.id,
-                    type: data.type,
-                    quantity: data.quantity,
-                    referenceId: undefined, // Set if needed
-                },
-            }),
-            prismaTx.inventory.update({
-                where: { id: inventory.id },
-                data: { quantity: Math.max(0, newQty) },
-            }),
-        ]);
-=======
         }));
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
         return await prismaTx.productVariant.findUnique({
             where: { id: variant.id },
             include: {

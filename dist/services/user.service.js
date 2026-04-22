@@ -14,8 +14,15 @@ const prisma_1 = require("../lib/prisma");
 const appError_1 = __importDefault(require("../utils/appError"));
 const hash_1 = require("../utils/hash");
 const apiFeature_1 = require("../utils/apiFeature");
+const fs_1 = __importDefault(require("fs"));
+const cloudinary_1 = require("../config/cloudinary");
 const userSearchableFields = ["email", "firstName", "lastName", "phone"];
-const userDateFields = ["createdAt", "updatedAt", "emailVerifiedAt", "phoneVerifiedAt"];
+const userDateFields = [
+    "createdAt",
+    "updatedAt",
+    "emailVerifiedAt",
+    "phoneVerifiedAt",
+];
 async function getMe(userId) {
     const user = await prisma_1.prisma.user.findUnique({
         where: { id: userId },
@@ -40,14 +47,23 @@ async function getMe(userId) {
         throw new appError_1.default("User not found", 404);
     return user;
 }
-async function updateMe(userId, data) {
+async function updateMe(userId, data, file) {
+    let resolvedAvatarUrl = data.avatarUrl;
+    console.log(file?.path, "fiel path");
+    console.log(resolvedAvatarUrl, "fiel path");
+    if (file?.path) {
+        const fileBuffer = fs_1.default.readFileSync(file.path);
+        const uploadResult = await (0, cloudinary_1.uploadToCloudinary)(fileBuffer, "ecommerce/users", "image");
+        fs_1.default.unlinkSync(file.path);
+        resolvedAvatarUrl = uploadResult.secure_url || uploadResult.url;
+    }
     const user = await prisma_1.prisma.user.update({
         where: { id: userId },
         data: {
             ...(data.firstName !== undefined && { firstName: data.firstName }),
             ...(data.lastName !== undefined && { lastName: data.lastName }),
             ...(data.phone !== undefined && { phone: data.phone }),
-            ...(data.avatarUrl !== undefined && { avatarUrl: data.avatarUrl }),
+            ...(resolvedAvatarUrl !== undefined && { avatarUrl: resolvedAvatarUrl }),
         },
         select: {
             id: true,
@@ -148,7 +164,9 @@ async function updateUser(id, data) {
             updateData.locationId = null;
         }
         else {
-            const loc = await prisma_1.prisma.shopLocation.findUnique({ where: { id: data.locationId } });
+            const loc = await prisma_1.prisma.shopLocation.findUnique({
+                where: { id: data.locationId },
+            });
             if (!loc)
                 throw new appError_1.default("Location not found", 404);
             updateData.locationId = data.locationId;

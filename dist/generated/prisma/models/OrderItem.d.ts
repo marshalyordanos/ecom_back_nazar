@@ -185,7 +185,7 @@ export type OrderItemGroupByOutputType = {
     _min: OrderItemMinAggregateOutputType | null;
     _max: OrderItemMaxAggregateOutputType | null;
 };
-type GetOrderItemGroupByPayload<T extends OrderItemGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<OrderItemGroupByOutputType, T['by']> & {
+export type GetOrderItemGroupByPayload<T extends OrderItemGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<OrderItemGroupByOutputType, T['by']> & {
     [P in ((keyof T) & (keyof OrderItemGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], OrderItemGroupByOutputType[P]> : Prisma.GetScalarType<T[P], OrderItemGroupByOutputType[P]>;
 }>>;
 export type OrderItemWhereInput = {
@@ -1240,6 +1240,11 @@ export type OrderItemFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
      * Skip the first `n` OrderItems.
      */
     skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of OrderItems.
+     */
     distinct?: Prisma.OrderItemScalarFieldEnum | Prisma.OrderItemScalarFieldEnum[];
 };
 /**
@@ -1446,5 +1451,4 @@ export type OrderItemDefaultArgs<ExtArgs extends runtime.Types.Extensions.Intern
      */
     include?: Prisma.OrderItemInclude<ExtArgs> | null;
 };
-export {};
 //# sourceMappingURL=OrderItem.d.ts.map

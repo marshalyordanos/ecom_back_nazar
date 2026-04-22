@@ -9,8 +9,8 @@ export declare function listShops(query: {
         name: string;
         email: string | null;
         status: string;
-        phone: string | null;
         id: string;
+        phone: string | null;
         createdAt: Date;
         updatedAt: Date;
         description: string | null;
@@ -20,9 +20,10 @@ export declare function listShops(query: {
         timezone: string;
         locations: {
             name: string;
-            phone: string | null;
             id: string;
+            phone: string | null;
             createdAt: Date;
+            shopId: string;
             addressLine1: string;
             addressLine2: string | null;
             city: string;
@@ -31,7 +32,6 @@ export declare function listShops(query: {
             postalCode: string | null;
             latitude: number | null;
             longitude: number | null;
-            shopId: string;
         }[];
     }[];
     pagination: {
@@ -44,9 +44,10 @@ export declare function listShops(query: {
 export declare function getShopById(id: string): Promise<{
     locations: {
         name: string;
-        phone: string | null;
         id: string;
+        phone: string | null;
         createdAt: Date;
+        shopId: string;
         addressLine1: string;
         addressLine2: string | null;
         city: string;
@@ -55,14 +56,13 @@ export declare function getShopById(id: string): Promise<{
         postalCode: string | null;
         latitude: number | null;
         longitude: number | null;
-        shopId: string;
     }[];
 } & {
     name: string;
     email: string | null;
     status: string;
-    phone: string | null;
     id: string;
+    phone: string | null;
     createdAt: Date;
     updatedAt: Date;
     description: string | null;
@@ -85,8 +85,8 @@ export declare function createOrUpdateShop(data: {
     name: string;
     email: string | null;
     status: string;
-    phone: string | null;
     id: string;
+    phone: string | null;
     createdAt: Date;
     updatedAt: Date;
     description: string | null;
@@ -108,8 +108,8 @@ export declare function updateShop(id: string, data: {
     name: string;
     email: string | null;
     status: string;
-    phone: string | null;
     id: string;
+    phone: string | null;
     createdAt: Date;
     updatedAt: Date;
     description: string | null;
@@ -120,9 +120,10 @@ export declare function updateShop(id: string, data: {
 }>;
 export declare function listShopLocations(shopId: string): Promise<{
     name: string;
-    phone: string | null;
     id: string;
+    phone: string | null;
     createdAt: Date;
+    shopId: string;
     addressLine1: string;
     addressLine2: string | null;
     city: string;
@@ -131,7 +132,6 @@ export declare function listShopLocations(shopId: string): Promise<{
     postalCode: string | null;
     latitude: number | null;
     longitude: number | null;
-    shopId: string;
 }[]>;
 export declare function addShopLocation(shopId: string, data: {
     name: string;
@@ -146,9 +146,10 @@ export declare function addShopLocation(shopId: string, data: {
     phone?: string;
 }): Promise<{
     name: string;
-    phone: string | null;
     id: string;
+    phone: string | null;
     createdAt: Date;
+    shopId: string;
     addressLine1: string;
     addressLine2: string | null;
     city: string;
@@ -157,7 +158,6 @@ export declare function addShopLocation(shopId: string, data: {
     postalCode: string | null;
     latitude: number | null;
     longitude: number | null;
-    shopId: string;
 }>;
 export declare function updateLocation(locationId: string, data: {
     name?: string;
@@ -172,9 +172,10 @@ export declare function updateLocation(locationId: string, data: {
     phone?: string;
 }): Promise<{
     name: string;
-    phone: string | null;
     id: string;
+    phone: string | null;
     createdAt: Date;
+    shopId: string;
     addressLine1: string;
     addressLine2: string | null;
     city: string;
@@ -183,7 +184,6 @@ export declare function updateLocation(locationId: string, data: {
     postalCode: string | null;
     latitude: number | null;
     longitude: number | null;
-    shopId: string;
 }>;
 export declare function deleteLocation(locationId: string): Promise<{
     message: string;
@@ -246,8 +246,8 @@ export declare function listSalesFromShop(query: {
                 id: string;
             };
         } & {
-            id: string;
             status: import("../generated/prisma/enums").ProductStatus;
+            id: string;
             createdAt: Date;
             updatedAt: Date;
             image: string | null;
@@ -303,8 +303,8 @@ export declare function getSaleFromShopById(id: string): Promise<{
             id: string;
         };
     } & {
-        id: string;
         status: import("../generated/prisma/enums").ProductStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         image: string | null;
@@ -358,8 +358,8 @@ export declare function updateSaleFromShop(id: string, body: {
             id: string;
         };
     } & {
-        id: string;
         status: import("../generated/prisma/enums").ProductStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         image: string | null;

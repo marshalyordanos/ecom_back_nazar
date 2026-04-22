@@ -46,7 +46,7 @@ export declare function login(emailPhone: string, password: string): Promise<{
         email: string | null;
         firstName: string;
         lastName: string;
-        phone: string;
+        phone: string | null;
         isSuperAdmin: boolean;
         roles: string[];
         permissions: import("./rbacPermission.service").MergedPermissionRow[];
@@ -64,10 +64,10 @@ export declare function refresh(refreshToken: string): Promise<{
     expiresIn: number;
     user: {
         id: string;
-        email: string;
+        email: string | null;
         firstName: string;
         lastName: string;
-        phone: string;
+        phone: string | null;
         isSuperAdmin: boolean;
         roles: string[];
         permissions: import("./rbacPermission.service").MergedPermissionRow[];

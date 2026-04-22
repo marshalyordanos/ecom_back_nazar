@@ -183,7 +183,7 @@ export type ProductGroupByOutputType = {
     _min: ProductMinAggregateOutputType | null;
     _max: ProductMaxAggregateOutputType | null;
 };
-type GetProductGroupByPayload<T extends ProductGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<ProductGroupByOutputType, T['by']> & {
+export type GetProductGroupByPayload<T extends ProductGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<ProductGroupByOutputType, T['by']> & {
     [P in ((keyof T) & (keyof ProductGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], ProductGroupByOutputType[P]> : Prisma.GetScalarType<T[P], ProductGroupByOutputType[P]>;
 }>>;
 export type ProductWhereInput = {
@@ -2086,6 +2086,11 @@ export type ProductFindManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
      * Skip the first `n` Products.
      */
     skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of Products.
+     */
     distinct?: Prisma.ProductScalarFieldEnum | Prisma.ProductScalarFieldEnum[];
 };
 /**
@@ -2420,5 +2425,4 @@ export type ProductDefaultArgs<ExtArgs extends runtime.Types.Extensions.Internal
      */
     include?: Prisma.ProductInclude<ExtArgs> | null;
 };
-export {};
 //# sourceMappingURL=Product.d.ts.map

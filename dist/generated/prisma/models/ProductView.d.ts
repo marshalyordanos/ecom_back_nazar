@@ -133,7 +133,7 @@ export type ProductViewGroupByOutputType = {
     _min: ProductViewMinAggregateOutputType | null;
     _max: ProductViewMaxAggregateOutputType | null;
 };
-type GetProductViewGroupByPayload<T extends ProductViewGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<ProductViewGroupByOutputType, T['by']> & {
+export type GetProductViewGroupByPayload<T extends ProductViewGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<ProductViewGroupByOutputType, T['by']> & {
     [P in ((keyof T) & (keyof ProductViewGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], ProductViewGroupByOutputType[P]> : Prisma.GetScalarType<T[P], ProductViewGroupByOutputType[P]>;
 }>>;
 export type ProductViewWhereInput = {
@@ -1108,6 +1108,11 @@ export type ProductViewFindManyArgs<ExtArgs extends runtime.Types.Extensions.Int
      * Skip the first `n` ProductViews.
      */
     skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of ProductViews.
+     */
     distinct?: Prisma.ProductViewScalarFieldEnum | Prisma.ProductViewScalarFieldEnum[];
 };
 /**
@@ -1332,5 +1337,4 @@ export type ProductViewDefaultArgs<ExtArgs extends runtime.Types.Extensions.Inte
      */
     include?: Prisma.ProductViewInclude<ExtArgs> | null;
 };
-export {};
 //# sourceMappingURL=ProductView.d.ts.map

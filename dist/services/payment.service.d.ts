@@ -9,15 +9,15 @@ export declare function listPayments(query: {
     data: ({
         order: {
             user: {
-                email: string;
+                email: string | null;
+                status: import("../generated/prisma/enums").UserStatus;
                 id: string;
-                phone: string;
+                phone: string | null;
                 passwordHash: string;
                 firstName: string;
                 lastName: string;
                 avatarUrl: string | null;
                 isSuperAdmin: boolean;
-                status: import("../generated/prisma/enums").UserStatus;
                 emailVerifiedAt: Date | null;
                 phoneVerifiedAt: Date | null;
                 locationId: string | null;
@@ -47,19 +47,11 @@ export declare function listPayments(query: {
 }>;
 export declare function getPaymentById(id: string): Promise<{
     order: {
-<<<<<<< HEAD
-=======
-        id: string;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
         status: import("../generated/prisma/enums").OrderStatus;
         id: string;
         createdAt: Date;
         updatedAt: Date;
         userId: string;
-<<<<<<< HEAD
-        currency: string;
-=======
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
         shopId: string;
         currency: string;
         orderNumber: string;

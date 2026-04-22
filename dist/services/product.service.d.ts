@@ -23,10 +23,6 @@ export declare function listProducts(shopId: string | undefined, track?: string,
                 url: string;
                 id: string;
                 type: string;
-<<<<<<< HEAD
-                position: number | null;
-=======
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
                 variantId: string;
                 position: number | null;
             }[];
@@ -52,12 +48,7 @@ export declare function listProducts(shopId: string | undefined, track?: string,
         updatedAt: Date;
         description: string | null;
         shopId: string;
-<<<<<<< HEAD
-        isFeatured: boolean;
-        track: string | null;
-=======
         slug: string;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
         shortDescription: string | null;
         brandId: string | null;
         categoryId: string | null;
@@ -95,15 +86,15 @@ export declare function getProductById(id: string, shopId?: string): Promise<{
         slug: string;
         track: string | null;
         parentId: string | null;
-        track: string | null;
     } | null;
     variants: ({
         inventories: ({
             location: {
                 name: string;
-                phone: string | null;
                 id: string;
+                phone: string | null;
                 createdAt: Date;
+                shopId: string;
                 addressLine1: string;
                 addressLine2: string | null;
                 city: string;
@@ -112,20 +103,14 @@ export declare function getProductById(id: string, shopId?: string): Promise<{
                 postalCode: string | null;
                 latitude: number | null;
                 longitude: number | null;
-                shopId: string;
             };
         } & {
             id: string;
             locationId: string;
             createdAt: Date;
             updatedAt: Date;
-<<<<<<< HEAD
-            locationId: string;
-=======
             variantId: string;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
             quantity: number;
-            variantId: string;
             reservedQuantity: number;
             reorderLevel: number | null;
         })[];
@@ -133,10 +118,6 @@ export declare function getProductById(id: string, shopId?: string): Promise<{
             url: string;
             id: string;
             type: string;
-<<<<<<< HEAD
-            position: number | null;
-=======
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
             variantId: string;
             position: number | null;
         }[];
@@ -181,12 +162,7 @@ export declare function getProductById(id: string, shopId?: string): Promise<{
     updatedAt: Date;
     description: string | null;
     shopId: string;
-<<<<<<< HEAD
-    isFeatured: boolean;
-    track: string | null;
-=======
     slug: string;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     shortDescription: string | null;
     brandId: string | null;
     categoryId: string | null;
@@ -217,15 +193,15 @@ export declare function getProductByIdMobile(id: string, shopId?: string, userId
         slug: string;
         track: string | null;
         parentId: string | null;
-        track: string | null;
     } | null;
     variants: ({
         inventories: ({
             location: {
                 name: string;
-                phone: string | null;
                 id: string;
+                phone: string | null;
                 createdAt: Date;
+                shopId: string;
                 addressLine1: string;
                 addressLine2: string | null;
                 city: string;
@@ -234,20 +210,14 @@ export declare function getProductByIdMobile(id: string, shopId?: string, userId
                 postalCode: string | null;
                 latitude: number | null;
                 longitude: number | null;
-                shopId: string;
             };
         } & {
             id: string;
             locationId: string;
             createdAt: Date;
             updatedAt: Date;
-<<<<<<< HEAD
-            locationId: string;
-=======
             variantId: string;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
             quantity: number;
-            variantId: string;
             reservedQuantity: number;
             reorderLevel: number | null;
         })[];
@@ -255,10 +225,6 @@ export declare function getProductByIdMobile(id: string, shopId?: string, userId
             url: string;
             id: string;
             type: string;
-<<<<<<< HEAD
-            position: number | null;
-=======
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
             variantId: string;
             position: number | null;
         }[];
@@ -303,12 +269,7 @@ export declare function getProductByIdMobile(id: string, shopId?: string, userId
     updatedAt: Date;
     description: string | null;
     shopId: string;
-<<<<<<< HEAD
-    isFeatured: boolean;
-    track: string | null;
-=======
     slug: string;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     shortDescription: string | null;
     brandId: string | null;
     categoryId: string | null;
@@ -332,12 +293,7 @@ export declare function createProduct(shopId: string, data: {
     updatedAt: Date;
     description: string | null;
     shopId: string;
-<<<<<<< HEAD
-    isFeatured: boolean;
-    track: string | null;
-=======
     slug: string;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     shortDescription: string | null;
     brandId: string | null;
     categoryId: string | null;
@@ -361,12 +317,7 @@ export declare function updateProduct(id: string, shopId: string, data: {
     updatedAt: Date;
     description: string | null;
     shopId: string;
-<<<<<<< HEAD
-    isFeatured: boolean;
-    track: string | null;
-=======
     slug: string;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     shortDescription: string | null;
     brandId: string | null;
     categoryId: string | null;
@@ -436,8 +387,8 @@ export declare function listVariants(shopId?: string, query?: {
             optionValueId: string;
         })[];
     } & {
-        id: string;
         status: import("../generated/prisma/enums").ProductStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         image: string | null;
@@ -472,10 +423,6 @@ export declare function getFeaturedProducts(shopId?: string, limit?: number): Pr
             url: string;
             id: string;
             type: string;
-<<<<<<< HEAD
-            position: number | null;
-=======
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
             variantId: string;
             position: number | null;
         }[];
@@ -501,28 +448,13 @@ export declare function getFeaturedProducts(shopId?: string, limit?: number): Pr
     updatedAt: Date;
     description: string | null;
     shopId: string;
-<<<<<<< HEAD
-    isFeatured: boolean;
-    track: string | null;
-=======
     slug: string;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     shortDescription: string | null;
     brandId: string | null;
     categoryId: string | null;
     track: string | null;
     isFeatured: boolean;
 })[]>;
-<<<<<<< HEAD
-export declare function getVariantById(id: string): Promise<({
-    inventories: {
-        id: string;
-        createdAt: Date;
-        updatedAt: Date;
-        locationId: string;
-        quantity: number;
-        variantId: string;
-=======
 export declare function getNewProducts(shopId?: string, limit?: number): Promise<({
     brand: {
         name: string;
@@ -543,8 +475,8 @@ export declare function getNewProducts(shopId?: string, limit?: number): Promise
             position: number | null;
         }[];
     } & {
-        id: string;
         status: import("../generated/prisma/enums").ProductStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         image: string | null;
@@ -558,8 +490,8 @@ export declare function getNewProducts(shopId?: string, limit?: number): Promise
     })[];
 } & {
     name: string;
-    id: string;
     status: import("../generated/prisma/enums").ProductStatus;
+    id: string;
     createdAt: Date;
     updatedAt: Date;
     description: string | null;
@@ -591,8 +523,8 @@ export declare function getPopularProducts(shopId?: string, limit?: number): Pro
             position: number | null;
         }[];
     } & {
-        id: string;
         status: import("../generated/prisma/enums").ProductStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         image: string | null;
@@ -606,8 +538,8 @@ export declare function getPopularProducts(shopId?: string, limit?: number): Pro
     })[];
 } & {
     name: string;
-    id: string;
     status: import("../generated/prisma/enums").ProductStatus;
+    id: string;
     createdAt: Date;
     updatedAt: Date;
     description: string | null;
@@ -639,8 +571,8 @@ export declare function getMostViewedProducts(shopId?: string, limit?: number): 
             position: number | null;
         }[];
     } & {
-        id: string;
         status: import("../generated/prisma/enums").ProductStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         image: string | null;
@@ -654,8 +586,8 @@ export declare function getMostViewedProducts(shopId?: string, limit?: number): 
     })[];
 } & {
     name: string;
-    id: string;
     status: import("../generated/prisma/enums").ProductStatus;
+    id: string;
     createdAt: Date;
     updatedAt: Date;
     description: string | null;
@@ -675,7 +607,6 @@ export declare function getVariantById(id: string): Promise<({
         updatedAt: Date;
         variantId: string;
         quantity: number;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
         reservedQuantity: number;
         reorderLevel: number | null;
     }[];
@@ -683,13 +614,8 @@ export declare function getVariantById(id: string): Promise<({
         url: string;
         id: string;
         type: string;
-<<<<<<< HEAD
-        position: number | null;
-        variantId: string;
-=======
         variantId: string;
         position: number | null;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     }[];
     variantOptionValues: ({
         optionValue: {
@@ -711,10 +637,8 @@ export declare function getVariantById(id: string): Promise<({
         optionValueId: string;
     })[];
 } & {
-<<<<<<< HEAD
-=======
-    id: string;
     status: import("../generated/prisma/enums").ProductStatus;
+    id: string;
     createdAt: Date;
     updatedAt: Date;
     image: string | null;
@@ -749,8 +673,6 @@ export declare function createVariant(productId: string, data: {
         reorderLevel: number | null;
     }[];
 } & {
-    id: string;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     status: import("../generated/prisma/enums").ProductStatus;
     id: string;
     createdAt: Date;
@@ -764,45 +686,6 @@ export declare function createVariant(productId: string, data: {
     costPrice: number | null;
     weight: number | null;
 }) | null>;
-<<<<<<< HEAD
-export declare function createVariant(productId: string, data: {
-    sku: string;
-    barcode?: string;
-    price: number;
-    comparePrice?: number;
-    costPrice?: number;
-    weight?: number;
-    status: string;
-    locationId: string;
-    type: string;
-    quantity: number;
-}, file?: any): Promise<({
-    inventories: {
-        id: string;
-        createdAt: Date;
-        updatedAt: Date;
-        locationId: string;
-        quantity: number;
-        variantId: string;
-        reservedQuantity: number;
-        reorderLevel: number | null;
-    }[];
-} & {
-    status: import("../generated/prisma/enums").ProductStatus;
-    id: string;
-    createdAt: Date;
-    updatedAt: Date;
-    image: string | null;
-    productId: string;
-    sku: string;
-    barcode: string | null;
-    price: number;
-    comparePrice: number | null;
-    costPrice: number | null;
-    weight: number | null;
-}) | null>;
-=======
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 export declare function updateVariant(variantId: string, data: {
     sku?: string;
     barcode?: string;
@@ -833,10 +716,6 @@ export declare function addVariantMedia(variantId: string, url: string, type: st
     url: string;
     id: string;
     type: string;
-<<<<<<< HEAD
-    position: number | null;
-=======
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     variantId: string;
     position: number | null;
 }>;

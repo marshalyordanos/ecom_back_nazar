@@ -150,7 +150,7 @@ export type NotificationGroupByOutputType = {
     _min: NotificationMinAggregateOutputType | null;
     _max: NotificationMaxAggregateOutputType | null;
 };
-type GetNotificationGroupByPayload<T extends NotificationGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<NotificationGroupByOutputType, T['by']> & {
+export type GetNotificationGroupByPayload<T extends NotificationGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<NotificationGroupByOutputType, T['by']> & {
     [P in ((keyof T) & (keyof NotificationGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], NotificationGroupByOutputType[P]> : Prisma.GetScalarType<T[P], NotificationGroupByOutputType[P]>;
 }>>;
 export type NotificationWhereInput = {
@@ -1096,6 +1096,11 @@ export type NotificationFindManyArgs<ExtArgs extends runtime.Types.Extensions.In
      * Skip the first `n` Notifications.
      */
     skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of Notifications.
+     */
     distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[];
 };
 /**
@@ -1320,5 +1325,4 @@ export type NotificationDefaultArgs<ExtArgs extends runtime.Types.Extensions.Int
      */
     include?: Prisma.NotificationInclude<ExtArgs> | null;
 };
-export {};
 //# sourceMappingURL=Notification.d.ts.map

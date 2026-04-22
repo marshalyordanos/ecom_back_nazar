@@ -14,7 +14,7 @@ function getAfroConfig() {
     if (!token || !identifier) {
         throw new appError_1.default("AfroMessage credentials are not configured", 500);
     }
-    return { token, sender: sender || identifier, identifier };
+    return { token, sender, identifier };
 }
 function toObject(value) {
     return value && typeof value === "object" ? value : null;
@@ -54,6 +54,15 @@ function extractProviderError(payload) {
     if (!obj)
         return null;
     const response = extractResponseNode(payload);
+    const responseErrors = response?.errors;
+    if (Array.isArray(responseErrors)) {
+        const texts = responseErrors
+            .filter((value) => typeof value === "string")
+            .map((value) => value.trim())
+            .filter(Boolean);
+        if (texts.length > 0)
+            return texts.join("; ");
+    }
     const candidates = [
         response?.error,
         response?.message,
@@ -68,11 +77,32 @@ function extractProviderError(payload) {
     }
     return null;
 }
+function parseJsonSafely(text) {
+    if (!text.trim())
+        return null;
+    try {
+        return JSON.parse(text);
+    }
+    catch {
+        return null;
+    }
+}
+function bodySnippet(text) {
+    const normalized = text.replace(/\s+/g, " ").trim();
+    if (!normalized)
+        return "";
+    const maxLen = 180;
+    return normalized.length > maxLen
+        ? `${normalized.slice(0, maxLen)}...`
+        : normalized;
+}
 async function sendOTPViaAfroMessage(to) {
     const { token, sender, identifier } = getAfroConfig();
     const url = new URL(`${AFRO_BASE_URL}/challenge`);
     url.searchParams.set("from", identifier);
-    url.searchParams.set("sender", sender);
+    if (sender) {
+        url.searchParams.set("sender", sender);
+    }
     url.searchParams.set("to", to);
     url.searchParams.set("len", "6");
     url.searchParams.set("t", "0");
@@ -84,13 +114,19 @@ async function sendOTPViaAfroMessage(to) {
             Accept: "application/json",
         },
     });
-    const payload = (await response.json().catch(() => null));
+    const rawBody = await response.text().catch(() => "");
+    const payload = parseJsonSafely(rawBody);
     const acknowledged = isAcknowledgeSuccess(payload);
     const verificationId = extractVerificationId(payload);
     if (!response.ok || !acknowledged || !verificationId) {
         const providerError = extractProviderError(payload);
-        const reason = providerError ? `: ${providerError}` : "";
-        throw new appError_1.default(`Failed to send OTP via AfroMessage${reason}`, 502);
+        const fallbackReason = bodySnippet(rawBody);
+        const reason = providerError || fallbackReason;
+        const reasonText = reason ? `: ${reason}` : "";
+        const statusCode = !response.ok || acknowledged
+            ? 502 // network/provider outage or unexpected success payload shape
+            : 400; // provider rejected request (e.g. invalid/unverified recipient)
+        throw new appError_1.default(`Failed to send OTP via AfroMessage (HTTP ${response.status} ${response.statusText})${reasonText}`, statusCode);
     }
     return { verificationId };
 }
@@ -109,7 +145,8 @@ async function verifyOTPViaAfroMessage(to, verificationId, code) {
     });
     if (!response.ok)
         return false;
-    const payload = (await response.json().catch(() => null));
+    const rawBody = await response.text().catch(() => "");
+    const payload = parseJsonSafely(rawBody);
     if (!payload || typeof payload !== "object")
         return true;
     if (!isAcknowledgeSuccess(payload))

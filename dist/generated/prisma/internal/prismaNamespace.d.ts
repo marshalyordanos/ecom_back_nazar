@@ -46,8 +46,8 @@ export type PrismaVersion = {
     engine: string;
 };
 /**
- * Prisma Client JS version: 7.2.0
- * Query Engine version: 0c8ef2ce45c83248ab3df073180d5eda9e8be7a3
+ * Prisma Client JS version: 7.7.0
+ * Query Engine version: 75cbdc1eb7150937890ad5465d861175c6624711
  */
 export declare const prismaVersion: PrismaVersion;
 /**
@@ -267,6 +267,8 @@ export declare const ModelName: {
     readonly SyncLog: "SyncLog";
     readonly SyncedProduct: "SyncedProduct";
     readonly ShopSetting: "ShopSetting";
+    readonly Faq: "Faq";
+    readonly StaticPage: "StaticPage";
     readonly SaleFromShop: "SaleFromShop";
 };
 export type ModelName = (typeof ModelName)[keyof typeof ModelName];
@@ -280,11 +282,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         omit: GlobalOmitOptions;
     };
     meta: {
-<<<<<<< HEAD
-        modelProps: "shop" | "shopLocation" | "user" | "token" | "otpRecord" | "role" | "permission" | "rolePermission" | "brand" | "productCategory" | "product" | "productVariant" | "variantOptionValue" | "optionValue" | "variantOption" | "variantMedia" | "inventory" | "inventoryMovement" | "cart" | "cartItem" | "order" | "orderItem" | "payment" | "shipment" | "shippingAddress" | "savedAddress" | "coupon" | "couponUsage" | "review" | "productView" | "searchLog" | "notification" | "syncLog" | "syncedProduct" | "shopSetting";
-=======
-        modelProps: "shop" | "shopLocation" | "user" | "token" | "role" | "permission" | "rolePermission" | "brand" | "productCategory" | "product" | "favorite" | "productVariant" | "variantOptionValue" | "optionValue" | "variantOption" | "variantMedia" | "inventory" | "inventoryMovement" | "cart" | "cartItem" | "order" | "orderItem" | "payment" | "shipment" | "shippingAddress" | "savedAddress" | "coupon" | "couponUsage" | "review" | "productView" | "searchLog" | "notification" | "syncLog" | "syncedProduct" | "shopSetting" | "saleFromShop";
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
+        modelProps: "shop" | "shopLocation" | "user" | "token" | "otpRecord" | "role" | "permission" | "rolePermission" | "brand" | "productCategory" | "product" | "favorite" | "productVariant" | "variantOptionValue" | "optionValue" | "variantOption" | "variantMedia" | "inventory" | "inventoryMovement" | "cart" | "cartItem" | "order" | "orderItem" | "payment" | "shipment" | "shippingAddress" | "savedAddress" | "coupon" | "couponUsage" | "review" | "productView" | "searchLog" | "notification" | "syncLog" | "syncedProduct" | "shopSetting" | "faq" | "staticPage" | "saleFromShop";
         txIsolationLevel: TransactionIsolationLevel;
     };
     model: {
@@ -2952,6 +2950,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
                 };
             };
         };
+        Faq: {
+            payload: Prisma.$FaqPayload<ExtArgs>;
+            fields: Prisma.FaqFieldRefs;
+            operations: {
+                findUnique: {
+                    args: Prisma.FaqFindUniqueArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$FaqPayload> | null;
+                };
+                findUniqueOrThrow: {
+                    args: Prisma.FaqFindUniqueOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$FaqPayload>;
+                };
+                findFirst: {
+                    args: Prisma.FaqFindFirstArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$FaqPayload> | null;
+                };
+                findFirstOrThrow: {
+                    args: Prisma.FaqFindFirstOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$FaqPayload>;
+                };
+                findMany: {
+                    args: Prisma.FaqFindManyArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$FaqPayload>[];
+                };
+                create: {
+                    args: Prisma.FaqCreateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$FaqPayload>;
+                };
+                createMany: {
+                    args: Prisma.FaqCreateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                createManyAndReturn: {
+                    args: Prisma.FaqCreateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$FaqPayload>[];
+                };
+                delete: {
+                    args: Prisma.FaqDeleteArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$FaqPayload>;
+                };
+                update: {
+                    args: Prisma.FaqUpdateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$FaqPayload>;
+                };
+                deleteMany: {
+                    args: Prisma.FaqDeleteManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateMany: {
+                    args: Prisma.FaqUpdateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateManyAndReturn: {
+                    args: Prisma.FaqUpdateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$FaqPayload>[];
+                };
+                upsert: {
+                    args: Prisma.FaqUpsertArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$FaqPayload>;
+                };
+                aggregate: {
+                    args: Prisma.FaqAggregateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.AggregateFaq>;
+                };
+                groupBy: {
+                    args: Prisma.FaqGroupByArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.FaqGroupByOutputType>[];
+                };
+                count: {
+                    args: Prisma.FaqCountArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.FaqCountAggregateOutputType> | number;
+                };
+            };
+        };
+        StaticPage: {
+            payload: Prisma.$StaticPagePayload<ExtArgs>;
+            fields: Prisma.StaticPageFieldRefs;
+            operations: {
+                findUnique: {
+                    args: Prisma.StaticPageFindUniqueArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$StaticPagePayload> | null;
+                };
+                findUniqueOrThrow: {
+                    args: Prisma.StaticPageFindUniqueOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$StaticPagePayload>;
+                };
+                findFirst: {
+                    args: Prisma.StaticPageFindFirstArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$StaticPagePayload> | null;
+                };
+                findFirstOrThrow: {
+                    args: Prisma.StaticPageFindFirstOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$StaticPagePayload>;
+                };
+                findMany: {
+                    args: Prisma.StaticPageFindManyArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$StaticPagePayload>[];
+                };
+                create: {
+                    args: Prisma.StaticPageCreateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$StaticPagePayload>;
+                };
+                createMany: {
+                    args: Prisma.StaticPageCreateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                createManyAndReturn: {
+                    args: Prisma.StaticPageCreateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$StaticPagePayload>[];
+                };
+                delete: {
+                    args: Prisma.StaticPageDeleteArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$StaticPagePayload>;
+                };
+                update: {
+                    args: Prisma.StaticPageUpdateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$StaticPagePayload>;
+                };
+                deleteMany: {
+                    args: Prisma.StaticPageDeleteManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateMany: {
+                    args: Prisma.StaticPageUpdateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateManyAndReturn: {
+                    args: Prisma.StaticPageUpdateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$StaticPagePayload>[];
+                };
+                upsert: {
+                    args: Prisma.StaticPageUpsertArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$StaticPagePayload>;
+                };
+                aggregate: {
+                    args: Prisma.StaticPageAggregateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.AggregateStaticPage>;
+                };
+                groupBy: {
+                    args: Prisma.StaticPageGroupByArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.StaticPageGroupByOutputType>[];
+                };
+                count: {
+                    args: Prisma.StaticPageCountArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.StaticPageCountAggregateOutputType> | number;
+                };
+            };
+        };
         SaleFromShop: {
             payload: Prisma.$SaleFromShopPayload<ExtArgs>;
             fields: Prisma.SaleFromShopFieldRefs;
@@ -3459,6 +3605,24 @@ export declare const ShopSettingScalarFieldEnum: {
     readonly updatedAt: "updatedAt";
 };
 export type ShopSettingScalarFieldEnum = (typeof ShopSettingScalarFieldEnum)[keyof typeof ShopSettingScalarFieldEnum];
+export declare const FaqScalarFieldEnum: {
+    readonly id: "id";
+    readonly question: "question";
+    readonly answer: "answer";
+    readonly status: "status";
+    readonly sortOrder: "sortOrder";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type FaqScalarFieldEnum = (typeof FaqScalarFieldEnum)[keyof typeof FaqScalarFieldEnum];
+export declare const StaticPageScalarFieldEnum: {
+    readonly id: "id";
+    readonly type: "type";
+    readonly content: "content";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type StaticPageScalarFieldEnum = (typeof StaticPageScalarFieldEnum)[keyof typeof StaticPageScalarFieldEnum];
 export declare const SaleFromShopScalarFieldEnum: {
     readonly id: "id";
     readonly locationId: "locationId";
@@ -3616,6 +3780,22 @@ export type EnumSyncStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Prism
  */
 export type ListEnumSyncStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SyncStatus[]'>;
 /**
+ * Reference to a field of type 'FaqStatus'
+ */
+export type EnumFaqStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FaqStatus'>;
+/**
+ * Reference to a field of type 'FaqStatus[]'
+ */
+export type ListEnumFaqStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FaqStatus[]'>;
+/**
+ * Reference to a field of type 'StaticPageType'
+ */
+export type EnumStaticPageTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StaticPageType'>;
+/**
+ * Reference to a field of type 'StaticPageType[]'
+ */
+export type ListEnumStaticPageTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StaticPageType[]'>;
+/**
  * Batch Payload for updateMany & deleteMany & createMany
  */
 export type BatchPayload = {
@@ -3745,6 +3925,8 @@ export type GlobalOmitConfig = {
     syncLog?: Prisma.SyncLogOmit;
     syncedProduct?: Prisma.SyncedProductOmit;
     shopSetting?: Prisma.ShopSettingOmit;
+    faq?: Prisma.FaqOmit;
+    staticPage?: Prisma.StaticPageOmit;
     saleFromShop?: Prisma.SaleFromShopOmit;
 };
 export type LogLevel = 'info' | 'query' | 'warn' | 'error';

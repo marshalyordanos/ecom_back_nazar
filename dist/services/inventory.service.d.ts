@@ -12,9 +12,10 @@ export declare function listInventory(query: {
     data: ({
         location: {
             name: string;
-            phone: string | null;
             id: string;
+            phone: string | null;
             createdAt: Date;
+            shopId: string;
             addressLine1: string;
             addressLine2: string | null;
             city: string;
@@ -23,13 +24,12 @@ export declare function listInventory(query: {
             postalCode: string | null;
             latitude: number | null;
             longitude: number | null;
-            shopId: string;
         };
         variant: {
             product: {
                 name: string;
-                id: string;
                 status: import("../generated/prisma/enums").ProductStatus;
+                id: string;
                 createdAt: Date;
                 updatedAt: Date;
                 description: string | null;
@@ -72,13 +72,8 @@ export declare function listInventory(query: {
         locationId: string;
         createdAt: Date;
         updatedAt: Date;
-<<<<<<< HEAD
-        locationId: string;
-=======
         variantId: string;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
         quantity: number;
-        variantId: string;
         reservedQuantity: number;
         reorderLevel: number | null;
     })[];
@@ -92,9 +87,10 @@ export declare function listInventory(query: {
 export declare function getInventoryByVariantId(variantId: string, user: InventoryScopeUser): Promise<({
     location: {
         name: string;
-        phone: string | null;
         id: string;
+        phone: string | null;
         createdAt: Date;
+        shopId: string;
         addressLine1: string;
         addressLine2: string | null;
         city: string;
@@ -103,20 +99,14 @@ export declare function getInventoryByVariantId(variantId: string, user: Invento
         postalCode: string | null;
         latitude: number | null;
         longitude: number | null;
-        shopId: string;
     };
 } & {
     id: string;
     locationId: string;
     createdAt: Date;
     updatedAt: Date;
-<<<<<<< HEAD
-    locationId: string;
-=======
     variantId: string;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     quantity: number;
-    variantId: string;
     reservedQuantity: number;
     reorderLevel: number | null;
 })[]>;
@@ -162,8 +152,8 @@ export declare function getInventoryById(id: string, user: InventoryScopeUser): 
         referenceId: string | null;
     }[];
     variant: {
-        id: string;
         status: import("../generated/prisma/enums").ProductStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         image: string | null;
@@ -178,14 +168,10 @@ export declare function getInventoryById(id: string, user: InventoryScopeUser): 
 } & {
     id: string;
     locationId: string;
-<<<<<<< HEAD
-=======
     createdAt: Date;
     updatedAt: Date;
     variantId: string;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     quantity: number;
-    variantId: string;
     reservedQuantity: number;
     reorderLevel: number | null;
 }>;
@@ -199,9 +185,10 @@ export declare function listMovements(query: {
     data: ({
         location: {
             name: string;
-            phone: string | null;
             id: string;
+            phone: string | null;
             createdAt: Date;
+            shopId: string;
             addressLine1: string;
             addressLine2: string | null;
             city: string;
@@ -210,7 +197,6 @@ export declare function listMovements(query: {
             postalCode: string | null;
             latitude: number | null;
             longitude: number | null;
-            shopId: string;
         };
         variant: {
             product: {
@@ -236,15 +222,10 @@ export declare function listMovements(query: {
         createdAt: Date;
         updatedAt: Date;
         type: import("../generated/prisma/enums").InventoryMovementType;
-<<<<<<< HEAD
-        locationId: string;
-=======
         variantId: string;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
         quantity: number;
-        variantId: string;
-        referenceId: string | null;
         inventoryId: string | null;
+        referenceId: string | null;
     })[];
     pagination: {
         total: number;
@@ -259,24 +240,15 @@ export declare function addMovement(data: {
     type: string;
     quantity: number;
     referenceId?: string;
-<<<<<<< HEAD
-}): Promise<{
-=======
 }, user: InventoryScopeUser): Promise<{
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     id: string;
     locationId: string;
     createdAt: Date;
     updatedAt: Date;
     type: import("../generated/prisma/enums").InventoryMovementType;
-<<<<<<< HEAD
-    locationId: string;
-=======
     variantId: string;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     quantity: number;
-    variantId: string;
-    referenceId: string | null;
     inventoryId: string | null;
+    referenceId: string | null;
 }>;
 //# sourceMappingURL=inventory.service.d.ts.map

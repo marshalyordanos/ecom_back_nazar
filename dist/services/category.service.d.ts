@@ -25,7 +25,6 @@ export declare function listCategories(query: {
         slug: string;
         track: string | null;
         parentId: string | null;
-        track: string | null;
     })[];
     pagination: {
         total: number;
@@ -64,7 +63,6 @@ export declare function listCategoriesTree2(): Promise<({
             slug: string;
             track: string | null;
             parentId: string | null;
-            track: string | null;
         }[];
     } & {
         name: string;
@@ -75,7 +73,6 @@ export declare function listCategoriesTree2(): Promise<({
         slug: string;
         track: string | null;
         parentId: string | null;
-        track: string | null;
     })[];
 } & {
     name: string;
@@ -86,11 +83,6 @@ export declare function listCategoriesTree2(): Promise<({
     slug: string;
     track: string | null;
     parentId: string | null;
-    track: string | null;
-})[]>;
-export declare function listCategoriesTree(): Promise<(CategoryNode & {
-    totalProducts: number;
-    children?: (CategoryNode & /*elided*/ any)[];
 })[]>;
 export declare function listCategoriesTree(): Promise<(CategoryNode & {
     totalProducts: number;
@@ -105,12 +97,7 @@ export declare function getCategoryById(id: string): Promise<{
         updatedAt: Date;
         description: string | null;
         shopId: string;
-<<<<<<< HEAD
-        isFeatured: boolean;
-        track: string | null;
-=======
         slug: string;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
         shortDescription: string | null;
         brandId: string | null;
         categoryId: string | null;
@@ -126,7 +113,6 @@ export declare function getCategoryById(id: string): Promise<{
         slug: string;
         track: string | null;
         parentId: string | null;
-        track: string | null;
     } | null;
     children: {
         name: string;
@@ -137,7 +123,6 @@ export declare function getCategoryById(id: string): Promise<{
         slug: string;
         track: string | null;
         parentId: string | null;
-        track: string | null;
     }[];
 } & {
     name: string;
@@ -148,7 +133,6 @@ export declare function getCategoryById(id: string): Promise<{
     slug: string;
     track: string | null;
     parentId: string | null;
-    track: string | null;
 }>;
 export declare function createCategory(data: {
     name: string;
@@ -165,7 +149,6 @@ export declare function createCategory(data: {
     slug: string;
     track: string | null;
     parentId: string | null;
-    track: string | null;
 }>;
 export declare function updateCategory(id: string, data: {
     name?: string;
@@ -183,7 +166,6 @@ export declare function updateCategory(id: string, data: {
     slug: string;
     track: string | null;
     parentId: string | null;
-    track: string | null;
 }>;
 export declare function deleteCategory(id: string): Promise<{
     message: string;

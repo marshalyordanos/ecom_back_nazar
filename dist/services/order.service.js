@@ -41,7 +41,28 @@ async function listUserOrders(userId, query) {
             orderBy,
             skip,
             take,
-            include: { items: true, address: true },
+            include: {
+                address: true,
+                shipments: { select: { id: true, status: true } },
+                items: {
+                    include: {
+                        variant: {
+                            select: {
+                                id: true,
+                                image: true,
+                                productId: true,
+                                sku: true,
+                                product: { select: { id: true, name: true } },
+                                media: {
+                                    orderBy: [{ position: "asc" }, { id: "asc" }],
+                                    take: 1,
+                                    select: { url: true },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
         }),
         prisma_1.prisma.order.count({ where: whereUser }),
     ]);

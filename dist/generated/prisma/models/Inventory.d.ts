@@ -185,7 +185,7 @@ export type InventoryGroupByOutputType = {
     _min: InventoryMinAggregateOutputType | null;
     _max: InventoryMaxAggregateOutputType | null;
 };
-type GetInventoryGroupByPayload<T extends InventoryGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<InventoryGroupByOutputType, T['by']> & {
+export type GetInventoryGroupByPayload<T extends InventoryGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<InventoryGroupByOutputType, T['by']> & {
     [P in ((keyof T) & (keyof InventoryGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], InventoryGroupByOutputType[P]> : Prisma.GetScalarType<T[P], InventoryGroupByOutputType[P]>;
 }>>;
 export type InventoryWhereInput = {
@@ -1361,6 +1361,11 @@ export type InventoryFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
      * Skip the first `n` Inventories.
      */
     skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of Inventories.
+     */
     distinct?: Prisma.InventoryScalarFieldEnum | Prisma.InventoryScalarFieldEnum[];
 };
 /**
@@ -1590,5 +1595,4 @@ export type InventoryDefaultArgs<ExtArgs extends runtime.Types.Extensions.Intern
      */
     include?: Prisma.InventoryInclude<ExtArgs> | null;
 };
-export {};
 //# sourceMappingURL=Inventory.d.ts.map

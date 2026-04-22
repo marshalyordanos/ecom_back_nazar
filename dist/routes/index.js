@@ -25,6 +25,8 @@ const settings_router_1 = __importDefault(require("./settings.router"));
 const dashboard_router_1 = __importDefault(require("./dashboard.router"));
 const reports_router_1 = __importDefault(require("./reports.router"));
 const favorite_router_1 = __importDefault(require("./favorite.router"));
+const faq_router_1 = __importDefault(require("./faq.router"));
+const pages_router_1 = __importDefault(require("./pages.router"));
 const router = express_1.default.Router();
 const defaultRoutes = [
     { path: "/auth", route: auth_router_1.default },
@@ -48,6 +50,8 @@ const defaultRoutes = [
     { path: "/dashboard", route: dashboard_router_1.default },
     { path: "/reports", route: reports_router_1.default },
     { path: "/favorites", route: favorite_router_1.default },
+    { path: "/faq", route: faq_router_1.default },
+    { path: "/pages", route: pages_router_1.default },
 ];
 defaultRoutes.forEach(({ path, route }) => {
     router.use(path, route);

@@ -140,7 +140,7 @@ export type BrandGroupByOutputType = {
     _min: BrandMinAggregateOutputType | null;
     _max: BrandMaxAggregateOutputType | null;
 };
-type GetBrandGroupByPayload<T extends BrandGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<BrandGroupByOutputType, T['by']> & {
+export type GetBrandGroupByPayload<T extends BrandGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<BrandGroupByOutputType, T['by']> & {
     [P in ((keyof T) & (keyof BrandGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], BrandGroupByOutputType[P]> : Prisma.GetScalarType<T[P], BrandGroupByOutputType[P]>;
 }>>;
 export type BrandWhereInput = {
@@ -997,6 +997,11 @@ export type BrandFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalA
      * Skip the first `n` Brands.
      */
     skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of Brands.
+     */
     distinct?: Prisma.BrandScalarFieldEnum | Prisma.BrandScalarFieldEnum[];
 };
 /**
@@ -1218,5 +1223,4 @@ export type BrandDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
      */
     include?: Prisma.BrandInclude<ExtArgs> | null;
 };
-export {};
 //# sourceMappingURL=Brand.d.ts.map

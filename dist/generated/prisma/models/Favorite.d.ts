@@ -119,7 +119,7 @@ export type FavoriteGroupByOutputType = {
     _min: FavoriteMinAggregateOutputType | null;
     _max: FavoriteMaxAggregateOutputType | null;
 };
-type GetFavoriteGroupByPayload<T extends FavoriteGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<FavoriteGroupByOutputType, T['by']> & {
+export type GetFavoriteGroupByPayload<T extends FavoriteGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<FavoriteGroupByOutputType, T['by']> & {
     [P in ((keyof T) & (keyof FavoriteGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], FavoriteGroupByOutputType[P]> : Prisma.GetScalarType<T[P], FavoriteGroupByOutputType[P]>;
 }>>;
 export type FavoriteWhereInput = {
@@ -1031,6 +1031,11 @@ export type FavoriteFindManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
      * Skip the first `n` Favorites.
      */
     skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of Favorites.
+     */
     distinct?: Prisma.FavoriteScalarFieldEnum | Prisma.FavoriteScalarFieldEnum[];
 };
 /**
@@ -1237,5 +1242,4 @@ export type FavoriteDefaultArgs<ExtArgs extends runtime.Types.Extensions.Interna
      */
     include?: Prisma.FavoriteInclude<ExtArgs> | null;
 };
-export {};
 //# sourceMappingURL=Favorite.d.ts.map

@@ -69,11 +69,7 @@ async function listCategoriesTree() {
         orderBy: { name: "asc" },
     });
     // Preprocessing for easier descendant lookup
-<<<<<<< HEAD
     const allCategories = allCategoriesRaw.map((cat) => ({
-=======
-    const allCategories = allCategoriesRaw.map(cat => ({
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
         id: cat.id,
         parentId: cat.parentId,
         name: cat.name,
@@ -84,15 +80,9 @@ async function listCategoriesTree() {
     }));
     // Step 2: For every category, find all its descendant ids using track
     const categoryDescendants = {};
-<<<<<<< HEAD
     const separator = "/";
     for (const cat of allCategories) {
         const trackPrefix = cat.track ? cat.track + separator : "";
-=======
-    const separator = '/';
-    for (const cat of allCategories) {
-        const trackPrefix = cat.track ? cat.track + separator : '';
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
         // A category's descendants are any category whose track starts with cat.track + '/'
         categoryDescendants[cat.id] = new Set([cat.id]);
         for (const otherCat of allCategories) {
@@ -113,11 +103,7 @@ async function listCategoriesTree() {
         // 2. Fetch all products in these categories
         const products = await prisma_1.prisma.product.findMany({
             where: { categoryId: { in: categoryIds } },
-<<<<<<< HEAD
             select: { id: true },
-=======
-            select: { id: true }
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
         });
         const productIds = products.map((p) => p.id);
         let categoryTotalAmount = 0;
@@ -146,11 +132,7 @@ async function listCategoriesTree() {
             totalSalesAmount: salesInfoByCategory[node.id]?.totalSalesAmount || 0,
             totalProductsSold: salesInfoByCategory[node.id]?.totalProductsSold || 0,
             totalProducts: salesInfoByCategory[node.id]?.totalProducts || 0,
-<<<<<<< HEAD
             children: buildTree(nodes, node.id),
-=======
-            children: buildTree(nodes, node.id)
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
         }));
     }
     const tree = buildTree(allCategories, null);
@@ -171,7 +153,6 @@ async function getCategoryById(id) {
 }
 async function createCategory(data, file) {
     if (!file) {
-<<<<<<< HEAD
         throw new appError_1.default("No file uploaded", 400);
     }
     const fileBuffer = fs_1.default.readFileSync(file.path);
@@ -183,17 +164,6 @@ async function createCategory(data, file) {
         });
         if (parent) {
             data.track = parent.track ?? "";
-=======
-        throw new appError_1.default('No file uploaded', 400);
-    }
-    const fileBuffer = fs_1.default.readFileSync(file.path);
-    const uploadResult = await (0, cloudinary_1.uploadToCloudinary)(fileBuffer, 'ecommerce/categories', 'image');
-    fs_1.default.unlinkSync(file.path);
-    if (data.parentId) {
-        const parent = await prisma_1.prisma.productCategory.findUnique({ where: { id: data.parentId } });
-        if (parent) {
-            data.track = parent.track ?? '';
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
         }
     }
     const category = await prisma_1.prisma.productCategory.create({
@@ -207,7 +177,6 @@ async function createCategory(data, file) {
     });
     if (category) {
         if (data.parentId) {
-<<<<<<< HEAD
             return await prisma_1.prisma.productCategory.update({
                 where: { id: category.id },
                 data: { track: String(data.track) + "/" + String(category.id) },
@@ -218,12 +187,6 @@ async function createCategory(data, file) {
                 where: { id: category.id },
                 data: { track: String(category.id) },
             });
-=======
-            return await prisma_1.prisma.productCategory.update({ where: { id: category.id }, data: { track: String(data.track) + '/' + String(category.id) } });
-        }
-        else {
-            return await prisma_1.prisma.productCategory.update({ where: { id: category.id }, data: { track: String(category.id) } });
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
         }
     }
     return category;
@@ -234,11 +197,7 @@ async function updateCategory(id, data, file) {
     // }
     if (file) {
         const fileBuffer = fs_1.default.readFileSync(file.path);
-<<<<<<< HEAD
         const uploadResult = await (0, cloudinary_1.uploadToCloudinary)(fileBuffer, "ecommerce/categories", "image");
-=======
-        const uploadResult = await (0, cloudinary_1.uploadToCloudinary)(fileBuffer, 'ecommerce/categories', 'image');
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
         fs_1.default.unlinkSync(file.path);
         if (uploadResult.secure_url) {
             data.image = uploadResult.secure_url;

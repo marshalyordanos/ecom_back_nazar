@@ -58,4 +58,15 @@ export declare const SyncStatus: {
     readonly FAILED: "FAILED";
 };
 export type SyncStatus = (typeof SyncStatus)[keyof typeof SyncStatus];
+export declare const FaqStatus: {
+    readonly DRAFT: "DRAFT";
+    readonly PUBLISHED: "PUBLISHED";
+};
+export type FaqStatus = (typeof FaqStatus)[keyof typeof FaqStatus];
+export declare const StaticPageType: {
+    readonly privacy: "privacy";
+    readonly terms: "terms";
+    readonly about: "about";
+};
+export type StaticPageType = (typeof StaticPageType)[keyof typeof StaticPageType];
 //# sourceMappingURL=enums.d.ts.map

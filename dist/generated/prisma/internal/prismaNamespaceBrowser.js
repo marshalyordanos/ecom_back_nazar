@@ -48,11 +48,8 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-<<<<<<< HEAD
-exports.JsonNullValueFilter = exports.NullsOrder = exports.QueryMode = exports.NullableJsonNullValueInput = exports.SortOrder = exports.ShopSettingScalarFieldEnum = exports.SyncedProductScalarFieldEnum = exports.SyncLogScalarFieldEnum = exports.NotificationScalarFieldEnum = exports.SearchLogScalarFieldEnum = exports.ProductViewScalarFieldEnum = exports.ReviewScalarFieldEnum = exports.CouponUsageScalarFieldEnum = exports.CouponScalarFieldEnum = exports.SavedAddressScalarFieldEnum = exports.ShippingAddressScalarFieldEnum = exports.ShipmentScalarFieldEnum = exports.PaymentScalarFieldEnum = exports.OrderItemScalarFieldEnum = exports.OrderScalarFieldEnum = exports.CartItemScalarFieldEnum = exports.CartScalarFieldEnum = exports.InventoryMovementScalarFieldEnum = exports.InventoryScalarFieldEnum = exports.VariantMediaScalarFieldEnum = exports.VariantOptionScalarFieldEnum = exports.OptionValueScalarFieldEnum = exports.VariantOptionValueScalarFieldEnum = exports.ProductVariantScalarFieldEnum = exports.ProductScalarFieldEnum = exports.ProductCategoryScalarFieldEnum = exports.BrandScalarFieldEnum = exports.RolePermissionScalarFieldEnum = exports.PermissionScalarFieldEnum = exports.RoleScalarFieldEnum = exports.OtpRecordScalarFieldEnum = exports.TokenScalarFieldEnum = exports.UserScalarFieldEnum = exports.ShopLocationScalarFieldEnum = exports.ShopScalarFieldEnum = exports.TransactionIsolationLevel = exports.ModelName = exports.AnyNull = exports.JsonNull = exports.DbNull = exports.NullTypes = exports.Decimal = void 0;
-=======
-exports.JsonNullValueFilter = exports.NullsOrder = exports.QueryMode = exports.NullableJsonNullValueInput = exports.SortOrder = exports.SaleFromShopScalarFieldEnum = exports.ShopSettingScalarFieldEnum = exports.SyncedProductScalarFieldEnum = exports.SyncLogScalarFieldEnum = exports.NotificationScalarFieldEnum = exports.SearchLogScalarFieldEnum = exports.ProductViewScalarFieldEnum = exports.ReviewScalarFieldEnum = exports.CouponUsageScalarFieldEnum = exports.CouponScalarFieldEnum = exports.SavedAddressScalarFieldEnum = exports.ShippingAddressScalarFieldEnum = exports.ShipmentScalarFieldEnum = exports.PaymentScalarFieldEnum = exports.OrderItemScalarFieldEnum = exports.OrderScalarFieldEnum = exports.CartItemScalarFieldEnum = exports.CartScalarFieldEnum = exports.InventoryMovementScalarFieldEnum = exports.InventoryScalarFieldEnum = exports.VariantMediaScalarFieldEnum = exports.VariantOptionScalarFieldEnum = exports.OptionValueScalarFieldEnum = exports.VariantOptionValueScalarFieldEnum = exports.ProductVariantScalarFieldEnum = exports.FavoriteScalarFieldEnum = exports.ProductScalarFieldEnum = exports.ProductCategoryScalarFieldEnum = exports.BrandScalarFieldEnum = exports.RolePermissionScalarFieldEnum = exports.PermissionScalarFieldEnum = exports.RoleScalarFieldEnum = exports.TokenScalarFieldEnum = exports.UserScalarFieldEnum = exports.ShopLocationScalarFieldEnum = exports.ShopScalarFieldEnum = exports.TransactionIsolationLevel = exports.ModelName = exports.AnyNull = exports.JsonNull = exports.DbNull = exports.NullTypes = exports.Decimal = void 0;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
+exports.NullsOrder = exports.QueryMode = exports.NullableJsonNullValueInput = exports.SortOrder = exports.SaleFromShopScalarFieldEnum = exports.StaticPageScalarFieldEnum = exports.FaqScalarFieldEnum = exports.ShopSettingScalarFieldEnum = exports.SyncedProductScalarFieldEnum = exports.SyncLogScalarFieldEnum = exports.NotificationScalarFieldEnum = exports.SearchLogScalarFieldEnum = exports.ProductViewScalarFieldEnum = exports.ReviewScalarFieldEnum = exports.CouponUsageScalarFieldEnum = exports.CouponScalarFieldEnum = exports.SavedAddressScalarFieldEnum = exports.ShippingAddressScalarFieldEnum = exports.ShipmentScalarFieldEnum = exports.PaymentScalarFieldEnum = exports.OrderItemScalarFieldEnum = exports.OrderScalarFieldEnum = exports.CartItemScalarFieldEnum = exports.CartScalarFieldEnum = exports.InventoryMovementScalarFieldEnum = exports.InventoryScalarFieldEnum = exports.VariantMediaScalarFieldEnum = exports.VariantOptionScalarFieldEnum = exports.OptionValueScalarFieldEnum = exports.VariantOptionValueScalarFieldEnum = exports.ProductVariantScalarFieldEnum = exports.FavoriteScalarFieldEnum = exports.ProductScalarFieldEnum = exports.ProductCategoryScalarFieldEnum = exports.BrandScalarFieldEnum = exports.RolePermissionScalarFieldEnum = exports.PermissionScalarFieldEnum = exports.RoleScalarFieldEnum = exports.OtpRecordScalarFieldEnum = exports.TokenScalarFieldEnum = exports.UserScalarFieldEnum = exports.ShopLocationScalarFieldEnum = exports.ShopScalarFieldEnum = exports.TransactionIsolationLevel = exports.ModelName = exports.AnyNull = exports.JsonNull = exports.DbNull = exports.NullTypes = exports.Decimal = void 0;
+exports.JsonNullValueFilter = void 0;
 const runtime = __importStar(require("@prisma/client/runtime/index-browser"));
 exports.Decimal = runtime.Decimal;
 exports.NullTypes = {
@@ -115,17 +112,19 @@ exports.ModelName = {
     SyncLog: 'SyncLog',
     SyncedProduct: 'SyncedProduct',
     ShopSetting: 'ShopSetting',
+    Faq: 'Faq',
+    StaticPage: 'StaticPage',
     SaleFromShop: 'SaleFromShop'
 };
 /*
  * Enums
  */
-exports.TransactionIsolationLevel = {
+exports.TransactionIsolationLevel = runtime.makeStrictEnum({
     ReadUncommitted: 'ReadUncommitted',
     ReadCommitted: 'ReadCommitted',
     RepeatableRead: 'RepeatableRead',
     Serializable: 'Serializable'
-};
+});
 exports.ShopScalarFieldEnum = {
     id: 'id',
     name: 'name',
@@ -489,6 +488,22 @@ exports.ShopSettingScalarFieldEnum = {
     value: 'value',
     updatedAt: 'updatedAt'
 };
+exports.FaqScalarFieldEnum = {
+    id: 'id',
+    question: 'question',
+    answer: 'answer',
+    status: 'status',
+    sortOrder: 'sortOrder',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+};
+exports.StaticPageScalarFieldEnum = {
+    id: 'id',
+    type: 'type',
+    content: 'content',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+};
 exports.SaleFromShopScalarFieldEnum = {
     id: 'id',
     locationId: 'locationId',
@@ -504,8 +519,8 @@ exports.SortOrder = {
     desc: 'desc'
 };
 exports.NullableJsonNullValueInput = {
-    DbNull: 'DbNull',
-    JsonNull: 'JsonNull'
+    DbNull: exports.DbNull,
+    JsonNull: exports.JsonNull
 };
 exports.QueryMode = {
     default: 'default',
@@ -516,8 +531,8 @@ exports.NullsOrder = {
     last: 'last'
 };
 exports.JsonNullValueFilter = {
-    DbNull: 'DbNull',
-    JsonNull: 'JsonNull',
-    AnyNull: 'AnyNull'
+    DbNull: exports.DbNull,
+    JsonNull: exports.JsonNull,
+    AnyNull: exports.AnyNull
 };
 //# sourceMappingURL=prismaNamespaceBrowser.js.map

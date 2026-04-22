@@ -42,13 +42,6 @@ const multer_1 = require("../config/multer");
 const router = (0, express_1.Router)();
 router.get("/", productController.listProducts);
 router.get("/featured", productController.getFeatured);
-<<<<<<< HEAD
-router.patch("/variants/:variantId", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), (0, multer_1.uploadSingleImage)("image"), productController.updateVariant);
-router.get("/variants/:id", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), productController.getVariantById);
-router.delete("/variants/:variantId", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), productController.deleteVariant);
-router.post("/variants/:variantId/media", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), productController.addVariantMedia);
-router.delete("/variants/media/:mediaId", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), productController.removeVariantMedia);
-=======
 router.get("/popular", productController.getPopular);
 router.get("/new-arrivals", productController.getNewArrivals);
 router.get("/most-viewed", productController.getMostViewed);
@@ -58,7 +51,6 @@ router.get("/variants/:id", auth_middleware_1.protect, (0, auth_middleware_1.res
 router.delete("/variants/:variantId", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), (0, permission_middleware_1.requirePermission)("products", "delete"), productController.deleteVariant);
 router.post("/variants/:variantId/media", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), (0, permission_middleware_1.requirePermission)("products", "update"), productController.addVariantMedia);
 router.delete("/variants/media/:mediaId", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), (0, permission_middleware_1.requirePermission)("products", "update"), productController.removeVariantMedia);
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 // --------- Variant Option Value Assignment Routes ---------
 router.post("/variants/:variantId/option-values", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), (0, permission_middleware_1.requirePermission)("products", "update"), productController.setVariantOptionValues);
 router.delete("/variants/:variantId/option-values/:optionValueId", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), (0, permission_middleware_1.requirePermission)("products", "update"), productController.removeVariantOptionValue);

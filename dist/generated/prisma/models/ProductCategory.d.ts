@@ -147,7 +147,7 @@ export type ProductCategoryGroupByOutputType = {
     _min: ProductCategoryMinAggregateOutputType | null;
     _max: ProductCategoryMaxAggregateOutputType | null;
 };
-type GetProductCategoryGroupByPayload<T extends ProductCategoryGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<ProductCategoryGroupByOutputType, T['by']> & {
+export type GetProductCategoryGroupByPayload<T extends ProductCategoryGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<ProductCategoryGroupByOutputType, T['by']> & {
     [P in ((keyof T) & (keyof ProductCategoryGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], ProductCategoryGroupByOutputType[P]> : Prisma.GetScalarType<T[P], ProductCategoryGroupByOutputType[P]>;
 }>>;
 export type ProductCategoryWhereInput = {
@@ -1277,6 +1277,11 @@ export type ProductCategoryFindManyArgs<ExtArgs extends runtime.Types.Extensions
      * Skip the first `n` ProductCategories.
      */
     skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of ProductCategories.
+     */
     distinct?: Prisma.ProductCategoryScalarFieldEnum | Prisma.ProductCategoryScalarFieldEnum[];
 };
 /**
@@ -1547,5 +1552,4 @@ export type ProductCategoryDefaultArgs<ExtArgs extends runtime.Types.Extensions.
      */
     include?: Prisma.ProductCategoryInclude<ExtArgs> | null;
 };
-export {};
 //# sourceMappingURL=ProductCategory.d.ts.map

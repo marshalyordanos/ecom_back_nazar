@@ -205,7 +205,7 @@ export type OtpRecordGroupByOutputType = {
     _min: OtpRecordMinAggregateOutputType | null;
     _max: OtpRecordMaxAggregateOutputType | null;
 };
-type GetOtpRecordGroupByPayload<T extends OtpRecordGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<OtpRecordGroupByOutputType, T['by']> & {
+export type GetOtpRecordGroupByPayload<T extends OtpRecordGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<OtpRecordGroupByOutputType, T['by']> & {
     [P in ((keyof T) & (keyof OtpRecordGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], OtpRecordGroupByOutputType[P]> : Prisma.GetScalarType<T[P], OtpRecordGroupByOutputType[P]>;
 }>>;
 export type OtpRecordWhereInput = {
@@ -1258,6 +1258,11 @@ export type OtpRecordFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
      * Skip the first `n` OtpRecords.
      */
     skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of OtpRecords.
+     */
     distinct?: Prisma.OtpRecordScalarFieldEnum | Prisma.OtpRecordScalarFieldEnum[];
 };
 /**
@@ -1464,5 +1469,4 @@ export type OtpRecordDefaultArgs<ExtArgs extends runtime.Types.Extensions.Intern
      */
     include?: Prisma.OtpRecordInclude<ExtArgs> | null;
 };
-export {};
 //# sourceMappingURL=OtpRecord.d.ts.map

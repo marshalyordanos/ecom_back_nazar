@@ -185,7 +185,7 @@ export type ReviewGroupByOutputType = {
     _min: ReviewMinAggregateOutputType | null;
     _max: ReviewMaxAggregateOutputType | null;
 };
-type GetReviewGroupByPayload<T extends ReviewGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<ReviewGroupByOutputType, T['by']> & {
+export type GetReviewGroupByPayload<T extends ReviewGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<ReviewGroupByOutputType, T['by']> & {
     [P in ((keyof T) & (keyof ReviewGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], ReviewGroupByOutputType[P]> : Prisma.GetScalarType<T[P], ReviewGroupByOutputType[P]>;
 }>>;
 export type ReviewWhereInput = {
@@ -1273,6 +1273,11 @@ export type ReviewFindManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
      * Skip the first `n` Reviews.
      */
     skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of Reviews.
+     */
     distinct?: Prisma.ReviewScalarFieldEnum | Prisma.ReviewScalarFieldEnum[];
 };
 /**
@@ -1479,5 +1484,4 @@ export type ReviewDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalA
      */
     include?: Prisma.ReviewInclude<ExtArgs> | null;
 };
-export {};
 //# sourceMappingURL=Review.d.ts.map

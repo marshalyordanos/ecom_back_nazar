@@ -47,7 +47,7 @@ exports.getMe = (0, catchAsync_1.default)(async (req, res, _next) => {
     res.status(200).json(user);
 });
 exports.updateMe = (0, catchAsync_1.default)(async (req, res, _next) => {
-    const user = await userService.updateMe(req.user.id, req.body);
+    const user = await userService.updateMe(req.user.id, req.body, req.file);
     res.status(200).json(user);
 });
 exports.updateMyPassword = (0, catchAsync_1.default)(async (req, res, _next) => {

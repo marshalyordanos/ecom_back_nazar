@@ -126,7 +126,7 @@ export type SearchLogGroupByOutputType = {
     _min: SearchLogMinAggregateOutputType | null;
     _max: SearchLogMaxAggregateOutputType | null;
 };
-type GetSearchLogGroupByPayload<T extends SearchLogGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<SearchLogGroupByOutputType, T['by']> & {
+export type GetSearchLogGroupByPayload<T extends SearchLogGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<SearchLogGroupByOutputType, T['by']> & {
     [P in ((keyof T) & (keyof SearchLogGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], SearchLogGroupByOutputType[P]> : Prisma.GetScalarType<T[P], SearchLogGroupByOutputType[P]>;
 }>>;
 export type SearchLogWhereInput = {
@@ -962,6 +962,11 @@ export type SearchLogFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
      * Skip the first `n` SearchLogs.
      */
     skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of SearchLogs.
+     */
     distinct?: Prisma.SearchLogScalarFieldEnum | Prisma.SearchLogScalarFieldEnum[];
 };
 /**
@@ -1186,5 +1191,4 @@ export type SearchLogDefaultArgs<ExtArgs extends runtime.Types.Extensions.Intern
      */
     include?: Prisma.SearchLogInclude<ExtArgs> | null;
 };
-export {};
 //# sourceMappingURL=SearchLog.d.ts.map

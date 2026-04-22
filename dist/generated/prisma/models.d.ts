@@ -34,6 +34,8 @@ export type * from './models/Notification';
 export type * from './models/SyncLog';
 export type * from './models/SyncedProduct';
 export type * from './models/ShopSetting';
+export type * from './models/Faq';
+export type * from './models/StaticPage';
 export type * from './models/SaleFromShop';
 export type * from './commonInputTypes';
 //# sourceMappingURL=models.d.ts.map

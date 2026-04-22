@@ -133,7 +133,7 @@ export type TokenGroupByOutputType = {
     _min: TokenMinAggregateOutputType | null;
     _max: TokenMaxAggregateOutputType | null;
 };
-type GetTokenGroupByPayload<T extends TokenGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<TokenGroupByOutputType, T['by']> & {
+export type GetTokenGroupByPayload<T extends TokenGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<TokenGroupByOutputType, T['by']> & {
     [P in ((keyof T) & (keyof TokenGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], TokenGroupByOutputType[P]> : Prisma.GetScalarType<T[P], TokenGroupByOutputType[P]>;
 }>>;
 export type TokenWhereInput = {
@@ -997,6 +997,11 @@ export type TokenFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalA
      * Skip the first `n` Tokens.
      */
     skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of Tokens.
+     */
     distinct?: Prisma.TokenScalarFieldEnum | Prisma.TokenScalarFieldEnum[];
 };
 /**
@@ -1203,5 +1208,4 @@ export type TokenDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
      */
     include?: Prisma.TokenInclude<ExtArgs> | null;
 };
-export {};
 //# sourceMappingURL=Token.d.ts.map

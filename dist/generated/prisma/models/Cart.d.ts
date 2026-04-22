@@ -126,7 +126,7 @@ export type CartGroupByOutputType = {
     _min: CartMinAggregateOutputType | null;
     _max: CartMaxAggregateOutputType | null;
 };
-type GetCartGroupByPayload<T extends CartGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<CartGroupByOutputType, T['by']> & {
+export type GetCartGroupByPayload<T extends CartGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<CartGroupByOutputType, T['by']> & {
     [P in ((keyof T) & (keyof CartGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], CartGroupByOutputType[P]> : Prisma.GetScalarType<T[P], CartGroupByOutputType[P]>;
 }>>;
 export type CartWhereInput = {
@@ -1060,6 +1060,11 @@ export type CartFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
      * Skip the first `n` Carts.
      */
     skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of Carts.
+     */
     distinct?: Prisma.CartScalarFieldEnum | Prisma.CartScalarFieldEnum[];
 };
 /**
@@ -1289,5 +1294,4 @@ export type CartDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
      */
     include?: Prisma.CartInclude<ExtArgs> | null;
 };
-export {};
 //# sourceMappingURL=Cart.d.ts.map

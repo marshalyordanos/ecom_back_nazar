@@ -119,7 +119,7 @@ export type OptionValueGroupByOutputType = {
     _min: OptionValueMinAggregateOutputType | null;
     _max: OptionValueMaxAggregateOutputType | null;
 };
-type GetOptionValueGroupByPayload<T extends OptionValueGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<OptionValueGroupByOutputType, T['by']> & {
+export type GetOptionValueGroupByPayload<T extends OptionValueGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<OptionValueGroupByOutputType, T['by']> & {
     [P in ((keyof T) & (keyof OptionValueGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], OptionValueGroupByOutputType[P]> : Prisma.GetScalarType<T[P], OptionValueGroupByOutputType[P]>;
 }>>;
 export type OptionValueWhereInput = {
@@ -1026,6 +1026,11 @@ export type OptionValueFindManyArgs<ExtArgs extends runtime.Types.Extensions.Int
      * Skip the first `n` OptionValues.
      */
     skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of OptionValues.
+     */
     distinct?: Prisma.OptionValueScalarFieldEnum | Prisma.OptionValueScalarFieldEnum[];
 };
 /**
@@ -1255,5 +1260,4 @@ export type OptionValueDefaultArgs<ExtArgs extends runtime.Types.Extensions.Inte
      */
     include?: Prisma.OptionValueInclude<ExtArgs> | null;
 };
-export {};
 //# sourceMappingURL=OptionValue.d.ts.map

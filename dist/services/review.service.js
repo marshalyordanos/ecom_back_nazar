@@ -73,11 +73,30 @@ async function createReview(userId, productId, data) {
     const product = await prisma_1.prisma.product.findUnique({ where: { id: productId } });
     if (!product)
         throw new appError_1.default("Product not found", 404);
+    const existing = await prisma_1.prisma.review.findFirst({
+        where: { userId, productId },
+    });
+    if (existing)
+        throw new appError_1.default("You have already reviewed this product", 400);
+    const eligibleOrder = await prisma_1.prisma.order.findFirst({
+        where: {
+            userId,
+            items: { some: { variant: { productId } } },
+            OR: [{ status: "COMPLETED" }, { shipments: { some: { status: "DELIVERED" } } }],
+        },
+    });
+    if (!eligibleOrder) {
+        throw new appError_1.default("You can only review products from completed or delivered orders", 403);
+    }
+    const rating = Math.round(Number(data.rating));
+    if (!Number.isFinite(rating) || rating < 1 || rating > 5) {
+        throw new appError_1.default("Rating must be between 1 and 5", 400);
+    }
     const review = await prisma_1.prisma.review.create({
         data: {
             productId,
             userId,
-            rating: data.rating,
+            rating,
             title: data.title,
             comment: data.comment,
             status: "PENDING",

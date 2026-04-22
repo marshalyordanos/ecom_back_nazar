@@ -126,7 +126,7 @@ export type RoleGroupByOutputType = {
     _min: RoleMinAggregateOutputType | null;
     _max: RoleMaxAggregateOutputType | null;
 };
-type GetRoleGroupByPayload<T extends RoleGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<RoleGroupByOutputType, T['by']> & {
+export type GetRoleGroupByPayload<T extends RoleGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<RoleGroupByOutputType, T['by']> & {
     [P in ((keyof T) & (keyof RoleGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], RoleGroupByOutputType[P]> : Prisma.GetScalarType<T[P], RoleGroupByOutputType[P]>;
 }>>;
 export type RoleWhereInput = {
@@ -1062,6 +1062,11 @@ export type RoleFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
      * Skip the first `n` Roles.
      */
     skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of Roles.
+     */
     distinct?: Prisma.RoleScalarFieldEnum | Prisma.RoleScalarFieldEnum[];
 };
 /**
@@ -1306,5 +1311,4 @@ export type RoleDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
      */
     include?: Prisma.RoleInclude<ExtArgs> | null;
 };
-export {};
 //# sourceMappingURL=Role.d.ts.map

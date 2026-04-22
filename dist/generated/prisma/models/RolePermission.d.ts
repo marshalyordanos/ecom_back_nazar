@@ -154,7 +154,7 @@ export type RolePermissionGroupByOutputType = {
     _min: RolePermissionMinAggregateOutputType | null;
     _max: RolePermissionMaxAggregateOutputType | null;
 };
-type GetRolePermissionGroupByPayload<T extends RolePermissionGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<RolePermissionGroupByOutputType, T['by']> & {
+export type GetRolePermissionGroupByPayload<T extends RolePermissionGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<RolePermissionGroupByOutputType, T['by']> & {
     [P in ((keyof T) & (keyof RolePermissionGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], RolePermissionGroupByOutputType[P]> : Prisma.GetScalarType<T[P], RolePermissionGroupByOutputType[P]>;
 }>>;
 export type RolePermissionWhereInput = {
@@ -1236,6 +1236,11 @@ export type RolePermissionFindManyArgs<ExtArgs extends runtime.Types.Extensions.
      * Skip the first `n` RolePermissions.
      */
     skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of RolePermissions.
+     */
     distinct?: Prisma.RolePermissionScalarFieldEnum | Prisma.RolePermissionScalarFieldEnum[];
 };
 /**
@@ -1442,5 +1447,4 @@ export type RolePermissionDefaultArgs<ExtArgs extends runtime.Types.Extensions.I
      */
     include?: Prisma.RolePermissionInclude<ExtArgs> | null;
 };
-export {};
 //# sourceMappingURL=RolePermission.d.ts.map

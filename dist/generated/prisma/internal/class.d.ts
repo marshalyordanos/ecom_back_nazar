@@ -8,7 +8,9 @@ export interface PrismaClientConstructor {
    * Type-safe database client for TypeScript
    * @example
    * ```
-   * const prisma = new PrismaClient()
+   * const prisma = new PrismaClient({
+   *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
+   * })
    * // Fetch zero or more Shops
    * const shops = await prisma.shop.findMany()
    * ```
@@ -25,7 +27,9 @@ export interface PrismaClientConstructor {
  * Type-safe database client for TypeScript
  * @example
  * ```
- * const prisma = new PrismaClient()
+ * const prisma = new PrismaClient({
+ *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
+ * })
  * // Fetch zero or more Shops
  * const shops = await prisma.shop.findMany()
  * ```
@@ -98,7 +102,7 @@ export interface PrismaClient<in LogOpts extends Prisma.LogLevel = never, in out
      * ])
      * ```
      *
-     * Read more in our [docs](https://www.prisma.io/docs/concepts/components/prisma-client/transactions).
+     * Read more in our [docs](https://www.prisma.io/docs/orm/prisma-client/queries/transactions).
      */
     $transaction<P extends Prisma.PrismaPromise<any>[]>(arg: [...P], options?: {
         isolationLevel?: Prisma.TransactionIsolationLevel;
@@ -505,6 +509,28 @@ export interface PrismaClient<in LogOpts extends Prisma.LogLevel = never, in out
       * ```
       */
     get shopSetting(): Prisma.ShopSettingDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    /**
+     * `prisma.faq`: Exposes CRUD operations for the **Faq** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more Faqs
+      * const faqs = await prisma.faq.findMany()
+      * ```
+      */
+    get faq(): Prisma.FaqDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    /**
+     * `prisma.staticPage`: Exposes CRUD operations for the **StaticPage** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more StaticPages
+      * const staticPages = await prisma.staticPage.findMany()
+      * ```
+      */
+    get staticPage(): Prisma.StaticPageDelegate<ExtArgs, {
         omit: OmitOpts;
     }>;
     /**

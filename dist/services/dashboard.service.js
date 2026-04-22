@@ -395,7 +395,7 @@ async function getRecentOrders(shopId, limit = 10) {
         include: { user: { select: { email: true, firstName: true, lastName: true } }, items: true },
     });
 }
-async function getRecentActivities(_shopId, limit = 20) {
+async function getRecentActivities(_shopId, limit = 10) {
     const [recentOrders, recentMovements] = await Promise.all([
         prisma_1.prisma.order.findMany({
             orderBy: { createdAt: "desc" },
@@ -735,6 +735,8 @@ async function getProductSummary(shopId) {
         where: { shopId },
         _count: { id: true },
     });
+    const totalSearchLogs = await prisma_1.prisma.searchLog.count({});
+    const totalViewCount = await prisma_1.prisma.productView.count({});
     const map = byStatus.reduce((acc, s) => {
         acc[String(s.status)] = s._count.id;
         return acc;
@@ -746,6 +748,8 @@ async function getProductSummary(shopId) {
         active: map.ACTIVE ?? 0,
         draft: map.DRAFT ?? 0,
         archived: map.ARCHIVED ?? 0,
+        totalSearchLogs,
+        totalViewCount,
     };
 }
 async function getVariantSummary(shopId) {
@@ -918,47 +922,18 @@ async function getNotificationSummary(shopId) {
 // ===============================
 async function getSearchSummary(shopId, days = 30) {
     const since = getSinceDate(days);
-    const [totalSearches, distinctQueries, failed] = await Promise.all([
+    const [totalSearches, distinctQueries] = await Promise.all([
         prisma_1.prisma.searchLog.count({ where: { createdAt: { gte: since } } }),
         prisma_1.prisma.searchLog.findMany({
             where: { createdAt: { gte: since } },
             distinct: ["query"],
             select: { query: true },
         }),
-        (async () => {
-            const byQuery = await prisma_1.prisma.searchLog.groupBy({
-                by: ["query"],
-                where: { createdAt: { gte: since }, query: { not: "" } },
-                _count: { id: true },
-            });
-            let failedSearches = 0;
-            for (const q of byQuery) {
-                const query = (q.query ?? "").trim();
-                if (!query)
-                    continue;
-                const exists = await prisma_1.prisma.product.findFirst({
-                    where: {
-                        shopId,
-                        OR: [
-                            { name: { contains: query, mode: "insensitive" } },
-                            { slug: { contains: query, mode: "insensitive" } },
-                            { description: { contains: query, mode: "insensitive" } },
-                            { shortDescription: { contains: query, mode: "insensitive" } },
-                        ],
-                    },
-                    select: { id: true },
-                });
-                if (!exists)
-                    failedSearches += q._count.id;
-            }
-            return failedSearches;
-        })(),
     ]);
     return {
         days,
         totalSearches,
         uniqueQueries: distinctQueries.length,
-        failedSearches: failed,
     };
 }
 // ===============================

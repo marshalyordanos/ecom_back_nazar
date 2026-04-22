@@ -16,7 +16,7 @@ export async function getEcommerceUsers() {
 		country: '',
 		contact: '',
 		fullName: `${u.firstName ?? ''} ${u.lastName ?? ''}`.trim() || u.email,
-		username: u.email.split('@')[0],
+		username: u.email?.split("@")[0] ?? "",
 		currentPlan: 'standard'
 	}))
 }

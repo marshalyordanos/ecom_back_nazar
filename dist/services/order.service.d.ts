@@ -6,26 +6,38 @@ export declare function listUserOrders(userId: string, query: {
     sort?: string;
 }): Promise<{
     data: ({
-        items: {
+        shipments: {
+            status: import("../generated/prisma/enums").ShipmentStatus;
+            id: string;
+        }[];
+        items: ({
+            variant: {
+                id: string;
+                image: string | null;
+                product: {
+                    name: string;
+                    id: string;
+                };
+                productId: string;
+                sku: string;
+                media: {
+                    url: string;
+                }[];
+            };
+        } & {
             id: string;
             total: number;
-<<<<<<< HEAD
-            quantity: number;
-            price: number;
-            variantId: string;
-=======
             variantId: string;
             quantity: number;
             price: number;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
             orderId: string;
             productName: string;
             variantName: string | null;
-        }[];
+        })[];
         address: {
             name: string;
-            phone: string;
             id: string;
+            phone: string;
             addressLine1: string;
             addressLine2: string | null;
             city: string;
@@ -37,19 +49,11 @@ export declare function listUserOrders(userId: string, query: {
             orderId: string;
         } | null;
     } & {
-<<<<<<< HEAD
-=======
-        id: string;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
         status: import("../generated/prisma/enums").OrderStatus;
         id: string;
         createdAt: Date;
         updatedAt: Date;
         userId: string;
-<<<<<<< HEAD
-        currency: string;
-=======
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
         shopId: string;
         currency: string;
         orderNumber: string;
@@ -66,19 +70,6 @@ export declare function listUserOrders(userId: string, query: {
     };
 }>;
 export declare function getOrderById(orderId: string, userId?: string): Promise<{
-<<<<<<< HEAD
-    items: {
-        id: string;
-        total: number;
-        quantity: number;
-        price: number;
-        variantId: string;
-        orderId: string;
-        productName: string;
-        variantName: string | null;
-    }[];
-=======
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     payments: {
         status: import("../generated/prisma/enums").PaymentStatus;
         id: string;
@@ -114,8 +105,8 @@ export declare function getOrderById(orderId: string, userId?: string): Promise<
     }[];
     address: {
         name: string;
-        phone: string;
         id: string;
+        phone: string;
         addressLine1: string;
         addressLine2: string | null;
         city: string;
@@ -127,19 +118,11 @@ export declare function getOrderById(orderId: string, userId?: string): Promise<
         orderId: string;
     } | null;
 } & {
-<<<<<<< HEAD
-=======
-    id: string;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     status: import("../generated/prisma/enums").OrderStatus;
     id: string;
     createdAt: Date;
     updatedAt: Date;
     userId: string;
-<<<<<<< HEAD
-    currency: string;
-=======
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     shopId: string;
     currency: string;
     orderNumber: string;
@@ -171,16 +154,16 @@ export declare function trackOrderByReference(reference: string): Promise<{
         variantName: string | null;
     }[];
     shipments: {
-        id: string;
         status: import("../generated/prisma/enums").ShipmentStatus;
+        id: string;
         trackingNumber: string | null;
         carrier: string | null;
         shippedAt: Date | null;
         deliveredAt: Date | null;
     }[];
     payments: {
-        id: string;
         status: import("../generated/prisma/enums").PaymentStatus;
+        id: string;
         createdAt: Date;
         currency: string;
         provider: string;
@@ -189,19 +172,11 @@ export declare function trackOrderByReference(reference: string): Promise<{
     }[];
 }>;
 export declare function cancelOrder(orderId: string, userId: string): Promise<{
-<<<<<<< HEAD
-=======
-    id: string;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     status: import("../generated/prisma/enums").OrderStatus;
     id: string;
     createdAt: Date;
     updatedAt: Date;
     userId: string;
-<<<<<<< HEAD
-    currency: string;
-=======
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     shopId: string;
     currency: string;
     orderNumber: string;
@@ -211,19 +186,11 @@ export declare function cancelOrder(orderId: string, userId: string): Promise<{
     grandTotal: number;
 }>;
 export declare function completeOrder(orderId: string): Promise<{
-<<<<<<< HEAD
-=======
-    id: string;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     status: import("../generated/prisma/enums").OrderStatus;
     id: string;
     createdAt: Date;
     updatedAt: Date;
     userId: string;
-<<<<<<< HEAD
-    currency: string;
-=======
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     shopId: string;
     currency: string;
     orderNumber: string;
@@ -255,15 +222,9 @@ export declare function listOrderItems(orderId: string): Promise<({
 } & {
     id: string;
     total: number;
-<<<<<<< HEAD
-    quantity: number;
-    price: number;
-    variantId: string;
-=======
     variantId: string;
     quantity: number;
     price: number;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     orderId: string;
     productName: string;
     variantName: string | null;
@@ -305,8 +266,8 @@ export declare function listOrdersAdmin(query: {
                     optionValueId: string;
                 })[];
             } & {
-                id: string;
                 status: import("../generated/prisma/enums").ProductStatus;
+                id: string;
                 createdAt: Date;
                 updatedAt: Date;
                 image: string | null;
@@ -321,23 +282,17 @@ export declare function listOrdersAdmin(query: {
         } & {
             id: string;
             total: number;
-<<<<<<< HEAD
-            quantity: number;
-            price: number;
-            variantId: string;
-=======
             variantId: string;
             quantity: number;
             price: number;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
             orderId: string;
             productName: string;
             variantName: string | null;
         })[];
         address: {
             name: string;
-            phone: string;
             id: string;
+            phone: string;
             addressLine1: string;
             addressLine2: string | null;
             city: string;
@@ -349,19 +304,11 @@ export declare function listOrdersAdmin(query: {
             orderId: string;
         } | null;
     } & {
-<<<<<<< HEAD
-=======
-        id: string;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
         status: import("../generated/prisma/enums").OrderStatus;
         id: string;
         createdAt: Date;
         updatedAt: Date;
         userId: string;
-<<<<<<< HEAD
-        currency: string;
-=======
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
         shopId: string;
         currency: string;
         orderNumber: string;
@@ -411,23 +358,17 @@ export declare function createOrderAdmin(data: {
     items: {
         id: string;
         total: number;
-<<<<<<< HEAD
-        quantity: number;
-        price: number;
-        variantId: string;
-=======
         variantId: string;
         quantity: number;
         price: number;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
         orderId: string;
         productName: string;
         variantName: string | null;
     }[];
     address: {
         name: string;
-        phone: string;
         id: string;
+        phone: string;
         addressLine1: string;
         addressLine2: string | null;
         city: string;
@@ -439,19 +380,11 @@ export declare function createOrderAdmin(data: {
         orderId: string;
     } | null;
 } & {
-<<<<<<< HEAD
-=======
-    id: string;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     status: import("../generated/prisma/enums").OrderStatus;
     id: string;
     createdAt: Date;
     updatedAt: Date;
     userId: string;
-<<<<<<< HEAD
-    currency: string;
-=======
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     shopId: string;
     currency: string;
     orderNumber: string;
@@ -483,8 +416,8 @@ export declare function checkoutAsGuest(data: {
 }): Promise<{
     order: ({
         payments: {
-            id: string;
             status: import("../generated/prisma/enums").PaymentStatus;
+            id: string;
             createdAt: Date;
             currency: string;
             orderId: string;
@@ -519,8 +452,8 @@ export declare function checkoutAsGuest(data: {
             orderId: string;
         } | null;
     } & {
-        id: string;
         status: import("../generated/prisma/enums").OrderStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         userId: string;

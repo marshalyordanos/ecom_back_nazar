@@ -85,9 +85,10 @@ export declare function getTopProducts(shopId: string, limit?: number): Promise<
 export declare function getLowInventory(shopId: string): Promise<({
     location: {
         name: string;
-        phone: string | null;
         id: string;
+        phone: string | null;
         createdAt: Date;
+        shopId: string;
         addressLine1: string;
         addressLine2: string | null;
         city: string;
@@ -96,7 +97,6 @@ export declare function getLowInventory(shopId: string): Promise<({
         postalCode: string | null;
         latitude: number | null;
         longitude: number | null;
-        shopId: string;
     };
     variant: {
         product: {
@@ -122,13 +122,8 @@ export declare function getLowInventory(shopId: string): Promise<({
     locationId: string;
     createdAt: Date;
     updatedAt: Date;
-<<<<<<< HEAD
-    locationId: string;
-=======
     variantId: string;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     quantity: number;
-    variantId: string;
     reservedQuantity: number;
     reorderLevel: number | null;
 })[]>;
@@ -142,33 +137,19 @@ export declare function getRecentOrders(shopId: string, limit?: number): Promise
     items: {
         id: string;
         total: number;
-<<<<<<< HEAD
-        quantity: number;
-        price: number;
-        variantId: string;
-=======
         variantId: string;
         quantity: number;
         price: number;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
         orderId: string;
         productName: string;
         variantName: string | null;
     }[];
 } & {
-<<<<<<< HEAD
-=======
-    id: string;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     status: import("../generated/prisma/enums").OrderStatus;
     id: string;
     createdAt: Date;
     updatedAt: Date;
     userId: string;
-<<<<<<< HEAD
-    currency: string;
-=======
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     shopId: string;
     currency: string;
     orderNumber: string;
@@ -212,15 +193,10 @@ export declare function getRecentActivities(_shopId: string, limit?: number): Pr
         createdAt: Date;
         updatedAt: Date;
         type: import("../generated/prisma/enums").InventoryMovementType;
-<<<<<<< HEAD
-        locationId: string;
-=======
         variantId: string;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
         quantity: number;
-        variantId: string;
-        referenceId: string | null;
         inventoryId: string | null;
+        referenceId: string | null;
     };
 })[]>;
 export declare function getSummaryWithDetails(shopId: string): Promise<{
@@ -311,6 +287,8 @@ export declare function getProductSummary(shopId: string): Promise<{
     active: number;
     draft: number;
     archived: number;
+    totalSearchLogs: number;
+    totalViewCount: number;
 }>;
 export declare function getVariantSummary(shopId: string): Promise<{
     totalVariants: number;
@@ -375,7 +353,6 @@ export declare function getSearchSummary(shopId: string, days?: number): Promise
     days: number;
     totalSearches: number;
     uniqueQueries: number;
-    failedSearches: number;
 }>;
 export declare function getSalesTrends(shopId: string, groupBy: "day" | "week" | "month", days?: number): Promise<{
     groupBy: "week" | "day" | "month";
@@ -675,10 +652,6 @@ export declare function getUserActivities(shopId: string, days?: number, limit?:
         createdAt: Date;
     }[];
     recentOrders: {
-<<<<<<< HEAD
-=======
-        id: string;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
         status: import("../generated/prisma/enums").OrderStatus;
         id: string;
         createdAt: Date;

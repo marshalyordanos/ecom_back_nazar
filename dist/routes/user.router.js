@@ -36,12 +36,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const userController = __importStar(require("../controllers/user.controller"));
 const authController = __importStar(require("../controllers/auth.controller"));
+const multer_1 = require("../config/multer");
 const auth_middleware_1 = require("../middleware/auth.middleware");
 const permission_middleware_1 = require("../middleware/permission.middleware");
 const router = (0, express_1.Router)();
 router.use(auth_middleware_1.protect);
 router.get("/me", userController.getMe);
-router.patch("/me", userController.updateMe);
+router.patch("/me", (0, multer_1.uploadSingleImage)("avatar"), userController.updateMe);
 router.patch("/me/password", userController.updateMyPassword);
 router.post("/", (0, auth_middleware_1.restrictTo)("admin"), (0, permission_middleware_1.requirePermission)("users", "create"), authController.register);
 // ===============================

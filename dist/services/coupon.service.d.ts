@@ -16,10 +16,7 @@ export declare function listCoupons(query: {
             couponId: string;
         }[];
     } & {
-<<<<<<< HEAD
         code: string;
-=======
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
         id: string;
         createdAt: Date;
         updatedAt: Date;
@@ -56,10 +53,7 @@ export declare function getCouponById(id: string): Promise<{
         couponId: string;
     })[];
 } & {
-<<<<<<< HEAD
     code: string;
-=======
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     id: string;
     createdAt: Date;
     updatedAt: Date;
@@ -78,10 +72,7 @@ export declare function createCoupon(data: {
     usageLimit?: number;
     expiresAt?: Date;
 }): Promise<{
-<<<<<<< HEAD
     code: string;
-=======
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     id: string;
     createdAt: Date;
     updatedAt: Date;
@@ -100,10 +91,7 @@ export declare function updateCoupon(id: string, data: {
     usageLimit?: number;
     expiresAt?: Date;
 }): Promise<{
-<<<<<<< HEAD
     code: string;
-=======
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     id: string;
     createdAt: Date;
     updatedAt: Date;
@@ -121,23 +109,17 @@ export declare function applyCouponToOrder(orderId: string, couponId: string, us
     items: {
         id: string;
         total: number;
-<<<<<<< HEAD
-        quantity: number;
-        price: number;
-        variantId: string;
-=======
         variantId: string;
         quantity: number;
         price: number;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
         orderId: string;
         productName: string;
         variantName: string | null;
     }[];
     address: {
         name: string;
-        phone: string;
         id: string;
+        phone: string;
         addressLine1: string;
         addressLine2: string | null;
         city: string;
@@ -149,19 +131,11 @@ export declare function applyCouponToOrder(orderId: string, couponId: string, us
         orderId: string;
     } | null;
 } & {
-<<<<<<< HEAD
-=======
-    id: string;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     status: import("../generated/prisma/enums").OrderStatus;
     id: string;
     createdAt: Date;
     updatedAt: Date;
     userId: string;
-<<<<<<< HEAD
-    currency: string;
-=======
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     shopId: string;
     currency: string;
     orderNumber: string;

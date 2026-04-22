@@ -25,14 +25,10 @@ const tokens_1 = require("../config/tokens");
 const prisma_1 = require("../lib/prisma");
 const hash_1 = require("../utils/hash");
 const appError_1 = __importDefault(require("../utils/appError"));
-<<<<<<< HEAD
 const sms_service_1 = require("./sms.service");
 const email_service_1 = require("./email.service");
 const otp_service_1 = require("./otp.service");
-=======
-const email_1 = require("../utils/email");
 const rbacPermission_service_1 = require("./rbacPermission.service");
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 const accessExpirationMinutes = parseInt(config_1.default.jwt.accessExpirationMinutes, 10) || 60;
 const refreshExpirationDays = parseInt(config_1.default.jwt.refreshExpirationDays, 10) || 60;
 const resetTokenExpirationMinutes = 15;

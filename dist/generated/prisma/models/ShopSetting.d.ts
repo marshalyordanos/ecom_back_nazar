@@ -126,7 +126,7 @@ export type ShopSettingGroupByOutputType = {
     _min: ShopSettingMinAggregateOutputType | null;
     _max: ShopSettingMaxAggregateOutputType | null;
 };
-type GetShopSettingGroupByPayload<T extends ShopSettingGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<ShopSettingGroupByOutputType, T['by']> & {
+export type GetShopSettingGroupByPayload<T extends ShopSettingGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<ShopSettingGroupByOutputType, T['by']> & {
     [P in ((keyof T) & (keyof ShopSettingGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], ShopSettingGroupByOutputType[P]> : Prisma.GetScalarType<T[P], ShopSettingGroupByOutputType[P]>;
 }>>;
 export type ShopSettingWhereInput = {
@@ -817,6 +817,11 @@ export type ShopSettingFindManyArgs<ExtArgs extends runtime.Types.Extensions.Int
      * Skip the first `n` ShopSettings.
      */
     skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of ShopSettings.
+     */
     distinct?: Prisma.ShopSettingScalarFieldEnum | Prisma.ShopSettingScalarFieldEnum[];
 };
 /**
@@ -995,5 +1000,4 @@ export type ShopSettingDefaultArgs<ExtArgs extends runtime.Types.Extensions.Inte
      */
     omit?: Prisma.ShopSettingOmit<ExtArgs> | null;
 };
-export {};
 //# sourceMappingURL=ShopSetting.d.ts.map

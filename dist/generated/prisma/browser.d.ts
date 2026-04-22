@@ -183,6 +183,16 @@ export type SyncedProduct = Prisma.SyncedProductModel;
  */
 export type ShopSetting = Prisma.ShopSettingModel;
 /**
+ * Model Faq
+ *
+ */
+export type Faq = Prisma.FaqModel;
+/**
+ * Model StaticPage
+ *
+ */
+export type StaticPage = Prisma.StaticPageModel;
+/**
  * Model SaleFromShop
  *
  */

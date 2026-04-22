@@ -22,8 +22,8 @@ export declare function listFavorites(userId: string, shopId: string | undefined
                 position: number | null;
             }[];
         } & {
-            id: string;
             status: import("../generated/prisma/enums").ProductStatus;
+            id: string;
             createdAt: Date;
             updatedAt: Date;
             image: string | null;
@@ -37,8 +37,8 @@ export declare function listFavorites(userId: string, shopId: string | undefined
         })[];
     } & {
         name: string;
-        id: string;
         status: import("../generated/prisma/enums").ProductStatus;
+        id: string;
         createdAt: Date;
         updatedAt: Date;
         description: string | null;

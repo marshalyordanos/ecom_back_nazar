@@ -8,12 +8,9 @@ export declare const updateProduct: (req: AuthRequest, res: Response, next: Next
 export declare const deleteProduct: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const listVariants: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const getFeatured: (req: AuthRequest, res: Response, next: NextFunction) => void;
-<<<<<<< HEAD
-=======
 export declare const getPopular: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const getNewArrivals: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const getMostViewed: (req: AuthRequest, res: Response, next: NextFunction) => void;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 export declare const getVariantById: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const createVariant: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const updateVariant: (req: AuthRequest, res: Response, next: NextFunction) => void;

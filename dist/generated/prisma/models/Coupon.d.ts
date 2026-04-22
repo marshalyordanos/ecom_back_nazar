@@ -204,7 +204,7 @@ export type CouponGroupByOutputType = {
     _min: CouponMinAggregateOutputType | null;
     _max: CouponMaxAggregateOutputType | null;
 };
-type GetCouponGroupByPayload<T extends CouponGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<CouponGroupByOutputType, T['by']> & {
+export type GetCouponGroupByPayload<T extends CouponGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<CouponGroupByOutputType, T['by']> & {
     [P in ((keyof T) & (keyof CouponGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], CouponGroupByOutputType[P]> : Prisma.GetScalarType<T[P], CouponGroupByOutputType[P]>;
 }>>;
 export type CouponWhereInput = {
@@ -1151,6 +1151,11 @@ export type CouponFindManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
      * Skip the first `n` Coupons.
      */
     skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of Coupons.
+     */
     distinct?: Prisma.CouponScalarFieldEnum | Prisma.CouponScalarFieldEnum[];
 };
 /**
@@ -1372,5 +1377,4 @@ export type CouponDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalA
      */
     include?: Prisma.CouponInclude<ExtArgs> | null;
 };
-export {};
 //# sourceMappingURL=Coupon.d.ts.map

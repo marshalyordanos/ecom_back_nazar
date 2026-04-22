@@ -190,7 +190,7 @@ export type UserGroupByOutputType = {
     _min: UserMinAggregateOutputType | null;
     _max: UserMaxAggregateOutputType | null;
 };
-type GetUserGroupByPayload<T extends UserGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<UserGroupByOutputType, T['by']> & {
+export type GetUserGroupByPayload<T extends UserGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<UserGroupByOutputType, T['by']> & {
     [P in ((keyof T) & (keyof UserGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], UserGroupByOutputType[P]> : Prisma.GetScalarType<T[P], UserGroupByOutputType[P]>;
 }>>;
 export type UserWhereInput = {
@@ -222,11 +222,8 @@ export type UserWhereInput = {
     searchLogs?: Prisma.SearchLogListRelationFilter;
     notifications?: Prisma.NotificationListRelationFilter;
     savedAddresses?: Prisma.SavedAddressListRelationFilter;
-<<<<<<< HEAD
-=======
     favorites?: Prisma.FavoriteListRelationFilter;
     location?: Prisma.XOR<Prisma.ShopLocationNullableScalarRelationFilter, Prisma.ShopLocationWhereInput> | null;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserOrderByWithRelationInput = {
     id?: Prisma.SortOrder;
@@ -254,11 +251,8 @@ export type UserOrderByWithRelationInput = {
     searchLogs?: Prisma.SearchLogOrderByRelationAggregateInput;
     notifications?: Prisma.NotificationOrderByRelationAggregateInput;
     savedAddresses?: Prisma.SavedAddressOrderByRelationAggregateInput;
-<<<<<<< HEAD
-=======
     favorites?: Prisma.FavoriteOrderByRelationAggregateInput;
     location?: Prisma.ShopLocationOrderByWithRelationInput;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: string;
@@ -289,11 +283,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
     searchLogs?: Prisma.SearchLogListRelationFilter;
     notifications?: Prisma.NotificationListRelationFilter;
     savedAddresses?: Prisma.SavedAddressListRelationFilter;
-<<<<<<< HEAD
-=======
     favorites?: Prisma.FavoriteListRelationFilter;
     location?: Prisma.XOR<Prisma.ShopLocationNullableScalarRelationFilter, Prisma.ShopLocationWhereInput> | null;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 }, "id" | "email" | "phone">;
 export type UserOrderByWithAggregationInput = {
     id?: Prisma.SortOrder;
@@ -358,11 +349,8 @@ export type UserCreateInput = {
     searchLogs?: Prisma.SearchLogCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressCreateNestedManyWithoutUserInput;
-<<<<<<< HEAD
-=======
     favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput;
     location?: Prisma.ShopLocationCreateNestedOneWithoutUsersInput;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUncheckedCreateInput = {
     id?: string;
@@ -390,10 +378,7 @@ export type UserUncheckedCreateInput = {
     searchLogs?: Prisma.SearchLogUncheckedCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressUncheckedCreateNestedManyWithoutUserInput;
-<<<<<<< HEAD
-=======
     favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUpdateInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -420,11 +405,8 @@ export type UserUpdateInput = {
     searchLogs?: Prisma.SearchLogUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUpdateManyWithoutUserNestedInput;
-<<<<<<< HEAD
-=======
     favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput;
     location?: Prisma.ShopLocationUpdateOneWithoutUsersNestedInput;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUncheckedUpdateInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -452,10 +434,7 @@ export type UserUncheckedUpdateInput = {
     searchLogs?: Prisma.SearchLogUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUncheckedUpdateManyWithoutUserNestedInput;
-<<<<<<< HEAD
-=======
     favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserCreateManyInput = {
     id?: string;
@@ -789,8 +768,8 @@ export type UserUpdateOneWithoutNotificationsNestedInput = {
 };
 export type UserCreateWithoutLocationInput = {
     id?: string;
-    email: string;
-    phone: string;
+    email?: string | null;
+    phone?: string | null;
     passwordHash: string;
     firstName: string;
     lastName: string;
@@ -803,6 +782,7 @@ export type UserCreateWithoutLocationInput = {
     updatedAt?: Date | string;
     roles?: Prisma.RoleCreateNestedManyWithoutUsersInput;
     tokens?: Prisma.TokenCreateNestedManyWithoutUserInput;
+    otpRecords?: Prisma.OtpRecordCreateNestedManyWithoutUserInput;
     carts?: Prisma.CartCreateNestedManyWithoutUserInput;
     orders?: Prisma.OrderCreateNestedManyWithoutUserInput;
     reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput;
@@ -815,8 +795,8 @@ export type UserCreateWithoutLocationInput = {
 };
 export type UserUncheckedCreateWithoutLocationInput = {
     id?: string;
-    email: string;
-    phone: string;
+    email?: string | null;
+    phone?: string | null;
     passwordHash: string;
     firstName: string;
     lastName: string;
@@ -829,6 +809,7 @@ export type UserUncheckedCreateWithoutLocationInput = {
     updatedAt?: Date | string;
     roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUsersInput;
     tokens?: Prisma.TokenUncheckedCreateNestedManyWithoutUserInput;
+    otpRecords?: Prisma.OtpRecordUncheckedCreateNestedManyWithoutUserInput;
     carts?: Prisma.CartUncheckedCreateNestedManyWithoutUserInput;
     orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput;
     reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput;
@@ -865,8 +846,8 @@ export type UserScalarWhereInput = {
     OR?: Prisma.UserScalarWhereInput[];
     NOT?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[];
     id?: Prisma.StringFilter<"User"> | string;
-    email?: Prisma.StringFilter<"User"> | string;
-    phone?: Prisma.StringFilter<"User"> | string;
+    email?: Prisma.StringNullableFilter<"User"> | string | null;
+    phone?: Prisma.StringNullableFilter<"User"> | string | null;
     passwordHash?: Prisma.StringFilter<"User"> | string;
     firstName?: Prisma.StringFilter<"User"> | string;
     lastName?: Prisma.StringFilter<"User"> | string;
@@ -903,11 +884,8 @@ export type UserCreateWithoutTokensInput = {
     searchLogs?: Prisma.SearchLogCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressCreateNestedManyWithoutUserInput;
-<<<<<<< HEAD
-=======
     favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput;
     location?: Prisma.ShopLocationCreateNestedOneWithoutUsersInput;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUncheckedCreateWithoutTokensInput = {
     id?: string;
@@ -934,10 +912,7 @@ export type UserUncheckedCreateWithoutTokensInput = {
     searchLogs?: Prisma.SearchLogUncheckedCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressUncheckedCreateNestedManyWithoutUserInput;
-<<<<<<< HEAD
-=======
     favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserCreateOrConnectWithoutTokensInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -976,11 +951,8 @@ export type UserUpdateWithoutTokensInput = {
     searchLogs?: Prisma.SearchLogUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUpdateManyWithoutUserNestedInput;
-<<<<<<< HEAD
-=======
     favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput;
     location?: Prisma.ShopLocationUpdateOneWithoutUsersNestedInput;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUncheckedUpdateWithoutTokensInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1007,7 +979,7 @@ export type UserUncheckedUpdateWithoutTokensInput = {
     searchLogs?: Prisma.SearchLogUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUncheckedUpdateManyWithoutUserNestedInput;
-<<<<<<< HEAD
+    favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserCreateWithoutOtpRecordsInput = {
     id?: string;
@@ -1033,6 +1005,8 @@ export type UserCreateWithoutOtpRecordsInput = {
     searchLogs?: Prisma.SearchLogCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressCreateNestedManyWithoutUserInput;
+    favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput;
+    location?: Prisma.ShopLocationCreateNestedOneWithoutUsersInput;
 };
 export type UserUncheckedCreateWithoutOtpRecordsInput = {
     id?: string;
@@ -1046,6 +1020,7 @@ export type UserUncheckedCreateWithoutOtpRecordsInput = {
     status?: $Enums.UserStatus;
     emailVerifiedAt?: Date | string | null;
     phoneVerifiedAt?: Date | string | null;
+    locationId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUsersInput;
@@ -1058,6 +1033,7 @@ export type UserUncheckedCreateWithoutOtpRecordsInput = {
     searchLogs?: Prisma.SearchLogUncheckedCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressUncheckedCreateNestedManyWithoutUserInput;
+    favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserCreateOrConnectWithoutOtpRecordsInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -1096,6 +1072,8 @@ export type UserUpdateWithoutOtpRecordsInput = {
     searchLogs?: Prisma.SearchLogUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUpdateManyWithoutUserNestedInput;
+    favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput;
+    location?: Prisma.ShopLocationUpdateOneWithoutUsersNestedInput;
 };
 export type UserUncheckedUpdateWithoutOtpRecordsInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1109,6 +1087,7 @@ export type UserUncheckedUpdateWithoutOtpRecordsInput = {
     status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus;
     emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     roles?: Prisma.RoleUncheckedUpdateManyWithoutUsersNestedInput;
@@ -1121,9 +1100,7 @@ export type UserUncheckedUpdateWithoutOtpRecordsInput = {
     searchLogs?: Prisma.SearchLogUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUncheckedUpdateManyWithoutUserNestedInput;
-=======
     favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserCreateWithoutRolesInput = {
     id?: string;
@@ -1149,11 +1126,8 @@ export type UserCreateWithoutRolesInput = {
     searchLogs?: Prisma.SearchLogCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressCreateNestedManyWithoutUserInput;
-<<<<<<< HEAD
-=======
     favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput;
     location?: Prisma.ShopLocationCreateNestedOneWithoutUsersInput;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUncheckedCreateWithoutRolesInput = {
     id?: string;
@@ -1180,10 +1154,7 @@ export type UserUncheckedCreateWithoutRolesInput = {
     searchLogs?: Prisma.SearchLogUncheckedCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressUncheckedCreateNestedManyWithoutUserInput;
-<<<<<<< HEAD
-=======
     favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserCreateOrConnectWithoutRolesInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -1202,29 +1173,10 @@ export type UserUpdateManyWithWhereWithoutRolesInput = {
     where: Prisma.UserScalarWhereInput;
     data: Prisma.XOR<Prisma.UserUpdateManyMutationInput, Prisma.UserUncheckedUpdateManyWithoutRolesInput>;
 };
-<<<<<<< HEAD
-export type UserScalarWhereInput = {
-    AND?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[];
-    OR?: Prisma.UserScalarWhereInput[];
-    NOT?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[];
-    id?: Prisma.StringFilter<"User"> | string;
-    email?: Prisma.StringNullableFilter<"User"> | string | null;
-    phone?: Prisma.StringNullableFilter<"User"> | string | null;
-    passwordHash?: Prisma.StringFilter<"User"> | string;
-    firstName?: Prisma.StringFilter<"User"> | string;
-    lastName?: Prisma.StringFilter<"User"> | string;
-    avatarUrl?: Prisma.StringNullableFilter<"User"> | string | null;
-    isSuperAdmin?: Prisma.BoolFilter<"User"> | boolean;
-    status?: Prisma.EnumUserStatusFilter<"User"> | $Enums.UserStatus;
-    emailVerifiedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null;
-    phoneVerifiedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null;
-    createdAt?: Prisma.DateTimeFilter<"User"> | Date | string;
-    updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string;
-=======
 export type UserCreateWithoutFavoritesInput = {
     id?: string;
-    email: string;
-    phone: string;
+    email?: string | null;
+    phone?: string | null;
     passwordHash: string;
     firstName: string;
     lastName: string;
@@ -1237,6 +1189,7 @@ export type UserCreateWithoutFavoritesInput = {
     updatedAt?: Date | string;
     roles?: Prisma.RoleCreateNestedManyWithoutUsersInput;
     tokens?: Prisma.TokenCreateNestedManyWithoutUserInput;
+    otpRecords?: Prisma.OtpRecordCreateNestedManyWithoutUserInput;
     carts?: Prisma.CartCreateNestedManyWithoutUserInput;
     orders?: Prisma.OrderCreateNestedManyWithoutUserInput;
     reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput;
@@ -1249,8 +1202,8 @@ export type UserCreateWithoutFavoritesInput = {
 };
 export type UserUncheckedCreateWithoutFavoritesInput = {
     id?: string;
-    email: string;
-    phone: string;
+    email?: string | null;
+    phone?: string | null;
     passwordHash: string;
     firstName: string;
     lastName: string;
@@ -1264,6 +1217,7 @@ export type UserUncheckedCreateWithoutFavoritesInput = {
     updatedAt?: Date | string;
     roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUsersInput;
     tokens?: Prisma.TokenUncheckedCreateNestedManyWithoutUserInput;
+    otpRecords?: Prisma.OtpRecordUncheckedCreateNestedManyWithoutUserInput;
     carts?: Prisma.CartUncheckedCreateNestedManyWithoutUserInput;
     orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput;
     reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput;
@@ -1288,8 +1242,8 @@ export type UserUpdateToOneWithWhereWithoutFavoritesInput = {
 };
 export type UserUpdateWithoutFavoritesInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
-    email?: Prisma.StringFieldUpdateOperationsInput | string;
-    phone?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
     firstName?: Prisma.StringFieldUpdateOperationsInput | string;
     lastName?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1302,6 +1256,7 @@ export type UserUpdateWithoutFavoritesInput = {
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     roles?: Prisma.RoleUpdateManyWithoutUsersNestedInput;
     tokens?: Prisma.TokenUpdateManyWithoutUserNestedInput;
+    otpRecords?: Prisma.OtpRecordUpdateManyWithoutUserNestedInput;
     carts?: Prisma.CartUpdateManyWithoutUserNestedInput;
     orders?: Prisma.OrderUpdateManyWithoutUserNestedInput;
     reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput;
@@ -1314,8 +1269,8 @@ export type UserUpdateWithoutFavoritesInput = {
 };
 export type UserUncheckedUpdateWithoutFavoritesInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
-    email?: Prisma.StringFieldUpdateOperationsInput | string;
-    phone?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
     firstName?: Prisma.StringFieldUpdateOperationsInput | string;
     lastName?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1329,6 +1284,7 @@ export type UserUncheckedUpdateWithoutFavoritesInput = {
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     roles?: Prisma.RoleUncheckedUpdateManyWithoutUsersNestedInput;
     tokens?: Prisma.TokenUncheckedUpdateManyWithoutUserNestedInput;
+    otpRecords?: Prisma.OtpRecordUncheckedUpdateManyWithoutUserNestedInput;
     carts?: Prisma.CartUncheckedUpdateManyWithoutUserNestedInput;
     orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput;
     reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput;
@@ -1337,7 +1293,6 @@ export type UserUncheckedUpdateWithoutFavoritesInput = {
     searchLogs?: Prisma.SearchLogUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUncheckedUpdateManyWithoutUserNestedInput;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserCreateWithoutCartsInput = {
     id?: string;
@@ -1363,11 +1318,8 @@ export type UserCreateWithoutCartsInput = {
     searchLogs?: Prisma.SearchLogCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressCreateNestedManyWithoutUserInput;
-<<<<<<< HEAD
-=======
     favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput;
     location?: Prisma.ShopLocationCreateNestedOneWithoutUsersInput;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUncheckedCreateWithoutCartsInput = {
     id?: string;
@@ -1394,10 +1346,7 @@ export type UserUncheckedCreateWithoutCartsInput = {
     searchLogs?: Prisma.SearchLogUncheckedCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressUncheckedCreateNestedManyWithoutUserInput;
-<<<<<<< HEAD
-=======
     favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserCreateOrConnectWithoutCartsInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -1436,11 +1385,8 @@ export type UserUpdateWithoutCartsInput = {
     searchLogs?: Prisma.SearchLogUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUpdateManyWithoutUserNestedInput;
-<<<<<<< HEAD
-=======
     favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput;
     location?: Prisma.ShopLocationUpdateOneWithoutUsersNestedInput;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUncheckedUpdateWithoutCartsInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1467,10 +1413,7 @@ export type UserUncheckedUpdateWithoutCartsInput = {
     searchLogs?: Prisma.SearchLogUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUncheckedUpdateManyWithoutUserNestedInput;
-<<<<<<< HEAD
-=======
     favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserCreateWithoutOrdersInput = {
     id?: string;
@@ -1496,11 +1439,8 @@ export type UserCreateWithoutOrdersInput = {
     searchLogs?: Prisma.SearchLogCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressCreateNestedManyWithoutUserInput;
-<<<<<<< HEAD
-=======
     favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput;
     location?: Prisma.ShopLocationCreateNestedOneWithoutUsersInput;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUncheckedCreateWithoutOrdersInput = {
     id?: string;
@@ -1527,10 +1467,7 @@ export type UserUncheckedCreateWithoutOrdersInput = {
     searchLogs?: Prisma.SearchLogUncheckedCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressUncheckedCreateNestedManyWithoutUserInput;
-<<<<<<< HEAD
-=======
     favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserCreateOrConnectWithoutOrdersInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -1569,11 +1506,8 @@ export type UserUpdateWithoutOrdersInput = {
     searchLogs?: Prisma.SearchLogUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUpdateManyWithoutUserNestedInput;
-<<<<<<< HEAD
-=======
     favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput;
     location?: Prisma.ShopLocationUpdateOneWithoutUsersNestedInput;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUncheckedUpdateWithoutOrdersInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1600,127 +1534,7 @@ export type UserUncheckedUpdateWithoutOrdersInput = {
     searchLogs?: Prisma.SearchLogUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUncheckedUpdateManyWithoutUserNestedInput;
-<<<<<<< HEAD
-=======
     favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput;
-};
-export type UserCreateWithoutSavedAddressesInput = {
-    id?: string;
-    email: string;
-    phone: string;
-    passwordHash: string;
-    firstName: string;
-    lastName: string;
-    avatarUrl?: string | null;
-    isSuperAdmin: boolean;
-    status?: $Enums.UserStatus;
-    emailVerifiedAt?: Date | string | null;
-    phoneVerifiedAt?: Date | string | null;
-    createdAt?: Date | string;
-    updatedAt?: Date | string;
-    roles?: Prisma.RoleCreateNestedManyWithoutUsersInput;
-    tokens?: Prisma.TokenCreateNestedManyWithoutUserInput;
-    carts?: Prisma.CartCreateNestedManyWithoutUserInput;
-    orders?: Prisma.OrderCreateNestedManyWithoutUserInput;
-    reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput;
-    couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput;
-    productViews?: Prisma.ProductViewCreateNestedManyWithoutUserInput;
-    searchLogs?: Prisma.SearchLogCreateNestedManyWithoutUserInput;
-    notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
-    favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput;
-    location?: Prisma.ShopLocationCreateNestedOneWithoutUsersInput;
-};
-export type UserUncheckedCreateWithoutSavedAddressesInput = {
-    id?: string;
-    email: string;
-    phone: string;
-    passwordHash: string;
-    firstName: string;
-    lastName: string;
-    avatarUrl?: string | null;
-    isSuperAdmin: boolean;
-    status?: $Enums.UserStatus;
-    emailVerifiedAt?: Date | string | null;
-    phoneVerifiedAt?: Date | string | null;
-    locationId?: string | null;
-    createdAt?: Date | string;
-    updatedAt?: Date | string;
-    roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUsersInput;
-    tokens?: Prisma.TokenUncheckedCreateNestedManyWithoutUserInput;
-    carts?: Prisma.CartUncheckedCreateNestedManyWithoutUserInput;
-    orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput;
-    reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput;
-    couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput;
-    productViews?: Prisma.ProductViewUncheckedCreateNestedManyWithoutUserInput;
-    searchLogs?: Prisma.SearchLogUncheckedCreateNestedManyWithoutUserInput;
-    notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
-    favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput;
-};
-export type UserCreateOrConnectWithoutSavedAddressesInput = {
-    where: Prisma.UserWhereUniqueInput;
-    create: Prisma.XOR<Prisma.UserCreateWithoutSavedAddressesInput, Prisma.UserUncheckedCreateWithoutSavedAddressesInput>;
-};
-export type UserUpsertWithoutSavedAddressesInput = {
-    update: Prisma.XOR<Prisma.UserUpdateWithoutSavedAddressesInput, Prisma.UserUncheckedUpdateWithoutSavedAddressesInput>;
-    create: Prisma.XOR<Prisma.UserCreateWithoutSavedAddressesInput, Prisma.UserUncheckedCreateWithoutSavedAddressesInput>;
-    where?: Prisma.UserWhereInput;
-};
-export type UserUpdateToOneWithWhereWithoutSavedAddressesInput = {
-    where?: Prisma.UserWhereInput;
-    data: Prisma.XOR<Prisma.UserUpdateWithoutSavedAddressesInput, Prisma.UserUncheckedUpdateWithoutSavedAddressesInput>;
-};
-export type UserUpdateWithoutSavedAddressesInput = {
-    id?: Prisma.StringFieldUpdateOperationsInput | string;
-    email?: Prisma.StringFieldUpdateOperationsInput | string;
-    phone?: Prisma.StringFieldUpdateOperationsInput | string;
-    passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
-    firstName?: Prisma.StringFieldUpdateOperationsInput | string;
-    lastName?: Prisma.StringFieldUpdateOperationsInput | string;
-    avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-    isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-    status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus;
-    emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
-    phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
-    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-    roles?: Prisma.RoleUpdateManyWithoutUsersNestedInput;
-    tokens?: Prisma.TokenUpdateManyWithoutUserNestedInput;
-    carts?: Prisma.CartUpdateManyWithoutUserNestedInput;
-    orders?: Prisma.OrderUpdateManyWithoutUserNestedInput;
-    reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput;
-    couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput;
-    productViews?: Prisma.ProductViewUpdateManyWithoutUserNestedInput;
-    searchLogs?: Prisma.SearchLogUpdateManyWithoutUserNestedInput;
-    notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
-    favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput;
-    location?: Prisma.ShopLocationUpdateOneWithoutUsersNestedInput;
-};
-export type UserUncheckedUpdateWithoutSavedAddressesInput = {
-    id?: Prisma.StringFieldUpdateOperationsInput | string;
-    email?: Prisma.StringFieldUpdateOperationsInput | string;
-    phone?: Prisma.StringFieldUpdateOperationsInput | string;
-    passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
-    firstName?: Prisma.StringFieldUpdateOperationsInput | string;
-    lastName?: Prisma.StringFieldUpdateOperationsInput | string;
-    avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-    isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-    status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus;
-    emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
-    phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
-    locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-    roles?: Prisma.RoleUncheckedUpdateManyWithoutUsersNestedInput;
-    tokens?: Prisma.TokenUncheckedUpdateManyWithoutUserNestedInput;
-    carts?: Prisma.CartUncheckedUpdateManyWithoutUserNestedInput;
-    orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput;
-    reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput;
-    couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput;
-    productViews?: Prisma.ProductViewUncheckedUpdateManyWithoutUserNestedInput;
-    searchLogs?: Prisma.SearchLogUncheckedUpdateManyWithoutUserNestedInput;
-    notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
-    favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserCreateWithoutSavedAddressesInput = {
     id?: string;
@@ -1746,7 +1560,6 @@ export type UserCreateWithoutSavedAddressesInput = {
     productViews?: Prisma.ProductViewCreateNestedManyWithoutUserInput;
     searchLogs?: Prisma.SearchLogCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
-    savedAddresses?: Prisma.SavedAddressCreateNestedManyWithoutUserInput;
     favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput;
     location?: Prisma.ShopLocationCreateNestedOneWithoutUsersInput;
 };
@@ -1775,6 +1588,7 @@ export type UserUncheckedCreateWithoutSavedAddressesInput = {
     productViews?: Prisma.ProductViewUncheckedCreateNestedManyWithoutUserInput;
     searchLogs?: Prisma.SearchLogUncheckedCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
+    favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserCreateOrConnectWithoutSavedAddressesInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -1813,6 +1627,8 @@ export type UserUpdateWithoutSavedAddressesInput = {
     productViews?: Prisma.ProductViewUpdateManyWithoutUserNestedInput;
     searchLogs?: Prisma.SearchLogUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
+    favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput;
+    location?: Prisma.ShopLocationUpdateOneWithoutUsersNestedInput;
 };
 export type UserUncheckedUpdateWithoutSavedAddressesInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1826,6 +1642,7 @@ export type UserUncheckedUpdateWithoutSavedAddressesInput = {
     status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus;
     emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     roles?: Prisma.RoleUncheckedUpdateManyWithoutUsersNestedInput;
@@ -1838,6 +1655,7 @@ export type UserUncheckedUpdateWithoutSavedAddressesInput = {
     productViews?: Prisma.ProductViewUncheckedUpdateManyWithoutUserNestedInput;
     searchLogs?: Prisma.SearchLogUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
+    favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserCreateWithoutCouponUsagesInput = {
     id?: string;
@@ -1863,6 +1681,8 @@ export type UserCreateWithoutCouponUsagesInput = {
     searchLogs?: Prisma.SearchLogCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressCreateNestedManyWithoutUserInput;
+    favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput;
+    location?: Prisma.ShopLocationCreateNestedOneWithoutUsersInput;
 };
 export type UserUncheckedCreateWithoutCouponUsagesInput = {
     id?: string;
@@ -1876,6 +1696,7 @@ export type UserUncheckedCreateWithoutCouponUsagesInput = {
     status?: $Enums.UserStatus;
     emailVerifiedAt?: Date | string | null;
     phoneVerifiedAt?: Date | string | null;
+    locationId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUsersInput;
@@ -1888,10 +1709,7 @@ export type UserUncheckedCreateWithoutCouponUsagesInput = {
     searchLogs?: Prisma.SearchLogUncheckedCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressUncheckedCreateNestedManyWithoutUserInput;
-<<<<<<< HEAD
-=======
     favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserCreateOrConnectWithoutCouponUsagesInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -1930,11 +1748,8 @@ export type UserUpdateWithoutCouponUsagesInput = {
     searchLogs?: Prisma.SearchLogUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUpdateManyWithoutUserNestedInput;
-<<<<<<< HEAD
-=======
     favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput;
     location?: Prisma.ShopLocationUpdateOneWithoutUsersNestedInput;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUncheckedUpdateWithoutCouponUsagesInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1961,10 +1776,7 @@ export type UserUncheckedUpdateWithoutCouponUsagesInput = {
     searchLogs?: Prisma.SearchLogUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUncheckedUpdateManyWithoutUserNestedInput;
-<<<<<<< HEAD
-=======
     favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserCreateWithoutReviewsInput = {
     id?: string;
@@ -1990,11 +1802,8 @@ export type UserCreateWithoutReviewsInput = {
     searchLogs?: Prisma.SearchLogCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressCreateNestedManyWithoutUserInput;
-<<<<<<< HEAD
-=======
     favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput;
     location?: Prisma.ShopLocationCreateNestedOneWithoutUsersInput;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUncheckedCreateWithoutReviewsInput = {
     id?: string;
@@ -2021,10 +1830,7 @@ export type UserUncheckedCreateWithoutReviewsInput = {
     searchLogs?: Prisma.SearchLogUncheckedCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressUncheckedCreateNestedManyWithoutUserInput;
-<<<<<<< HEAD
-=======
     favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserCreateOrConnectWithoutReviewsInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -2063,11 +1869,8 @@ export type UserUpdateWithoutReviewsInput = {
     searchLogs?: Prisma.SearchLogUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUpdateManyWithoutUserNestedInput;
-<<<<<<< HEAD
-=======
     favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput;
     location?: Prisma.ShopLocationUpdateOneWithoutUsersNestedInput;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUncheckedUpdateWithoutReviewsInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -2094,10 +1897,7 @@ export type UserUncheckedUpdateWithoutReviewsInput = {
     searchLogs?: Prisma.SearchLogUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUncheckedUpdateManyWithoutUserNestedInput;
-<<<<<<< HEAD
-=======
     favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserCreateWithoutProductViewsInput = {
     id?: string;
@@ -2123,11 +1923,8 @@ export type UserCreateWithoutProductViewsInput = {
     searchLogs?: Prisma.SearchLogCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressCreateNestedManyWithoutUserInput;
-<<<<<<< HEAD
-=======
     favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput;
     location?: Prisma.ShopLocationCreateNestedOneWithoutUsersInput;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUncheckedCreateWithoutProductViewsInput = {
     id?: string;
@@ -2154,10 +1951,7 @@ export type UserUncheckedCreateWithoutProductViewsInput = {
     searchLogs?: Prisma.SearchLogUncheckedCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressUncheckedCreateNestedManyWithoutUserInput;
-<<<<<<< HEAD
-=======
     favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserCreateOrConnectWithoutProductViewsInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -2196,11 +1990,8 @@ export type UserUpdateWithoutProductViewsInput = {
     searchLogs?: Prisma.SearchLogUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUpdateManyWithoutUserNestedInput;
-<<<<<<< HEAD
-=======
     favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput;
     location?: Prisma.ShopLocationUpdateOneWithoutUsersNestedInput;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUncheckedUpdateWithoutProductViewsInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -2227,10 +2018,7 @@ export type UserUncheckedUpdateWithoutProductViewsInput = {
     searchLogs?: Prisma.SearchLogUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUncheckedUpdateManyWithoutUserNestedInput;
-<<<<<<< HEAD
-=======
     favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserCreateWithoutSearchLogsInput = {
     id?: string;
@@ -2256,11 +2044,8 @@ export type UserCreateWithoutSearchLogsInput = {
     productViews?: Prisma.ProductViewCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressCreateNestedManyWithoutUserInput;
-<<<<<<< HEAD
-=======
     favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput;
     location?: Prisma.ShopLocationCreateNestedOneWithoutUsersInput;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUncheckedCreateWithoutSearchLogsInput = {
     id?: string;
@@ -2287,10 +2072,7 @@ export type UserUncheckedCreateWithoutSearchLogsInput = {
     productViews?: Prisma.ProductViewUncheckedCreateNestedManyWithoutUserInput;
     notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressUncheckedCreateNestedManyWithoutUserInput;
-<<<<<<< HEAD
-=======
     favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserCreateOrConnectWithoutSearchLogsInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -2329,11 +2111,8 @@ export type UserUpdateWithoutSearchLogsInput = {
     productViews?: Prisma.ProductViewUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUpdateManyWithoutUserNestedInput;
-<<<<<<< HEAD
-=======
     favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput;
     location?: Prisma.ShopLocationUpdateOneWithoutUsersNestedInput;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUncheckedUpdateWithoutSearchLogsInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -2360,10 +2139,7 @@ export type UserUncheckedUpdateWithoutSearchLogsInput = {
     productViews?: Prisma.ProductViewUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUncheckedUpdateManyWithoutUserNestedInput;
-<<<<<<< HEAD
-=======
     favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserCreateWithoutNotificationsInput = {
     id?: string;
@@ -2389,11 +2165,8 @@ export type UserCreateWithoutNotificationsInput = {
     productViews?: Prisma.ProductViewCreateNestedManyWithoutUserInput;
     searchLogs?: Prisma.SearchLogCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressCreateNestedManyWithoutUserInput;
-<<<<<<< HEAD
-=======
     favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput;
     location?: Prisma.ShopLocationCreateNestedOneWithoutUsersInput;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUncheckedCreateWithoutNotificationsInput = {
     id?: string;
@@ -2420,10 +2193,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
     productViews?: Prisma.ProductViewUncheckedCreateNestedManyWithoutUserInput;
     searchLogs?: Prisma.SearchLogUncheckedCreateNestedManyWithoutUserInput;
     savedAddresses?: Prisma.SavedAddressUncheckedCreateNestedManyWithoutUserInput;
-<<<<<<< HEAD
-=======
     favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserCreateOrConnectWithoutNotificationsInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -2462,11 +2232,8 @@ export type UserUpdateWithoutNotificationsInput = {
     productViews?: Prisma.ProductViewUpdateManyWithoutUserNestedInput;
     searchLogs?: Prisma.SearchLogUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUpdateManyWithoutUserNestedInput;
-<<<<<<< HEAD
-=======
     favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput;
     location?: Prisma.ShopLocationUpdateOneWithoutUsersNestedInput;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUncheckedUpdateWithoutNotificationsInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -2485,6 +2252,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     roles?: Prisma.RoleUncheckedUpdateManyWithoutUsersNestedInput;
     tokens?: Prisma.TokenUncheckedUpdateManyWithoutUserNestedInput;
+    otpRecords?: Prisma.OtpRecordUncheckedUpdateManyWithoutUserNestedInput;
     carts?: Prisma.CartUncheckedUpdateManyWithoutUserNestedInput;
     orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput;
     reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput;
@@ -2496,8 +2264,8 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
 };
 export type UserCreateManyLocationInput = {
     id?: string;
-    email: string;
-    phone: string;
+    email?: string | null;
+    phone?: string | null;
     passwordHash: string;
     firstName: string;
     lastName: string;
@@ -2511,8 +2279,8 @@ export type UserCreateManyLocationInput = {
 };
 export type UserUpdateWithoutLocationInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
-    email?: Prisma.StringFieldUpdateOperationsInput | string;
-    phone?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
     firstName?: Prisma.StringFieldUpdateOperationsInput | string;
     lastName?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -2525,6 +2293,7 @@ export type UserUpdateWithoutLocationInput = {
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     roles?: Prisma.RoleUpdateManyWithoutUsersNestedInput;
     tokens?: Prisma.TokenUpdateManyWithoutUserNestedInput;
+    otpRecords?: Prisma.OtpRecordUpdateManyWithoutUserNestedInput;
     carts?: Prisma.CartUpdateManyWithoutUserNestedInput;
     orders?: Prisma.OrderUpdateManyWithoutUserNestedInput;
     reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput;
@@ -2537,8 +2306,8 @@ export type UserUpdateWithoutLocationInput = {
 };
 export type UserUncheckedUpdateWithoutLocationInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
-    email?: Prisma.StringFieldUpdateOperationsInput | string;
-    phone?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
     firstName?: Prisma.StringFieldUpdateOperationsInput | string;
     lastName?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -2558,17 +2327,14 @@ export type UserUncheckedUpdateWithoutLocationInput = {
     couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput;
     productViews?: Prisma.ProductViewUncheckedUpdateManyWithoutUserNestedInput;
     searchLogs?: Prisma.SearchLogUncheckedUpdateManyWithoutUserNestedInput;
-<<<<<<< HEAD
-    savedAddresses?: Prisma.SavedAddressUncheckedUpdateManyWithoutUserNestedInput;
-=======
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUncheckedUpdateManyWithoutUserNestedInput;
     favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateManyWithoutLocationInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
-    email?: Prisma.StringFieldUpdateOperationsInput | string;
-    phone?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
     firstName?: Prisma.StringFieldUpdateOperationsInput | string;
     lastName?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -2579,7 +2345,6 @@ export type UserUncheckedUpdateManyWithoutLocationInput = {
     phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUpdateWithoutRolesInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -2605,11 +2370,8 @@ export type UserUpdateWithoutRolesInput = {
     searchLogs?: Prisma.SearchLogUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUpdateManyWithoutUserNestedInput;
-<<<<<<< HEAD
-=======
     favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput;
     location?: Prisma.ShopLocationUpdateOneWithoutUsersNestedInput;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUncheckedUpdateWithoutRolesInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -2636,10 +2398,7 @@ export type UserUncheckedUpdateWithoutRolesInput = {
     searchLogs?: Prisma.SearchLogUncheckedUpdateManyWithoutUserNestedInput;
     notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput;
     savedAddresses?: Prisma.SavedAddressUncheckedUpdateManyWithoutUserNestedInput;
-<<<<<<< HEAD
-=======
     favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserUncheckedUpdateManyWithoutRolesInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -2672,10 +2431,7 @@ export type UserCountOutputType = {
     searchLogs: number;
     notifications: number;
     savedAddresses: number;
-<<<<<<< HEAD
-=======
     favorites: number;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     roles?: boolean | UserCountOutputTypeCountRolesArgs;
@@ -2689,10 +2445,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
     searchLogs?: boolean | UserCountOutputTypeCountSearchLogsArgs;
     notifications?: boolean | UserCountOutputTypeCountNotificationsArgs;
     savedAddresses?: boolean | UserCountOutputTypeCountSavedAddressesArgs;
-<<<<<<< HEAD
-=======
     favorites?: boolean | UserCountOutputTypeCountFavoritesArgs;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 };
 /**
  * UserCountOutputType without action
@@ -2769,15 +2522,12 @@ export type UserCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Ty
 export type UserCountOutputTypeCountSavedAddressesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     where?: Prisma.SavedAddressWhereInput;
 };
-<<<<<<< HEAD
-=======
 /**
  * UserCountOutputType without action
  */
 export type UserCountOutputTypeCountFavoritesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     where?: Prisma.FavoriteWhereInput;
 };
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
     email?: boolean;
@@ -2804,11 +2554,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
     searchLogs?: boolean | Prisma.User$searchLogsArgs<ExtArgs>;
     notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>;
     savedAddresses?: boolean | Prisma.User$savedAddressesArgs<ExtArgs>;
-<<<<<<< HEAD
-=======
     favorites?: boolean | Prisma.User$favoritesArgs<ExtArgs>;
     location?: boolean | Prisma.User$locationArgs<ExtArgs>;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>;
 }, ExtArgs["result"]["user"]>;
 export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -2874,11 +2621,8 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
     searchLogs?: boolean | Prisma.User$searchLogsArgs<ExtArgs>;
     notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>;
     savedAddresses?: boolean | Prisma.User$savedAddressesArgs<ExtArgs>;
-<<<<<<< HEAD
-=======
     favorites?: boolean | Prisma.User$favoritesArgs<ExtArgs>;
     location?: boolean | Prisma.User$locationArgs<ExtArgs>;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>;
 };
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2901,11 +2645,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
         searchLogs: Prisma.$SearchLogPayload<ExtArgs>[];
         notifications: Prisma.$NotificationPayload<ExtArgs>[];
         savedAddresses: Prisma.$SavedAddressPayload<ExtArgs>[];
-<<<<<<< HEAD
-=======
         favorites: Prisma.$FavoritePayload<ExtArgs>[];
         location: Prisma.$ShopLocationPayload<ExtArgs> | null;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     };
     scalars: runtime.Types.Extensions.GetPayloadResult<{
         id: string;
@@ -3262,11 +3003,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
     searchLogs<T extends Prisma.User$searchLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$searchLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SearchLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     savedAddresses<T extends Prisma.User$savedAddressesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$savedAddressesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SavedAddressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
-<<<<<<< HEAD
-=======
     favorites<T extends Prisma.User$favoritesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$favoritesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FavoritePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     location<T extends Prisma.User$locationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$locationArgs<ExtArgs>>): Prisma.Prisma__ShopLocationClient<runtime.Types.Result.GetResult<Prisma.$ShopLocationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3495,6 +3233,11 @@ export type UserFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
      * Skip the first `n` Users.
      */
     skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of Users.
+     */
     distinct?: Prisma.UserScalarFieldEnum | Prisma.UserScalarFieldEnum[];
 };
 /**
@@ -3938,8 +3681,6 @@ export type User$savedAddressesArgs<ExtArgs extends runtime.Types.Extensions.Int
     distinct?: Prisma.SavedAddressScalarFieldEnum | Prisma.SavedAddressScalarFieldEnum[];
 };
 /**
-<<<<<<< HEAD
-=======
  * User.favorites
  */
 export type User$favoritesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3981,7 +3722,6 @@ export type User$locationArgs<ExtArgs extends runtime.Types.Extensions.InternalA
     where?: Prisma.ShopLocationWhereInput;
 };
 /**
->>>>>>> 6665a0efb0b38eb357a170710810a911002e7351
  * User without action
  */
 export type UserDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3998,5 +3738,4 @@ export type UserDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
      */
     include?: Prisma.UserInclude<ExtArgs> | null;
 };
-export {};
 //# sourceMappingURL=User.d.ts.map

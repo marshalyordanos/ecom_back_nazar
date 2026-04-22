@@ -164,7 +164,7 @@ export type SyncLogGroupByOutputType = {
     _min: SyncLogMinAggregateOutputType | null;
     _max: SyncLogMaxAggregateOutputType | null;
 };
-type GetSyncLogGroupByPayload<T extends SyncLogGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<SyncLogGroupByOutputType, T['by']> & {
+export type GetSyncLogGroupByPayload<T extends SyncLogGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<SyncLogGroupByOutputType, T['by']> & {
     [P in ((keyof T) & (keyof SyncLogGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], SyncLogGroupByOutputType[P]> : Prisma.GetScalarType<T[P], SyncLogGroupByOutputType[P]>;
 }>>;
 export type SyncLogWhereInput = {
@@ -882,6 +882,11 @@ export type SyncLogFindManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
      * Skip the first `n` SyncLogs.
      */
     skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of SyncLogs.
+     */
     distinct?: Prisma.SyncLogScalarFieldEnum | Prisma.SyncLogScalarFieldEnum[];
 };
 /**
@@ -1060,5 +1065,4 @@ export type SyncLogDefaultArgs<ExtArgs extends runtime.Types.Extensions.Internal
      */
     omit?: Prisma.SyncLogOmit<ExtArgs> | null;
 };
-export {};
 //# sourceMappingURL=SyncLog.d.ts.map

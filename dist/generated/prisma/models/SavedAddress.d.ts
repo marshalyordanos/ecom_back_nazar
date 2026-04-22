@@ -230,7 +230,7 @@ export type SavedAddressGroupByOutputType = {
     _min: SavedAddressMinAggregateOutputType | null;
     _max: SavedAddressMaxAggregateOutputType | null;
 };
-type GetSavedAddressGroupByPayload<T extends SavedAddressGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<SavedAddressGroupByOutputType, T['by']> & {
+export type GetSavedAddressGroupByPayload<T extends SavedAddressGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<SavedAddressGroupByOutputType, T['by']> & {
     [P in ((keyof T) & (keyof SavedAddressGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], SavedAddressGroupByOutputType[P]> : Prisma.GetScalarType<T[P], SavedAddressGroupByOutputType[P]>;
 }>>;
 export type SavedAddressWhereInput = {
@@ -1356,6 +1356,11 @@ export type SavedAddressFindManyArgs<ExtArgs extends runtime.Types.Extensions.In
      * Skip the first `n` SavedAddresses.
      */
     skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of SavedAddresses.
+     */
     distinct?: Prisma.SavedAddressScalarFieldEnum | Prisma.SavedAddressScalarFieldEnum[];
 };
 /**
@@ -1562,5 +1567,4 @@ export type SavedAddressDefaultArgs<ExtArgs extends runtime.Types.Extensions.Int
      */
     include?: Prisma.SavedAddressInclude<ExtArgs> | null;
 };
-export {};
 //# sourceMappingURL=SavedAddress.d.ts.map
