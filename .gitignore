@@ -25,3 +25,9 @@ yarn-error.log*
 
 config.env
 /src/generated/prisma
+
+# build output
+/dist
+
+# logs
+*.log
