@@ -153,6 +153,11 @@ async function cancelOrder(orderId, userId) {
         message: `Order ${order.orderNumber} has been cancelled.`,
         metadata: { orderId: order.id },
     });
+    await (0, notification_service_1.notifyAllAdminsOrderEvent)({
+        title: "Order cancelled",
+        message: `Order ${order.orderNumber} has been cancelled.`,
+        metadata: { orderId: order.id, eventKind: "order_cancelled" },
+    });
     return updated;
 }
 async function completeOrder(orderId) {
@@ -171,6 +176,11 @@ async function completeOrder(orderId) {
         title: "Order completed",
         message: `Order ${order.orderNumber} has been completed.`,
         metadata: { orderId: order.id },
+    });
+    await (0, notification_service_1.notifyAllAdminsOrderEvent)({
+        title: "Order completed",
+        message: `Order ${order.orderNumber} has been completed.`,
+        metadata: { orderId: order.id, eventKind: "order_completed" },
     });
     return updated;
 }
@@ -241,6 +251,11 @@ async function createOrderAdmin(data) {
         title: "Order placed",
         message: `Order ${orderNumber} has been created.`,
         metadata: { orderId: order.id },
+    });
+    await (0, notification_service_1.notifyAllAdminsOrderEvent)({
+        title: "New order created",
+        message: `Order ${orderNumber} has been created.`,
+        metadata: { orderId: order.id, eventKind: "order_created" },
     });
     return full;
 }

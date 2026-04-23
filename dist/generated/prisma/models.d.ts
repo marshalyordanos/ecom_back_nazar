@@ -30,6 +30,7 @@ export type * from './models/Review';
 export type * from './models/ProductView';
 export type * from './models/SearchLog';
 export type * from './models/Notification';
+export type * from './models/ExpoPushToken';
 export type * from './models/SyncLog';
 export type * from './models/SyncedProduct';
 export type * from './models/ShopSetting';

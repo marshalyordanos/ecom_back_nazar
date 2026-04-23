@@ -5,6 +5,7 @@ import { parseListQuery } from "../utils/queryParser";
 import type { AuthRequest } from "../middleware/auth.middleware";
 import * as notificationService from "../services/notification.service";
 import * as savedAddressService from "../services/savedAddress.service";
+import * as expoPushTokenService from "../services/expoPushToken.service";
 
 export const getMe = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
   const user = await userService.getMe(req.user!.id);
@@ -82,6 +83,40 @@ export const getMyUnreadNotificationsCount = catchAsync(
   async (req: AuthRequest, res: Response, _next: NextFunction) => {
     const count = await notificationService.getUnreadCount(req.user!.id);
     res.status(200).json({ unreadCount: count });
+  }
+);
+
+export const registerMyPushToken = catchAsync(
+  async (req: AuthRequest, res: Response, _next: NextFunction) => {
+    const token = typeof req.body?.token === "string" ? req.body.token.trim() : "";
+    const platform =
+      typeof req.body?.platform === "string" ? req.body.platform.trim() : undefined;
+
+    if (!token) {
+      return res.status(400).json({ status: "fail", message: "token is required" });
+    }
+
+    const data = await expoPushTokenService.registerExpoPushToken({
+      userId: req.user!.id,
+      token,
+      platform,
+    });
+    res.status(200).json({ data });
+  }
+);
+
+export const removeMyPushToken = catchAsync(
+  async (req: AuthRequest, res: Response, _next: NextFunction) => {
+    const bodyToken = typeof req.body?.token === "string" ? req.body.token : "";
+    const queryToken = typeof req.query.token === "string" ? req.query.token : "";
+    const token = (bodyToken || queryToken).trim();
+
+    if (!token) {
+      return res.status(400).json({ status: "fail", message: "token is required" });
+    }
+
+    const data = await expoPushTokenService.removeExpoPushToken(req.user!.id, token);
+    res.status(200).json(data);
   }
 );
 

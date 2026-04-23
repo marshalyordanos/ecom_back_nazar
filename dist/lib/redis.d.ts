@@ -5,8 +5,15 @@ import Redis from "ioredis";
  */
 export declare function getNotificationPub(): Redis | null;
 /**
- * Get Redis subscriber client (for Socket.io server to subscribe to "notification" channel).
+ * Get dedicated pub/sub clients for Socket.IO Redis adapter.
  */
-export declare function getNotificationSub(): Redis | null;
+export declare function getSocketAdapterRedisClients(): {
+    pubClient: Redis;
+    subClient: Redis;
+} | null;
+/**
+ * Get dedicated Redis subscriber client for app-level "notification" channel.
+ */
+export declare function getAppNotificationSub(): Redis | null;
 export declare function getRedis(): Redis | null;
 //# sourceMappingURL=redis.d.ts.map

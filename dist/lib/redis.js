@@ -4,46 +4,60 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getNotificationPub = getNotificationPub;
-exports.getNotificationSub = getNotificationSub;
+exports.getSocketAdapterRedisClients = getSocketAdapterRedisClients;
+exports.getAppNotificationSub = getAppNotificationSub;
 exports.getRedis = getRedis;
 const ioredis_1 = __importDefault(require("ioredis"));
 const REDIS_URL = process.env.REDIS_URL || "redis://localhost:6379";
 let publisher = null;
-let subscriber = null;
+let adapterPublisher = null;
+let adapterSubscriber = null;
+let notificationSubscriber = null;
+function createRedisClient() {
+    if (!process.env.REDIS_URL)
+        return null;
+    try {
+        const client = new ioredis_1.default(REDIS_URL, { maxRetriesPerRequest: 3 });
+        client.on("error", () => { });
+        return client;
+    }
+    catch {
+        return null;
+    }
+}
 /**
  * Get Redis publisher client for notification pub/sub.
  * Returns null if REDIS_URL is not set or connection fails (app can run without Redis).
  */
 function getNotificationPub() {
-    if (!process.env.REDIS_URL)
-        return null;
     if (!publisher) {
-        try {
-            publisher = new ioredis_1.default(REDIS_URL, { maxRetriesPerRequest: 3 });
-            publisher.on("error", () => { });
-        }
-        catch {
-            publisher = null;
-        }
+        publisher = createRedisClient();
     }
     return publisher;
 }
 /**
- * Get Redis subscriber client (for Socket.io server to subscribe to "notification" channel).
+ * Get dedicated pub/sub clients for Socket.IO Redis adapter.
  */
-function getNotificationSub() {
-    if (!process.env.REDIS_URL)
-        return null;
-    if (!subscriber) {
-        try {
-            subscriber = new ioredis_1.default(REDIS_URL, { maxRetriesPerRequest: 3 });
-            subscriber.on("error", () => { });
-        }
-        catch {
-            subscriber = null;
-        }
+function getSocketAdapterRedisClients() {
+    if (!adapterPublisher) {
+        adapterPublisher = createRedisClient();
     }
-    return subscriber;
+    if (!adapterSubscriber) {
+        adapterSubscriber = createRedisClient();
+    }
+    if (!adapterPublisher || !adapterSubscriber) {
+        return null;
+    }
+    return { pubClient: adapterPublisher, subClient: adapterSubscriber };
+}
+/**
+ * Get dedicated Redis subscriber client for app-level "notification" channel.
+ */
+function getAppNotificationSub() {
+    if (!notificationSubscriber) {
+        notificationSubscriber = createRedisClient();
+    }
+    return notificationSubscriber;
 }
 function getRedis() {
     return getNotificationPub();

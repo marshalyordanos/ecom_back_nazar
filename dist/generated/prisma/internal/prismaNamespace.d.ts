@@ -263,6 +263,7 @@ export declare const ModelName: {
     readonly ProductView: "ProductView";
     readonly SearchLog: "SearchLog";
     readonly Notification: "Notification";
+    readonly ExpoPushToken: "ExpoPushToken";
     readonly SyncLog: "SyncLog";
     readonly SyncedProduct: "SyncedProduct";
     readonly ShopSetting: "ShopSetting";
@@ -279,7 +280,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         omit: GlobalOmitOptions;
     };
     meta: {
-        modelProps: "shop" | "shopLocation" | "user" | "token" | "role" | "permission" | "rolePermission" | "brand" | "productCategory" | "product" | "favorite" | "productVariant" | "variantOptionValue" | "optionValue" | "variantOption" | "variantMedia" | "inventory" | "inventoryMovement" | "cart" | "cartItem" | "order" | "orderItem" | "payment" | "shipment" | "shippingAddress" | "savedAddress" | "coupon" | "couponUsage" | "review" | "productView" | "searchLog" | "notification" | "syncLog" | "syncedProduct" | "shopSetting" | "saleFromShop";
+        modelProps: "shop" | "shopLocation" | "user" | "token" | "role" | "permission" | "rolePermission" | "brand" | "productCategory" | "product" | "favorite" | "productVariant" | "variantOptionValue" | "optionValue" | "variantOption" | "variantMedia" | "inventory" | "inventoryMovement" | "cart" | "cartItem" | "order" | "orderItem" | "payment" | "shipment" | "shippingAddress" | "savedAddress" | "coupon" | "couponUsage" | "review" | "productView" | "searchLog" | "notification" | "expoPushToken" | "syncLog" | "syncedProduct" | "shopSetting" | "saleFromShop";
         txIsolationLevel: TransactionIsolationLevel;
     };
     model: {
@@ -2651,6 +2652,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
                 };
             };
         };
+        ExpoPushToken: {
+            payload: Prisma.$ExpoPushTokenPayload<ExtArgs>;
+            fields: Prisma.ExpoPushTokenFieldRefs;
+            operations: {
+                findUnique: {
+                    args: Prisma.ExpoPushTokenFindUniqueArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ExpoPushTokenPayload> | null;
+                };
+                findUniqueOrThrow: {
+                    args: Prisma.ExpoPushTokenFindUniqueOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ExpoPushTokenPayload>;
+                };
+                findFirst: {
+                    args: Prisma.ExpoPushTokenFindFirstArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ExpoPushTokenPayload> | null;
+                };
+                findFirstOrThrow: {
+                    args: Prisma.ExpoPushTokenFindFirstOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ExpoPushTokenPayload>;
+                };
+                findMany: {
+                    args: Prisma.ExpoPushTokenFindManyArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ExpoPushTokenPayload>[];
+                };
+                create: {
+                    args: Prisma.ExpoPushTokenCreateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ExpoPushTokenPayload>;
+                };
+                createMany: {
+                    args: Prisma.ExpoPushTokenCreateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                createManyAndReturn: {
+                    args: Prisma.ExpoPushTokenCreateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ExpoPushTokenPayload>[];
+                };
+                delete: {
+                    args: Prisma.ExpoPushTokenDeleteArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ExpoPushTokenPayload>;
+                };
+                update: {
+                    args: Prisma.ExpoPushTokenUpdateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ExpoPushTokenPayload>;
+                };
+                deleteMany: {
+                    args: Prisma.ExpoPushTokenDeleteManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateMany: {
+                    args: Prisma.ExpoPushTokenUpdateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateManyAndReturn: {
+                    args: Prisma.ExpoPushTokenUpdateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ExpoPushTokenPayload>[];
+                };
+                upsert: {
+                    args: Prisma.ExpoPushTokenUpsertArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ExpoPushTokenPayload>;
+                };
+                aggregate: {
+                    args: Prisma.ExpoPushTokenAggregateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.AggregateExpoPushToken>;
+                };
+                groupBy: {
+                    args: Prisma.ExpoPushTokenGroupByArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.ExpoPushTokenGroupByOutputType>[];
+                };
+                count: {
+                    args: Prisma.ExpoPushTokenCountArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.ExpoPushTokenCountAggregateOutputType> | number;
+                };
+            };
+        };
         SyncLog: {
             payload: Prisma.$SyncLogPayload<ExtArgs>;
             fields: Prisma.SyncLogFieldRefs;
@@ -3342,6 +3417,15 @@ export declare const NotificationScalarFieldEnum: {
     readonly updatedAt: "updatedAt";
 };
 export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum];
+export declare const ExpoPushTokenScalarFieldEnum: {
+    readonly id: "id";
+    readonly userId: "userId";
+    readonly token: "token";
+    readonly platform: "platform";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type ExpoPushTokenScalarFieldEnum = (typeof ExpoPushTokenScalarFieldEnum)[keyof typeof ExpoPushTokenScalarFieldEnum];
 export declare const SyncLogScalarFieldEnum: {
     readonly id: "id";
     readonly shopId: "shopId";
@@ -3648,6 +3732,7 @@ export type GlobalOmitConfig = {
     productView?: Prisma.ProductViewOmit;
     searchLog?: Prisma.SearchLogOmit;
     notification?: Prisma.NotificationOmit;
+    expoPushToken?: Prisma.ExpoPushTokenOmit;
     syncLog?: Prisma.SyncLogOmit;
     syncedProduct?: Prisma.SyncedProductOmit;
     shopSetting?: Prisma.ShopSettingOmit;

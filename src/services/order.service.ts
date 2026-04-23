@@ -1,7 +1,7 @@
 import { prisma } from "../lib/prisma";
 import AppError from "../utils/appError";
 import { PrismaQueryFeature } from "../utils/apiFeature";
-import { createNotification } from "./notification.service";
+import { createNotification, notifyAllAdminsOrderEvent } from "./notification.service";
 import axios from "axios";
 import bcrypt from "bcrypt";
 import { formatPhoneTo251 } from "../utils/helper";
@@ -147,6 +147,11 @@ export async function cancelOrder(orderId: string, userId: string) {
     message: `Order ${order.orderNumber} has been cancelled.`,
     metadata: { orderId: order.id },
   });
+  await notifyAllAdminsOrderEvent({
+    title: "Order cancelled",
+    message: `Order ${order.orderNumber} has been cancelled.`,
+    metadata: { orderId: order.id, eventKind: "order_cancelled" },
+  });
   return updated;
 }
 
@@ -165,6 +170,11 @@ export async function completeOrder(orderId: string) {
     title: "Order completed",
     message: `Order ${order.orderNumber} has been completed.`,
     metadata: { orderId: order.id },
+  });
+  await notifyAllAdminsOrderEvent({
+    title: "Order completed",
+    message: `Order ${order.orderNumber} has been completed.`,
+    metadata: { orderId: order.id, eventKind: "order_completed" },
   });
   return updated;
 }
@@ -269,6 +279,11 @@ export async function createOrderAdmin(data: {
     title: "Order placed",
     message: `Order ${orderNumber} has been created.`,
     metadata: { orderId: order.id },
+  });
+  await notifyAllAdminsOrderEvent({
+    title: "New order created",
+    message: `Order ${orderNumber} has been created.`,
+    metadata: { orderId: order.id, eventKind: "order_created" },
   });
   return full;
 }

@@ -180,6 +180,11 @@ export type SearchLog = Prisma.SearchLogModel;
  */
 export type Notification = Prisma.NotificationModel;
 /**
+ * Model ExpoPushToken
+ *
+ */
+export type ExpoPushToken = Prisma.ExpoPushTokenModel;
+/**
  * Model SyncLog
  *
  */

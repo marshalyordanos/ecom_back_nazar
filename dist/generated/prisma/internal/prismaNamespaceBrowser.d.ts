@@ -58,6 +58,7 @@ export declare const ModelName: {
     readonly ProductView: "ProductView";
     readonly SearchLog: "SearchLog";
     readonly Notification: "Notification";
+    readonly ExpoPushToken: "ExpoPushToken";
     readonly SyncLog: "SyncLog";
     readonly SyncedProduct: "SyncedProduct";
     readonly ShopSetting: "ShopSetting";
@@ -432,6 +433,15 @@ export declare const NotificationScalarFieldEnum: {
     readonly updatedAt: "updatedAt";
 };
 export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum];
+export declare const ExpoPushTokenScalarFieldEnum: {
+    readonly id: "id";
+    readonly userId: "userId";
+    readonly token: "token";
+    readonly platform: "platform";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type ExpoPushTokenScalarFieldEnum = (typeof ExpoPushTokenScalarFieldEnum)[keyof typeof ExpoPushTokenScalarFieldEnum];
 export declare const SyncLogScalarFieldEnum: {
     readonly id: "id";
     readonly shopId: "shopId";

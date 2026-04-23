@@ -256,6 +256,11 @@ async function checkout(userId, data) {
                 message: `Order ${fullOrder.orderNumber} has been placed successfully.`,
                 metadata: { orderId: fullOrder.id },
             });
+            await (0, notification_service_1.notifyAllAdminsOrderEvent)({
+                title: "New order placed",
+                message: `Order ${fullOrder.orderNumber} has been placed successfully.`,
+                metadata: { orderId: fullOrder.id, eventKind: "order_created" },
+            });
             // await tx.commit();
             ord = fullOrder;
             checkout_url = chapaRes.data.checkout_url;
@@ -355,6 +360,11 @@ async function handleChapaCallback(data) {
                 title: "Order placed",
                 message: `Order ${payment.order.orderNumber} has been paid successfully.`,
                 metadata: { orderId: payment.order.id },
+            });
+            await (0, notification_service_1.notifyAllAdminsPaymentEvent)({
+                title: "Payment received",
+                message: `Order ${payment.order.orderNumber} has been paid successfully.`,
+                metadata: { orderId: payment.order.id, eventKind: "payment_received" },
             });
             await (0, sendSms_1.sendSms)(`Your order ${payment.order.orderNumber} has been paid successfully.`, payment.order.address?.phone || '');
         }

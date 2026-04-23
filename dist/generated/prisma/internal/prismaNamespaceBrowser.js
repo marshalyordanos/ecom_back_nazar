@@ -48,7 +48,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.JsonNullValueFilter = exports.NullsOrder = exports.QueryMode = exports.NullableJsonNullValueInput = exports.SortOrder = exports.SaleFromShopScalarFieldEnum = exports.ShopSettingScalarFieldEnum = exports.SyncedProductScalarFieldEnum = exports.SyncLogScalarFieldEnum = exports.NotificationScalarFieldEnum = exports.SearchLogScalarFieldEnum = exports.ProductViewScalarFieldEnum = exports.ReviewScalarFieldEnum = exports.CouponUsageScalarFieldEnum = exports.CouponScalarFieldEnum = exports.SavedAddressScalarFieldEnum = exports.ShippingAddressScalarFieldEnum = exports.ShipmentScalarFieldEnum = exports.PaymentScalarFieldEnum = exports.OrderItemScalarFieldEnum = exports.OrderScalarFieldEnum = exports.CartItemScalarFieldEnum = exports.CartScalarFieldEnum = exports.InventoryMovementScalarFieldEnum = exports.InventoryScalarFieldEnum = exports.VariantMediaScalarFieldEnum = exports.VariantOptionScalarFieldEnum = exports.OptionValueScalarFieldEnum = exports.VariantOptionValueScalarFieldEnum = exports.ProductVariantScalarFieldEnum = exports.FavoriteScalarFieldEnum = exports.ProductScalarFieldEnum = exports.ProductCategoryScalarFieldEnum = exports.BrandScalarFieldEnum = exports.RolePermissionScalarFieldEnum = exports.PermissionScalarFieldEnum = exports.RoleScalarFieldEnum = exports.TokenScalarFieldEnum = exports.UserScalarFieldEnum = exports.ShopLocationScalarFieldEnum = exports.ShopScalarFieldEnum = exports.TransactionIsolationLevel = exports.ModelName = exports.AnyNull = exports.JsonNull = exports.DbNull = exports.NullTypes = exports.Decimal = void 0;
+exports.JsonNullValueFilter = exports.NullsOrder = exports.QueryMode = exports.NullableJsonNullValueInput = exports.SortOrder = exports.SaleFromShopScalarFieldEnum = exports.ShopSettingScalarFieldEnum = exports.SyncedProductScalarFieldEnum = exports.SyncLogScalarFieldEnum = exports.ExpoPushTokenScalarFieldEnum = exports.NotificationScalarFieldEnum = exports.SearchLogScalarFieldEnum = exports.ProductViewScalarFieldEnum = exports.ReviewScalarFieldEnum = exports.CouponUsageScalarFieldEnum = exports.CouponScalarFieldEnum = exports.SavedAddressScalarFieldEnum = exports.ShippingAddressScalarFieldEnum = exports.ShipmentScalarFieldEnum = exports.PaymentScalarFieldEnum = exports.OrderItemScalarFieldEnum = exports.OrderScalarFieldEnum = exports.CartItemScalarFieldEnum = exports.CartScalarFieldEnum = exports.InventoryMovementScalarFieldEnum = exports.InventoryScalarFieldEnum = exports.VariantMediaScalarFieldEnum = exports.VariantOptionScalarFieldEnum = exports.OptionValueScalarFieldEnum = exports.VariantOptionValueScalarFieldEnum = exports.ProductVariantScalarFieldEnum = exports.FavoriteScalarFieldEnum = exports.ProductScalarFieldEnum = exports.ProductCategoryScalarFieldEnum = exports.BrandScalarFieldEnum = exports.RolePermissionScalarFieldEnum = exports.PermissionScalarFieldEnum = exports.RoleScalarFieldEnum = exports.TokenScalarFieldEnum = exports.UserScalarFieldEnum = exports.ShopLocationScalarFieldEnum = exports.ShopScalarFieldEnum = exports.TransactionIsolationLevel = exports.ModelName = exports.AnyNull = exports.JsonNull = exports.DbNull = exports.NullTypes = exports.Decimal = void 0;
 const runtime = __importStar(require("@prisma/client/runtime/index-browser"));
 exports.Decimal = runtime.Decimal;
 exports.NullTypes = {
@@ -107,6 +107,7 @@ exports.ModelName = {
     ProductView: 'ProductView',
     SearchLog: 'SearchLog',
     Notification: 'Notification',
+    ExpoPushToken: 'ExpoPushToken',
     SyncLog: 'SyncLog',
     SyncedProduct: 'SyncedProduct',
     ShopSetting: 'ShopSetting',
@@ -447,6 +448,14 @@ exports.NotificationScalarFieldEnum = {
     message: 'message',
     readAt: 'readAt',
     metadata: 'metadata',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+};
+exports.ExpoPushTokenScalarFieldEnum = {
+    id: 'id',
+    userId: 'userId',
+    token: 'token',
+    platform: 'platform',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
 };

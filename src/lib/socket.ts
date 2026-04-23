@@ -4,7 +4,7 @@ import { createAdapter } from "@socket.io/redis-adapter";
 import jwt from "jsonwebtoken";
 import config from "../config/config";
 import { tokenTypes } from "../config/tokens";
-import { getNotificationSub, getNotificationPub } from "./redis";
+import { getAppNotificationSub, getSocketAdapterRedisClients } from "./redis";
 
 interface JwtPayload {
   userId: string;
@@ -21,10 +21,9 @@ export function initSocket(httpServer: HttpServer): Server {
   });
 
   // Redis adapter for multi-instance pub/sub
-  const sub = getNotificationSub();
-  const pub = getNotificationPub();
-  if (sub && pub) {
-    io.adapter(createAdapter(pub, sub));
+  const adapterClients = getSocketAdapterRedisClients();
+  if (adapterClients) {
+    io.adapter(createAdapter(adapterClients.pubClient, adapterClients.subClient));
   }
 
   io.use((socket, next) => {
@@ -52,11 +51,12 @@ export function initSocket(httpServer: HttpServer): Server {
   });
 
   // Subscribe to Redis "notification" channel and emit to user room
-  if (sub) {
-    sub.subscribe("notification", (err) => {
+  const notificationSub = getAppNotificationSub();
+  if (notificationSub) {
+    notificationSub.subscribe("notification", (err) => {
       if (err) console.error("Redis subscribe error:", err);
     });
-    sub.on("message", (channel, message) => {
+    notificationSub.on("message", (channel, message) => {
       if (channel === "notification" && io) {
         try {
           const payload = JSON.parse(message);

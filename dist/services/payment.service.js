@@ -66,6 +66,11 @@ async function capturePayment(id) {
         message: `Payment for order ${payment.order.orderNumber} has been confirmed.`,
         metadata: { orderId: payment.orderId, paymentId: id },
     });
+    await (0, notification_service_1.notifyAllAdminsPaymentEvent)({
+        title: "Payment received",
+        message: `Payment for order ${payment.order.orderNumber} has been confirmed.`,
+        metadata: { orderId: payment.orderId, paymentId: id, eventKind: "payment_received" },
+    });
     // 5️⃣ Create shipment if payment is NOT cash
     if (payment.provider.toLowerCase() !== "cash") {
         const trackingNumber = `TRACK-${Date.now()}-${Math.random().toString(36).slice(2, 9).toUpperCase()}`;
@@ -109,6 +114,11 @@ async function refundPayment(id) {
         title: "Payment refunded",
         message: `Payment for order ${payment.order.orderNumber} has been refunded.`,
         metadata: { orderId: payment.orderId, paymentId: id },
+    });
+    await (0, notification_service_1.notifyAllAdminsPaymentEvent)({
+        title: "Payment refunded",
+        message: `Payment for order ${payment.order.orderNumber} has been refunded.`,
+        metadata: { orderId: payment.orderId, paymentId: id, eventKind: "payment_refunded" },
     });
     return updated;
 }

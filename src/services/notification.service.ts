@@ -1,5 +1,6 @@
 import { prisma } from "../lib/prisma";
 import { getNotificationPub } from "../lib/redis";
+import { sendExpoPushToUser } from "./expoPush.service";
 
 export type NotificationType =
   | "order_update"
@@ -17,12 +18,79 @@ export interface CreateNotificationInput {
   title: string;
   message: string;
   metadata?: Record<string, unknown>;
+  sendPush?: boolean;
+  targetAudience?: "single_user" | "all_admins";
+}
+
+type NotificationPayload = {
+  id: string;
+  userId: string | null;
+  type: string;
+  title: string;
+  message: string;
+  metadata?: Record<string, unknown>;
+  createdAt: Date;
+};
+
+function publishNotification(payload: NotificationPayload) {
+  const pub = getNotificationPub();
+  if (!pub) return;
+  pub.publish("notification", JSON.stringify(payload));
+}
+
+async function resolveAdminRecipientIds(): Promise<string[]> {
+  const admins = await prisma.user.findMany({
+    where: {
+      status: "ACTIVE",
+      roles: { some: { name: { not: "user" } } },
+    },
+    select: { id: true },
+  });
+  return admins.map((x) => x.id);
 }
 
 /**
  * Create a notification in DB and publish to Redis for real-time delivery via Socket.io.
  */
 export async function createNotification(input: CreateNotificationInput) {
+  const targetAudience = input.targetAudience ?? "single_user";
+  const sendPush = input.sendPush ?? true;
+
+  if (targetAudience === "all_admins") {
+    const recipientIds = await resolveAdminRecipientIds();
+    if (!recipientIds.length) {
+      return { data: [], count: 0 };
+    }
+
+    const rows = await Promise.all(
+      recipientIds.map((recipientId) =>
+        prisma.notification.create({
+          data: {
+            userId: recipientId,
+            type: input.type,
+            title: input.title,
+            message: input.message,
+            metadata: input.metadata ? (input.metadata as object) : undefined,
+          },
+        })
+      )
+    );
+
+    for (const row of rows) {
+      publishNotification({
+        id: row.id,
+        userId: row.userId,
+        type: row.type,
+        title: row.title,
+        message: row.message,
+        metadata: (row.metadata as Record<string, unknown> | null) ?? undefined,
+        createdAt: row.createdAt,
+      });
+    }
+
+    return { data: rows, count: rows.length };
+  }
+
   const notification = await prisma.notification.create({
     data: {
       userId: input.userId,
@@ -33,21 +101,65 @@ export async function createNotification(input: CreateNotificationInput) {
     },
   });
 
-  const pub = getNotificationPub();
-  if (pub) {
-    const payload = {
-      id: notification.id,
-      userId: input.userId,
-      type: input.type,
-      title: input.title,
-      message: input.message,
-      metadata: input.metadata,
-      createdAt: notification.createdAt,
-    };
-    pub.publish("notification", JSON.stringify(payload));
+  publishNotification({
+    id: notification.id,
+    userId: input.userId,
+    type: input.type,
+    title: input.title,
+    message: input.message,
+    metadata: input.metadata,
+    createdAt: notification.createdAt,
+  });
+
+  if (sendPush && input.userId) {
+    try {
+      await sendExpoPushToUser(input.userId, {
+        title: input.title,
+        message: input.message,
+        data: {
+          notificationId: notification.id,
+          type: input.type,
+          ...(input.metadata || {}),
+        },
+      });
+    } catch (error) {
+      console.error("Expo push notification error:", error);
+    }
   }
 
   return notification;
+}
+
+export async function notifyAllAdminsOrderEvent(input: {
+  title: string;
+  message: string;
+  metadata?: Record<string, unknown>;
+}) {
+  return createNotification({
+    userId: null,
+    type: "order_update",
+    title: input.title,
+    message: input.message,
+    metadata: { source: "admin_event", eventType: "order_event", ...(input.metadata || {}) },
+    targetAudience: "all_admins",
+    sendPush: false,
+  });
+}
+
+export async function notifyAllAdminsPaymentEvent(input: {
+  title: string;
+  message: string;
+  metadata?: Record<string, unknown>;
+}) {
+  return createNotification({
+    userId: null,
+    type: "payment",
+    title: input.title,
+    message: input.message,
+    metadata: { source: "admin_event", eventType: "payment_event", ...(input.metadata || {}) },
+    targetAudience: "all_admins",
+    sendPush: false,
+  });
 }
 
 /**

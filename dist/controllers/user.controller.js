@@ -36,12 +36,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteMySavedAddress = exports.addMySavedAddress = exports.listMySavedAddresses = exports.getMyUnreadNotificationsCount = exports.markAllMyNotificationsRead = exports.markMyNotificationRead = exports.listMyNotifications = exports.deactivateUser = exports.updateUser = exports.listUsers = exports.getById = exports.updateMyPassword = exports.updateMe = exports.getMe = void 0;
+exports.deleteMySavedAddress = exports.addMySavedAddress = exports.listMySavedAddresses = exports.removeMyPushToken = exports.registerMyPushToken = exports.getMyUnreadNotificationsCount = exports.markAllMyNotificationsRead = exports.markMyNotificationRead = exports.listMyNotifications = exports.deactivateUser = exports.updateUser = exports.listUsers = exports.getById = exports.updateMyPassword = exports.updateMe = exports.getMe = void 0;
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 const userService = __importStar(require("../services/user.service"));
 const queryParser_1 = require("../utils/queryParser");
 const notificationService = __importStar(require("../services/notification.service"));
 const savedAddressService = __importStar(require("../services/savedAddress.service"));
+const expoPushTokenService = __importStar(require("../services/expoPushToken.service"));
 exports.getMe = (0, catchAsync_1.default)(async (req, res, _next) => {
     const user = await userService.getMe(req.user.id);
     res.status(200).json(user);
@@ -100,6 +101,29 @@ exports.markAllMyNotificationsRead = (0, catchAsync_1.default)(async (req, res, 
 exports.getMyUnreadNotificationsCount = (0, catchAsync_1.default)(async (req, res, _next) => {
     const count = await notificationService.getUnreadCount(req.user.id);
     res.status(200).json({ unreadCount: count });
+});
+exports.registerMyPushToken = (0, catchAsync_1.default)(async (req, res, _next) => {
+    const token = typeof req.body?.token === "string" ? req.body.token.trim() : "";
+    const platform = typeof req.body?.platform === "string" ? req.body.platform.trim() : undefined;
+    if (!token) {
+        return res.status(400).json({ status: "fail", message: "token is required" });
+    }
+    const data = await expoPushTokenService.registerExpoPushToken({
+        userId: req.user.id,
+        token,
+        platform,
+    });
+    res.status(200).json({ data });
+});
+exports.removeMyPushToken = (0, catchAsync_1.default)(async (req, res, _next) => {
+    const bodyToken = typeof req.body?.token === "string" ? req.body.token : "";
+    const queryToken = typeof req.query.token === "string" ? req.query.token : "";
+    const token = (bodyToken || queryToken).trim();
+    if (!token) {
+        return res.status(400).json({ status: "fail", message: "token is required" });
+    }
+    const data = await expoPushTokenService.removeExpoPushToken(req.user.id, token);
+    res.status(200).json(data);
 });
 // ===============================
 // SAVED ADDRESSES (PER USER)

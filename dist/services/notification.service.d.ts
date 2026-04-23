@@ -5,6 +5,8 @@ export interface CreateNotificationInput {
     title: string;
     message: string;
     metadata?: Record<string, unknown>;
+    sendPush?: boolean;
+    targetAudience?: "single_user" | "all_admins";
 }
 /**
  * Create a notification in DB and publish to Redis for real-time delivery via Socket.io.
@@ -19,6 +21,75 @@ export declare function createNotification(input: CreateNotificationInput): Prom
     title: string;
     readAt: Date | null;
     metadata: import("@prisma/client/runtime/client").JsonValue | null;
+} | {
+    data: {
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        userId: string | null;
+        type: string;
+        message: string;
+        title: string;
+        readAt: Date | null;
+        metadata: import("@prisma/client/runtime/client").JsonValue | null;
+    }[];
+    count: number;
+}>;
+export declare function notifyAllAdminsOrderEvent(input: {
+    title: string;
+    message: string;
+    metadata?: Record<string, unknown>;
+}): Promise<{
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    userId: string | null;
+    type: string;
+    message: string;
+    title: string;
+    readAt: Date | null;
+    metadata: import("@prisma/client/runtime/client").JsonValue | null;
+} | {
+    data: {
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        userId: string | null;
+        type: string;
+        message: string;
+        title: string;
+        readAt: Date | null;
+        metadata: import("@prisma/client/runtime/client").JsonValue | null;
+    }[];
+    count: number;
+}>;
+export declare function notifyAllAdminsPaymentEvent(input: {
+    title: string;
+    message: string;
+    metadata?: Record<string, unknown>;
+}): Promise<{
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    userId: string | null;
+    type: string;
+    message: string;
+    title: string;
+    readAt: Date | null;
+    metadata: import("@prisma/client/runtime/client").JsonValue | null;
+} | {
+    data: {
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        userId: string | null;
+        type: string;
+        message: string;
+        title: string;
+        readAt: Date | null;
+        metadata: import("@prisma/client/runtime/client").JsonValue | null;
+    }[];
+    count: number;
 }>;
 /**
  * Get unread count for a user.

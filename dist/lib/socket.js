@@ -18,10 +18,9 @@ function initSocket(httpServer) {
         path: "/socket.io",
     });
     // Redis adapter for multi-instance pub/sub
-    const sub = (0, redis_1.getNotificationSub)();
-    const pub = (0, redis_1.getNotificationPub)();
-    if (sub && pub) {
-        io.adapter((0, redis_adapter_1.createAdapter)(pub, sub));
+    const adapterClients = (0, redis_1.getSocketAdapterRedisClients)();
+    if (adapterClients) {
+        io.adapter((0, redis_adapter_1.createAdapter)(adapterClients.pubClient, adapterClients.subClient));
     }
     io.use((socket, next) => {
         const token = socket.handshake.auth?.token || socket.handshake.query?.token;
@@ -46,12 +45,13 @@ function initSocket(httpServer) {
         socket.on("disconnect", () => { });
     });
     // Subscribe to Redis "notification" channel and emit to user room
-    if (sub) {
-        sub.subscribe("notification", (err) => {
+    const notificationSub = (0, redis_1.getAppNotificationSub)();
+    if (notificationSub) {
+        notificationSub.subscribe("notification", (err) => {
             if (err)
                 console.error("Redis subscribe error:", err);
         });
-        sub.on("message", (channel, message) => {
+        notificationSub.on("message", (channel, message) => {
             if (channel === "notification" && io) {
                 try {
                     const payload = JSON.parse(message);

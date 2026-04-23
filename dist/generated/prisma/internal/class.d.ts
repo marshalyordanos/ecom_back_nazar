@@ -464,6 +464,17 @@ export interface PrismaClient<in LogOpts extends Prisma.LogLevel = never, in out
         omit: OmitOpts;
     }>;
     /**
+     * `prisma.expoPushToken`: Exposes CRUD operations for the **ExpoPushToken** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more ExpoPushTokens
+      * const expoPushTokens = await prisma.expoPushToken.findMany()
+      * ```
+      */
+    get expoPushToken(): Prisma.ExpoPushTokenDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    /**
      * `prisma.syncLog`: Exposes CRUD operations for the **SyncLog** model.
       * Example usage:
       * ```ts

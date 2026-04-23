@@ -1,7 +1,11 @@
 import axios from "axios";
 import { prisma } from "../lib/prisma";
 import AppError from "../utils/appError";
-import { createNotification } from "./notification.service";
+import {
+  createNotification,
+  notifyAllAdminsOrderEvent,
+  notifyAllAdminsPaymentEvent,
+} from "./notification.service";
 import { createId } from '@paralleldrive/cuid2'
 import config from "../config/config";
 import { sendSms } from "../utils/sendSms";
@@ -281,6 +285,11 @@ let checkout_url:any;
         message: `Order ${fullOrder.orderNumber} has been placed successfully.`,
         metadata: { orderId: fullOrder.id },
       });
+      await notifyAllAdminsOrderEvent({
+        title: "New order placed",
+        message: `Order ${fullOrder.orderNumber} has been placed successfully.`,
+        metadata: { orderId: fullOrder.id, eventKind: "order_created" },
+      });
 
       // await tx.commit();
       ord = fullOrder;
@@ -394,6 +403,11 @@ export async function handleChapaCallback(data: any) {
         title: "Order placed",
         message: `Order ${payment.order.orderNumber} has been paid successfully.`,
         metadata: { orderId: payment.order.id },
+      });
+      await notifyAllAdminsPaymentEvent({
+        title: "Payment received",
+        message: `Order ${payment.order.orderNumber} has been paid successfully.`,
+        metadata: { orderId: payment.order.id, eventKind: "payment_received" },
       });
 
       await sendSms(
