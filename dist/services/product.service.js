@@ -14,6 +14,7 @@ exports.getFeaturedProducts = getFeaturedProducts;
 exports.getNewProducts = getNewProducts;
 exports.getPopularProducts = getPopularProducts;
 exports.getMostViewedProducts = getMostViewedProducts;
+exports.getRecentlyViewedProducts = getRecentlyViewedProducts;
 exports.getVariantById = getVariantById;
 exports.createVariant = createVariant;
 exports.updateVariant = updateVariant;
@@ -114,7 +115,7 @@ async function listProducts(shopId, track, query, req, options) {
         : data;
     return { data: sortedData, pagination: feature.getPagination(total) };
 }
-async function getProductById(id, shopId) {
+async function getProductById(id, shopId, userId) {
     const where = { id };
     if (shopId)
         where.shopId = shopId;
@@ -137,9 +138,18 @@ async function getProductById(id, shopId) {
     });
     if (!product)
         throw new appError_1.default("Product not found", 404);
+    if (userId) {
+        await prisma_1.prisma.productView.create({
+            data: {
+                productId: product.id,
+                userId,
+                sessionId: null,
+            },
+        });
+    }
     return product;
 }
-async function getProductByIdMobile(id, shopId, userId, sessionId) {
+async function getProductByIdMobile(id, shopId, userId) {
     const where = { id };
     if (shopId)
         where.shopId = shopId;
@@ -162,14 +172,15 @@ async function getProductByIdMobile(id, shopId, userId, sessionId) {
     });
     if (!product)
         throw new appError_1.default("Product not found", 404);
-    // 🔥 Track view
-    await prisma_1.prisma.productView.create({
-        data: {
-            productId: product.id,
-            userId: userId || null,
-            sessionId: sessionId || null,
-        },
-    });
+    if (userId) {
+        await prisma_1.prisma.productView.create({
+            data: {
+                productId: product.id,
+                userId,
+                sessionId: null,
+            },
+        });
+    }
     return product;
 }
 async function createProduct(shopId, data) {
@@ -327,6 +338,62 @@ async function getMostViewedProducts(shopId, limit = 10) {
     });
     const byId = new Map(products.map((p) => [p.id, p]));
     return rankedIds.map((id) => byId.get(id)).filter(Boolean).slice(0, limit);
+}
+async function getRecentlyViewedProducts(params) {
+    const page = Math.max(1, params.page ?? 1);
+    const pageSize = Math.min(Math.max(1, params.pageSize ?? 12), 50);
+    const skip = (page - 1) * pageSize;
+    const where = {
+        userId: params.userId,
+        product: {
+            status: "ACTIVE",
+            ...(params.shopId ? { shopId: params.shopId } : {}),
+        },
+    };
+    const [grouped, totalGrouped] = await Promise.all([
+        prisma_1.prisma.productView.groupBy({
+            by: ["productId"],
+            where,
+            _max: { createdAt: true },
+            orderBy: { _max: { createdAt: "desc" } },
+            skip,
+            take: pageSize,
+        }),
+        prisma_1.prisma.productView.groupBy({
+            by: ["productId"],
+            where,
+        }),
+    ]);
+    const rankedIds = grouped.map((g) => g.productId);
+    if (!rankedIds.length) {
+        return {
+            data: [],
+            pagination: { page, pageSize, total: 0, totalPages: 1 },
+        };
+    }
+    const products = await prisma_1.prisma.product.findMany({
+        where: { id: { in: rankedIds }, status: "ACTIVE" },
+        include: {
+            brand: { select: { id: true, name: true, slug: true } },
+            category: { select: { id: true, name: true, slug: true } },
+            variants: {
+                take: 3,
+                include: { media: { take: 1 } },
+            },
+        },
+    });
+    const byId = new Map(products.map((p) => [p.id, p]));
+    const data = rankedIds.map((id) => byId.get(id)).filter(Boolean);
+    const total = totalGrouped.length;
+    return {
+        data,
+        pagination: {
+            page,
+            pageSize,
+            total,
+            totalPages: Math.max(1, Math.ceil(total / pageSize)),
+        },
+    };
 }
 async function getVariantById(id) {
     const variant = await prisma_1.prisma.productVariant.findUnique({

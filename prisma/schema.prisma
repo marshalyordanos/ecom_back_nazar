@@ -616,7 +616,7 @@ model Notification {
   message   String
   readAt    DateTime? // null if unread
   metadata  Json?     // optional JSON data for extra info (e.g., orderId, productId)
-  createdAt DateTime  @default(now())
+  createdAt DateTime  @default(now()) 
   updatedAt DateTime  @updatedAt
 }
 

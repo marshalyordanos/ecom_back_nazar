@@ -1,7 +1,7 @@
 import { Router } from "express";
 import * as productController from "../controllers/product.controller";
 import * as reviewController from "../controllers/review.controller";
-import { protect, restrictTo } from "../middleware/auth.middleware";
+import { optionalAuth, protect, restrictTo } from "../middleware/auth.middleware";
 import { requirePermission } from "../middleware/permission.middleware";
 import { uploadSingleImage } from "../config/multer";
 
@@ -12,6 +12,7 @@ router.get("/featured", productController.getFeatured);
 router.get("/popular", productController.getPopular);
 router.get("/new-arrivals", productController.getNewArrivals);
 router.get("/most-viewed", productController.getMostViewed);
+router.get("/recently-viewed", protect, productController.getRecentlyViewed);
 router.get(
   "/variants",
   protect,
@@ -128,8 +129,8 @@ router.delete(
   productController.deleteVariantOption
 );
 
-router.get("/:id", productController.getProductById);
-router.get("/mobile/:id", productController.getProductByIdMobile);
+router.get("/:id", optionalAuth, productController.getProductById);
+router.get("/mobile/:id", optionalAuth, productController.getProductByIdMobile);
 router.get("/:id/reviews", reviewController.listByProduct);
 router.post(
   "/",

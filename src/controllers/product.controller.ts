@@ -30,15 +30,23 @@ export const listProducts = catchAsync(async (req: AuthRequest, res: Response, _
 
 export const getProductById = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
   const shopId = req.query.shopId as string | undefined;
-  const product = await productService.getProductById(req.params.id, shopId);
+  const canTrackView = Boolean(req.user?.id && req.user.roles.includes("user"));
+  const product = await productService.getProductById(
+    req.params.id,
+    shopId,
+    canTrackView ? req.user?.id : undefined
+  );
   res.status(200).json(product);
 });
 
 export const getProductByIdMobile = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
   const shopId = req.query.shopId as string | undefined;
-  const userId = req.body?.userId as string | undefined;
-  const sessionId = req.body?.sessionId as string | undefined;
-  const product = await productService.getProductByIdMobile(req.params.id, shopId,userId,sessionId);
+  const canTrackView = Boolean(req.user?.id && req.user.roles.includes("user"));
+  const product = await productService.getProductByIdMobile(
+    req.params.id,
+    shopId,
+    canTrackView ? req.user?.id : undefined
+  );
   res.status(200).json(product);
 });
 
@@ -96,6 +104,19 @@ export const getMostViewed = catchAsync(async (req: AuthRequest, res: Response, 
   const limit = Math.min(parseInt(String(req.query.limit), 10) || 10, 50);
   const products = await productService.getMostViewedProducts(shopId, limit);
   res.status(200).json(products);
+});
+
+export const getRecentlyViewed = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const shopId = req.query.shopId as string | undefined;
+  const page = req.query.page ? Number(req.query.page) : undefined;
+  const pageSize = req.query.pageSize ? Number(req.query.pageSize) : undefined;
+  const result = await productService.getRecentlyViewedProducts({
+    userId: req.user!.id,
+    shopId,
+    page,
+    pageSize,
+  });
+  res.status(200).json(result);
 });
 
 

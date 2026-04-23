@@ -11,6 +11,7 @@ export declare const getFeatured: (req: AuthRequest, res: Response, next: NextFu
 export declare const getPopular: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const getNewArrivals: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const getMostViewed: (req: AuthRequest, res: Response, next: NextFunction) => void;
+export declare const getRecentlyViewed: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const getVariantById: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const createVariant: (req: AuthRequest, res: Response, next: NextFunction) => void;
 export declare const updateVariant: (req: AuthRequest, res: Response, next: NextFunction) => void;

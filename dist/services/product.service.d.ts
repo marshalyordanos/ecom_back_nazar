@@ -65,7 +65,7 @@ export declare function listProducts(shopId: string | undefined, track?: string,
         totalPages: number;
     };
 }>;
-export declare function getProductById(id: string, shopId?: string): Promise<{
+export declare function getProductById(id: string, shopId?: string, userId?: string): Promise<{
     shop: {
         name: string;
         id: string;
@@ -173,7 +173,7 @@ export declare function getProductById(id: string, shopId?: string): Promise<{
     track: string | null;
     isFeatured: boolean;
 }>;
-export declare function getProductByIdMobile(id: string, shopId?: string, userId?: string, sessionId?: string): Promise<{
+export declare function getProductByIdMobile(id: string, shopId?: string, userId?: string): Promise<{
     shop: {
         name: string;
         id: string;
@@ -605,6 +605,67 @@ export declare function getMostViewedProducts(shopId?: string, limit?: number): 
     track: string | null;
     isFeatured: boolean;
 }) | undefined)[]>;
+export declare function getRecentlyViewedProducts(params: {
+    userId: string;
+    shopId?: string;
+    page?: number;
+    pageSize?: number;
+}): Promise<{
+    data: (({
+        brand: {
+            name: string;
+            id: string;
+            slug: string;
+        } | null;
+        category: {
+            name: string;
+            id: string;
+            slug: string;
+        } | null;
+        variants: ({
+            media: {
+                url: string;
+                id: string;
+                type: string;
+                variantId: string;
+                position: number | null;
+            }[];
+        } & {
+            id: string;
+            status: import("../generated/prisma/enums").ProductStatus;
+            createdAt: Date;
+            updatedAt: Date;
+            price: number;
+            image: string | null;
+            productId: string;
+            sku: string;
+            barcode: string | null;
+            comparePrice: number | null;
+            costPrice: number | null;
+            weight: number | null;
+        })[];
+    } & {
+        name: string;
+        id: string;
+        status: import("../generated/prisma/enums").ProductStatus;
+        createdAt: Date;
+        updatedAt: Date;
+        description: string | null;
+        shopId: string;
+        slug: string;
+        shortDescription: string | null;
+        brandId: string | null;
+        categoryId: string | null;
+        track: string | null;
+        isFeatured: boolean;
+    }) | undefined)[];
+    pagination: {
+        page: number;
+        pageSize: number;
+        total: number;
+        totalPages: number;
+    };
+}>;
 export declare function getVariantById(id: string): Promise<({
     inventories: {
         id: string;

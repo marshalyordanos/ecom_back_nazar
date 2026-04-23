@@ -36,7 +36,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.assignVariantOptionValue = exports.removeVariantOptionValue = exports.setVariantOptionValues = exports.deleteOptionValue = exports.updateOptionValue = exports.createOptionValue = exports.getOptionValueById = exports.listOptionValues = exports.deleteVariantOption = exports.updateVariantOption = exports.createVariantOption = exports.getVariantOptionById = exports.listVariantOptions = exports.removeVariantMedia = exports.addVariantMedia = exports.deleteVariant = exports.updateVariant = exports.createVariant = exports.getVariantById = exports.getMostViewed = exports.getNewArrivals = exports.getPopular = exports.getFeatured = exports.listVariants = exports.deleteProduct = exports.updateProduct = exports.createProduct = exports.getProductByIdMobile = exports.getProductById = exports.listProducts = void 0;
+exports.assignVariantOptionValue = exports.removeVariantOptionValue = exports.setVariantOptionValues = exports.deleteOptionValue = exports.updateOptionValue = exports.createOptionValue = exports.getOptionValueById = exports.listOptionValues = exports.deleteVariantOption = exports.updateVariantOption = exports.createVariantOption = exports.getVariantOptionById = exports.listVariantOptions = exports.removeVariantMedia = exports.addVariantMedia = exports.deleteVariant = exports.updateVariant = exports.createVariant = exports.getVariantById = exports.getRecentlyViewed = exports.getMostViewed = exports.getNewArrivals = exports.getPopular = exports.getFeatured = exports.listVariants = exports.deleteProduct = exports.updateProduct = exports.createProduct = exports.getProductByIdMobile = exports.getProductById = exports.listProducts = void 0;
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 const productService = __importStar(require("../services/product.service"));
 const queryParser_1 = require("../utils/queryParser");
@@ -62,14 +62,14 @@ exports.listProducts = (0, catchAsync_1.default)(async (req, res, _next) => {
 });
 exports.getProductById = (0, catchAsync_1.default)(async (req, res, _next) => {
     const shopId = req.query.shopId;
-    const product = await productService.getProductById(req.params.id, shopId);
+    const canTrackView = Boolean(req.user?.id && req.user.roles.includes("user"));
+    const product = await productService.getProductById(req.params.id, shopId, canTrackView ? req.user?.id : undefined);
     res.status(200).json(product);
 });
 exports.getProductByIdMobile = (0, catchAsync_1.default)(async (req, res, _next) => {
     const shopId = req.query.shopId;
-    const userId = req.body?.userId;
-    const sessionId = req.body?.sessionId;
-    const product = await productService.getProductByIdMobile(req.params.id, shopId, userId, sessionId);
+    const canTrackView = Boolean(req.user?.id && req.user.roles.includes("user"));
+    const product = await productService.getProductByIdMobile(req.params.id, shopId, canTrackView ? req.user?.id : undefined);
     res.status(200).json(product);
 });
 exports.createProduct = (0, catchAsync_1.default)(async (req, res, _next) => {
@@ -118,6 +118,18 @@ exports.getMostViewed = (0, catchAsync_1.default)(async (req, res, _next) => {
     const limit = Math.min(parseInt(String(req.query.limit), 10) || 10, 50);
     const products = await productService.getMostViewedProducts(shopId, limit);
     res.status(200).json(products);
+});
+exports.getRecentlyViewed = (0, catchAsync_1.default)(async (req, res, _next) => {
+    const shopId = req.query.shopId;
+    const page = req.query.page ? Number(req.query.page) : undefined;
+    const pageSize = req.query.pageSize ? Number(req.query.pageSize) : undefined;
+    const result = await productService.getRecentlyViewedProducts({
+        userId: req.user.id,
+        shopId,
+        page,
+        pageSize,
+    });
+    res.status(200).json(result);
 });
 exports.getVariantById = (0, catchAsync_1.default)(async (req, res, _next) => {
     const variant = await productService.getVariantById(req.params.id);

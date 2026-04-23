@@ -100,7 +100,11 @@ export async function listProducts(
   return { data: sortedData, pagination: feature.getPagination(total) };
 }
 
-export async function getProductById(id: string, shopId?: string) {
+export async function getProductById(
+  id: string,
+  shopId?: string,
+  userId?: string
+) {
   const where: Record<string, unknown> = { id };
   if (shopId) (where as any).shopId = shopId;
   const product = await prisma.product.findFirst({
@@ -121,10 +125,21 @@ export async function getProductById(id: string, shopId?: string) {
     },
   });
   if (!product) throw new AppError("Product not found", 404);
+
+  if (userId) {
+    await prisma.productView.create({
+      data: {
+        productId: product.id,
+        userId,
+        sessionId: null,
+      },
+    });
+  }
+
   return product;
 }
 
-export async function getProductByIdMobile(id: string, shopId?: string,userId?: string,sessionId?: string) {
+export async function getProductByIdMobile(id: string, shopId?: string, userId?: string) {
   const where: Record<string, unknown> = { id };
   if (shopId) (where as any).shopId = shopId;
   const product = await prisma.product.findFirst({
@@ -147,14 +162,15 @@ export async function getProductByIdMobile(id: string, shopId?: string,userId?: 
 
   if (!product) throw new AppError("Product not found", 404);
 
-   // 🔥 Track view
-   await prisma.productView.create({
-    data: {
-      productId:product.id,
-      userId: userId || null,
-      sessionId: sessionId || null,
-    },
-  });
+  if (userId) {
+    await prisma.productView.create({
+      data: {
+        productId: product.id,
+        userId,
+        sessionId: null,
+      },
+    });
+  }
 
   return product;
 }
@@ -350,6 +366,73 @@ export async function getMostViewedProducts(shopId?: string, limit = 10) {
   });
   const byId = new Map(products.map((p) => [p.id, p]));
   return rankedIds.map((id) => byId.get(id)).filter(Boolean).slice(0, limit);
+}
+
+export async function getRecentlyViewedProducts(params: {
+  userId: string;
+  shopId?: string;
+  page?: number;
+  pageSize?: number;
+}) {
+  const page = Math.max(1, params.page ?? 1);
+  const pageSize = Math.min(Math.max(1, params.pageSize ?? 12), 50);
+  const skip = (page - 1) * pageSize;
+
+  const where: Parameters<typeof prisma.productView.groupBy>[0]["where"] = {
+    userId: params.userId,
+    product: {
+      status: "ACTIVE",
+      ...(params.shopId ? { shopId: params.shopId } : {}),
+    },
+  };
+
+  const [grouped, totalGrouped] = await Promise.all([
+    prisma.productView.groupBy({
+      by: ["productId"],
+      where,
+      _max: { createdAt: true },
+      orderBy: { _max: { createdAt: "desc" } },
+      skip,
+      take: pageSize,
+    }),
+    prisma.productView.groupBy({
+      by: ["productId"],
+      where,
+    }),
+  ]);
+
+  const rankedIds = grouped.map((g) => g.productId);
+  if (!rankedIds.length) {
+    return {
+      data: [],
+      pagination: { page, pageSize, total: 0, totalPages: 1 },
+    };
+  }
+
+  const products = await prisma.product.findMany({
+    where: { id: { in: rankedIds }, status: "ACTIVE" },
+    include: {
+      brand: { select: { id: true, name: true, slug: true } },
+      category: { select: { id: true, name: true, slug: true } },
+      variants: {
+        take: 3,
+        include: { media: { take: 1 } },
+      },
+    },
+  });
+  const byId = new Map(products.map((p) => [p.id, p]));
+  const data = rankedIds.map((id) => byId.get(id)).filter(Boolean);
+
+  const total = totalGrouped.length;
+  return {
+    data,
+    pagination: {
+      page,
+      pageSize,
+      total,
+      totalPages: Math.max(1, Math.ceil(total / pageSize)),
+    },
+  };
 }
 
 export async function getVariantById(id: string) {

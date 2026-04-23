@@ -45,6 +45,7 @@ router.get("/featured", productController.getFeatured);
 router.get("/popular", productController.getPopular);
 router.get("/new-arrivals", productController.getNewArrivals);
 router.get("/most-viewed", productController.getMostViewed);
+router.get("/recently-viewed", auth_middleware_1.protect, productController.getRecentlyViewed);
 router.get("/variants", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), (0, permission_middleware_1.requirePermission)("products", "read"), productController.listVariants);
 router.patch("/variants/:variantId", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), (0, permission_middleware_1.requirePermission)("products", "update"), (0, multer_1.uploadSingleImage)("image"), productController.updateVariant);
 router.get("/variants/:id", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), (0, permission_middleware_1.requirePermission)("products", "read"), productController.getVariantById);
@@ -66,8 +67,8 @@ router.post("/options/:optionId/values", auth_middleware_1.protect, (0, auth_mid
 router.get("/options/:optionId", productController.getVariantOptionById);
 router.patch("/options/:optionId", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), (0, permission_middleware_1.requirePermission)("products", "update"), productController.updateVariantOption);
 router.delete("/options/:optionId", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), (0, permission_middleware_1.requirePermission)("products", "delete"), productController.deleteVariantOption);
-router.get("/:id", productController.getProductById);
-router.get("/mobile/:id", productController.getProductByIdMobile);
+router.get("/:id", auth_middleware_1.optionalAuth, productController.getProductById);
+router.get("/mobile/:id", auth_middleware_1.optionalAuth, productController.getProductByIdMobile);
 router.get("/:id/reviews", reviewController.listByProduct);
 router.post("/", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), (0, permission_middleware_1.requirePermission)("products", "create"), productController.createProduct);
 router.patch("/:id", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), (0, permission_middleware_1.requirePermission)("products", "update"), productController.updateProduct);
