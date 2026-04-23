@@ -27,6 +27,8 @@ router.get("/notifications", userController.listMyNotifications);
 router.get("/notifications/unread-count", userController.getMyUnreadNotificationsCount);
 router.post("/notifications/read-all", userController.markAllMyNotificationsRead);
 router.post("/notifications/:id/read", userController.markMyNotificationRead);
+router.post("/me/push-token", userController.registerMyPushToken);
+router.delete("/me/push-token", userController.removeMyPushToken);
 
 // ===============================
 // SAVED ADDRESSES (ME)

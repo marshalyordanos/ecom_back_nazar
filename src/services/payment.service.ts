@@ -1,7 +1,7 @@
 import { prisma } from "../lib/prisma";
 import AppError from "../utils/appError";
 import { PrismaQueryFeature } from "../utils/apiFeature";
-import { createNotification } from "./notification.service";
+import { createNotification, notifyAllAdminsPaymentEvent } from "./notification.service";
 
 const dateFields = ["createdAt", "paidAt"];
 
@@ -67,6 +67,11 @@ export async function capturePayment(id: string) {
     message: `Payment for order ${payment.order.orderNumber} has been confirmed.`,
     metadata: { orderId: payment.orderId, paymentId: id },
   });
+  await notifyAllAdminsPaymentEvent({
+    title: "Payment received",
+    message: `Payment for order ${payment.order.orderNumber} has been confirmed.`,
+    metadata: { orderId: payment.orderId, paymentId: id, eventKind: "payment_received" },
+  });
 
 
   // 5️⃣ Create shipment if payment is NOT cash
@@ -118,6 +123,11 @@ export async function refundPayment(id: string) {
     title: "Payment refunded",
     message: `Payment for order ${payment.order.orderNumber} has been refunded.`,
     metadata: { orderId: payment.orderId, paymentId: id },
+  });
+  await notifyAllAdminsPaymentEvent({
+    title: "Payment refunded",
+    message: `Payment for order ${payment.order.orderNumber} has been refunded.`,
+    metadata: { orderId: payment.orderId, paymentId: id, eventKind: "payment_refunded" },
   });
   return updated;
 }
