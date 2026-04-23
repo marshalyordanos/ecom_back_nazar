@@ -130,8 +130,8 @@ model ShopLocation {
 
 model User {
   id              String         @id @default(cuid())
-  email           String         @unique
-  phone           String         @unique
+  email           String?        @unique
+  phone           String?        @unique
   passwordHash    String
   firstName       String
   lastName        String
@@ -143,6 +143,7 @@ model User {
   phoneVerifiedAt DateTime?
   roles           Role[]
   tokens          Token[]
+  otpRecords      OtpRecord[]
   carts           Cart[]
   orders          Order[]
   reviews         Review[]
@@ -170,6 +171,25 @@ model Token {
 
   @@index([userId, type])
   @@index([token])
+}
+
+model OtpRecord {
+  id               String   @id @default(cuid())
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId           String
+  channelValue     String
+  otpType          String   // email | phone
+  otpPurpose       String   // account_verification | password_reset
+  verificationId   String?
+  otpHash          String?
+  otpExpiresAt     DateTime?
+  otpAttempts      Int      @default(0)
+  otpCooldownUntil DateTime?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@unique([userId, otpType, otpPurpose])
+  @@index([channelValue, otpType, otpPurpose])
 }
 
 //////////////////////////////////////////////////////
@@ -666,6 +686,38 @@ model ShopSetting {
   @@unique([shopId, key])
 }
 
+//////////////////////////////////////////////////////
+// CMS: FAQ & STATIC PAGES
+//////////////////////////////////////////////////////
+
+enum FaqStatus {
+  DRAFT
+  PUBLISHED
+}
+
+enum StaticPageType {
+  privacy
+  terms
+  about
+}
+
+model Faq {
+  id        String    @id @default(cuid())
+  question  String
+  answer    String    @db.Text
+  status    FaqStatus @default(DRAFT)
+  sortOrder Int       @default(0)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model StaticPage {
+  id        String         @id @default(cuid())
+  type      StaticPageType @unique
+  content   String         @db.Text
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+}
 
 model SaleFromShop{
   id String @id @default(cuid())

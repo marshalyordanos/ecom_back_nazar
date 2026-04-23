@@ -2,8 +2,15 @@ import { prisma } from "../lib/prisma";
 import AppError from "../utils/appError";
 import { hashPassword } from "../utils/hash";
 import { PrismaQueryFeature } from "../utils/apiFeature";
+import fs from "fs";
+import { uploadToCloudinary } from "../config/cloudinary";
 const userSearchableFields = ["email", "firstName", "lastName", "phone"];
-const userDateFields = ["createdAt", "updatedAt", "emailVerifiedAt", "phoneVerifiedAt"];
+const userDateFields = [
+  "createdAt",
+  "updatedAt",
+  "emailVerifiedAt",
+  "phoneVerifiedAt",
+];
 
 export async function getMe(userId: string) {
   const user = await prisma.user.findUnique({
@@ -31,15 +38,34 @@ export async function getMe(userId: string) {
 
 export async function updateMe(
   userId: string,
-  data: { firstName?: string; lastName?: string; phone?: string; avatarUrl?: string }
+  data: {
+    firstName?: string;
+    lastName?: string;
+    phone?: string;
+    avatarUrl?: string;
+  },
+  file?: Express.Multer.File,
 ) {
+  let resolvedAvatarUrl = data.avatarUrl;
+
+  if (file?.path) {
+    const fileBuffer = fs.readFileSync(file.path);
+    const uploadResult = await uploadToCloudinary(
+      fileBuffer,
+      "ecommerce/users",
+      "image",
+    );
+    fs.unlinkSync(file.path);
+    resolvedAvatarUrl = uploadResult.secure_url || uploadResult.url;
+  }
+
   const user = await prisma.user.update({
     where: { id: userId },
     data: {
       ...(data.firstName !== undefined && { firstName: data.firstName }),
       ...(data.lastName !== undefined && { lastName: data.lastName }),
       ...(data.phone !== undefined && { phone: data.phone }),
-      ...(data.avatarUrl !== undefined && { avatarUrl: data.avatarUrl }),
+      ...(resolvedAvatarUrl !== undefined && { avatarUrl: resolvedAvatarUrl }),
     },
     select: {
       id: true,
@@ -85,9 +111,12 @@ export async function listUsers(
     sort?: string;
     roleId?: string;
   },
-  onlyUsers?: boolean
+  onlyUsers?: boolean,
 ) {
-  const feature = new PrismaQueryFeature<Record<string, unknown>, Record<string, string>>({
+  const feature = new PrismaQueryFeature<
+    Record<string, unknown>,
+    Record<string, string>
+  >({
     ...query,
     searchableFields: userSearchableFields,
     dateFields: userDateFields,
@@ -147,7 +176,7 @@ export async function updateUser(
     avatarUrl?: string;
     roleIds?: string[];
     locationId?: string | null;
-  }
+  },
 ) {
   const existing = await prisma.user.findUnique({ where: { id } });
   if (!existing) throw new AppError("User not found", 404);
@@ -166,7 +195,9 @@ export async function updateUser(
     if (data.locationId === null) {
       updateData.locationId = null;
     } else {
-      const loc = await prisma.shopLocation.findUnique({ where: { id: data.locationId } });
+      const loc = await prisma.shopLocation.findUnique({
+        where: { id: data.locationId },
+      });
       if (!loc) throw new AppError("Location not found", 404);
       updateData.locationId = data.locationId;
     }

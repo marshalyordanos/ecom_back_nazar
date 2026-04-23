@@ -14,7 +14,10 @@ export async function listCategories(query: {
   filter?: string;
   sort?: string;
 }) {
-  const feature = new PrismaQueryFeature<Record<string, unknown>, Record<string, string>>({
+  const feature = new PrismaQueryFeature<
+    Record<string, unknown>,
+    Record<string, string>
+  >({
     ...query,
     searchableFields,
     dateFields,
@@ -89,7 +92,10 @@ export async function listCategoriesTree() {
   });
 
   // Preprocessing for easier descendant lookup
-  const allCategories: Omit<CategoryNode, 'totalSalesAmount' | 'totalProductsSold' | 'children'>[] = allCategoriesRaw.map(cat => ({
+  const allCategories: Omit<
+    CategoryNode,
+    "totalSalesAmount" | "totalProductsSold" | "children"
+  >[] = allCategoriesRaw.map((cat) => ({
     id: cat.id,
     parentId: cat.parentId,
     name: cat.name,
@@ -101,9 +107,9 @@ export async function listCategoriesTree() {
 
   // Step 2: For every category, find all its descendant ids using track
   const categoryDescendants: Record<string, Set<string>> = {};
-  const separator = '/';
+  const separator = "/";
   for (const cat of allCategories) {
-    const trackPrefix = cat.track ? cat.track + separator : '';
+    const trackPrefix = cat.track ? cat.track + separator : "";
     // A category's descendants are any category whose track starts with cat.track + '/'
     categoryDescendants[cat.id] = new Set([cat.id]);
     for (const otherCat of allCategories) {
@@ -122,7 +128,11 @@ export async function listCategoriesTree() {
   // Also, compute sales and product count for each category tree
   const salesInfoByCategory: Record<
     string,
-    { totalSalesAmount: number; totalProductsSold: number; totalProducts: number }
+    {
+      totalSalesAmount: number;
+      totalProductsSold: number;
+      totalProducts: number;
+    }
   > = {};
 
   for (const [catId, allIds] of Object.entries(categoryDescendants)) {
@@ -132,7 +142,7 @@ export async function listCategoriesTree() {
     // 2. Fetch all products in these categories
     const products = await prisma.product.findMany({
       where: { categoryId: { in: categoryIds } },
-      select: { id: true }
+      select: { id: true },
     });
     const productIds = products.map((p) => p.id);
     let categoryTotalAmount = 0;
@@ -157,11 +167,17 @@ export async function listCategoriesTree() {
   }
 
   // Step 4: Treeify categories
-  type CategoryTreeNode = CategoryNode & { totalProducts: number; children?: CategoryTreeNode[] };
+  type CategoryTreeNode = CategoryNode & {
+    totalProducts: number;
+    children?: CategoryTreeNode[];
+  };
 
   function buildTree(
-    nodes: (Omit<CategoryNode, 'totalSalesAmount' | 'totalProductsSold' | 'children'>)[],
-    parentId: string | null
+    nodes: Omit<
+      CategoryNode,
+      "totalSalesAmount" | "totalProductsSold" | "children"
+    >[],
+    parentId: string | null,
   ): CategoryTreeNode[] {
     return nodes
       .filter((node) => node.parentId === parentId)
@@ -170,7 +186,7 @@ export async function listCategoriesTree() {
         totalSalesAmount: salesInfoByCategory[node.id]?.totalSalesAmount || 0,
         totalProductsSold: salesInfoByCategory[node.id]?.totalProductsSold || 0,
         totalProducts: salesInfoByCategory[node.id]?.totalProducts || 0,
-        children: buildTree(nodes, node.id)
+        children: buildTree(nodes, node.id),
       }));
   }
 
@@ -191,24 +207,33 @@ export async function getCategoryById(id: string) {
   return category;
 }
 
-export async function createCategory(data: {
-  name: string;
-  slug: string;
-  description?: string;
-  parentId?: string;
-  track?: string;
-}, file: any) {
+export async function createCategory(
+  data: {
+    name: string;
+    slug: string;
+    description?: string;
+    parentId?: string;
+    track?: string;
+  },
+  file: any,
+) {
   if (!file) {
-    throw new AppError('No file uploaded', 400);
+    throw new AppError("No file uploaded", 400);
   }
 
   const fileBuffer = fs.readFileSync(file.path);
-  const uploadResult = await uploadToCloudinary(fileBuffer, 'ecommerce/categories', 'image');
+  const uploadResult = await uploadToCloudinary(
+    fileBuffer,
+    "ecommerce/categories",
+    "image",
+  );
   fs.unlinkSync(file.path);
-  if(data.parentId){
-    const parent = await prisma.productCategory.findUnique({ where: { id: data.parentId } });
-    if(parent){
-      data.track = parent.track ?? '';
+  if (data.parentId) {
+    const parent = await prisma.productCategory.findUnique({
+      where: { id: data.parentId },
+    });
+    if (parent) {
+      data.track = parent.track ?? "";
     }
   }
   const category = await prisma.productCategory.create({
@@ -220,11 +245,17 @@ export async function createCategory(data: {
       image: uploadResult.secure_url,
     },
   });
-  if(category){
-    if(data.parentId){
-      return await prisma.productCategory.update({ where: { id: category.id }, data: { track: String(data.track)+'/'+String(category.id) } });
-    }else{
-      return await prisma.productCategory.update({ where: { id: category.id }, data: { track: String(category.id) } });
+  if (category) {
+    if (data.parentId) {
+      return await prisma.productCategory.update({
+        where: { id: category.id },
+        data: { track: String(data.track) + "/" + String(category.id) },
+      });
+    } else {
+      return await prisma.productCategory.update({
+        where: { id: category.id },
+        data: { track: String(category.id) },
+      });
     }
   }
   return category;
@@ -232,15 +263,26 @@ export async function createCategory(data: {
 
 export async function updateCategory(
   id: string,
-  data: { name?: string; slug?: string; description?: string; parentId?: string; image?: string; track?: string },
-  file: any
+  data: {
+    name?: string;
+    slug?: string;
+    description?: string;
+    parentId?: string;
+    image?: string;
+    track?: string;
+  },
+  file: any,
 ) {
   // if (!file) {
   //   throw new AppError('No file uploaded', 400);
   // }
   if (file) {
     const fileBuffer = fs.readFileSync(file.path);
-    const uploadResult = await uploadToCloudinary(fileBuffer, 'ecommerce/categories', 'image');
+    const uploadResult = await uploadToCloudinary(
+      fileBuffer,
+      "ecommerce/categories",
+      "image",
+    );
     fs.unlinkSync(file.path);
 
     if (uploadResult.secure_url) {
@@ -249,14 +291,6 @@ export async function updateCategory(
   }
   if (data.parentId === "") {
     (data as { parentId?: string | null }).parentId = null;
-  }
-  if(data.parentId){
-    const parent = await prisma.productCategory.findUnique({ where: { id: data.parentId } });
-    if(parent){
-      data.track = String(parent.track)+'/'+String(id);
-    }
-  }else{
-    data.track = String(id);
   }
   const category = await prisma.productCategory.update({
     where: { id },

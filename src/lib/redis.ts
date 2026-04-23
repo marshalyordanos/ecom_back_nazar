@@ -32,9 +32,10 @@ export function getNotificationPub(): Redis | null {
 /**
  * Get dedicated pub/sub clients for Socket.IO Redis adapter.
  */
-export function getSocketAdapterRedisClients():
-  | { pubClient: Redis; subClient: Redis }
-  | null {
+export function getSocketAdapterRedisClients(): {
+  pubClient: Redis;
+  subClient: Redis;
+} | null {
   if (!adapterPublisher) {
     adapterPublisher = createRedisClient();
   }

@@ -23,7 +23,9 @@ export function initSocket(httpServer: HttpServer): Server {
   // Redis adapter for multi-instance pub/sub
   const adapterClients = getSocketAdapterRedisClients();
   if (adapterClients) {
-    io.adapter(createAdapter(adapterClients.pubClient, adapterClients.subClient));
+    io.adapter(
+      createAdapter(adapterClients.pubClient, adapterClients.subClient),
+    );
   }
 
   io.use((socket, next) => {
@@ -32,7 +34,10 @@ export function initSocket(httpServer: HttpServer): Server {
       return next();
     }
     try {
-      const decoded = jwt.verify(String(token), config.jwt.secret) as JwtPayload;
+      const decoded = jwt.verify(
+        String(token),
+        config.jwt.secret,
+      ) as JwtPayload;
       if (decoded.type === tokenTypes.ACCESS) {
         (socket as Socket & { userId?: string }).userId = decoded.userId;
       }

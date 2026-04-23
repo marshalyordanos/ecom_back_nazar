@@ -35,8 +35,8 @@ const parseFieldFromConstraint = (err: any): string | null => {
     typeof err?.meta?.driverAdapterError?.cause?.originalMessage === "string"
       ? err.meta.driverAdapterError.cause.originalMessage
       : typeof err?.meta?.driverAdapterError?.message === "string"
-      ? err.meta.driverAdapterError.message
-      : null;
+        ? err.meta.driverAdapterError.message
+        : null;
 
   const fromAdapter = adapterMessage?.match(/["`]([A-Za-z0-9_]+)_fkey["`]/);
 
@@ -56,14 +56,14 @@ export const errHandling = (
   err: any,
   _req: Request,
   res: Response,
-  _next: NextFunction
+  _next: NextFunction,
 ) => {
   // Log original error for debugging
   console.log("********** ERROR NAME:", err.name);
   console.log("********** ERROR CODE:", err.code);
   console.log("********** ERROR FULL:", err);
 
-  // Always show the actual error returned by AppError and not clone 
+  // Always show the actual error returned by AppError and not clone
   // (because property copying is shallow and misses prototype/isOperational)
   let error = err;
 
@@ -80,7 +80,7 @@ export const errHandling = (
     const missingField = match ? match[1] : null;
     error = new AppError(
       `Invalid input data${missingField ? `: ${missingField}` : ""}`,
-      400
+      400,
     );
   }
 
@@ -95,7 +95,7 @@ export const errHandling = (
     if (field) {
       error = new AppError(
         `${friendlyField(field)} is required or invalid`,
-        400
+        400,
       );
     } else {
       error = new AppError("Related resource does not exist", 400);
@@ -122,7 +122,7 @@ export const errHandling = (
         : "field";
     error = new AppError(
       `Duplicate field value: please use another ${field}`,
-      409
+      409,
     );
   }
 
@@ -137,7 +137,10 @@ export const errHandling = (
   if (err?.name === "TokenExpiredError") {
     error = new AppError("Token expired. Please log in again", 401);
   }
-  if (err?.name === "JsonWebTokenError" || err?.message === "Invalid or expired token") {
+  if (
+    err?.name === "JsonWebTokenError" ||
+    err?.message === "Invalid or expired token"
+  ) {
     // Accept also hand-created tokens errors
     error = new AppError("Invalid or expired token", 401);
   }

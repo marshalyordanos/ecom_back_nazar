@@ -1,6 +1,7 @@
 import { Router } from "express";
 import * as userController from "../controllers/user.controller";
 import * as authController from "../controllers/auth.controller";
+import { uploadSingleImage } from "../config/multer";
 
 import { protect, restrictTo } from "../middleware/auth.middleware";
 import { requirePermission } from "../middleware/permission.middleware";
@@ -10,7 +11,7 @@ const router = Router();
 router.use(protect);
 
 router.get("/me", userController.getMe);
-router.patch("/me", userController.updateMe);
+router.patch("/me", uploadSingleImage("avatar"), userController.updateMe);
 router.patch("/me/password", userController.updateMyPassword);
 router.post(
   "/",

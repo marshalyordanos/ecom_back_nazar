@@ -72,8 +72,8 @@ export async function createNotification(input: CreateNotificationInput) {
             message: input.message,
             metadata: input.metadata ? (input.metadata as object) : undefined,
           },
-        })
-      )
+        }),
+      ),
     );
 
     for (const row of rows) {
@@ -140,7 +140,11 @@ export async function notifyAllAdminsOrderEvent(input: {
     type: "order_update",
     title: input.title,
     message: input.message,
-    metadata: { source: "admin_event", eventType: "order_event", ...(input.metadata || {}) },
+    metadata: {
+      source: "admin_event",
+      eventType: "order_event",
+      ...(input.metadata || {}),
+    },
     targetAudience: "all_admins",
     sendPush: false,
   });
@@ -156,7 +160,11 @@ export async function notifyAllAdminsPaymentEvent(input: {
     type: "payment",
     title: input.title,
     message: input.message,
-    metadata: { source: "admin_event", eventType: "payment_event", ...(input.metadata || {}) },
+    metadata: {
+      source: "admin_event",
+      eventType: "payment_event",
+      ...(input.metadata || {}),
+    },
     targetAudience: "all_admins",
     sendPush: false,
   });
@@ -173,11 +181,11 @@ export async function getUnreadCount(userId: string): Promise<number> {
 
 export async function listMyNotifications(
   userId: string,
-  query: { page?: number; pageSize?: number } = {}
+  query: { page?: number; pageSize?: number } = {},
 ) {
-  const page = query.page ?? 1
-  const pageSize = Math.min(query.pageSize ?? 20, 50)
-  const skip = (page - 1) * pageSize
+  const page = query.page ?? 1;
+  const pageSize = Math.min(query.pageSize ?? 20, 50);
+  const skip = (page - 1) * pageSize;
 
   const [data, total] = await Promise.all([
     prisma.notification.findMany({
@@ -187,7 +195,7 @@ export async function listMyNotifications(
       take: pageSize,
     }),
     prisma.notification.count({ where: { userId } }),
-  ])
+  ]);
 
   return {
     data,
@@ -197,21 +205,24 @@ export async function listMyNotifications(
       total,
       totalPages: Math.max(1, Math.ceil(total / pageSize)),
     },
-  }
+  };
 }
 
-export async function markMyNotificationRead(userId: string, notificationId: string) {
+export async function markMyNotificationRead(
+  userId: string,
+  notificationId: string,
+) {
   await prisma.notification.updateMany({
     where: { id: notificationId, userId },
     data: { readAt: new Date() },
-  })
-  return { message: "Notification marked as read" }
+  });
+  return { message: "Notification marked as read" };
 }
 
 export async function markAllMyNotificationsRead(userId: string) {
   await prisma.notification.updateMany({
     where: { userId, readAt: null },
     data: { readAt: new Date() },
-  })
-  return { message: "All notifications marked as read" }
+  });
+  return { message: "All notifications marked as read" };
 }
