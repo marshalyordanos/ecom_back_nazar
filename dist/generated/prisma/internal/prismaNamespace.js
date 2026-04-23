@@ -307,6 +307,7 @@ exports.VariantOptionValueScalarFieldEnum = {
 exports.OptionValueScalarFieldEnum = {
     id: 'id',
     value: 'value',
+    colorValue: 'colorValue',
     optionId: 'optionId',
     createdAt: 'createdAt'
 };

@@ -9,6 +9,7 @@ exports.getOverview = getOverview;
 exports.getSalesSummary = getSalesSummary;
 exports.getOrdersSummary = getOrdersSummary;
 exports.getTopProducts = getTopProducts;
+exports.getEcommerceHighlights = getEcommerceHighlights;
 exports.getLowInventory = getLowInventory;
 exports.getNewCustomers = getNewCustomers;
 exports.getRecentOrders = getRecentOrders;
@@ -365,17 +366,182 @@ async function getTopProducts(shopId, limit = 10) {
         };
     });
 }
+async function getEcommerceHighlights(shopId, limit = 3) {
+    const safeLimit = Math.min(Math.max(Number(limit) || 3, 1), 6);
+    const now = new Date();
+    const currentWindowStart = new Date(now);
+    currentWindowStart.setDate(currentWindowStart.getDate() - 30);
+    const previousWindowStart = new Date(currentWindowStart);
+    previousWindowStart.setDate(previousWindowStart.getDate() - 30);
+    const [totalVisits, totalOrders, visitsThisWindow, visitsPreviousWindow, ordersThisWindow, ordersPreviousWindow, topLevelCategories, soldVariants, productViewCounts,] = await Promise.all([
+        prisma_1.prisma.productView.count({ where: { product: { shopId } } }),
+        prisma_1.prisma.order.count({ where: { shopId } }),
+        prisma_1.prisma.productView.count({
+            where: { product: { shopId }, createdAt: { gte: currentWindowStart } },
+        }),
+        prisma_1.prisma.productView.count({
+            where: {
+                product: { shopId },
+                createdAt: { gte: previousWindowStart, lt: currentWindowStart },
+            },
+        }),
+        prisma_1.prisma.order.count({ where: { shopId, createdAt: { gte: currentWindowStart } } }),
+        prisma_1.prisma.order.count({
+            where: { shopId, createdAt: { gte: previousWindowStart, lt: currentWindowStart } },
+        }),
+        prisma_1.prisma.productCategory.findMany({
+            where: { parentId: null },
+            select: { id: true, name: true, track: true, image: true },
+        }),
+        prisma_1.prisma.orderItem.groupBy({
+            by: ["variantId"],
+            where: { order: { shopId } },
+            _sum: { total: true },
+            _count: { id: true },
+        }),
+        prisma_1.prisma.productView.groupBy({
+            by: ["productId"],
+            where: { product: { shopId } },
+            _count: { id: true },
+        }),
+    ]);
+    const variantIds = soldVariants.map((item) => item.variantId);
+    const variants = variantIds.length
+        ? await prisma_1.prisma.productVariant.findMany({
+            where: { id: { in: variantIds } },
+            select: {
+                id: true,
+                image: true,
+                media: {
+                    take: 1,
+                    orderBy: { position: "asc" },
+                    select: { url: true },
+                },
+                product: {
+                    select: {
+                        id: true,
+                        name: true,
+                        slug: true,
+                        categoryId: true,
+                        category: {
+                            select: {
+                                id: true,
+                                name: true,
+                                track: true,
+                                parentId: true,
+                                image: true,
+                            },
+                        },
+                    },
+                },
+            },
+        })
+        : [];
+    const topLevelById = new Map(topLevelCategories.map((category) => [
+        category.id,
+        {
+            id: category.id,
+            name: category.name,
+            track: category.track,
+            image: category.image,
+            revenue: 0,
+            orderCount: 0,
+        },
+    ]));
+    const variantById = new Map(variants.map((variant) => [variant.id, variant]));
+    const productViewsById = new Map(productViewCounts.map((item) => [item.productId, item._count.id]));
+    const categoryProducts = new Map();
+    const categoryProductIds = new Map();
+    for (const item of soldVariants) {
+        const variant = variantById.get(item.variantId);
+        if (!variant)
+            continue;
+        const categoryTrack = variant.product.category?.track ?? null;
+        const rootCategoryId = categoryTrack?.split("/")[0] ?? variant.product.categoryId ?? null;
+        if (!rootCategoryId)
+            continue;
+        const topLevelCategory = topLevelById.get(rootCategoryId);
+        if (!topLevelCategory)
+            continue;
+        topLevelCategory.revenue += safeNumber(item._sum.total);
+        topLevelCategory.orderCount += item._count.id;
+        const productMap = categoryProducts.get(rootCategoryId) ?? new Map();
+        const existingProduct = productMap.get(variant.product.id) ?? {
+            productId: variant.product.id,
+            productName: variant.product.name,
+            productSlug: variant.product.slug,
+            revenue: 0,
+            orderCount: 0,
+            views: productViewsById.get(variant.product.id) ?? 0,
+            image: variant.image ?? variant.media[0]?.url ?? topLevelCategory.image ?? null,
+        };
+        existingProduct.revenue += safeNumber(item._sum.total);
+        existingProduct.orderCount += item._count.id;
+        productMap.set(variant.product.id, existingProduct);
+        categoryProducts.set(rootCategoryId, productMap);
+        const productIds = categoryProductIds.get(rootCategoryId) ?? new Set();
+        productIds.add(variant.product.id);
+        categoryProductIds.set(rootCategoryId, productIds);
+    }
+    const categoryHighlights = Array.from(topLevelById.values())
+        .map((category) => {
+        const topProduct = Array.from(categoryProducts.get(category.id)?.values() ?? []).sort((a, b) => {
+            if (b.revenue !== a.revenue)
+                return b.revenue - a.revenue;
+            if (b.orderCount !== a.orderCount)
+                return b.orderCount - a.orderCount;
+            return b.views - a.views;
+        })[0] ?? null;
+        const totalViews = Array.from(categoryProductIds.get(category.id) ?? []).reduce((sum, productId) => sum + (productViewsById.get(productId) ?? 0), 0);
+        return {
+            categoryId: category.id,
+            categoryName: category.name,
+            track: category.track,
+            image: category.image ?? topProduct?.image ?? null,
+            revenue: category.revenue,
+            orderCount: category.orderCount,
+            totalViews,
+            topProduct,
+        };
+    })
+        .filter((category) => category.topProduct)
+        .sort((a, b) => {
+        if (b.revenue !== a.revenue)
+            return b.revenue - a.revenue;
+        if (b.orderCount !== a.orderCount)
+            return b.orderCount - a.orderCount;
+        return b.totalViews - a.totalViews;
+    })
+        .slice(0, safeLimit);
+    return {
+        visitsSummary: {
+            totalVisits,
+            totalOrders,
+            conversionRate: totalVisits > 0 ? (totalOrders / totalVisits) * 100 : 0,
+            visitsChangePct: percentChangeGlobal(visitsThisWindow, visitsPreviousWindow),
+            ordersChangePct: percentChangeGlobal(ordersThisWindow, ordersPreviousWindow),
+        },
+        categoryHighlights,
+    };
+}
 async function getLowInventory(shopId) {
-    const inventories = await prisma_1.prisma.inventory.findMany({
+    return prisma_1.prisma.inventory.findMany({
         where: {
             variant: { product: { shopId } },
+            OR: [
+                { quantity: { lte: 0 } },
+                {
+                    reorderLevel: { not: null },
+                    quantity: { lte: prisma_1.prisma.inventory.fields.reorderLevel },
+                },
+            ],
         },
+        orderBy: [{ quantity: "asc" }, { updatedAt: "asc" }],
         include: {
             variant: { include: { product: { select: { name: true, slug: true } } } },
             location: true,
         },
     });
-    return inventories.filter((inv) => inv.quantity <= 0);
 }
 async function getNewCustomers(shopId, days = 30) {
     const since = new Date();

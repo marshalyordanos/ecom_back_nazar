@@ -386,6 +386,7 @@ export async function register(data: {
     verificationRequired: true,
   };
 }
+//
 
 export async function login(emailPhone: string, password: string) {
   const user = await prisma.user.findFirst({
@@ -447,10 +448,20 @@ export async function refresh(refreshToken: string) {
     where: { token: refreshToken, type: tokenTypes.REFRESH },
     include: { user: true },
   });
-  if (!tokenRecord || tokenRecord.expiresAt < new Date()) {
-    throw new AppError("Invalid or expired refresh token", 401);
+  if (!tokenRecord) {
+    throw new AppError("Session expired. Please log in again", 401);
+  }
+
+  if (tokenRecord.expiresAt < new Date()) {
+    await prisma.token.deleteMany({
+      where: { token: refreshToken, type: tokenTypes.REFRESH },
+    });
+    throw new AppError("Session expired. Please log in again", 401);
   }
   if (tokenRecord.user.status !== "ACTIVE") {
+    await prisma.token.deleteMany({
+      where: { token: refreshToken, type: tokenTypes.REFRESH },
+    });
     throw new AppError("Account is inactive", 401);
   }
 

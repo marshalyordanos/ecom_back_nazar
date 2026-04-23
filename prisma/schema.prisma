@@ -342,6 +342,7 @@ model VariantOptionValue {
 model OptionValue {
   id        String        @id @default(cuid())
   value     String        // S, M, L or Red, Blue
+  colorValue String?      @map("color_value") // Hex color for color options
   option    VariantOption @relation(fields: [optionId], references: [id], onDelete: Cascade)
   optionId  String
   variants  VariantOptionValue[]

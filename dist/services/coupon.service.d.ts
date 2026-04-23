@@ -16,13 +16,13 @@ export declare function listCoupons(query: {
             couponId: string;
         }[];
     } & {
+        value: number;
         code: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
         type: import("../generated/prisma/enums").CouponType;
         expiresAt: Date | null;
-        value: number;
         minOrderAmount: number | null;
         usageLimit: number | null;
         usedCount: number;
@@ -53,13 +53,13 @@ export declare function getCouponById(id: string): Promise<{
         couponId: string;
     })[];
 } & {
+    value: number;
     code: string;
     id: string;
     createdAt: Date;
     updatedAt: Date;
     type: import("../generated/prisma/enums").CouponType;
     expiresAt: Date | null;
-    value: number;
     minOrderAmount: number | null;
     usageLimit: number | null;
     usedCount: number;
@@ -72,13 +72,13 @@ export declare function createCoupon(data: {
     usageLimit?: number;
     expiresAt?: Date;
 }): Promise<{
+    value: number;
     code: string;
     id: string;
     createdAt: Date;
     updatedAt: Date;
     type: import("../generated/prisma/enums").CouponType;
     expiresAt: Date | null;
-    value: number;
     minOrderAmount: number | null;
     usageLimit: number | null;
     usedCount: number;
@@ -91,13 +91,13 @@ export declare function updateCoupon(id: string, data: {
     usageLimit?: number;
     expiresAt?: Date;
 }): Promise<{
+    value: number;
     code: string;
     id: string;
     createdAt: Date;
     updatedAt: Date;
     type: import("../generated/prisma/enums").CouponType;
     expiresAt: Date | null;
-    value: number;
     minOrderAmount: number | null;
     usageLimit: number | null;
     usedCount: number;
@@ -108,10 +108,10 @@ export declare function deleteCoupon(id: string): Promise<{
 export declare function applyCouponToOrder(orderId: string, couponId: string, userId: string): Promise<({
     items: {
         id: string;
+        price: number;
         total: number;
         variantId: string;
         quantity: number;
-        price: number;
         orderId: string;
         productName: string;
         variantName: string | null;

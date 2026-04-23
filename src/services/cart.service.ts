@@ -109,7 +109,7 @@ export async function removeItem(userId: string, itemId: string) {
     include: { items: true },
   });
   if (!cart) throw new AppError("Cart not found", 404);
-  const item = cart.items.find((i) => i.id === itemId);
+  const item = cart.items.find((i) =>  i.id === itemId);
   if (!item) throw new AppError("Cart item not found", 404);
   await prisma.cartItem.delete({ where: { id: itemId } });
   return await getOrCreateCart(userId);

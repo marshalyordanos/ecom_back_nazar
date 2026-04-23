@@ -8,7 +8,23 @@ export const listProducts = catchAsync(async (req: AuthRequest, res: Response, _
   const query = parseListQuery(req);
   const shopId = req.query.shopId as string | undefined;
   const track = req.query.track as string | undefined;
-  const result = await productService.listProducts(shopId, track, query,req as any);
+  const minPriceRaw = req.query.minPrice;
+  const maxPriceRaw = req.query.maxPrice;
+  const minPrice = typeof minPriceRaw === "string" && minPriceRaw.trim() !== "" ? Number(minPriceRaw) : undefined;
+  const maxPrice = typeof maxPriceRaw === "string" && maxPriceRaw.trim() !== "" ? Number(maxPriceRaw) : undefined;
+  const normalizedMinPrice =
+    Number.isFinite(minPrice as number) && Number.isFinite(maxPrice as number) && (minPrice as number) > (maxPrice as number)
+      ? (maxPrice as number)
+      : (Number.isFinite(minPrice as number) ? (minPrice as number) : undefined);
+  const normalizedMaxPrice =
+    Number.isFinite(minPrice as number) && Number.isFinite(maxPrice as number) && (minPrice as number) > (maxPrice as number)
+      ? (minPrice as number)
+      : (Number.isFinite(maxPrice as number) ? (maxPrice as number) : undefined);
+
+  const result = await productService.listProducts(shopId, track, query, req as any, {
+    minPrice: normalizedMinPrice,
+    maxPrice: normalizedMaxPrice,
+  });
   res.status(200).json(result);
 });
 

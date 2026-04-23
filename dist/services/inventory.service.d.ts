@@ -43,9 +43,10 @@ export declare function listInventory(query: {
             };
             variantOptionValues: ({
                 optionValue: {
+                    value: string;
                     id: string;
                     createdAt: Date;
-                    value: string;
+                    colorValue: string | null;
                     optionId: string;
                 };
             } & {
@@ -58,8 +59,8 @@ export declare function listInventory(query: {
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            image: string | null;
             price: number;
+            image: string | null;
             productId: string;
             sku: string;
             barcode: string | null;
@@ -156,8 +157,8 @@ export declare function getInventoryById(id: string, user: InventoryScopeUser): 
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        image: string | null;
         price: number;
+        image: string | null;
         productId: string;
         sku: string;
         barcode: string | null;
@@ -207,8 +208,8 @@ export declare function listMovements(query: {
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            image: string | null;
             price: number;
+            image: string | null;
             productId: string;
             sku: string;
             barcode: string | null;

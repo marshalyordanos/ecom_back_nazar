@@ -153,12 +153,24 @@ class PrismaQueryFeature {
             this.orderBy = [{ createdAt: 'desc' }];
             return;
         }
-        this.orderBy = sort.split(',').map((item) => {
+        this.orderBy = sort
+            .split(',')
+            .map((item) => {
             const [key, order] = item.split(':');
+            const normalizedKey = key === 'vareints.price' ? 'variants.price' : key;
+            // Prisma cannot order Product by variants.price directly in findMany orderBy.
+            // This sort is handled in product.service.ts after fetch.
+            if (normalizedKey === 'variants.price' || normalizedKey === 'price') {
+                return null;
+            }
             return {
-                [key]: order === 'desc' ? 'desc' : 'asc',
+                [normalizedKey]: order === 'desc' ? 'desc' : 'asc',
             };
-        });
+        })
+            .filter((entry) => entry !== null);
+        if (this.orderBy.length === 0) {
+            this.orderBy = [{ createdAt: 'desc' }];
+        }
     }
     getQuery() {
         return {

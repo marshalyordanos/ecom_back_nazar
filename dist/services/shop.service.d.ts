@@ -204,10 +204,10 @@ export declare function addSalesFromShop(body: AddSalesFromShopBody): Promise<{
         locationId: string;
         createdAt: Date;
         updatedAt: Date;
+        price: number;
         total: number;
         variantId: string;
         quantity: number;
-        price: number;
     }[];
 }>;
 export declare function listSalesFromShop(query: {
@@ -250,8 +250,8 @@ export declare function listSalesFromShop(query: {
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            image: string | null;
             price: number;
+            image: string | null;
             productId: string;
             sku: string;
             barcode: string | null;
@@ -264,10 +264,10 @@ export declare function listSalesFromShop(query: {
         locationId: string;
         createdAt: Date;
         updatedAt: Date;
+        price: number;
         total: number;
         variantId: string;
         quantity: number;
-        price: number;
     })[];
     pagination: {
         total: number;
@@ -307,8 +307,8 @@ export declare function getSaleFromShopById(id: string): Promise<{
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        image: string | null;
         price: number;
+        image: string | null;
         productId: string;
         sku: string;
         barcode: string | null;
@@ -321,10 +321,10 @@ export declare function getSaleFromShopById(id: string): Promise<{
     locationId: string;
     createdAt: Date;
     updatedAt: Date;
+    price: number;
     total: number;
     variantId: string;
     quantity: number;
-    price: number;
 }>;
 export declare function updateSaleFromShop(id: string, body: {
     quantity?: number;
@@ -362,8 +362,8 @@ export declare function updateSaleFromShop(id: string, body: {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        image: string | null;
         price: number;
+        image: string | null;
         productId: string;
         sku: string;
         barcode: string | null;
@@ -376,10 +376,10 @@ export declare function updateSaleFromShop(id: string, body: {
     locationId: string;
     createdAt: Date;
     updatedAt: Date;
+    price: number;
     total: number;
     variantId: string;
     quantity: number;
-    price: number;
 }>;
 export declare function deleteSaleFromShop(id: string): Promise<{
     message: string;

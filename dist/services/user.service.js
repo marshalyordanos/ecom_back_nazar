@@ -49,8 +49,6 @@ async function getMe(userId) {
 }
 async function updateMe(userId, data, file) {
     let resolvedAvatarUrl = data.avatarUrl;
-    console.log(file?.path, "fiel path");
-    console.log(resolvedAvatarUrl, "fiel path");
     if (file?.path) {
         const fileBuffer = fs_1.default.readFileSync(file.path);
         const uploadResult = await (0, cloudinary_1.uploadToCloudinary)(fileBuffer, "ecommerce/users", "image");

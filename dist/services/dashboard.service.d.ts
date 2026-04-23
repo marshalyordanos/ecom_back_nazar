@@ -82,6 +82,33 @@ export declare function getTopProducts(shopId: string, limit?: number): Promise<
     orderCount: number;
     productName: string | undefined;
 }[]>;
+export declare function getEcommerceHighlights(shopId: string, limit?: number): Promise<{
+    visitsSummary: {
+        totalVisits: number;
+        totalOrders: number;
+        conversionRate: number;
+        visitsChangePct: number;
+        ordersChangePct: number;
+    };
+    categoryHighlights: {
+        categoryId: string;
+        categoryName: string;
+        track: string | null;
+        image: string | null;
+        revenue: number;
+        orderCount: number;
+        totalViews: number;
+        topProduct: {
+            productId: string;
+            productName: string;
+            productSlug: string;
+            revenue: number;
+            orderCount: number;
+            views: number;
+            image: string | null;
+        };
+    }[];
+}>;
 export declare function getLowInventory(shopId: string): Promise<({
     location: {
         name: string;
@@ -108,8 +135,8 @@ export declare function getLowInventory(shopId: string): Promise<({
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        image: string | null;
         price: number;
+        image: string | null;
         productId: string;
         sku: string;
         barcode: string | null;
@@ -136,10 +163,10 @@ export declare function getRecentOrders(shopId: string, limit?: number): Promise
     };
     items: {
         id: string;
+        price: number;
         total: number;
         variantId: string;
         quantity: number;
-        price: number;
         orderId: string;
         productName: string;
         variantName: string | null;
@@ -178,8 +205,8 @@ export declare function getRecentActivities(_shopId: string, limit?: number): Pr
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            image: string | null;
             price: number;
+            image: string | null;
             productId: string;
             sku: string;
             barcode: string | null;

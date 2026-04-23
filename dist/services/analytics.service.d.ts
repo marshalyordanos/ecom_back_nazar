@@ -45,10 +45,10 @@ export declare function getSalesReport(filters: {
     orders: ({
         items: {
             id: string;
+            price: number;
             total: number;
             variantId: string;
             quantity: number;
-            price: number;
             orderId: string;
             productName: string;
             variantName: string | null;
@@ -86,10 +86,10 @@ export declare function getOrdersReport(filters: {
         };
         items: {
             id: string;
+            price: number;
             total: number;
             variantId: string;
             quantity: number;
-            price: number;
             orderId: string;
             productName: string;
             variantName: string | null;

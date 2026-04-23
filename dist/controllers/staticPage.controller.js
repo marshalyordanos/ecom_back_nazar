@@ -42,6 +42,8 @@ const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 const staticPageService = __importStar(require("../services/staticPage.service"));
 const appError_1 = __importDefault(require("../utils/appError"));
 const enums_1 = require("../generated/prisma/enums");
+const sanitizeHtml_1 = require("../utils/sanitizeHtml");
+const MAX_CONTENT_BYTES = 200 * 1024;
 const STATIC_TYPES = new Set([
     enums_1.StaticPageType.privacy,
     enums_1.StaticPageType.terms,
@@ -55,7 +57,7 @@ function parsePageType(param) {
     return t;
 }
 const upsertBodySchema = joi_1.default.object({
-    content: joi_1.default.string().required().min(1),
+    content: joi_1.default.string().required().min(1).max(MAX_CONTENT_BYTES),
 });
 /** Public */
 exports.getPageByType = (0, catchAsync_1.default)(async (req, res, _next) => {
@@ -73,7 +75,11 @@ exports.upsertPageByType = (0, catchAsync_1.default)(async (req, res, next) => {
     if (error) {
         return next(new appError_1.default(error.details.map((d) => d.message).join("; "), 400));
     }
-    const page = await staticPageService.upsertStaticPage(type, value.content);
+    const sanitized = (0, sanitizeHtml_1.sanitizeRichTextHtml)(value.content).trim();
+    if (!sanitized) {
+        return next(new appError_1.default("Content is empty after sanitization", 400));
+    }
+    const page = await staticPageService.upsertStaticPage(type, sanitized);
     res.status(200).json(page);
 });
 //# sourceMappingURL=staticPage.controller.js.map

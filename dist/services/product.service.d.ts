@@ -4,7 +4,10 @@ export declare function listProducts(shopId: string | undefined, track?: string,
     search?: string;
     filter?: string;
     sort?: string;
-}, req?: any): Promise<{
+}, req?: any, options?: {
+    minPrice?: number;
+    maxPrice?: number;
+}): Promise<{
     data: ({
         brand: {
             name: string;
@@ -31,8 +34,8 @@ export declare function listProducts(shopId: string | undefined, track?: string,
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            image: string | null;
             price: number;
+            image: string | null;
             productId: string;
             sku: string;
             barcode: string | null;
@@ -130,9 +133,10 @@ export declare function getProductById(id: string, shopId?: string): Promise<{
                     updatedAt: Date;
                 };
             } & {
+                value: string;
                 id: string;
                 createdAt: Date;
-                value: string;
+                colorValue: string | null;
                 optionId: string;
             };
         } & {
@@ -145,8 +149,8 @@ export declare function getProductById(id: string, shopId?: string): Promise<{
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        image: string | null;
         price: number;
+        image: string | null;
         productId: string;
         sku: string;
         barcode: string | null;
@@ -237,9 +241,10 @@ export declare function getProductByIdMobile(id: string, shopId?: string, userId
                     updatedAt: Date;
                 };
             } & {
+                value: string;
                 id: string;
                 createdAt: Date;
-                value: string;
+                colorValue: string | null;
                 optionId: string;
             };
         } & {
@@ -252,8 +257,8 @@ export declare function getProductByIdMobile(id: string, shopId?: string, userId
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        image: string | null;
         price: number;
+        image: string | null;
         productId: string;
         sku: string;
         barcode: string | null;
@@ -376,9 +381,10 @@ export declare function listVariants(shopId?: string, query?: {
                     updatedAt: Date;
                 };
             } & {
+                value: string;
                 id: string;
                 createdAt: Date;
-                value: string;
+                colorValue: string | null;
                 optionId: string;
             };
         } & {
@@ -391,8 +397,8 @@ export declare function listVariants(shopId?: string, query?: {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        image: string | null;
         price: number;
+        image: string | null;
         productId: string;
         sku: string;
         barcode: string | null;
@@ -431,8 +437,8 @@ export declare function getFeaturedProducts(shopId?: string, limit?: number): Pr
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        image: string | null;
         price: number;
+        image: string | null;
         productId: string;
         sku: string;
         barcode: string | null;
@@ -479,8 +485,8 @@ export declare function getNewProducts(shopId?: string, limit?: number): Promise
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        image: string | null;
         price: number;
+        image: string | null;
         productId: string;
         sku: string;
         barcode: string | null;
@@ -527,8 +533,8 @@ export declare function getPopularProducts(shopId?: string, limit?: number): Pro
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        image: string | null;
         price: number;
+        image: string | null;
         productId: string;
         sku: string;
         barcode: string | null;
@@ -575,8 +581,8 @@ export declare function getMostViewedProducts(shopId?: string, limit?: number): 
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        image: string | null;
         price: number;
+        image: string | null;
         productId: string;
         sku: string;
         barcode: string | null;
@@ -626,9 +632,10 @@ export declare function getVariantById(id: string): Promise<({
                 updatedAt: Date;
             };
         } & {
+            value: string;
             id: string;
             createdAt: Date;
-            value: string;
+            colorValue: string | null;
             optionId: string;
         };
     } & {
@@ -641,8 +648,8 @@ export declare function getVariantById(id: string): Promise<({
     id: string;
     createdAt: Date;
     updatedAt: Date;
-    image: string | null;
     price: number;
+    image: string | null;
     productId: string;
     sku: string;
     barcode: string | null;
@@ -677,8 +684,8 @@ export declare function createVariant(productId: string, data: {
     id: string;
     createdAt: Date;
     updatedAt: Date;
-    image: string | null;
     price: number;
+    image: string | null;
     productId: string;
     sku: string;
     barcode: string | null;
@@ -700,8 +707,8 @@ export declare function updateVariant(variantId: string, data: {
     id: string;
     createdAt: Date;
     updatedAt: Date;
-    image: string | null;
     price: number;
+    image: string | null;
     productId: string;
     sku: string;
     barcode: string | null;
@@ -724,9 +731,10 @@ export declare function removeVariantMedia(mediaId: string): Promise<{
 }>;
 export declare function listVariantOptions(): Promise<({
     values: {
+        value: string;
         id: string;
         createdAt: Date;
-        value: string;
+        colorValue: string | null;
         optionId: string;
     }[];
 } & {
@@ -737,9 +745,10 @@ export declare function listVariantOptions(): Promise<({
 })[]>;
 export declare function getVariantOptionById(optionId: string): Promise<{
     values: {
+        value: string;
         id: string;
         createdAt: Date;
-        value: string;
+        colorValue: string | null;
         optionId: string;
     }[];
 } & {
@@ -768,9 +777,10 @@ export declare function deleteVariantOption(optionId: string): Promise<{
     message: string;
 }>;
 export declare function listOptionValues(optionId: string): Promise<{
+    value: string;
     id: string;
     createdAt: Date;
-    value: string;
+    colorValue: string | null;
     optionId: string;
 }[]>;
 export declare function getOptionValueById(valueId: string): Promise<{
@@ -781,25 +791,30 @@ export declare function getOptionValueById(valueId: string): Promise<{
         updatedAt: Date;
     };
 } & {
+    value: string;
     id: string;
     createdAt: Date;
-    value: string;
+    colorValue: string | null;
     optionId: string;
 }>;
 export declare function createOptionValue(optionId: string, data: {
     value: string;
+    colorValue?: string | null;
 }): Promise<{
+    value: string;
     id: string;
     createdAt: Date;
-    value: string;
+    colorValue: string | null;
     optionId: string;
 }>;
 export declare function updateOptionValue(valueId: string, data: {
     value?: string;
+    colorValue?: string | null;
 }): Promise<{
+    value: string;
     id: string;
     createdAt: Date;
-    value: string;
+    colorValue: string | null;
     optionId: string;
 }>;
 export declare function deleteOptionValue(valueId: string): Promise<{
@@ -819,9 +834,10 @@ export declare function setVariantOptionValues(variantId: string, optionValueIds
                 updatedAt: Date;
             };
         } & {
+            value: string;
             id: string;
             createdAt: Date;
-            value: string;
+            colorValue: string | null;
             optionId: string;
         };
     } & {
@@ -834,8 +850,8 @@ export declare function setVariantOptionValues(variantId: string, optionValueIds
     id: string;
     createdAt: Date;
     updatedAt: Date;
-    image: string | null;
     price: number;
+    image: string | null;
     productId: string;
     sku: string;
     barcode: string | null;

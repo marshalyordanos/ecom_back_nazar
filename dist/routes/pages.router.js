@@ -38,6 +38,6 @@ const staticPageController = __importStar(require("../controllers/staticPage.con
 const auth_middleware_1 = require("../middleware/auth.middleware");
 const router = (0, express_1.Router)();
 router.get("/:type", staticPageController.getPageByType);
-router.put("/:type", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), staticPageController.upsertPageByType);
+router.put("/:type", auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)("admin"), (0, express_1.json)({ limit: "256kb" }), staticPageController.upsertPageByType);
 exports.default = router;
 //# sourceMappingURL=pages.router.js.map

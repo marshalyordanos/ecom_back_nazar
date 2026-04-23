@@ -26,10 +26,10 @@ export declare function listUserOrders(userId: string, query: {
             };
         } & {
             id: string;
+            price: number;
             total: number;
             variantId: string;
             quantity: number;
-            price: number;
             orderId: string;
             productName: string;
             variantName: string | null;
@@ -95,10 +95,10 @@ export declare function getOrderById(orderId: string, userId?: string): Promise<
     }[];
     items: {
         id: string;
+        price: number;
         total: number;
         variantId: string;
         quantity: number;
-        price: number;
         orderId: string;
         productName: string;
         variantName: string | null;
@@ -147,9 +147,9 @@ export declare function trackOrderByReference(reference: string): Promise<{
     } | null;
     items: {
         id: string;
+        price: number;
         total: number;
         quantity: number;
-        price: number;
         productName: string;
         variantName: string | null;
     }[];
@@ -210,8 +210,8 @@ export declare function listOrderItems(orderId: string): Promise<({
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        image: string | null;
         price: number;
+        image: string | null;
         productId: string;
         sku: string;
         barcode: string | null;
@@ -221,10 +221,10 @@ export declare function listOrderItems(orderId: string): Promise<({
     };
 } & {
     id: string;
+    price: number;
     total: number;
     variantId: string;
     quantity: number;
-    price: number;
     orderId: string;
     productName: string;
     variantName: string | null;
@@ -255,9 +255,10 @@ export declare function listOrdersAdmin(query: {
                             updatedAt: Date;
                         };
                     } & {
+                        value: string;
                         id: string;
                         createdAt: Date;
-                        value: string;
+                        colorValue: string | null;
                         optionId: string;
                     };
                 } & {
@@ -270,8 +271,8 @@ export declare function listOrdersAdmin(query: {
                 id: string;
                 createdAt: Date;
                 updatedAt: Date;
-                image: string | null;
                 price: number;
+                image: string | null;
                 productId: string;
                 sku: string;
                 barcode: string | null;
@@ -281,10 +282,10 @@ export declare function listOrdersAdmin(query: {
             };
         } & {
             id: string;
+            price: number;
             total: number;
             variantId: string;
             quantity: number;
-            price: number;
             orderId: string;
             productName: string;
             variantName: string | null;
@@ -357,10 +358,10 @@ export declare function createOrderAdmin(data: {
 }): Promise<({
     items: {
         id: string;
+        price: number;
         total: number;
         variantId: string;
         quantity: number;
-        price: number;
         orderId: string;
         productName: string;
         variantName: string | null;
@@ -429,10 +430,10 @@ export declare function checkoutAsGuest(data: {
         }[];
         items: {
             id: string;
+            price: number;
             total: number;
             variantId: string;
             quantity: number;
-            price: number;
             orderId: string;
             productName: string;
             variantName: string | null;
