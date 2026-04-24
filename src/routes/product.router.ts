@@ -29,6 +29,7 @@ router.patch(
   uploadSingleImage("image"),
   productController.updateVariant
 );
+
 router.get(
   "/variants/:id",
   protect,
@@ -36,6 +37,7 @@ router.get(
   requirePermission("products", "read"),
   productController.getVariantById
 );
+
 router.delete(
   "/variants/:variantId",
   protect,
