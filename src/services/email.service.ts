@@ -18,11 +18,11 @@ let zeptoClientKey: string | null = null;
 function cleanEnv(value?: string): string | undefined {
   if (!value) return undefined;
   let normalized = value.trim();
-  // Strip wrapper or stray quotes that may come from copied shell exports.
-  while (normalized.startsWith("\"") || normalized.startsWith("'")) {
+
+  while (normalized.startsWith('"') || normalized.startsWith("'")) {
     normalized = normalized.slice(1).trim();
   }
-  while (normalized.endsWith("\"") || normalized.endsWith("'")) {
+  while (normalized.endsWith('"') || normalized.endsWith("'")) {
     normalized = normalized.slice(0, -1).trim();
   }
   while (normalized.endsWith(";")) {
@@ -37,7 +37,6 @@ function resolveApiUrl(): string {
   try {
     return new URL(raw).toString();
   } catch {
-    // Some environments may include surrounding shell noise.
     const extracted = raw.match(/https?:\/\/\S+/)?.[0];
     if (extracted) {
       try {
