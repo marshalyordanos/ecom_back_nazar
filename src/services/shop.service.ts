@@ -164,10 +164,45 @@ export async function addShopLocation(
     phone?: string;
   }
 ) {
-  const location = await prisma.shopLocation.create({
-    data: { shopId, ...data },
+  // Wrap both location creation and inventory creation in a transaction
+  const result = await prisma.$transaction(async (prismaTx) => {
+    // 1. Create the shop location
+    const location = await prismaTx.shopLocation.create({
+      data: { shopId, ...data },
+    });
+
+    // 2. Find all variants for products in this shop
+    const productIds = await prismaTx.product.findMany({
+      where: { shopId },
+      select: { id: true },
+    });
+
+    // Only proceed if there are products
+    if (productIds.length > 0) {
+      const allVariants = await prismaTx.productVariant.findMany({
+        where: { productId: { in: productIds.map(p => p.id) } },
+        select: { id: true },
+      });
+
+      // 3. For each variant, add an inventory record for the new location
+      await Promise.all(
+        allVariants.map(async (variant) => {
+          await prismaTx.inventory.create({
+            data: {
+              variantId: variant.id,
+              locationId: location.id,
+              quantity: 0,
+              reservedQuantity: 0,
+            },
+          });
+        })
+      );
+    }
+
+    return location;
   });
-  return location;
+
+  return result;
 }
 
 export async function updateLocation(
