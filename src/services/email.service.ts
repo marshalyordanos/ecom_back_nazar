@@ -1,5 +1,7 @@
-import nodemailer from "nodemailer";
+import { SendMailClient } from "zeptomail";
 import AppError from "../utils/appError";
+
+const DEFAULT_ZEPTOMAIL_API_URL = "https://api.zeptomail.com/v1.1/email";
 
 type OtpEmailPurpose = "account_verification" | "password_reset";
 
@@ -10,22 +12,64 @@ interface OtpEmailInput {
   firstName?: string;
 }
 
-function buildTransporter() {
-  const host = process.env.EMAIL_HOST || process.env.SMTP_HOST;
-  const port = Number(process.env.EMAIL_PORT || process.env.SMTP_PORT || 587);
-  const user = process.env.EMAIL_USER || process.env.SMTP_USER;
-  const pass = process.env.EMAIL_PASS || process.env.SMTP_PASS;
+let zeptoClient: SendMailClient | null = null;
+let zeptoClientKey: string | null = null;
 
-  if (!host || !user || !pass) {
+function cleanEnv(value?: string): string | undefined {
+  if (!value) return undefined;
+  let normalized = value.trim();
+  // Strip wrapper or stray quotes that may come from copied shell exports.
+  while (normalized.startsWith("\"") || normalized.startsWith("'")) {
+    normalized = normalized.slice(1).trim();
+  }
+  while (normalized.endsWith("\"") || normalized.endsWith("'")) {
+    normalized = normalized.slice(0, -1).trim();
+  }
+  while (normalized.endsWith(";")) {
+    normalized = normalized.slice(0, -1).trim();
+  }
+  return normalized || undefined;
+}
+
+function resolveApiUrl(): string {
+  const raw = cleanEnv(process.env.ZEPTOMAIL_API_URL);
+  if (!raw) return DEFAULT_ZEPTOMAIL_API_URL;
+  try {
+    return new URL(raw).toString();
+  } catch {
+    // Some environments may include surrounding shell noise.
+    const extracted = raw.match(/https?:\/\/\S+/)?.[0];
+    if (extracted) {
+      try {
+        return new URL(cleanEnv(extracted) || extracted).toString();
+      } catch {
+        return DEFAULT_ZEPTOMAIL_API_URL;
+      }
+    }
+    return DEFAULT_ZEPTOMAIL_API_URL;
+  }
+}
+
+function getZeptoMailClient(): SendMailClient {
+  const token = cleanEnv(process.env.ZEPTOMAIL_SEND_MAIL_TOKEN);
+  const url = resolveApiUrl();
+
+  if (!token) {
     throw new AppError("Email service is not configured", 500);
   }
+  if (!token.startsWith("Zoho-enczapikey")) {
+    throw new AppError("Invalid ZeptoMail Send Mail token format", 500);
+  }
+  const key = `${url}::${token}`;
+  if (!zeptoClient || zeptoClientKey !== key) {
+    zeptoClient = new SendMailClient({ url, token });
+    zeptoClientKey = key;
+  }
+  return zeptoClient;
+}
 
-  return nodemailer.createTransport({
-    host,
-    port,
-    secure: port === 465,
-    auth: { user, pass },
-  });
+function resolveFromEmail(): string | undefined {
+  return cleanEnv(process.env.ZEPTOMAIL_FROM_EMAIL);
 }
 
 function buildOtpEmailTemplate(input: OtpEmailInput): {
@@ -90,20 +134,66 @@ function buildOtpEmailTemplate(input: OtpEmailInput): {
   return { subject, text, html };
 }
 
+function extractZeptoMailErrorMessage(err: unknown): string {
+  if (err && typeof err === "object") {
+    const anyErr = err as Record<string, unknown>;
+    const message = anyErr.message;
+    if (typeof message === "string" && message.trim()) return message;
+    const error = anyErr.error;
+    if (typeof error === "string" && error.trim()) return error;
+    if (error && typeof error === "object") {
+      const nested = (error as Record<string, unknown>).message;
+      if (typeof nested === "string" && nested.trim()) return nested;
+    }
+    const response = anyErr.response;
+    if (response && typeof response === "object") {
+      const data = (response as Record<string, unknown>).data;
+      if (typeof data === "string" && data.trim()) return data;
+      if (data && typeof data === "object") {
+        const d = data as Record<string, unknown>;
+        const msg = d.message ?? d.error;
+        if (typeof msg === "string" && msg.trim()) return msg;
+      }
+    }
+  }
+  if (err instanceof Error && err.message.trim()) return err.message;
+  return "Unknown ZeptoMail error";
+}
+
 export async function sendOTPEmail(input: OtpEmailInput): Promise<void> {
-  const from =
-    process.env.EMAIL_FROM ||
-    process.env.SMTP_FROM ||
-    process.env.EMAIL_USER ||
-    "no-reply@nazartech.net";
-  const transporter = buildTransporter();
+  const fromAddress = resolveFromEmail();
+  if (!fromAddress) {
+    throw new AppError("Email service is not configured", 500);
+  }
+
+  const appName = process.env.APP_NAME || "Ecom";
+  const fromName = cleanEnv(process.env.ZEPTOMAIL_FROM_NAME) || appName;
+
+  const client = getZeptoMailClient();
   const message = buildOtpEmailTemplate(input);
 
-  await transporter.sendMail({
-    from: `"${process.env.APP_NAME || "Ecom"}" <${from}>`,
-    to: input.to,
-    subject: message.subject,
-    text: message.text,
-    html: message.html,
-  });
+  const toName = input.firstName?.trim() || input.to.split("@")[0] || input.to;
+
+  try {
+    await client.sendMail({
+      from: {
+        address: fromAddress,
+        name: fromName,
+      },
+      to: [
+        {
+          email_address: {
+            address: input.to,
+            name: toName,
+          },
+        },
+      ],
+      subject: message.subject,
+      textbody: message.text,
+      htmlbody: message.html,
+    });
+  } catch (err: unknown) {
+    const detail = extractZeptoMailErrorMessage(err);
+    throw new AppError(`Failed to send OTP email: ${detail}`, 500);
+  }
 }

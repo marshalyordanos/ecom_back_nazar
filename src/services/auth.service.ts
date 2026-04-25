@@ -282,34 +282,27 @@ export async function adminRegister(data: {
     expiresIn: accessExpirationMinutes * 60,
   };
 }
+type SignupCollisionOutcome = "verification_required" | "conflict";
+
 /**
- * If the conflicting account is ACTIVE/SUSPENDED, reject outright.
- * If INACTIVE but within the grace window, give a helpful retry message.
- * If INACTIVE and past the grace window, delete the stale record so the
- * caller can proceed with a fresh registration.
+ * If the conflicting account is ACTIVE/SUSPENDED, reject with a generic conflict.
+ * If INACTIVE and within the grace window, ask client to continue via OTP flow.
+ * If INACTIVE and past the grace window, delete stale record and allow fresh signup.
  */
-async function reclaimOrReject(
+async function reclaimOrClassify(
   existing: { id: string; status: string; createdAt: Date },
-  label: string,
-): Promise<void> {
+): Promise<SignupCollisionOutcome | null> {
   if (existing.status !== "INACTIVE") {
-    throw new AppError(`${label} already registered`, 409);
+    return "conflict";
   }
 
   const ageMs = Date.now() - new Date(existing.createdAt).getTime();
   if (ageMs < INACTIVE_ACCOUNT_GRACE_MS) {
-    const minutesLeft = Math.ceil(
-      (INACTIVE_ACCOUNT_GRACE_MS - ageMs) / 60_000,
-    );
-    throw new AppError(
-      `${label} was recently registered but not yet verified. ` +
-        `You can retry in ~${minutesLeft} minute${minutesLeft === 1 ? "" : "s"}, ` +
-        `or use a different ${label.toLowerCase()}.`,
-      409,
-    );
+    return "verification_required";
   }
 
   await prisma.user.delete({ where: { id: existing.id } });
+  return null;
 }
 
 /**
@@ -340,17 +333,32 @@ export async function register(data: {
     throw new AppError("Provide at least an email or phone number", 400);
   }
 
+  let signupCollision: SignupCollisionOutcome | null = null;
+
   if (email) {
     const byEmail = await prisma.user.findUnique({ where: { email } });
     if (byEmail) {
-      await reclaimOrReject(byEmail, "Email");
+      signupCollision = await reclaimOrClassify(byEmail);
     }
   }
-  if (phone) {
+  if (!signupCollision && phone) {
     const byPhone = await prisma.user.findUnique({ where: { phone } });
     if (byPhone) {
-      await reclaimOrReject(byPhone, "Phone");
+      signupCollision = await reclaimOrClassify(byPhone);
     }
+  }
+
+  if (signupCollision === "verification_required") {
+    return {
+      message: "Please continue with verification to complete signup.",
+      verificationRequired: true,
+      nextStep: "verify_account" as const,
+      registrationCreated: false,
+    };
+  }
+
+  if (signupCollision === "conflict") {
+    throw new AppError("Unable to continue signup. Please try logging in.", 409);
   }
 
   const passwordHash = await hashPassword(data.password);
@@ -384,6 +392,8 @@ export async function register(data: {
     user,
     message: "Registration successful. Please verify your account using OTP.",
     verificationRequired: true,
+    nextStep: "verify_account" as const,
+    registrationCreated: true,
   };
 }
 //

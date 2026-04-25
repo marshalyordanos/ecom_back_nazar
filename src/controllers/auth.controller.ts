@@ -11,7 +11,8 @@ export const register = catchAsync(async (req: AuthRequest, res: Response) => {
     lastName: req.body.lastName,
     phone: req.body.phone,
   });
-  return res.status(201).json(result);
+  const statusCode = result.registrationCreated ? 201 : 200;
+  return res.status(statusCode).json(result);
 });
 
 export const createSuperAdmin = catchAsync(async (req: AuthRequest, res: Response) => {
