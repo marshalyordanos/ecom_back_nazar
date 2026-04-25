@@ -224,3 +224,202 @@ export async function deactivateUser(id: string) {
   });
   return { message: "User deactivated successfully" };
 }
+
+export async function getUserAnalytics(userId: string, shopId?: string) {
+  const orderShopFilter = shopId ? { shopId } : {};
+  const productShopFilter = shopId ? { product: { shopId } } : {};
+
+  const [
+    totalViews,
+    recentlyViewedGrouped,
+    mostViewedGrouped,
+    orderAgg,
+    lastOrder,
+    firstOrder,
+    totalItemsAgg,
+    mostPurchasedGrouped,
+    orderItemsForCategory,
+  ] = await Promise.all([
+    prisma.productView.count({ where: { userId } }),
+    prisma.productView.groupBy({
+      by: ["productId"],
+      where: { userId, ...productShopFilter },
+      _max: { createdAt: true },
+      orderBy: { _max: { createdAt: "desc" } },
+      take: 5,
+    }),
+    prisma.productView.groupBy({
+      by: ["productId"],
+      where: { userId, ...productShopFilter },
+      _count: { id: true },
+      orderBy: { _count: { id: "desc" } },
+      take: 5,
+    }),
+    prisma.order.aggregate({
+      where: { userId, ...orderShopFilter },
+      _count: { id: true },
+      _sum: { grandTotal: true },
+      _avg: { grandTotal: true },
+    }),
+    prisma.order.findFirst({
+      where: { userId, ...orderShopFilter },
+      orderBy: { createdAt: "desc" },
+      select: { createdAt: true },
+    }),
+    prisma.order.findFirst({
+      where: { userId, ...orderShopFilter },
+      orderBy: { createdAt: "asc" },
+      select: { createdAt: true },
+    }),
+    prisma.orderItem.aggregate({
+      where: { order: { userId, ...orderShopFilter } },
+      _sum: { quantity: true },
+    }),
+    prisma.orderItem.groupBy({
+      by: ["variantId"],
+      where: { order: { userId, ...orderShopFilter } },
+      _sum: { quantity: true },
+      orderBy: { _sum: { quantity: "desc" } },
+      take: 5,
+    }),
+    prisma.orderItem.findMany({
+      where: { order: { userId, ...orderShopFilter } },
+      select: {
+        quantity: true,
+        variant: {
+          select: {
+            product: {
+              select: { category: { select: { id: true, name: true } } },
+            },
+          },
+        },
+      },
+      take: 200,
+    }),
+  ]);
+
+  const recentProductIds = recentlyViewedGrouped.map((g) => g.productId);
+  const mostViewedProductIds = mostViewedGrouped.map((g) => g.productId);
+  const mostPurchasedVariantIds = mostPurchasedGrouped.map((g) => g.variantId);
+
+  const productInclude = {
+    brand: { select: { id: true, name: true, slug: true } },
+    category: { select: { id: true, name: true, slug: true } },
+    variants: { take: 1 as const, include: { media: { take: 1 as const } } },
+  };
+
+  const [recentProducts, mostViewedProducts, mostPurchasedVariants] = await Promise.all([
+    recentProductIds.length
+      ? prisma.product.findMany({
+          where: { id: { in: recentProductIds }, ...(shopId ? { shopId } : {}) },
+          include: productInclude,
+        })
+      : ([] as any[]),
+    mostViewedProductIds.length
+      ? prisma.product.findMany({
+          where: { id: { in: mostViewedProductIds }, ...(shopId ? { shopId } : {}) },
+          include: productInclude,
+        })
+      : ([] as any[]),
+    mostPurchasedVariantIds.length
+      ? prisma.productVariant.findMany({
+          where: { id: { in: mostPurchasedVariantIds } },
+          include: {
+            product: {
+              select: {
+                id: true,
+                name: true,
+                slug: true,
+                category: { select: { id: true, name: true } },
+              },
+            },
+            media: { take: 1 },
+          },
+        })
+      : ([] as any[]),
+  ]);
+
+  const recentProductById = new Map(recentProducts.map((p: any) => [p.id, p]));
+  const recentlyViewed = recentProductIds.map((id) => recentProductById.get(id)).filter(Boolean);
+
+  const mostViewedProductById = new Map(mostViewedProducts.map((p: any) => [p.id, p]));
+  const mostViewed = mostViewedProductIds.map((id) => mostViewedProductById.get(id)).filter(Boolean);
+
+  const mostPurchasedVariantById = new Map(mostPurchasedVariants.map((v: any) => [v.id, v]));
+  const mostPurchasedProducts = mostPurchasedGrouped
+    .map((g) => ({
+      variant: mostPurchasedVariantById.get(g.variantId),
+      totalQuantity: g._sum.quantity ?? 0,
+    }))
+    .filter((x) => x.variant != null);
+
+  // Aggregate category purchase counts in memory
+  const categoryCount = new Map<string, { name: string; count: number }>();
+  for (const item of orderItemsForCategory) {
+    const cat = item.variant?.product?.category;
+    if (!cat) continue;
+    const existing = categoryCount.get(cat.id);
+    if (existing) {
+      existing.count += item.quantity;
+    } else {
+      categoryCount.set(cat.id, { name: cat.name, count: item.quantity });
+    }
+  }
+  let frequentCategory: string | null = null;
+  let maxCatCount = 0;
+  for (const entry of categoryCount.values()) {
+    if (entry.count > maxCatCount) {
+      maxCatCount = entry.count;
+      frequentCategory = entry.name;
+    }
+  }
+
+  const totalOrders = orderAgg._count.id;
+  const totalSpent = orderAgg._sum.grandTotal ?? 0;
+  const averageOrderValue = orderAgg._avg.grandTotal ?? 0;
+  const totalItemsPurchased = totalItemsAgg._sum.quantity ?? 0;
+  const lastOrderDate = lastOrder?.createdAt ?? null;
+
+  let orderFrequency: string;
+  if (totalOrders === 0) {
+    orderFrequency = "No orders yet";
+  } else if (totalOrders === 1) {
+    orderFrequency = "1 order total";
+  } else {
+    const first = firstOrder!.createdAt;
+    const last = lastOrder!.createdAt;
+    const monthsDiff = Math.max(
+      1,
+      (last.getFullYear() - first.getFullYear()) * 12 + (last.getMonth() - first.getMonth())
+    );
+    const rate = totalOrders / monthsDiff;
+    if (rate >= 1) {
+      const rounded = Math.round(rate);
+      orderFrequency = `${rounded} order${rounded !== 1 ? "s" : ""}/month`;
+    } else {
+      const every = Math.round(1 / rate);
+      orderFrequency = `1 order every ${every} month${every !== 1 ? "s" : ""}`;
+    }
+  }
+
+  return {
+    productAnalytics: {
+      totalViews,
+      recentlyViewed,
+      mostViewed,
+    },
+    orderAnalytics: {
+      totalOrders,
+      totalSpent,
+      averageOrderValue,
+      totalItemsPurchased,
+      lastOrderDate,
+    },
+    insights: {
+      mostPurchasedProducts,
+      frequentCategory,
+      orderFrequency,
+      isRepeatBuyer: totalOrders > 1,
+    },
+  };
+}

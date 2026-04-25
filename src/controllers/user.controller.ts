@@ -145,3 +145,15 @@ export const deleteMySavedAddress = catchAsync(
     res.status(200).json(data);
   }
 );
+
+// ===============================
+// USER PERSONAL ANALYTICS
+// ===============================
+
+export const getMyAnalytics = catchAsync(
+  async (req: AuthRequest, res: Response, _next: NextFunction) => {
+    const shopId = typeof req.query.shopId === "string" ? req.query.shopId : undefined;
+    const result = await userService.getUserAnalytics(req.user!.id, shopId);
+    res.status(200).json(result);
+  }
+);

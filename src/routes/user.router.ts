@@ -11,6 +11,7 @@ const router = Router();
 router.use(protect);
 
 router.get("/me", userController.getMe);
+router.get("/me/analytics", userController.getMyAnalytics);
 router.patch("/me", uploadSingleImage("avatar"), userController.updateMe);
 router.patch("/me/password", userController.updateMyPassword);
 router.post(

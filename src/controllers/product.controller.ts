@@ -5,8 +5,16 @@ import { parseListQuery } from "../utils/queryParser";
 import type { AuthRequest } from "../middleware/auth.middleware";
 
 export const listProducts = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
-  const query = parseListQuery(req);
   const shopId = req.query.shopId as string | undefined;
+  const preset = typeof req.query.preset === "string" ? req.query.preset : undefined;
+
+  if (preset === "topSelling") {
+    const limit = Math.min(parseInt(String(req.query.limit), 10) || 10, 50);
+    const products = await productService.getPopularProducts(shopId, limit);
+    return res.status(200).json(products);
+  }
+
+  const query = parseListQuery(req);
   const track = req.query.track as string | undefined;
   const minPriceRaw = req.query.minPrice;
   const maxPriceRaw = req.query.maxPrice;
