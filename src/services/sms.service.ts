@@ -105,6 +105,7 @@ function bodySnippet(text: string): string {
 
 export async function sendOTPViaAfroMessage(to: string): Promise<AfroChallengeResponse> {
   const { token, sender, identifier } = getAfroConfig();
+  console.log("token: ", token, "sender: ", sender, "identifier: ", identifier);
   const url = new URL(`${AFRO_BASE_URL}/challenge`);
   url.searchParams.set("from", identifier);
   if (sender) {
