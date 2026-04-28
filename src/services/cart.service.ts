@@ -9,7 +9,7 @@ import {
 import { createId } from '@paralleldrive/cuid2'
 import config from "../config/config";
 import { sendSms } from "../utils/sendSms";
-import { formatPhoneTo251 } from "../utils/helper";
+import { finalizeShippingAddressForOrder } from "../utils/helper";
 
 const generateOrderNumber = (counter: number) => {
 const year = new Date().getFullYear();
@@ -123,14 +123,15 @@ export async function checkout(
   userId: string,
   data: {
     shopId: string;
+    paymentMethod?: "chapa" | "pickup";
     shippingAddress: {
       name: string;
       phone: string;
       addressLine1: string;
       addressLine2?: string;
-      city: string;
+      city?: string;
       state?: string;
-      country: string;
+      country?: string;
       postalCode?: string;
     };
     couponCode?: string;
@@ -149,6 +150,8 @@ export async function checkout(
   const shop = await prisma.shop.findUnique({ where: { id: data.shopId } });
   if (!shop) throw new AppError("Shop not found", 404);
 
+  const paymentMethod = data.paymentMethod === "pickup" ? "pickup" : "chapa";
+  const shippingAddress = finalizeShippingAddressForOrder(data.shippingAddress);
   let subtotal = 0;
   for (const item of cart.items) {
     subtotal += item.price * item.quantity;
@@ -177,10 +180,10 @@ export async function checkout(
     },
   });
   const orderNumber = generateOrderNumber(orderCount + 1);
-let ord:any;
-let checkout_url:any;
+  let ord: any;
+  let checkout_url: string | null = null;
 
- const orderData = await prisma.$transaction(async (tx) => {
+ await prisma.$transaction(async (tx) => {
     const newOrder = await tx.order.create({
       data: {
         shopId: data.shopId,
@@ -193,7 +196,7 @@ let checkout_url:any;
         grandTotal,
         currency: shop.currency,
         address: {
-          create: data.shippingAddress,
+          create: shippingAddress,
         },
       },
       include: { address: true },
@@ -229,105 +232,83 @@ let checkout_url:any;
       data: { status: "completed" },
     });
 
-    const phone = formatPhoneTo251(data.shippingAddress.phone || "");
-    const txRef = `${Date.now()}-order-${newOrder.id}`;
-    console.log('=====================txRef:',{
-      amount: grandTotal,
-      currency: 'ETB',
-      tx_ref: txRef,
-      callback_url: `https://api.wheellol.com/bookings/chapa-callback`,
-      'customization[title]': 'Car Rental Booking',
-      'customization[description]': 'Payment for car booking',
-      phone_number: phone,
-      return_url: `https://api.wheellol.com/bookings/confirmation`,
-    });
-    const chapaData = {
-      amount: grandTotal,
-      currency: 'ETB',
-      tx_ref: txRef,
-      callback_url: `https://api.wheellol.com/bookings/chapa-callback`,
-      'customization[title]': 'Car Rental Booking',
-      'customization[description]': 'Payment for car booking',
-      phone_number: phone,
-      return_url: `https://api.wheellol.com/bookings/confirmation`,
-    };
-
-    try {
-      const chapaResponse = await axios.post(
-        'https://api.chapa.co/v1/transaction/initialize',
-        chapaData,
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.CHAPA_SECRET_KEY}`, 
-            'Content-Type': 'application/json',
-          },
-        },
-      );
-
-      // console.log('000000000000000000000005:', chapaResponse);
-      const chapaRes: any = chapaResponse.data;
-      if (chapaRes?.status !== 'success') {
-        throw new AppError('Chapa initialization failed', 500);
-      }
-      
-     
-      const fullOrder = await tx.order.findUnique({
-        where: { id: newOrder.id },
-        include: { items: true, address: true },
-      });
-      if (!fullOrder) throw new AppError("Order not found", 404);
-    
-      // Notify the customer so their in-app notifications are user-specific.
-      await createNotification({
-        userId,
-        type: "order_created",
-        title: "Order placed",
-        message: `Order ${fullOrder.orderNumber} has been placed successfully.`,
-        metadata: { orderId: fullOrder.id },
-      });
-      await notifyAllAdminsOrderEvent({
-        title: "New order placed",
-        message: `Order ${fullOrder.orderNumber} has been placed successfully.`,
-        metadata: { orderId: fullOrder.id, eventKind: "order_created" },
-      });
-
-      // await tx.commit();
-      ord = fullOrder;
-      checkout_url = chapaRes.data.checkout_url;
+    if (paymentMethod === "pickup") {
       await tx.payment.create({
         data: {
           orderId: newOrder.id,
-          provider: "CHAPA",
-          providerTransactionId: txRef,
+          provider: "PICKUP",
           amount: grandTotal,
-          currency: "ETB",
+          currency: shop.currency,
           status: "PENDING",
         },
       });
-      // return {
-      //   order: fullOrder,
-      //   checkout_url: chapaRes.checkout_url,
-      // };
-        } catch (err: any) {
-      // await tx.abort();
-      // console.error('Chapa error:', err.response?.data || err.message);
-      throw new AppError('Failed to initialize Chapa payment', 500);
+    } else {
+      const phone = shippingAddress.phone;
+      const txRef = `${Date.now()}-order-${newOrder.id}`;
+      const chapaData = {
+        amount: grandTotal,
+        currency: "ETB",
+        tx_ref: txRef,
+        callback_url: `${process.env.BACKEND_URL || ""}/cart/chapa-callback`,
+        return_url: `${process.env.FRONTEND_URL || ""}/orders/${newOrder.id}?paid=1`,
+        phone_number: phone,
+      };
+
+      try {
+        const chapaResponse = await axios.post(
+          'https://api.chapa.co/v1/transaction/initialize',
+          chapaData,
+          {
+            headers: {
+              Authorization: `Bearer ${process.env.CHAPA_SECRET_KEY}`,
+              'Content-Type': 'application/json',
+            },
+          },
+        );
+        const chapaRes: any = chapaResponse.data;
+        if (chapaRes?.status !== 'success') {
+          throw new AppError('Chapa initialization failed', 500);
+        }
+
+        checkout_url = chapaRes.data.checkout_url || null;
+        await tx.payment.create({
+          data: {
+            orderId: newOrder.id,
+            provider: "CHAPA",
+            providerTransactionId: txRef,
+            amount: grandTotal,
+            currency: "ETB",
+            status: "PENDING",
+          },
+        });
+      } catch (_err: any) {
+        throw new AppError('Failed to initialize Chapa payment', 500);
+      }
     }
-     // 5️⃣ Create payment record
-    //  await tx.payment.create({
-    //   data: {
-    //     orderId: newOrder.id,
-    //     provider: "",
-    //     providerTransactionId: txRef,
-    //     amount: grandTotal,
-    //     currency: shop.currency,
-    //     status: "PENDING",
-    //   },
-    // });
+
+    const fullOrder = await tx.order.findUnique({
+      where: { id: newOrder.id },
+      include: { items: true, address: true },
+    });
+    if (!fullOrder) throw new AppError("Order not found", 404);
+
+    await createNotification({
+      userId,
+      type: "order_created",
+      title: "Order placed",
+      message: `Order ${fullOrder.orderNumber} has been placed successfully.`,
+      metadata: { orderId: fullOrder.id },
+    });
+    await notifyAllAdminsOrderEvent({
+      title: "New order placed",
+      message: `Order ${fullOrder.orderNumber} has been placed successfully.`,
+      metadata: { orderId: fullOrder.id, eventKind: "order_created" },
+    });
+    ord = fullOrder;
 
   });
 
-return {order: ord, checkout_url: checkout_url};
+return {order: ord, checkout_url};
 }
 
 
@@ -395,6 +376,14 @@ export async function handleChapaCallback(data: any) {
       await tx.order.update({
         where: { id: payment.orderId },
         data: { status: 'PAID' },
+      });
+      await tx.cartItem.deleteMany({
+        where: {
+          cart: {
+            userId: payment.order.userId,
+            status: "active",
+          },
+        },
       });
 
       await createNotification({

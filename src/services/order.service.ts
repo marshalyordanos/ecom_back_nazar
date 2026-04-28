@@ -4,7 +4,7 @@ import { PrismaQueryFeature } from "../utils/apiFeature";
 import { createNotification, notifyAllAdminsOrderEvent } from "./notification.service";
 import axios from "axios";
 import bcrypt from "bcrypt";
-import { formatPhoneTo251 } from "../utils/helper";
+import { ethiopiaPhoneLookupVariants, finalizeShippingAddressForOrder } from "../utils/helper";
 
 const orderSearchableFields = ["orderNumber", "user.firstName", "user.lastName", "user.email"];
 const orderDateFields = ["createdAt", "updatedAt"];
@@ -317,9 +317,9 @@ export async function checkoutAsGuest(data: {
     phone: string;
     addressLine1: string;
     addressLine2?: string;
-    city: string;
+    city?: string;
     state?: string;
-    country: string;
+    country?: string;
     postalCode?: string;
     email?: string;
   };
@@ -328,7 +328,7 @@ export async function checkoutAsGuest(data: {
 }) {
   if (!data.shopId) throw new AppError("shopId required", 400);
   if (!data.items?.length) throw new AppError("Cart is empty", 400);
-  if (!data.shippingAddress?.name || !data.shippingAddress?.phone || !data.shippingAddress?.addressLine1 || !data.shippingAddress?.city) {
+  if (!data.shippingAddress?.name || !data.shippingAddress?.phone || !data.shippingAddress?.addressLine1) {
     throw new AppError("Incomplete shippingAddress", 400);
   }
 
@@ -369,15 +369,18 @@ export async function checkoutAsGuest(data: {
   const taxTotal = 0;
   const grandTotal = subtotal - discountTotal + taxTotal;
 
-  const phone = formatPhoneTo251(data.shippingAddress.phone || "");
-  
+  const shipping = finalizeShippingAddressForOrder(data.shippingAddress);
+  const phone = shipping.phone;
+
   const phoneDigits = phone.replace(/\D/g, "");
   const firstName = "registerd";
   const lastName = "byadmin";
   const email = `user+${phoneDigits}@gmail.com`;
 
   let user = await prisma.user.findFirst({
-    where: { OR: [{ phone }, { email }] },
+    where: {
+      OR: [{ email }, ...ethiopiaPhoneLookupVariants(data.shippingAddress.phone).map((p) => ({ phone: p }))],
+    },
   });
   if (!user) {
     const passwordHash = await bcrypt.hash("12345678", 10);
@@ -422,14 +425,14 @@ export async function checkoutAsGuest(data: {
         currency: shop.currency,
         address: {
           create: {
-            name: data.shippingAddress.name || `${firstName} ${lastName}`,
-            phone,
-            addressLine1: data.shippingAddress.addressLine1,
-            addressLine2: data.shippingAddress.addressLine2,
-            city: data.shippingAddress.city,
-            state: data.shippingAddress.state,
-            country: data.shippingAddress.country || "—",
-            postalCode: data.shippingAddress.postalCode,
+            name: shipping.name,
+            phone: shipping.phone,
+            addressLine1: shipping.addressLine1,
+            addressLine2: shipping.addressLine2,
+            city: shipping.city,
+            state: shipping.state,
+            country: shipping.country,
+            postalCode: shipping.postalCode,
           },
         },
       },

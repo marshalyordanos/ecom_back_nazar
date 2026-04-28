@@ -135,13 +135,17 @@ export const getVariantById = catchAsync(async (req: AuthRequest, res: Response,
 });
 
 export const createVariant = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
-  const variant = await productService.createVariant(req.params.id, req.body, req.file);
+  const payload = { ...(req.body as Record<string, unknown>) };
+  delete payload.sku;
+  const variant = await productService.createVariant(req.params.id, payload as any, req.file);
   res.status(201).json(variant);
 });
 
 export const updateVariant = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
   const variantId = req.params.variantId || req.params.id;
-  const variant = await productService.updateVariant(variantId, req.body, req.file);
+  const payload = { ...(req.body as Record<string, unknown>) };
+  delete payload.sku;
+  const variant = await productService.updateVariant(variantId, payload as any, req.file);
   res.status(200).json(variant);
 });
 

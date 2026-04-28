@@ -292,9 +292,14 @@ export const getSearchSummary = catchAsync(async (req: AuthRequest, res: Respons
 export const getSalesTrends = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
   const shopId = req.query.shopId as string;
   const groupBy = (req.query.groupBy as "day" | "week" | "month") || "day";
-  const days = parseInt(String(req.query.days), 10) || 30;
+  const days = parseInt(String(req.query.days), 10) || 90;
+  let year: number | null = null;
+  if (req.query.year !== undefined && req.query.year !== "") {
+    const y = parseInt(String(req.query.year), 10);
+    if (Number.isFinite(y)) year = y;
+  }
   if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
-  const data = await dashboardService.getSalesTrends(shopId, groupBy, days);
+  const data = await dashboardService.getSalesTrends(shopId, groupBy, { days, year });
   res.status(200).json(data);
 });
 

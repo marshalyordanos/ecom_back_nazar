@@ -449,10 +449,70 @@ export async function getVariantById(id: string) {
   return variant;
 }
 // --------- Variants ---------
+function skuChunk(input: string, fallback: string) {
+  const cleaned = String(input || "")
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toUpperCase()
+    .replace(/[^A-Z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+  return cleaned || fallback;
+}
+
+function ensureSkuLength(base: string, suffix?: number) {
+  const suffixPart = suffix && suffix > 1 ? `-${suffix}` : "";
+  const maxBaseLength = Math.max(1, 64 - suffixPart.length);
+  return `${base.slice(0, maxBaseLength)}${suffixPart}`;
+}
+
+async function findUniqueSku(baseSku: string, excludeVariantId?: string) {
+  let attempt = 1;
+  while (attempt < 1000) {
+    const candidate = ensureSkuLength(baseSku, attempt);
+    const existing = await prisma.productVariant.findFirst({
+      where: {
+        sku: candidate,
+        ...(excludeVariantId ? { id: { not: excludeVariantId } } : {}),
+      },
+      select: { id: true },
+    });
+    if (!existing) return candidate;
+    attempt += 1;
+  }
+  throw new AppError("Failed to generate unique SKU", 500);
+}
+
+export async function syncVariantSkuFromOptions(variantId: string) {
+  const variant = await prisma.productVariant.findUnique({
+    where: { id: variantId },
+    include: {
+      product: { select: { name: true } },
+      variantOptionValues: {
+        include: { optionValue: { include: { option: true } } },
+      },
+    },
+  });
+  if (!variant) throw new AppError("Variant not found", 404);
+
+  const valueParts = [...variant.variantOptionValues]
+    .sort((a, b) =>
+      (a.optionValue.option?.name || "").localeCompare(b.optionValue.option?.name || "")
+    )
+    .map((row) => skuChunk(row.optionValue.value, "VAL"));
+
+  const productPart = skuChunk(variant.product.name, "PRODUCT");
+  const baseSku = [productPart, ...valueParts].join("-");
+  const uniqueSku = await findUniqueSku(baseSku, variantId);
+
+  return prisma.productVariant.update({
+    where: { id: variantId },
+    data: { sku: uniqueSku },
+  });
+}
+
 export async function createVariant(
   productId: string,
   data: {
-    sku: string;
     barcode?: string;
     price: number;
     comparePrice?: number;
@@ -489,7 +549,10 @@ export async function createVariant(
     const variant = await prismaTx.productVariant.create({
       data: {
         productId,
-        sku: data.sku,
+        sku: `PEND-${Date.now().toString(36).toUpperCase()}-${Math.random()
+          .toString(36)
+          .slice(2, 7)
+          .toUpperCase()}`,
         barcode: data.barcode,
         price: Number(data.price),
         comparePrice: Number(data.comparePrice),
@@ -537,7 +600,6 @@ export async function createVariant(
 export async function updateVariant(
   variantId: string,
   data: {
-    sku?: string;
     barcode?: string;
     price?: number;
     comparePrice?: number;
@@ -566,9 +628,11 @@ if(data.price) data.price = Number(data.price);
 if(data.comparePrice) data.comparePrice = Number(data.comparePrice);
 if(data.costPrice) data.costPrice = Number(data.costPrice);
 if(data.weight) data.weight = Number(data.weight);
+const safeData = { ...(data as Record<string, unknown>) };
+delete safeData.sku;
   const variant = await prisma.productVariant.update({
     where: { id: variantId },
-    data: data as Parameters<typeof prisma.productVariant.update>[0]["data"],
+    data: safeData as Parameters<typeof prisma.productVariant.update>[0]["data"],
   });
   return variant;
 }
@@ -736,15 +800,15 @@ export async function setVariantOptionValues(
   );
 
   // Return updated variant with values
-  const updated = await prisma.productVariant.findUnique({
+  await syncVariantSkuFromOptions(variantId);
+  return prisma.productVariant.findUnique({
     where: { id: variantId },
     include: {
       variantOptionValues: {
         include: { optionValue: { include: { option: true } } },
-      }
-    }
+      },
+    },
   });
-  return updated;
 }
 
 /**
@@ -760,6 +824,7 @@ export async function removeVariantOptionValue(
       optionValueId,
     },
   });
+  await syncVariantSkuFromOptions(variantId);
   return { message: "Variant option value removed successfully" };
 }
 
@@ -778,5 +843,6 @@ export async function assignVariantOptionValue(
   const result = await prisma.variantOptionValue.create({
     data: { variantId, optionValueId },
   });
+  await syncVariantSkuFromOptions(variantId);
   return result;
 }

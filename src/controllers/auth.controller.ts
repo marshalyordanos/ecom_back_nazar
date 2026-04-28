@@ -49,7 +49,10 @@ export const refresh = catchAsync(async (req: AuthRequest, res: Response) => {
 });
 
 export const forgotPassword = catchAsync(async (req: AuthRequest, res: Response) => {
-  const result = await authService.forgotPassword(req.body.email);
+  const result = await authService.forgotPassword({
+    email: req.body.email,
+    phone: req.body.phone,
+  });
   return res.status(200).json(result);
 });
 

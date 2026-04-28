@@ -16,6 +16,7 @@ import {
   verifyOTP,
 } from "./otp.service";
 import { sendEmail } from "../utils/email";
+import { ethiopiaPhoneLookupVariants, formatPhoneTo251 } from "../utils/helper";
 import { getMergedPermissionsForUser, mergedMapToList } from "./rbacPermission.service";
 
 const accessExpirationMinutes =
@@ -63,14 +64,17 @@ function resolveChannelValue(input: {
   }
   const phone = `${input.phone || ""}`.trim();
   if (!phone) throw new AppError("Phone is required for otpType=phone", 400);
-  return phone;
+  return formatPhoneTo251(phone);
 }
 
 async function findUserByChannel(otpType: OtpType, channelValue: string) {
   if (otpType === OTP_TYPE_EMAIL) {
     return prisma.user.findUnique({ where: { email: channelValue } });
   }
-  return prisma.user.findUnique({ where: { phone: channelValue } });
+  const variants = ethiopiaPhoneLookupVariants(channelValue);
+  return prisma.user.findFirst({
+    where: { OR: variants.map((p) => ({ phone: p })) },
+  });
 }
 
 function ensureCooldownAllowed(otpCooldownUntil: Date | null): void {
@@ -327,7 +331,8 @@ export async function register(data: {
   phone?: string;
 }) {
   const email = data.email?.trim().toLowerCase() || undefined;
-  const phone = data.phone?.trim() || undefined;
+  const phoneRaw = data.phone?.trim() || undefined;
+  const phone = phoneRaw ? formatPhoneTo251(phoneRaw) : undefined;
 
   if (!email && !phone) {
     throw new AppError("Provide at least an email or phone number", 400);
@@ -341,8 +346,10 @@ export async function register(data: {
       signupCollision = await reclaimOrClassify(byEmail);
     }
   }
-  if (!signupCollision && phone) {
-    const byPhone = await prisma.user.findUnique({ where: { phone } });
+  if (!signupCollision && phoneRaw) {
+    const byPhone = await prisma.user.findFirst({
+      where: { OR: ethiopiaPhoneLookupVariants(phoneRaw).map((p) => ({ phone: p })) },
+    });
     if (byPhone) {
       signupCollision = await reclaimOrClassify(byPhone);
     }
@@ -399,12 +406,17 @@ export async function register(data: {
 //
 
 export async function login(emailPhone: string, password: string) {
-  const user = await prisma.user.findFirst({
-    where: {
-      OR: [{ email: emailPhone }, { phone: emailPhone }],
-    },
-    include: { roles: { select: { name: true } } },
-  });
+  const raw = `${emailPhone || ""}`.trim();
+  const isEmail = raw.includes("@");
+  const user = isEmail
+    ? await prisma.user.findFirst({
+        where: { email: raw.toLowerCase() },
+        include: { roles: { select: { name: true } } },
+      })
+    : await prisma.user.findFirst({
+        where: { OR: ethiopiaPhoneLookupVariants(raw).map((p) => ({ phone: p })) },
+        include: { roles: { select: { name: true } } },
+      });
   if (!user || !(await comparePassword(password, user.passwordHash))) {
     throw new AppError("Invalid email/phone or password", 401);
   }
@@ -435,6 +447,7 @@ export async function login(emailPhone: string, password: string) {
       lastName: user.lastName,
       phone: user.phone,
       isSuperAdmin: user.isSuperAdmin,
+      locationId: user.locationId ?? null,
       roles: user.roles.map((r) => r.name),
       permissions: mergedMapToList(permMap),
     },
@@ -513,22 +526,57 @@ export async function refresh(refreshToken: string) {
       lastName: fullUser.lastName,
       phone: fullUser.phone,
       isSuperAdmin: fullUser.isSuperAdmin,
+      locationId: fullUser.locationId ?? null,
       roles: fullUser.roles.map((r) => r.name),
       permissions: mergedMapToList(permMap),
     },
   };
 }
 
-export async function forgotPassword(email: string) {
-  // Legacy endpoint compatibility: route to OTP reset initiation with email.
-  const normalizedEmail = `${email || ""}`.trim().toLowerCase();
-  if (!normalizedEmail)
-    return { message: "If the email exists, a reset OTP has been sent." };
+export async function forgotPassword(body: { email?: string; phone?: string }) {
+  const phone = `${body.phone || ""}`.trim();
+  const normalizedEmail = `${body.email || ""}`.trim().toLowerCase();
+
+  if (phone) {
+    const normalizedPhone = formatPhoneTo251(phone);
+    const user = await prisma.user.findFirst({
+      where: { OR: ethiopiaPhoneLookupVariants(phone).map((p) => ({ phone: p })) },
+    });
+    if (!user) {
+      return {
+        message:
+          "If an account exists for this phone number, you will receive a verification code by SMS.",
+      };
+    }
+    await issueAndPersistOtp({
+      userId: user.id,
+      otpType: OTP_TYPE_PHONE,
+      otpPurpose: OTP_PURPOSE_PASSWORD_RESET,
+      channelValue: normalizedPhone,
+      firstName: user.firstName,
+    });
+    return {
+      message:
+        "If an account exists for this phone number, you will receive a verification code by SMS.",
+    };
+  }
+
+  // Legacy: email + email OTP
+  if (!normalizedEmail) {
+    return {
+      message:
+        "If an account exists for this email, you will receive a verification code.",
+    };
+  }
   const user = await prisma.user.findUnique({
     where: { email: normalizedEmail },
   });
-  if (!user)
-    return { message: "If the email exists, a reset OTP has been sent." };
+  if (!user) {
+    return {
+      message:
+        "If an account exists for this email, you will receive a verification code.",
+    };
+  }
 
   await issueAndPersistOtp({
     userId: user.id,
@@ -537,7 +585,10 @@ export async function forgotPassword(email: string) {
     channelValue: normalizedEmail,
     firstName: user.firstName,
   });
-  return { message: "If the email exists, a reset OTP has been sent." };
+  return {
+    message:
+      "If an account exists for this email, you will receive a verification code.",
+  };
 }
 
 export async function resetPassword(token: string, newPassword: string) {
@@ -657,6 +708,7 @@ export async function verifyAccount(input: {
     user: {
       id: activatedUser.id,
       email: activatedUser.email,
+      phone: activatedUser.phone,
       firstName: activatedUser.firstName,
       lastName: activatedUser.lastName,
       roles: activatedUser.roles.map((r) => r.name),

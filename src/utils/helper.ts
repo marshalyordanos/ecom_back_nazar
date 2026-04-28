@@ -60,36 +60,89 @@ export const formatCard = (
   subtitle,
 });
 
+/** Default shipping locale when storefront omits city/country */
+export const DEFAULT_SHIPPING_CITY = "Addis Ababa";
+export const DEFAULT_SHIPPING_COUNTRY = "Ethiopia";
+
 /**
- * Normalize Ethiopian phone numbers to +251XXXXXXXXX for Chapa.
- * Examples:
- *  - 0912345678 -> +251912345678
- *  - 912345678  -> +251912345678
- *  - 251912345678 -> +251912345678
- *  - +251912345678 -> +251912345678
+ * Normalize Ethiopian numbers to E.164 +2519… / +2517… for Chapa, SMS, and storage.
+ * Accepts: 09xxxxxxxx, 07xxxxxxxx, 9xxxxxxxx, 7xxxxxxxx, 251…, +251…
  */
 export const formatPhoneTo251 = (input: string): string => {
   const trimmed = String(input || "").trim();
   if (!trimmed) return "+251";
 
-  if (trimmed.startsWith("+")) {
-    const digits = trimmed.slice(1).replace(/\D/g, "");
-    if (digits.startsWith("251")) {
-      return `+251${digits.slice(3)}`;
-    }
-    if (digits.startsWith("0")) {
-      return `+251${digits.slice(1)}`;
-    }
-    if (digits.length === 9 && digits.startsWith("9")) {
-      return `+251${digits}`;
-    }
-    return `+251${digits}`;
+  const d = trimmed.replace(/\D/g, "");
+
+  if (d.startsWith("251") && d.length >= 12) {
+    return `+251${d.slice(3)}`;
   }
 
-  const rawPhone = trimmed.replace(/\D/g, "");
-  if (rawPhone.startsWith("251")) return `+251${rawPhone.slice(3)}`;
-  if (rawPhone.startsWith("0")) return `+251${rawPhone.slice(1)}`;
-  if (rawPhone.length === 9 && rawPhone.startsWith("9")) return `+251${rawPhone}`;
-  return `+251${rawPhone}`;
+  // 07xxxxxxxxxx / 09xxxxxxxxxx (leading 0 + 7/9 + 9 subscriber digits)
+  if (/^0[79]\d{9}$/.test(d)) {
+    return `+251${d.slice(2)}`;
+  }
+
+  if (d.startsWith("0") && d.length === 10 && (d[1] === "9" || d[1] === "7")) {
+    return `+251${d.slice(1)}`;
+  }
+
+  if (d.length === 9 && (d[0] === "9" || d[0] === "7")) {
+    return `+251${d}`;
+  }
+
+  if (d.startsWith("251")) {
+    return `+251${d.slice(3)}`;
+  }
+
+  if (d.startsWith("0")) {
+    return `+251${d.slice(1)}`;
+  }
+
+  return `+251${d}`;
 };
+
+/** Values that may exist in DB for the same handset (legacy rows). */
+export const ethiopiaPhoneLookupVariants = (input: string): string[] => {
+  const norm = formatPhoneTo251(input);
+  const inner = norm.replace(/^\+/, "");
+  const sub = inner.startsWith("251") ? inner.slice(3) : inner;
+  const out = new Set<string>();
+  const add = (x: string) => {
+    const t = x.trim();
+    if (t) out.add(t);
+  };
+  add(input.trim());
+  add(norm);
+  add(sub);
+  add(`0${sub}`);
+  add(`251${sub}`);
+  add(`+251${sub}`);
+  return [...out];
+};
+
+export type ShippingAddressInput = {
+  name: string;
+  phone: string;
+  addressLine1: string;
+  addressLine2?: string;
+  city?: string;
+  state?: string;
+  country?: string;
+  postalCode?: string;
+};
+
+/** Ensures +251 phone and non-empty city/country for Prisma order addresses. */
+export function finalizeShippingAddressForOrder(input: ShippingAddressInput) {
+  return {
+    name: input.name,
+    phone: formatPhoneTo251(input.phone),
+    addressLine1: input.addressLine1,
+    addressLine2: input.addressLine2,
+    state: input.state?.trim() || undefined,
+    city: input.city?.trim() || DEFAULT_SHIPPING_CITY,
+    country: input.country?.trim() || DEFAULT_SHIPPING_COUNTRY,
+    postalCode: input.postalCode,
+  };
+}
 

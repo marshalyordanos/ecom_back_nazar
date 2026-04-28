@@ -4,6 +4,7 @@ import { hashPassword } from "../utils/hash";
 import { PrismaQueryFeature } from "../utils/apiFeature";
 import fs from "fs";
 import { uploadToCloudinary } from "../config/cloudinary";
+import { formatPhoneTo251 } from "../utils/helper";
 const userSearchableFields = ["email", "firstName", "lastName", "phone"];
 const userDateFields = [
   "createdAt",
@@ -64,7 +65,7 @@ export async function updateMe(
     data: {
       ...(data.firstName !== undefined && { firstName: data.firstName }),
       ...(data.lastName !== undefined && { lastName: data.lastName }),
-      ...(data.phone !== undefined && { phone: data.phone }),
+      ...(data.phone !== undefined && { phone: data.phone ? formatPhoneTo251(data.phone) : data.phone }),
       ...(resolvedAvatarUrl !== undefined && { avatarUrl: resolvedAvatarUrl }),
     },
     select: {

@@ -25,6 +25,43 @@ export const PERMISSION_RESOURCES = [
 
 export type PermissionResource = (typeof PERMISSION_RESOURCES)[number];
 
+/** Human-readable labels stored on Permission.description when bootstrapping missing rows. */
+const RESOURCE_DESCRIPTIONS: Record<PermissionResource, string> = {
+  users: "Manage user accounts",
+  products: "Manage products and variants",
+  orders: "Manage customer orders",
+  shops: "Manage shops and locations",
+  shop_sales: "Manage sales recorded from shops",
+  inventory: "Manage stock and inventory movements",
+  payments: "View and process payments",
+  shipments: "Manage shipments and tracking",
+  categories: "Manage product categories",
+  brands: "Manage brands",
+  coupons: "Manage coupons",
+  reviews: "Manage product reviews",
+  roles: "Manage roles",
+  permissions: "Manage permission definitions",
+  analytics: "View analytics",
+  sync: "Data sync operations",
+  settings: "Manage application settings",
+  reports: "View reports",
+  statistics: "View dashboard statistics",
+};
+
+/**
+ * Ensures every resource in PERMISSION_RESOURCES exists as a Permission row.
+ * Safe to run on every server start (idempotent via skipDuplicates).
+ */
+export async function ensureDefaultPermissions(): Promise<{ count: number }> {
+  return prisma.permission.createMany({
+    data: PERMISSION_RESOURCES.map((resource) => ({
+      resource,
+      description: RESOURCE_DESCRIPTIONS[resource],
+    })),
+    skipDuplicates: true,
+  });
+}
+
 export type MergedPermissionRow = {
   resource: string;
   create: boolean;

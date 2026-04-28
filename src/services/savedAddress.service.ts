@@ -1,5 +1,10 @@
 import { prisma } from "../lib/prisma"
 import AppError from "../utils/appError"
+import {
+  DEFAULT_SHIPPING_CITY,
+  DEFAULT_SHIPPING_COUNTRY,
+  formatPhoneTo251,
+} from "../utils/helper"
 
 export async function listMySavedAddresses(userId: string) {
   return prisma.savedAddress.findMany({
@@ -16,29 +21,32 @@ export async function addMySavedAddress(
     phone: string
     addressLine1: string
     addressLine2?: string
-    city: string
+    city?: string
     state?: string
-    country: string
+    country?: string
     postalCode?: string
     latitude?: number
     longitude?: number
   }
 ) {
-  if (!data.label || !data.name || !data.phone || !data.addressLine1 || !data.city || !data.country) {
+  if (!data.label || !data.name || !data.phone || !data.addressLine1) {
     throw new AppError("Missing required address fields", 400)
   }
+
+  const city = data.city?.trim() || DEFAULT_SHIPPING_CITY
+  const country = data.country?.trim() || DEFAULT_SHIPPING_COUNTRY
 
   return prisma.savedAddress.create({
     data: {
       userId,
       label: data.label,
       name: data.name,
-      phone: data.phone,
+      phone: formatPhoneTo251(data.phone),
       addressLine1: data.addressLine1,
       addressLine2: data.addressLine2 || undefined,
-      city: data.city,
+      city,
       state: data.state || undefined,
-      country: data.country,
+      country,
       postalCode: data.postalCode || undefined,
       latitude: data.latitude ?? undefined,
       longitude: data.longitude ?? undefined,

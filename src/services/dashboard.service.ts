@@ -1,3 +1,4 @@
+import { Prisma } from "../generated/prisma/client";
 import { prisma } from "../lib/prisma";
 
 function percentChangeGlobal(current: number, previous: number) {
@@ -1201,25 +1202,136 @@ export async function getSearchSummary(shopId: string, days = 30) {
 // ===============================
 // 💰 SALES ANALYTICS
 // ===============================
-export async function getSalesTrends(shopId: string, groupBy: "day" | "week" | "month", days = 30) {
-  const since = getSinceDate(days);
-  const orders = await prisma.payment.findMany({
-    where: { status: "PAID", createdAt: { gte: since } },
-    select: { createdAt: true, amount: true },
-  });
+type TrendBucket = {
+  revenue: number;
+  pendingPayments: number;
+  pendingAmount: number;
+  completedPayments: number;
+  failedPayments: number;
+  failedAmount: number;
+  refundedPayments: number;
+  refundedAmount: number;
+  cancelledOrders: number;
+};
 
-  const buckets: Record<string, number> = {};
-  for (const o of orders) {
-    const key = bucketKey(o.createdAt, groupBy);
-    buckets[key] = (buckets[key] || 0) + o.amount;
+function ensureTrendBucket(map: Record<string, TrendBucket>, key: string): TrendBucket {
+  if (!map[key]) {
+    map[key] = {
+      revenue: 0,
+      pendingPayments: 0,
+      pendingAmount: 0,
+      completedPayments: 0,
+      failedPayments: 0,
+      failedAmount: 0,
+      refundedPayments: 0,
+      refundedAmount: 0,
+      cancelledOrders: 0,
+    };
   }
+  return map[key];
+}
+
+/** Up to 5 most recent calendar years that have payment or cancelled-order activity. */
+export async function getSalesTrendAvailableYears(shopId: string, limit = 5): Promise<number[]> {
+  const rows = await prisma.$queryRaw<Array<{ y: number }>>(
+    Prisma.sql`
+      SELECT y FROM (
+        SELECT DISTINCT CAST(EXTRACT(YEAR FROM p."createdAt") AS INTEGER) AS y
+        FROM "Payment" p
+        INNER JOIN "Order" o ON o."id" = p."orderId"
+        WHERE o."shopId" = ${shopId}
+        UNION
+        SELECT DISTINCT CAST(EXTRACT(YEAR FROM o."createdAt") AS INTEGER) AS y
+        FROM "Order" o
+        WHERE o."shopId" = ${shopId} AND o."status" = 'CANCELLED'
+      ) AS years
+      ORDER BY y DESC
+      LIMIT ${limit}
+    `
+  );
+  const fromDb = rows.map((r) => r.y).filter((y) => Number.isFinite(y));
+  if (fromDb.length > 0) return fromDb;
+  const y = new Date().getFullYear();
+  return Array.from({ length: limit }, (_, i) => y - i);
+}
+
+export async function getSalesTrends(
+  shopId: string,
+  groupBy: "day" | "week" | "month",
+  opts: { days?: number; year?: number | null } = {}
+) {
+  const days = opts.days ?? 90;
+  let since: Date;
+  let until: Date | undefined;
+  if (opts.year != null && Number.isFinite(opts.year)) {
+    since = new Date(opts.year, 0, 1, 0, 0, 0, 0);
+    until = new Date(opts.year, 11, 31, 23, 59, 59, 999);
+  } else {
+    since = getSinceDate(days);
+    until = undefined;
+  }
+
+  const dateFilter = until ? { gte: since, lte: until } : { gte: since };
+
+  const [payments, cancelledOrders, availableYears] = await Promise.all([
+    prisma.payment.findMany({
+      where: { order: { shopId }, createdAt: dateFilter },
+      select: { createdAt: true, amount: true, status: true },
+    }),
+    prisma.order.findMany({
+      where: { shopId, status: "CANCELLED", createdAt: dateFilter },
+      select: { createdAt: true },
+    }),
+    getSalesTrendAvailableYears(shopId, 5),
+  ]);
+
+  const buckets: Record<string, TrendBucket> = {};
+
+  for (const p of payments) {
+    const key = bucketKey(p.createdAt, groupBy);
+    const b = ensureTrendBucket(buckets, key);
+    const amt = Number(p.amount ?? 0);
+    if (p.status === "PAID") {
+      b.revenue += amt;
+      b.completedPayments += 1;
+    } else if (p.status === "PENDING") {
+      b.pendingPayments += 1;
+      b.pendingAmount += amt;
+    } else if (p.status === "FAILED") {
+      b.failedPayments += 1;
+      b.failedAmount += amt;
+    } else if (p.status === "REFUNDED") {
+      b.refundedPayments += 1;
+      b.refundedAmount += amt;
+    }
+  }
+
+  for (const o of cancelledOrders) {
+    const key = bucketKey(o.createdAt, groupBy);
+    ensureTrendBucket(buckets, key).cancelledOrders += 1;
+  }
+
+  const series = Object.entries(buckets)
+    .sort((a, b) => a[0].localeCompare(b[0]))
+    .map(([period, v]) => ({
+      period,
+      revenue: v.revenue,
+      pendingPayments: v.pendingPayments,
+      pendingAmount: v.pendingAmount,
+      completedPayments: v.completedPayments,
+      failedPayments: v.failedPayments,
+      failedAmount: v.failedAmount,
+      refundedPayments: v.refundedPayments,
+      refundedAmount: v.refundedAmount,
+      cancelledOrders: v.cancelledOrders,
+    }));
 
   return {
     groupBy,
-    days,
-    series: Object.entries(buckets)
-      .sort((a, b) => a[0].localeCompare(b[0]))
-      .map(([period, revenue]) => ({ period, revenue })),
+    days: opts.year != null && Number.isFinite(opts.year) ? null : days,
+    year: opts.year != null && Number.isFinite(opts.year) ? opts.year : null,
+    availableYears,
+    series,
   };
 }
 
