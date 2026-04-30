@@ -1,4 +1,5 @@
 import AppError from "../utils/appError";
+import { formatPhoneTo251 } from "../utils/helper";
 
 const AFRO_BASE_URL = "https://api.afromessage.com/api";
 
@@ -192,4 +193,70 @@ export async function verifyOTPViaAfroMessage(
   }
 
   return true;
+}
+
+/** POST /send — same Bearer token env vars as OTP; never throws on missing token or failures. */
+export async function sendTransactionalSms(to: string, message: string): Promise<void> {
+  const token = (process.env.AFRO_MESSAGE_TOKEN || process.env.AFRO_SMS_TOKEN || "").trim();
+  if (!token) {
+    console.warn("[Afro SMS] AFRO_MESSAGE_TOKEN not set — transactional SMS skipped.");
+    return;
+  }
+
+  const sender =
+    (
+      process.env.AFRO_MESSAGE_SENDER ||
+      process.env.AFRO_SMS_SENDER ||
+      process.env.AFRO_MESSAGE_IDENTIFIER ||
+      process.env.AFRO_SMS_IDENTIFIER_ID ||
+      ""
+    ).trim() || undefined;
+
+  const phone = formatPhoneTo251(`${to || ""}`.trim());
+  if (!phone || phone.replace(/\D/g, "").length < 9) {
+    console.warn("[Afro SMS] Invalid phone for transactional SMS:", to);
+    return;
+  }
+
+  const trimmedMsg = `${message || ""}`.trim().slice(0, 1000);
+  if (!trimmedMsg) return;
+
+  const payload: Record<string, string> = { to: phone, message: trimmedMsg };
+  if (sender) payload.sender = sender;
+
+  const response = await fetch(`${AFRO_BASE_URL}/send`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const rawBody = await response.text().catch(() => "");
+  const parsed = parseJsonSafely(rawBody);
+  if (!response.ok || !isAcknowledgeSuccess(parsed)) {
+    const reason = extractProviderError(parsed) || bodySnippet(rawBody);
+    console.warn(`[Afro SMS] /send failed (HTTP ${response.status}):`, reason || rawBody.slice(0, 200));
+  }
+}
+
+/** SMS to customer immediately after checkout (guest or logged-in); does not reject the order if SMS fails. */
+export async function notifyOrderPlacedSms(
+  phoneRaw: string,
+  orderNumber: string,
+  shopName?: string | null,
+): Promise<void> {
+  const num = `${orderNumber || ""}`.trim();
+  if (!num) return;
+  const shop = shopName?.trim();
+  const text = shop
+    ? `Thank you! Your order number is ${num}. (${shop}). We'll keep you updated.`
+    : `Thank you! Your order number is ${num}. We'll keep you updated.`;
+  try {
+    await sendTransactionalSms(phoneRaw, text);
+  } catch (e) {
+    console.warn("[Afro SMS] notifyOrderPlacedSms failed:", e);
+  }
 }

@@ -8,6 +8,7 @@ import {
 } from "./notification.service";
 import { createId } from '@paralleldrive/cuid2'
 import config from "../config/config";
+import { notifyOrderPlacedSms } from "./sms.service";
 import { sendSms } from "../utils/sendSms";
 import { finalizeShippingAddressForOrder } from "../utils/helper";
 
@@ -342,6 +343,8 @@ export async function checkout(
 
   });
 
+  void notifyOrderPlacedSms(shippingAddress.phone, orderNumber, shop.name);
+
 return {order: ord, checkout_url};
 }
 
@@ -434,7 +437,7 @@ export async function handleChapaCallback(data: any) {
       });
 
       await sendSms(
-        `Your order ${payment.order.orderNumber} has been paid successfully.`,
+        `Your order ${payment.order.orderNumber} payment is confirmed. Thank you!`,
         payment.order.address?.phone || '',
       );
 

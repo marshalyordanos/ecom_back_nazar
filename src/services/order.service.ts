@@ -5,6 +5,7 @@ import { createNotification, notifyAllAdminsOrderEvent } from "./notification.se
 import axios from "axios";
 import bcrypt from "bcrypt";
 import { ethiopiaPhoneLookupVariants, finalizeShippingAddressForOrder } from "../utils/helper";
+import { notifyOrderPlacedSms } from "./sms.service";
 
 const orderSearchableFields = ["orderNumber", "user.firstName", "user.lastName", "user.email"];
 const orderDateFields = ["createdAt", "updatedAt"];
@@ -451,7 +452,7 @@ export async function checkoutAsGuest(data: {
   });
   const orderNumber = generateOrderNumber(orderCount + 1);
 
-  return prisma.$transaction(async (tx) => {
+  const result = await prisma.$transaction(async (tx) => {
     const newOrder = await tx.order.create({
       data: {
         shopId: data.shopId,
@@ -561,4 +562,12 @@ export async function checkoutAsGuest(data: {
     });
     return { order: fullOrder, checkout_url };
   });
+
+  const o = result.order;
+  const phoneNotify = o?.address?.phone;
+  if (phoneNotify && o?.orderNumber) {
+    void notifyOrderPlacedSms(phoneNotify, o.orderNumber, shop.name);
+  }
+
+  return result;
 }
