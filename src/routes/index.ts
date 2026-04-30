@@ -22,6 +22,7 @@ import reportsRoute from "./reports.router";
 import favoriteRoute from "./favorite.router";
 import faqRoute from "./faq.router";
 import pagesRoute from "./pages.router";
+import maintenanceRoute from "./maintenance.router";
 
 const router = express.Router();
 
@@ -49,6 +50,7 @@ const defaultRoutes = [
   { path: "/favorites", route: favoriteRoute },
   { path: "/faq", route: faqRoute },
   { path: "/pages", route: pagesRoute },
+  { path: "/maintenance", route: maintenanceRoute },
 ];
 
 defaultRoutes.forEach(({ path, route }) => {

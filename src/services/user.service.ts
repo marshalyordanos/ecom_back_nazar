@@ -151,6 +151,7 @@ export async function listUsers(
         lastName: true,
         avatarUrl: true,
         status: true,
+        registrationSource: true,
         locationId: true,
         location: { select: { id: true, name: true, shopId: true } },
         roles: { select: { id: true, name: true } },

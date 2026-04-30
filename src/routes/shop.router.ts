@@ -73,6 +73,7 @@ router.patch(
   protect,
   restrictTo("admin"),
   requirePermission("shops", "update"),
+  uploadSingleImage("image"),
   shopController.updateShop
 );
 router.get("/:id/locations", shopController.listShopLocations);

@@ -124,6 +124,8 @@ export async function checkout(
   data: {
     shopId: string;
     paymentMethod?: "chapa" | "pickup";
+    /** Required when paymentMethod is pickup — must be a ShopLocation belonging to shopId */
+    pickupLocationId?: string;
     shippingAddress: {
       name: string;
       phone: string;
@@ -151,7 +153,32 @@ export async function checkout(
   if (!shop) throw new AppError("Shop not found", 404);
 
   const paymentMethod = data.paymentMethod === "pickup" ? "pickup" : "chapa";
-  const shippingAddress = finalizeShippingAddressForOrder(data.shippingAddress);
+
+  let pickupLocationIdResolved: string | undefined;
+  if (paymentMethod === "pickup") {
+    const lid = typeof data.pickupLocationId === "string" ? data.pickupLocationId.trim() : "";
+    if (!lid) throw new AppError("Pickup location is required for store pickup", 400);
+    const pickupLoc = await prisma.shopLocation.findFirst({
+      where: { id: lid, shopId: data.shopId },
+    });
+    if (!pickupLoc) throw new AppError("Pickup location not found for this shop", 400);
+    pickupLocationIdResolved = pickupLoc.id;
+  }
+  let shippingAddress = finalizeShippingAddressForOrder(data.shippingAddress);
+  if (paymentMethod === "pickup" && pickupLocationIdResolved) {
+    const pl = await prisma.shopLocation.findUnique({
+      where: { id: pickupLocationIdResolved },
+      select: { name: true, city: true, country: true },
+    });
+    if (pl) {
+      shippingAddress = {
+        ...shippingAddress,
+        addressLine1: `Pickup — ${pl.name}`,
+        city: shippingAddress.city || pl.city,
+        country: shippingAddress.country || pl.country,
+      };
+    }
+  }
   let subtotal = 0;
   for (const item of cart.items) {
     subtotal += item.price * item.quantity;
@@ -195,6 +222,9 @@ export async function checkout(
         discountTotal,
         grandTotal,
         currency: shop.currency,
+        ...(pickupLocationIdResolved
+          ? { pickupLocationId: pickupLocationIdResolved }
+          : {}),
         address: {
           create: shippingAddress,
         },
@@ -288,7 +318,11 @@ export async function checkout(
 
     const fullOrder = await tx.order.findUnique({
       where: { id: newOrder.id },
-      include: { items: true, address: true },
+      include: {
+        items: true,
+        address: true,
+        pickupLocation: { select: { id: true, name: true, addressLine1: true, city: true } },
+      },
     });
     if (!fullOrder) throw new AppError("Order not found", 404);
 

@@ -1,8 +1,15 @@
 import { Router } from "express";
 import * as authController from "../controllers/auth.controller";
+import * as oauthController from "../controllers/oauth.controller";
 import { protect } from "../middleware/auth.middleware";
 
 const router = Router();
+
+router.get("/oauth/google/start", oauthController.googleStart);
+router.get("/oauth/google/callback", oauthController.googleCallback);
+router.get("/oauth/facebook/start", oauthController.facebookStart);
+router.get("/oauth/facebook/callback", oauthController.facebookCallback);
+router.post("/oauth/complete", oauthController.oauthComplete);
 
 router.post("/register", authController.register);
 router.post('/createSuperAdmin',authController.createSuperAdmin)

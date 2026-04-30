@@ -7,6 +7,11 @@ import { uploadToCloudinary } from "../config/cloudinary";
 const searchableFields = ["name", "slug", "email", "description"];
 const dateFields = ["createdAt", "updatedAt"];
 
+function optionalTrimmed(raw: unknown): string | null {
+  const s = String(raw ?? "").trim();
+  return s === "" ? null : s;
+}
+
 export async function listShops(query: {
   page?: number;
   pageSize?: number;
@@ -33,6 +38,11 @@ export async function listShops(query: {
         slug: true,
         email: true,
         phone: true,
+        instagramUrl: true,
+        telegramUrl: true,
+        facebookUrl: true,
+        youtubeUrl: true,
+        xUrl: true,
         logoUrl: true,
         description: true,
         currency: true,
@@ -66,6 +76,11 @@ export async function createOrUpdateShop(
     slug: string;
     email?: string;
     phone?: string;
+    instagramUrl?: string;
+    telegramUrl?: string;
+    facebookUrl?: string;
+    youtubeUrl?: string;
+    xUrl?: string;
     description?: string;
     currency: string;
     timezone: string;
@@ -85,25 +100,36 @@ export async function createOrUpdateShop(
     }
   }
 
+  const payload = {
+    name: data.name,
+    slug: data.slug,
+    currency: data.currency,
+    timezone: data.timezone,
+    status: data.status,
+    logoUrl,
+    ...(data.email !== undefined && { email: optionalTrimmed(data.email) }),
+    ...(data.phone !== undefined && { phone: optionalTrimmed(data.phone) }),
+    ...(data.instagramUrl !== undefined && { instagramUrl: optionalTrimmed(data.instagramUrl) }),
+    ...(data.telegramUrl !== undefined && { telegramUrl: optionalTrimmed(data.telegramUrl) }),
+    ...(data.facebookUrl !== undefined && { facebookUrl: optionalTrimmed(data.facebookUrl) }),
+    ...(data.youtubeUrl !== undefined && { youtubeUrl: optionalTrimmed(data.youtubeUrl) }),
+    ...(data.xUrl !== undefined && { xUrl: optionalTrimmed(data.xUrl) }),
+    ...(data.description !== undefined && { description: data.description }),
+  };
+
   const existingShop = await prisma.shop.findFirst();
 
   if (existingShop) {
     // Update the only shop row
     const shop = await prisma.shop.update({
       where: { id: existingShop.id },
-      data: {
-        ...data,
-        logoUrl,
-      } as Parameters<typeof prisma.shop.update>[0]["data"],
+      data: payload as Parameters<typeof prisma.shop.update>[0]["data"],
     });
     return shop;
   } else {
     // Create the shop row
     const shop = await prisma.shop.create({
-      data: {
-        ...data,
-        logoUrl,
-      },
+      data: payload as Parameters<typeof prisma.shop.create>[0]["data"],
     });
     return shop;
   }
@@ -116,6 +142,11 @@ export async function updateShop(
     email?: string;
     phone?: string;
     logoUrl?: string;
+    instagramUrl?: string;
+    telegramUrl?: string;
+    facebookUrl?: string;
+    youtubeUrl?: string;
+    xUrl?: string;
     description?: string;
     currency?: string;
     timezone?: string;
@@ -123,7 +154,7 @@ export async function updateShop(
   },
   file?: any
 ) {
-  let newData = { ...data };
+  const newData: Record<string, unknown> = { ...data };
 
   if (file) {
     const fileBuffer = fs.readFileSync(file.path);
@@ -131,6 +162,20 @@ export async function updateShop(
     fs.unlinkSync(file.path);
     if (uploadResult.secure_url) {
       newData.logoUrl = uploadResult.secure_url;
+    }
+  }
+
+  for (const key of [
+    "email",
+    "phone",
+    "instagramUrl",
+    "telegramUrl",
+    "facebookUrl",
+    "youtubeUrl",
+    "xUrl",
+  ] as const) {
+    if (key in newData && newData[key] !== undefined) {
+      newData[key] = optionalTrimmed(newData[key]);
     }
   }
 

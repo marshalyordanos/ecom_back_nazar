@@ -27,6 +27,12 @@ enum UserStatus {
   SUSPENDED
 }
 
+/** SELF: storefront sign-up (or admin-seeded). SYSTEM_GUEST_CHECKOUT: auto-created on guest order. */
+enum UserRegistrationSource {
+  SELF
+  SYSTEM_GUEST_CHECKOUT
+}
+
 enum ProductStatus {
   DRAFT
   ACTIVE
@@ -86,13 +92,18 @@ enum SyncStatus {
 //////////////////////////////////////////////////////
 
 model Shop {
-  id          String         @id @default(cuid())
-  name        String
-  slug        String         @unique
-  email       String?
-  phone       String?
-  logoUrl     String?
-  description String?
+  id            String         @id @default(cuid())
+  name          String
+  slug          String         @unique
+  email         String?
+  phone         String?
+  instagramUrl  String?
+  telegramUrl   String?
+  facebookUrl   String?
+  youtubeUrl    String?
+  xUrl          String?
+  logoUrl       String?
+  description   String?
   currency    String
   timezone    String
   status      String
@@ -121,6 +132,7 @@ model ShopLocation {
   sales        SaleFromShop[]
   movements    InventoryMovement[] @relation("MovementLocation")
   users        User[]
+  pickupOrders Order[] @relation("OrderPickupLocation")
   createdAt    DateTime @default(now())
 }
 
@@ -139,6 +151,11 @@ model User {
   isSuperAdmin   Boolean
 
   status          UserStatus     @default(ACTIVE)
+  registrationSource UserRegistrationSource @default(SELF)
+  /** Set when customer signs in with Google OAuth (nullable). */
+  googleId           String?        @unique
+  /** Set when customer signs in with Facebook OAuth (nullable). */
+  facebookId         String?        @unique
   emailVerifiedAt DateTime?
   phoneVerifiedAt DateTime?
   roles           Role[]
@@ -453,6 +470,8 @@ model Order {
   shipments     Shipment[]
   address       ShippingAddress?
   couponUsages  CouponUsage[]
+  pickupLocationId String?
+  pickupLocation   ShopLocation? @relation("OrderPickupLocation", fields: [pickupLocationId], references: [id], onDelete: SetNull)
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
 }
@@ -675,6 +694,16 @@ model SyncedProduct {
 //////////////////////////////////////////////////////
 // SETTINGS
 //////////////////////////////////////////////////////
+
+/** Singleton row (`id`: `default`): global maintenance switches per surface. */
+model MaintenanceConfig {
+  id                  String   @id
+  webMaintenance      Boolean  @default(false)
+  adminMaintenance    Boolean  @default(false)
+  mobileMaintenance   Boolean  @default(false)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
 
 model ShopSetting {
   id        String   @id @default(cuid())

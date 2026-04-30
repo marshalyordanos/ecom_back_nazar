@@ -533,6 +533,50 @@ export async function refresh(refreshToken: string) {
   };
 }
 
+/** Storefront OAuth — same JSON shape as POST /auth/login for ACTIVE users. */
+export async function createCustomerSession(userId: string) {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    include: { roles: { select: { name: true } } },
+  });
+  if (!user) throw new AppError("User not found", 404);
+  if (user.status !== "ACTIVE") {
+    throw new AppError("Account not verified", 401);
+  }
+
+  const accessToken = generateAccessToken(user.id, user.email);
+  const refreshToken = generateRefreshToken();
+  await prisma.token.create({
+    data: {
+      userId: user.id,
+      token: refreshToken,
+      type: tokenTypes.REFRESH,
+      expiresAt: new Date(
+        Date.now() + refreshExpirationDays * 24 * 60 * 60 * 1000,
+      ),
+    },
+  });
+
+  const permMap = await getMergedPermissionsForUser(user.id);
+
+  return {
+    user: {
+      id: user.id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      phone: user.phone,
+      isSuperAdmin: user.isSuperAdmin,
+      locationId: user.locationId ?? null,
+      roles: user.roles.map((r) => r.name),
+      permissions: mergedMapToList(permMap),
+    },
+    accessToken,
+    refreshToken,
+    expiresIn: accessExpirationMinutes * 60,
+  };
+}
+
 export async function forgotPassword(body: { email?: string; phone?: string }) {
   const phone = `${body.phone || ""}`.trim();
   const normalizedEmail = `${body.email || ""}`.trim().toLowerCase();

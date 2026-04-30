@@ -16,6 +16,15 @@ const generateOrderNumber = (counter: number) => {
   return `ORD-${year}-${paddedCounter}`;
 };
 
+/** Maps checkout full name to required User.firstName / lastName. */
+function splitGuestFullName(full: string): { firstName: string; lastName: string } {
+  const trimmed = full.trim().replace(/\s+/g, " ");
+  if (!trimmed) return { firstName: "Guest", lastName: "Customer" };
+  const parts = trimmed.split(" ");
+  if (parts.length === 1) return { firstName: parts[0], lastName: "Customer" };
+  return { firstName: parts[0], lastName: parts.slice(1).join(" ") };
+}
+
 export async function listUserOrders(
   userId: string,
   query: { page?: number; pageSize?: number; search?: string; filter?: string; sort?: string }
@@ -36,6 +45,7 @@ export async function listUserOrders(
       take,
       include: {
         address: true,
+        pickupLocation: { select: { id: true, name: true, addressLine1: true, city: true } },
         shipments: { select: { id: true, status: true } },
         items: {
           include: {
@@ -72,6 +82,7 @@ export async function getOrderById(orderId: string, userId?: string) {
       address: true,
       payments: true,
       shipments: true,
+      pickupLocation: { select: { id: true, name: true, addressLine1: true, city: true } },
     },
   });
   if (!order) throw new AppError("Order not found", 404);
@@ -325,6 +336,8 @@ export async function checkoutAsGuest(data: {
   };
   couponCode?: string;
   paymentMethod?: "chapa" | "pickup";
+  /** Required when paymentMethod is pickup */
+  pickupLocationId?: string;
 }) {
   if (!data.shopId) throw new AppError("shopId required", 400);
   if (!data.items?.length) throw new AppError("Cart is empty", 400);
@@ -333,6 +346,17 @@ export async function checkoutAsGuest(data: {
   }
 
   const paymentMethod = data.paymentMethod === "pickup" ? "pickup" : "chapa";
+
+  let pickupLocationIdResolved: string | undefined;
+  if (paymentMethod === "pickup") {
+    const lid = typeof data.pickupLocationId === "string" ? data.pickupLocationId.trim() : "";
+    if (!lid) throw new AppError("Pickup location is required for store pickup", 400);
+    const pickupLoc = await prisma.shopLocation.findFirst({
+      where: { id: lid, shopId: data.shopId },
+    });
+    if (!pickupLoc) throw new AppError("Pickup location not found for this shop", 400);
+    pickupLocationIdResolved = pickupLoc.id;
+  }
   const shop = await prisma.shop.findUnique({ where: { id: data.shopId } });
   if (!shop) throw new AppError("Shop not found", 404);
 
@@ -369,19 +393,34 @@ export async function checkoutAsGuest(data: {
   const taxTotal = 0;
   const grandTotal = subtotal - discountTotal + taxTotal;
 
-  const shipping = finalizeShippingAddressForOrder(data.shippingAddress);
-  const phone = shipping.phone;
-
-  const phoneDigits = phone.replace(/\D/g, "");
-  const firstName = "registerd";
-  const lastName = "byadmin";
+  let shipping = finalizeShippingAddressForOrder(data.shippingAddress);
+  if (paymentMethod === "pickup" && pickupLocationIdResolved) {
+    const pl = await prisma.shopLocation.findUnique({
+      where: { id: pickupLocationIdResolved },
+      select: { name: true, city: true, country: true },
+    });
+    if (pl) {
+      shipping = {
+        ...shipping,
+        addressLine1: `Pickup — ${pl.name}`,
+        city: shipping.city || pl.city,
+        country: shipping.country || pl.country,
+      };
+    }
+  }
+  const phoneNormalized = shipping.phone.replace(/\s/g, "");
+  const phoneDigits = phoneNormalized.replace(/\D/g, "");
   const email = `user+${phoneDigits}@gmail.com`;
 
+  const phoneVariants = ethiopiaPhoneLookupVariants(data.shippingAddress.phone);
   let user = await prisma.user.findFirst({
     where: {
-      OR: [{ email }, ...ethiopiaPhoneLookupVariants(data.shippingAddress.phone).map((p) => ({ phone: p }))],
+      OR: [{ email }, ...phoneVariants.map((p) => ({ phone: p }))],
     },
   });
+
+  const { firstName, lastName } = splitGuestFullName(shipping.name);
+
   if (!user) {
     const passwordHash = await bcrypt.hash("12345678", 10);
     const defaultRole = await prisma.role.findFirst({ where: { name: "user" } });
@@ -391,10 +430,11 @@ export async function checkoutAsGuest(data: {
     user = await prisma.user.create({
       data: {
         email,
-        phone,
+        phone: phoneNormalized,
         passwordHash,
         firstName,
         lastName,
+        registrationSource: "SYSTEM_GUEST_CHECKOUT",
         isSuperAdmin: false,
         roles: { connect: [{ id: defaultRole.id }] },
       },
@@ -423,6 +463,7 @@ export async function checkoutAsGuest(data: {
         discountTotal,
         grandTotal,
         currency: shop.currency,
+        ...(pickupLocationIdResolved ? { pickupLocationId: pickupLocationIdResolved } : {}),
         address: {
           create: {
             name: shipping.name,
@@ -481,7 +522,7 @@ export async function checkoutAsGuest(data: {
           amount: grandTotal,
           currency: "ETB",
           tx_ref: txRef,
-          phone_number: phone,
+          phone_number: phoneNormalized,
           callback_url: `${process.env.BACKEND_URL || ""}/cart/chapa-callback`,
           return_url: `${process.env.FRONTEND_URL || ""}/orders/${newOrder.id}?paid=1`,
         },
@@ -511,7 +552,12 @@ export async function checkoutAsGuest(data: {
 
     const fullOrder = await tx.order.findUnique({
       where: { id: newOrder.id },
-      include: { items: true, address: true, payments: true },
+      include: {
+        items: true,
+        address: true,
+        payments: true,
+        pickupLocation: { select: { id: true, name: true, addressLine1: true, city: true } },
+      },
     });
     return { order: fullOrder, checkout_url };
   });
