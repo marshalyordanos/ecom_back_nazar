@@ -11,6 +11,13 @@ export const listPayments = catchAsync(async (req: AuthRequest, res: Response, _
   res.status(200).json(result);
 });
 
+export const getPaymentsAdminSummary = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const query = parseListQuery(req);
+  const orderId = req.query.orderId as string | undefined;
+  const data = await paymentService.getPaymentsAdminSummary({ ...query, orderId });
+  res.status(200).json({ data });
+});
+
 export const getPaymentById = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
   const payment = await paymentService.getPaymentById(req.params.id);
   res.status(200).json(payment);

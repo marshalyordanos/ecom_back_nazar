@@ -249,6 +249,134 @@ export async function listOrdersAdmin(query: {
   return { data, pagination: feature.getPagination(total) };
 }
 
+/** KPI row for admin orders list; respects same filters/search as listOrdersAdmin (ignores pagination). */
+export async function getOrdersAdminSummary(query: {
+  page?: number;
+  pageSize?: number;
+  search?: string;
+  filter?: string;
+  sort?: string;
+  shopId?: string;
+}) {
+  const feature = new PrismaQueryFeature<Record<string, unknown>, Record<string, string>>({
+    ...query,
+    searchableFields: orderSearchableFields,
+    dateFields: orderDateFields,
+  });
+  const { where } = feature.getQuery();
+  const whereShop = query.shopId ? { ...where, shopId: query.shopId } : where;
+
+  const [
+    totalOrders,
+    completedOrders,
+    pendingOrders,
+    paidOrders,
+    processingOrders,
+    shippedOrders,
+    cancelledOrders,
+    refundedOrders,
+    revenueAgg,
+    avgAgg,
+    lineItemsCount,
+    itemsForProfit,
+  ] = await Promise.all([
+    prisma.order.count({ where: whereShop }),
+    prisma.order.count({ where: { ...whereShop, status: "COMPLETED" } }),
+    prisma.order.count({ where: { ...whereShop, status: "PENDING" } }),
+    prisma.order.count({ where: { ...whereShop, status: "PAID" } }),
+    prisma.order.count({ where: { ...whereShop, status: "PROCESSING" } }),
+    prisma.order.count({ where: { ...whereShop, status: "SHIPPED" } }),
+    prisma.order.count({ where: { ...whereShop, status: "CANCELLED" } }),
+    prisma.order.count({ where: { ...whereShop, status: "REFUNDED" } }),
+    prisma.order.aggregate({
+      where: whereShop,
+      _sum: { grandTotal: true, subtotal: true, discountTotal: true, taxTotal: true },
+    }),
+    prisma.order.aggregate({ where: whereShop, _avg: { grandTotal: true } }),
+    prisma.orderItem.count({ where: { order: whereShop } }),
+    prisma.orderItem.findMany({
+      where: { order: whereShop },
+      select: {
+        quantity: true,
+        total: true,
+        variant: { select: { costPrice: true } },
+      },
+    }),
+  ]);
+
+  let estimatedProfit = 0;
+  for (const i of itemsForProfit) {
+    const unitCost = i.variant.costPrice ?? 0;
+    estimatedProfit += i.total - unitCost * i.quantity;
+  }
+  const totalRev = revenueAgg._sum.grandTotal ?? 0;
+
+  return {
+    totalOrders,
+    completedOrders,
+    pendingOrders,
+    paidOrders,
+    processingOrders,
+    shippedOrders,
+    cancelledOrders,
+    refundedOrders,
+    totalRevenue: totalRev,
+    totalSubtotal: revenueAgg._sum.subtotal ?? 0,
+    totalDiscounts: revenueAgg._sum.discountTotal ?? 0,
+    totalTax: revenueAgg._sum.taxTotal ?? 0,
+    avgOrderValue: avgAgg._avg.grandTotal ?? 0,
+    lineItemsCount,
+    estimatedProfit,
+    estimatedMarginPercent: totalRev > 0 ? (estimatedProfit / totalRev) * 100 : 0,
+  };
+}
+
+export async function getOrderAdminById(orderId: string) {
+  const order = await prisma.order.findFirst({
+    where: { id: orderId },
+    include: {
+      user: {
+        select: {
+          id: true,
+          email: true,
+          phone: true,
+          firstName: true,
+          lastName: true,
+        },
+      },
+      shop: { select: { id: true, name: true, currency: true } },
+      items: {
+        include: {
+          variant: {
+            select: {
+              id: true,
+              sku: true,
+              image: true,
+              price: true,
+              costPrice: true,
+              product: { select: { id: true, name: true, slug: true } },
+              media: {
+                orderBy: [{ position: "asc" }, { id: "asc" }],
+                take: 1,
+                select: { url: true },
+              },
+              variantOptionValues: {
+                include: { optionValue: { include: { option: true } } },
+              },
+            },
+          },
+        },
+      },
+      address: true,
+      payments: true,
+      shipments: true,
+      pickupLocation: { select: { id: true, name: true, addressLine1: true, city: true } },
+    },
+  });
+  if (!order) throw new AppError("Order not found", 404);
+  return order;
+}
+
 export async function createOrderAdmin(data: {
   shopId: string;
   userId: string;

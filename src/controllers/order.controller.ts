@@ -44,6 +44,18 @@ export const listOrdersAdmin = catchAsync(async (req: AuthRequest, res: Response
   res.status(200).json(result);
 });
 
+export const getOrdersAdminSummary = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const query = parseListQuery(req);
+  const shopId = req.query.shopId as string | undefined;
+  const data = await orderService.getOrdersAdminSummary({ ...query, shopId });
+  res.status(200).json({ data });
+});
+
+export const getOrderAdminById = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+  const order = await orderService.getOrderAdminById(req.params.id);
+  res.status(200).json(order);
+});
+
 export const createOrderAdmin = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
   const order = await orderService.createOrderAdmin(req.body);
   res.status(201).json(order);

@@ -9,6 +9,7 @@ router.use(protect);
 router.use(restrictTo("admin"));
 
 router.get("/", requirePermission("payments", "read"), paymentController.listPayments);
+router.get("/summary-stats", requirePermission("payments", "read"), paymentController.getPaymentsAdminSummary);
 router.get("/:id", requirePermission("payments", "read"), paymentController.getPaymentById);
 router.post("/:id/capture", requirePermission("payments", "update"), paymentController.capturePayment);
 router.post("/:id/refund", requirePermission("payments", "update"), paymentController.refundPayment);

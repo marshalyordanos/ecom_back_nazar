@@ -16,6 +16,20 @@ router.get(
   requirePermission("orders", "read"),
   orderController.listOrdersAdmin
 );
+router.get(
+  "/admin/summary",
+  protect,
+  restrictTo("admin"),
+  requirePermission("orders", "read"),
+  orderController.getOrdersAdminSummary
+);
+router.get(
+  "/admin/:id",
+  protect,
+  restrictTo("admin"),
+  requirePermission("orders", "read"),
+  orderController.getOrderAdminById
+);
 router.post(
   "/admin/create",
   protect,

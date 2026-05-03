@@ -34,6 +34,72 @@ export async function listPayments(query: {
   return { data, pagination: feature.getPagination(total) };
 }
 
+/** KPI row for admin payments list; same filters as listPayments (ignores pagination). */
+export async function getPaymentsAdminSummary(query: {
+  page?: number;
+  pageSize?: number;
+  search?: string;
+  filter?: string;
+  sort?: string;
+  orderId?: string;
+}) {
+  const feature = new PrismaQueryFeature<Record<string, unknown>, Record<string, string>>({
+    ...query,
+    searchableFields: ["order.orderNumber", "order.user.firstName", "order.user.lastName", "order.user.email"],
+    dateFields,
+  });
+  const { where } = feature.getQuery();
+  const whereOrder = query.orderId ? { ...where, orderId: query.orderId } : where;
+
+  const [
+    totalPayments,
+    paidPayments,
+    failedPayments,
+    pendingPayments,
+    refundedPayments,
+    amountAgg,
+    paidAmountAgg,
+    refundedAmountAgg,
+    pendingAmountAgg,
+  ] = await Promise.all([
+    prisma.payment.count({ where: whereOrder }),
+    prisma.payment.count({ where: { ...whereOrder, status: "PAID" } }),
+    prisma.payment.count({ where: { ...whereOrder, status: "FAILED" } }),
+    prisma.payment.count({ where: { ...whereOrder, status: "PENDING" } }),
+    prisma.payment.count({ where: { ...whereOrder, status: "REFUNDED" } }),
+    prisma.payment.aggregate({ where: whereOrder, _sum: { amount: true } }),
+    prisma.payment.aggregate({
+      where: { ...whereOrder, status: "PAID" },
+      _sum: { amount: true },
+    }),
+    prisma.payment.aggregate({
+      where: { ...whereOrder, status: "REFUNDED" },
+      _sum: { amount: true },
+    }),
+    prisma.payment.aggregate({
+      where: { ...whereOrder, status: "PENDING" },
+      _sum: { amount: true },
+    }),
+  ]);
+
+  const totalAmount = amountAgg._sum.amount ?? 0;
+
+  return {
+    totalPayments,
+    paidPayments,
+    failedPayments,
+    pendingPayments,
+    refundedPayments,
+    totalPaymentAmount: totalAmount,
+    paidVolume: paidAmountAgg._sum.amount ?? 0,
+    refundedVolume: refundedAmountAgg._sum.amount ?? 0,
+    pendingVolume: pendingAmountAgg._sum.amount ?? 0,
+    avgPaymentAmount: totalPayments > 0 ? totalAmount / totalPayments : 0,
+    successfulRatePercent:
+      totalPayments > 0 ? (paidPayments / totalPayments) * 100 : 0,
+  };
+}
+
 export async function getPaymentById(id: string) {
   const payment = await prisma.payment.findUnique({
     where: { id },
