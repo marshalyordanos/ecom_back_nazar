@@ -4,6 +4,7 @@ import * as dashboardService from "../services/dashboard.service";
 import type { AuthRequest } from "../middleware/auth.middleware";
 import { calculateTrend, DashboardResponse, formatCard, getDateRanges } from "../utils/helper";
 import { prisma } from "../lib/prisma";
+import { resolveDashboardScope } from "../utils/dashboardScope";
 
 export const getSummary = catchAsync(async (_req: AuthRequest, res: Response, _next: NextFunction) => {
   const data = await dashboardService.getGlobalDashboardSummary();
@@ -36,7 +37,8 @@ export const getGlobalPaymentsSeries = catchAsync(async (req: AuthRequest, res: 
 export const getOverview = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
   const shopId = req.query.shopId as string || (req as any).shopId;
   if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
-  const data = await dashboardService.getOverview(shopId);
+  const scope = await resolveDashboardScope(req, shopId);
+  const data = await dashboardService.getOverview(shopId, scope);
   res.status(200).json(data);
 });
 
@@ -59,7 +61,8 @@ export const getTopProducts = catchAsync(async (req: AuthRequest, res: Response,
   const shopId = req.query.shopId as string;
   const limit = Math.min(parseInt(String(req.query.limit), 10) || 10, 50);
   if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
-  const data = await dashboardService.getTopProducts(shopId, limit);
+  const scope = await resolveDashboardScope(req, shopId);
+  const data = await dashboardService.getTopProducts(shopId, limit, scope);
   res.status(200).json(data);
 });
 
@@ -67,14 +70,16 @@ export const getEcommerceHighlights = catchAsync(async (req: AuthRequest, res: R
   const shopId = req.query.shopId as string;
   const limit = Math.min(parseInt(String(req.query.limit), 10) || 3, 6);
   if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
-  const data = await dashboardService.getEcommerceHighlights(shopId, limit);
+  const scope = await resolveDashboardScope(req, shopId);
+  const data = await dashboardService.getEcommerceHighlights(shopId, limit, scope);
   res.status(200).json(data);
 });
 
 export const getLowInventory = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
   const shopId = req.query.shopId as string;
   if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
-  const data = await dashboardService.getLowInventory(shopId);
+  const scope = await resolveDashboardScope(req, shopId);
+  const data = await dashboardService.getLowInventory(shopId, scope);
   res.status(200).json(data);
 });
 
@@ -90,14 +95,16 @@ export const getRecentOrders = catchAsync(async (req: AuthRequest, res: Response
   const shopId = req.query.shopId as string;
   const limit = Math.min(parseInt(String(req.query.limit), 10) || 10, 50);
   if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
-  const data = await dashboardService.getRecentOrders(shopId, limit);
+  const scope = await resolveDashboardScope(req, shopId);
+  const data = await dashboardService.getRecentOrders(shopId, limit, scope);
   res.status(200).json(data);
 });
 
 export const getRecentActivities = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
   const shopId = req.query.shopId as string || (req as any).shopId;
   const limit = Math.min(parseInt(String(req.query.limit), 10) || 20, 100);
-  const data = await dashboardService.getRecentActivities(shopId || "", limit);
+  const scope = shopId ? await resolveDashboardScope(req, shopId) : {};
+  const data = await dashboardService.getRecentActivities(shopId || "", limit, scope);
   res.status(200).json(data);
 });
 
@@ -107,13 +114,15 @@ export const getRecentActivities = catchAsync(async (req: AuthRequest, res: Resp
 export const getShopDashboardSummary = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
   const shopId = req.query.shopId as string;
   if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
-  const data = await dashboardService.getShopDashboardSummary(shopId);
+  const scope = await resolveDashboardScope(req, shopId);
+  const data = await dashboardService.getShopDashboardSummary(shopId, scope);
   res.status(200).json(data);
 });
 export const getSummaryWithDetails = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
   const shopId = req.query.shopId as string;
   if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
-  const data = await dashboardService.getSummaryWithDetails(shopId);
+  const scope = await resolveDashboardScope(req, shopId);
+  const data = await dashboardService.getSummaryWithDetails(shopId, scope);
   res.status(200).json(data);
 });
 // ===============================
@@ -165,7 +174,8 @@ export const getDailyOrdersSummary = catchAsync(async (req: AuthRequest, res: Re
 export const getPaymentSummary = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
   const shopId = req.query.shopId as string;
   if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
-  const data = await dashboardService.getPaymentSummary(shopId);
+  const scope = await resolveDashboardScope(req, shopId);
+  const data = await dashboardService.getPaymentSummary(shopId, scope);
   res.status(200).json(data);
 });
 
@@ -214,7 +224,8 @@ export const getInventorySummary = catchAsync(async (req: AuthRequest, res: Resp
 export const getLowStockCount = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
   const shopId = req.query.shopId as string;
   if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
-  const data = await dashboardService.getLowStockCount(shopId);
+  const scope = await resolveDashboardScope(req, shopId);
+  const data = await dashboardService.getLowStockCount(shopId, scope);
   res.status(200).json(data);
 });
 
@@ -299,7 +310,8 @@ export const getSalesTrends = catchAsync(async (req: AuthRequest, res: Response,
     if (Number.isFinite(y)) year = y;
   }
   if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
-  const data = await dashboardService.getSalesTrends(shopId, groupBy, { days, year });
+  const scope = await resolveDashboardScope(req, shopId);
+  const data = await dashboardService.getSalesTrends(shopId, groupBy, { days, year }, scope);
   res.status(200).json(data);
 });
 
@@ -396,7 +408,8 @@ export const getBrandStats = catchAsync(async (req: AuthRequest, res: Response, 
   const shopId = req.query.shopId as string;
   const days = parseInt(String(req.query.days), 10) || 90;
   if (!shopId) return res.status(400).json({ status: "fail", message: "shopId required" });
-  const data = await dashboardService.getBrandStats(shopId, days);
+  const scope = await resolveDashboardScope(req, shopId);
+  const data = await dashboardService.getBrandStats(shopId, days, scope);
   res.status(200).json(data);
 });
 

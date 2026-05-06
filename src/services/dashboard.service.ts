@@ -1,5 +1,7 @@
 import { Prisma } from "../generated/prisma/client";
 import { prisma } from "../lib/prisma";
+import type { ResolvedDashboardScope } from "../utils/dashboardScope";
+import { orderWhereWithScope, paymentWhereFromOrderScope } from "../utils/dashboardScope";
 
 function percentChangeGlobal(current: number, previous: number) {
   if (previous === 0) return current > 0 ? 100 : 0;
@@ -238,21 +240,33 @@ export async function getGlobalPaymentsSeries(days: number) {
   };
 }
 
-export async function getOverview(shopId: string) {
+export async function getOverview(shopId: string, scope: ResolvedDashboardScope = {}) {
+  const ow = orderWhereWithScope(shopId, scope);
+  const completedOw: Prisma.OrderWhereInput = {
+    ...ow,
+    status: { in: ["PAID", "PROCESSING", "SHIPPED", "COMPLETED"] },
+  };
+
+  const invWhere: Prisma.InventoryWhereInput = {
+    variant: { product: { shopId } },
+    reorderLevel: { not: null },
+    ...(scope.locationId ? { locationId: scope.locationId } : {}),
+  };
+
   const [totalOrders, totalRevenue, ordersByStatus, lowInventoryCount] = await Promise.all([
-    prisma.order.count({ where: { shopId } }),
+    prisma.order.count({ where: ow }),
     prisma.order.aggregate({
-      where: { shopId, status: { in: ["PAID", "PROCESSING", "SHIPPED", "COMPLETED"] } },
+      where: completedOw,
       _sum: { grandTotal: true },
     }),
     prisma.order.groupBy({
       by: ["status"],
-      where: { shopId },
+      where: ow,
       _count: { id: true },
     }),
     (async () => {
       const invs = await prisma.inventory.findMany({
-        where: { variant: { product: { shopId } }, reorderLevel: { not: null } },
+        where: invWhere,
         select: { quantity: true, reorderLevel: true },
       });
       return invs.filter((i) => i.reorderLevel != null && i.quantity <= i.reorderLevel).length;
@@ -261,7 +275,7 @@ export async function getOverview(shopId: string) {
 
   const topProducts = await prisma.orderItem.groupBy({
     by: ["variantId"],
-    where: { order: { shopId,status:"COMPLETED" } },
+    where: { order: { ...ow, status: "COMPLETED" } },
     _sum: { total: true },
     _count: { id: true },
     orderBy: { _sum: { total: "desc" } },
@@ -285,7 +299,7 @@ export async function getOverview(shopId: string) {
 
   return {
     totalOrders,
-    totalRevenue: totalRevenue._sum.grandTotal ?? 0,
+    totalRevenue: totalRevenue._sum?.grandTotal ?? 0,
     ordersByStatus: ordersByStatus.reduce((acc, s) => ({ ...acc, [s.status]: s._count.id }), {}),
     lowInventoryAlerts: lowInventoryCount,
     topProducts: topProductsWithNames,
@@ -318,10 +332,11 @@ export async function getOrdersSummary(shopId: string) {
   return byStatus.reduce((acc, s) => ({ ...acc, [s.status]: s._count.id }), {} as Record<string, number>);
 }
 
-export async function getTopProducts(shopId: string, limit = 10) {
+export async function getTopProducts(shopId: string, limit = 10, scope: ResolvedDashboardScope = {}) {
+  const ow = orderWhereWithScope(shopId, scope);
   const items = await prisma.orderItem.groupBy({
     by: ["variantId"],
-    where: { order: { shopId } },
+    where: { order: ow },
     _sum: { total: true },
     _count: { id: true },
     orderBy: { _sum: { total: "desc" } },
@@ -343,13 +358,43 @@ export async function getTopProducts(shopId: string, limit = 10) {
   });
 }
 
-export async function getEcommerceHighlights(shopId: string, limit = 3) {
+export async function getEcommerceHighlights(shopId: string, limit = 3, scope: ResolvedDashboardScope = {}) {
   const safeLimit = Math.min(Math.max(Number(limit) || 3, 1), 6);
-  const now = new Date();
-  const currentWindowStart = new Date(now);
-  currentWindowStart.setDate(currentWindowStart.getDate() - 30);
-  const previousWindowStart = new Date(currentWindowStart);
-  previousWindowStart.setDate(previousWindowStart.getDate() - 30);
+  let currentWindowStart: Date;
+  let currentWindowEnd: Date;
+  let previousWindowStart: Date;
+  let previousWindowEnd: Date;
+
+  if (scope.dateFrom && scope.dateTo) {
+    currentWindowStart = scope.dateFrom;
+    currentWindowEnd = scope.dateTo;
+    const lenMs = currentWindowEnd.getTime() - currentWindowStart.getTime();
+    previousWindowEnd = new Date(currentWindowStart.getTime() - 86400000);
+    previousWindowEnd.setUTCHours(23, 59, 59, 999);
+    previousWindowStart = new Date(previousWindowEnd.getTime() - lenMs);
+  } else {
+    const now = new Date();
+    currentWindowEnd = now;
+    currentWindowStart = new Date(now);
+    currentWindowStart.setDate(currentWindowStart.getDate() - 30);
+    previousWindowEnd = new Date(currentWindowStart);
+    previousWindowStart = new Date(currentWindowStart);
+    previousWindowStart.setDate(previousWindowStart.getDate() - 30);
+  }
+
+  const orderLocOnly = orderWhereWithScope(shopId, {
+    locationId: scope.locationId,
+    dateFrom: undefined,
+    dateTo: undefined,
+  });
+  const orderThisWin = {
+    ...orderLocOnly,
+    createdAt: { gte: currentWindowStart, lte: currentWindowEnd },
+  };
+  const orderPrevWin = {
+    ...orderLocOnly,
+    createdAt: { gte: previousWindowStart, lte: previousWindowEnd },
+  };
 
   const [
     totalVisits,
@@ -363,19 +408,19 @@ export async function getEcommerceHighlights(shopId: string, limit = 3) {
     productViewCounts,
   ] = await Promise.all([
     prisma.productView.count({ where: { product: { shopId } } }),
-    prisma.order.count({ where: { shopId } }),
+    prisma.order.count({ where: orderLocOnly }),
     prisma.productView.count({
-      where: { product: { shopId }, createdAt: { gte: currentWindowStart } },
+      where: { product: { shopId }, createdAt: { gte: currentWindowStart, lte: currentWindowEnd } },
     }),
     prisma.productView.count({
       where: {
         product: { shopId },
-        createdAt: { gte: previousWindowStart, lt: currentWindowStart },
+        createdAt: { gte: previousWindowStart, lte: previousWindowEnd },
       },
     }),
-    prisma.order.count({ where: { shopId, createdAt: { gte: currentWindowStart } } }),
+    prisma.order.count({ where: orderThisWin }),
     prisma.order.count({
-      where: { shopId, createdAt: { gte: previousWindowStart, lt: currentWindowStart } },
+      where: orderPrevWin,
     }),
     prisma.productCategory.findMany({
       where: { parentId: null },
@@ -383,7 +428,7 @@ export async function getEcommerceHighlights(shopId: string, limit = 3) {
     }),
     prisma.orderItem.groupBy({
       by: ["variantId"],
-      where: { order: { shopId } },
+      where: { order: orderThisWin },
       _sum: { total: true },
       _count: { id: true },
     }),
@@ -538,10 +583,11 @@ export async function getEcommerceHighlights(shopId: string, limit = 3) {
   };
 }
 
-export async function getLowInventory(shopId: string) {
+export async function getLowInventory(shopId: string, scope: ResolvedDashboardScope = {}) {
   return prisma.inventory.findMany({
     where: {
       variant: { product: { shopId } },
+      ...(scope.locationId ? { locationId: scope.locationId } : {}),
       OR: [
         { quantity: { lte: 0 } },
         {
@@ -569,23 +615,29 @@ export async function getNewCustomers(shopId: string, days = 30) {
   return count.length;
 }
 
-export async function getRecentOrders(shopId: string, limit = 10) {
+export async function getRecentOrders(shopId: string, limit = 10, scope: ResolvedDashboardScope = {}) {
   return prisma.order.findMany({
-    where: { shopId },
+    where: orderWhereWithScope(shopId, scope),
     orderBy: { createdAt: "desc" },
     take: limit,
     include: { user: { select: { email: true, firstName: true, lastName: true } }, items: true },
   });
 }
 
-export async function getRecentActivities(_shopId: string, limit = 10) {
+export async function getRecentActivities(shopId: string, limit = 10, scope: ResolvedDashboardScope = {}) {
+  const ow = shopId ? orderWhereWithScope(shopId, scope) : undefined;
   const [recentOrders, recentMovements] = await Promise.all([
     prisma.order.findMany({
+      ...(ow ? { where: ow } : {}),
       orderBy: { createdAt: "desc" },
       take: limit,
       select: { id: true, orderNumber: true, status: true, createdAt: true },
     }),
     prisma.inventoryMovement.findMany({
+      where: {
+        ...(shopId ? { variant: { product: { shopId } } } : {}),
+        ...(scope.locationId ? { locationId: scope.locationId } : {}),
+      },
       orderBy: { createdAt: "desc" },
       take: limit,
       include: { variant: { include: { product: { select: { name: true } } } } },
@@ -633,7 +685,7 @@ function safeNumber(n: number | null | undefined) {
   // - New customers this month + percent growth
   // - Orders this month + percent growth
   // - Sales this month + percent growth
-  export async function getSummaryWithDetails(shopId: string) {
+  export async function getSummaryWithDetails(shopId: string, scope: ResolvedDashboardScope = {}) {
     const now = new Date();
 
     // Current Month - first day & last day
@@ -644,18 +696,44 @@ function safeNumber(n: number | null | undefined) {
     const prevMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
     const prevMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59, 999);
 
+    const useCustomRange = Boolean(scope.dateFrom && scope.dateTo);
+    let curStart = startOfMonth;
+    let curEnd = endOfMonth;
+    let prevStart = prevMonthStart;
+    let prevEnd = prevMonthEnd;
+    if (useCustomRange && scope.dateFrom && scope.dateTo) {
+      curStart = scope.dateFrom;
+      curEnd = scope.dateTo;
+      const lenMs = curEnd.getTime() - curStart.getTime();
+      const prevEndDate = new Date(curStart.getTime() - 86400000);
+      prevEndDate.setUTCHours(23, 59, 59, 999);
+      prevEnd = prevEndDate;
+      prevStart = new Date(prevEnd.getTime() - lenMs);
+    }
+
+    const orderThisPeriod = orderWhereWithScope(shopId, {
+      ...scope,
+      dateFrom: curStart,
+      dateTo: curEnd,
+    });
+    const orderPrevPeriod = orderWhereWithScope(shopId, {
+      ...scope,
+      dateFrom: prevStart,
+      dateTo: prevEnd,
+    });
+
     // New Customers (users with 'user' role) - created in this month and last month
     const [thisMonthNewCustomers, prevMonthNewCustomers] = await Promise.all([
       prisma.user.count({
         where: {
           roles: { some: { name: "user" } },
-          createdAt: { gte: startOfMonth, lte: endOfMonth }
+          createdAt: { gte: curStart, lte: curEnd }
         }
       }),
       prisma.user.count({
         where: {
           roles: { some: { name: "user" } },
-          createdAt: { gte: prevMonthStart, lte: prevMonthEnd }
+          createdAt: { gte: prevStart, lte: prevEnd }
         }
       }),
     ]);
@@ -663,16 +741,10 @@ function safeNumber(n: number | null | undefined) {
     // Orders in current and previous month
     const [thisMonthOrders, prevMonthOrders] = await Promise.all([
       prisma.order.count({
-        where: {
-          shopId,
-          createdAt: { gte: startOfMonth, lte: endOfMonth },
-        },
+        where: orderThisPeriod,
       }),
       prisma.order.count({
-        where: {
-          shopId,
-          createdAt: { gte: prevMonthStart, lte: prevMonthEnd },
-        },
+        where: orderPrevPeriod,
       }),
     ]);
 
@@ -680,16 +752,23 @@ function safeNumber(n: number | null | undefined) {
     const [thisMonthSalesAgg, prevMonthSalesAgg] = await Promise.all([
       prisma.payment.aggregate({
         where: {
-          
           status: { in: ["PAID", "REFUNDED"] },
-          createdAt: { gte: startOfMonth, lte: endOfMonth },
+          createdAt: { gte: curStart, lte: curEnd },
+          order: {
+            shopId,
+            ...(scope.locationId ? { pickupLocationId: scope.locationId } : {}),
+          },
         },
         _sum: { amount: true },
       }),
       prisma.payment.aggregate({
         where: {
           status: { in: ["PAID", "REFUNDED"] },
-          createdAt: { gte: prevMonthStart, lte: prevMonthEnd },
+          createdAt: { gte: prevStart, lte: prevEnd },
+          order: {
+            shopId,
+            ...(scope.locationId ? { pickupLocationId: scope.locationId } : {}),
+          },
         },
         _sum: { amount: true },
       }),
@@ -731,24 +810,28 @@ function safeNumber(n: number | null | undefined) {
 // ===============================
 // 📊 SHOP KPI SUMMARY (per shop, requires shopId)
 // ===============================
-export async function getShopDashboardSummary(shopId: string) {
+export async function getShopDashboardSummary(shopId: string, scope: ResolvedDashboardScope = {}) {
+  const ow = orderWhereWithScope(shopId, scope);
   const [ordersCount, revenueAgg, productsCount, userIds, customersCount, totalTransactions] = await Promise.all([
-    prisma.order.count({ where: { shopId } }),
+    prisma.order.count({ where: ow }),
     prisma.payment.aggregate({
-      where: {  status: { in: ["PAID","REFUNDED"] } },
+      where: {
+        status: { in: ["PAID", "REFUNDED"] },
+        order: ow,
+      },
       _sum: { amount: true },
     }),
     prisma.product.count({ where: { shopId } }),
     prisma.order.findMany({
-      where: { shopId },
+      where: ow,
       distinct: ["userId"],
       select: { userId: true },
     }),
     prisma.user.count({ where: { roles: { some: { name: "user" } } } }),
-    prisma.payment.count({ where: { status: "PAID" } }),
+    prisma.payment.count({ where: { status: "PAID", order: ow } }),
   ]);
 
-  const lowInventoryCount = (await getLowStockCount(shopId)).count;
+  const lowInventoryCount = (await getLowStockCount(shopId, scope)).count;
   const usersCount = userIds.length;
   console.log("revenueAgg",revenueAgg);
   const revenue = safeNumber(revenueAgg._sum?.amount ?? 0);
@@ -896,10 +979,10 @@ export async function getDailyOrdersSummary(shopId: string, days = 30) {
 // ===============================
 // 💳 PAYMENT SUMMARY
 // ===============================
-export async function getPaymentSummary(shopId: string) {
+export async function getPaymentSummary(shopId: string, scope: ResolvedDashboardScope = {}) {
   const byStatus = await prisma.payment.groupBy({
     by: ["status"],
-    where: { order: { shopId } },
+    where: paymentWhereFromOrderScope(shopId, scope),
     _count: { id: true },
   });
 
@@ -1032,10 +1115,14 @@ export async function getInventorySummary(shopId: string) {
   return { totalStock: total, reserved, available };
 }
 
-export async function getLowStockCount(shopId: string) {
+export async function getLowStockCount(shopId: string, scope: ResolvedDashboardScope = {}) {
   // reorderLevel is nullable; low stock => reorderLevel != null AND quantity <= reorderLevel.
   const items = await prisma.inventory.findMany({
-    where: { variant: { product: { shopId } }, reorderLevel: { not: null } },
+    where: {
+      variant: { product: { shopId } },
+      reorderLevel: { not: null },
+      ...(scope.locationId ? { locationId: scope.locationId } : {}),
+    },
     select: { quantity: true, reorderLevel: true },
   });
   return { count: items.filter((i) => (i.reorderLevel ?? Infinity) >= i.quantity).length };
@@ -1258,12 +1345,16 @@ export async function getSalesTrendAvailableYears(shopId: string, limit = 5): Pr
 export async function getSalesTrends(
   shopId: string,
   groupBy: "day" | "week" | "month",
-  opts: { days?: number; year?: number | null } = {}
+  opts: { days?: number; year?: number | null } = {},
+  scope: ResolvedDashboardScope = {}
 ) {
   const days = opts.days ?? 90;
   let since: Date;
   let until: Date | undefined;
-  if (opts.year != null && Number.isFinite(opts.year)) {
+  if (scope.dateFrom && scope.dateTo) {
+    since = scope.dateFrom;
+    until = scope.dateTo;
+  } else if (opts.year != null && Number.isFinite(opts.year)) {
     since = new Date(opts.year, 0, 1, 0, 0, 0, 0);
     until = new Date(opts.year, 11, 31, 23, 59, 59, 999);
   } else {
@@ -1273,13 +1364,25 @@ export async function getSalesTrends(
 
   const dateFilter = until ? { gte: since, lte: until } : { gte: since };
 
+  const orderLoc: Prisma.OrderWhereInput = {
+    shopId,
+    ...(scope.locationId ? { pickupLocationId: scope.locationId } : {}),
+  };
+
   const [payments, cancelledOrders, availableYears] = await Promise.all([
     prisma.payment.findMany({
-      where: { order: { shopId }, createdAt: dateFilter },
+      where: {
+        order: orderLoc,
+        createdAt: dateFilter,
+      },
       select: { createdAt: true, amount: true, status: true },
     }),
     prisma.order.findMany({
-      where: { shopId, status: "CANCELLED", createdAt: dateFilter },
+      where: {
+        ...orderLoc,
+        status: "CANCELLED",
+        createdAt: dateFilter,
+      },
       select: { createdAt: true },
     }),
     getSalesTrendAvailableYears(shopId, 5),
@@ -1687,12 +1790,16 @@ export async function getCategoryStats(shopId: string, days = 90) {
   return Array.from(map.values()).sort((a, b) => b.revenue - a.revenue);
 }
 
-export async function getBrandStats(shopId: string, days = 90) {
+export async function getBrandStats(shopId: string, days = 90, scope: ResolvedDashboardScope = {}) {
   const since = getSinceDate(days);
+  const rollingOrderWhere: Prisma.OrderWhereInput =
+    scope.dateFrom || scope.dateTo
+      ? orderWhereWithScope(shopId, scope)
+      : { ...orderWhereWithScope(shopId, scope), createdAt: { gte: since } };
 
   const byVariant = await prisma.orderItem.groupBy({
     by: ["variantId"],
-    where: { order: { shopId, createdAt: { gte: since } } },
+    where: { order: rollingOrderWhere },
     _sum: { total: true },
     _count: { id: true },
   });
@@ -2328,7 +2435,7 @@ export async function getSystemHealth(shopId?: string) {
       where: shopId ? { order: { shopId }, createdAt: { gte: since } } : { createdAt: { gte: since } },
       _count: { id: true },
     }),
-    shopId ? getLowStockCount(shopId).then((r) => r.count) : Promise.resolve(0),
+    shopId ? getLowStockCount(shopId, {}).then((r) => r.count) : Promise.resolve(0),
   ]);
 
   const orders = ordersByStatus.reduce<Record<string, number>>((acc, g) => {
